@@ -8,5 +8,6 @@
 </head>
 <body>
 	<h1>hello first commit </h1>
+	<h2>얼른 집에 갑시다~!!</h2>
 </body>
 </html>
