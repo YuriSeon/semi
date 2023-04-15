@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class FoodMainController
  */
-@WebServlet("/foodm.bo")
+@WebServlet("/realMain")
 public class FoodMainController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -26,7 +26,7 @@ public class FoodMainController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("views/food/foodm.jsp").forward(request, response);
+		request.getRequestDispatcher("views/food/afterLoginMain.jsp").forward(request, response);
 	}
 
 	/**
