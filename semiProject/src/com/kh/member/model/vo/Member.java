@@ -3,6 +3,7 @@ package com.kh.member.model.vo;
 import java.sql.Date;
 
 public class Member {
+
 	private int userNo;//		      USERNO NUMBER PRIMARY KEY,
 	private String userId;//		      USERID VARCHAR2(20) NOT NULL UNIQUE,
 	private String userPwd;//		      USERPWD VARCHAR2(100) NOT NULL,
@@ -182,8 +183,5 @@ public class Member {
 				+ ", schoolNo=" + schoolNo + ", power=" + power + ", school_st=" + school_st + ", number=" + number
 				+ "]";
 	}
-	
-	
-	
 	
 }
