@@ -8,16 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class FoodMainController
+ * Servlet implementation class FoodMain
  */
-@WebServlet("/realMain")
-public class FoodMainController extends HttpServlet {
+@WebServlet("/foodm.bo")
+public class FoodMain extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public FoodMainController() {
+    public FoodMain() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -26,7 +26,8 @@ public class FoodMainController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("views/food/afterLoginMain.jsp").forward(request, response);
+		// TODO Auto-generated method stub
+		request.getRequestDispatcher("views/food/foodm.jsp").forward(request, response);
 	}
 
 	/**
