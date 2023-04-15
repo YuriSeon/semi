@@ -1,4 +1,4 @@
-package com.kh.admin.common.model.vo;
+package com.kh.common.model.vo;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
