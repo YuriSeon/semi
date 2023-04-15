@@ -1,4 +1,4 @@
-package com.kh.admin.board.model.vo;
+package com.kh.board.model.vo;
 
 import java.sql.Date;
 
