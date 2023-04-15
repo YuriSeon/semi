@@ -6,7 +6,6 @@ public class Board {
 	
 //	BOARD_NO	NUMBER
 //	USERNO	NUMBER		
-	// 이거는 원래 no인데 회원번호 조회해온거 필요 없을거같아서 회원이름으로 바꿀게요
 //	BOARD_TYPE	NUMBER
 //	BOARD_TITLE	VARCHAR2(60 BYTE)
 //	BOARD_CONTENT	VARCHAR2(4000 BYTE)
@@ -17,8 +16,8 @@ public class Board {
 //	COUNT	NUMBER
 	
 	private int boardNo;
-	private String boardWriter;
-	private int boardType;
+	private String boardWriter; // 이거는 원래 no인데 회원번호 조회해온거 필요 없을거같아서 작성자로 바꿀게요
+	private String boardType; // 이것도 위에랑 마찬가지로 게시글타입을 번호로 보여줄일이 없을거같아서 String으로 타입 바꿀게요
 	private String boardTitle;
 	private String boardContent;
 	private Date createDate;
@@ -31,19 +30,22 @@ public class Board {
 	public Board() {
 		super();
 	}
+
 	
-	public Board(int boardNo, String boardWriter, int boardType, String boardTitle, Date createDate) {
+
+	public Board(int boardNo, String boardWriter, String boardType, String boardTitle, Date createDate, int count) {
 		super();
 		this.boardNo = boardNo;
 		this.boardWriter = boardWriter;
 		this.boardType = boardType;
 		this.boardTitle = boardTitle;
 		this.createDate = createDate;
+		this.count = count;
 	}
 
 
 
-	public Board(int boardNo, String boardWriter, int boardType, String boardTitle, String boardContent, Date createDate,
+	public Board(int boardNo, String boardWriter, String boardType, String boardTitle, String boardContent, Date createDate,
 			Date modifyDate, int recommend, String status, int count) {
 		super();
 		this.boardNo = boardNo;
@@ -79,12 +81,12 @@ public class Board {
 	}
 
 
-	public int getBoardType() {
+	public String getBoardType() {
 		return boardType;
 	}
 
 
-	public void setBoardType(int boardType) {
+	public void setBoardType(String boardType) {
 		this.boardType = boardType;
 	}
 
