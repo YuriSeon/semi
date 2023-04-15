@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class FoodMain
  */
-@WebServlet("/foodm.bo")
+@WebServlet("/foodmain.bo")
 public class FoodMain extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -48,7 +48,7 @@ public class FoodMain extends HttpServlet {
 		// 10초마다 실행
 		// 매우 잘 실행되는 거 확인
 		
-		request.getRequestDispatcher("views/food/foodm.jsp").forward(request, response);
+		request.getRequestDispatcher("views/food/foodMain.jsp").forward(request, response);
 	}
 
 	/**

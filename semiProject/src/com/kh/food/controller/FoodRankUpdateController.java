@@ -30,6 +30,8 @@ public class FoodRankUpdateController extends HttpServlet {
 		request.setAttribute("boardNo", request.getParameter("bno"));
 		request.setAttribute("title", request.getParameter("Btitle"));
 		request.setAttribute("content", request.getParameter("content"));
+		request.setAttribute("address1", request.getParameter("address1"));
+		request.setAttribute("address2", request.getParameter("address2"));
 		request.getRequestDispatcher("views/food/foodRankUpdate.jsp").forward(request, response);
 	}
 

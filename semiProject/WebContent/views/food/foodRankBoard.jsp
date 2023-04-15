@@ -9,7 +9,7 @@
 <body>
 	<h1>맛집 랭킹</h1>
 	<p>여기에 글들이 좌르륵</p>
-	<a href="<%=request.getContextPath()%>/rankChellage.bo">글작성</a>
+	<a href="<%=request.getContextPath()%>/rankInsert.bo">글작성</a>
 	
 	
 	<script>
