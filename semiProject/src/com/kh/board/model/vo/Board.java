@@ -5,7 +5,8 @@ import java.sql.Date;
 public class Board {
 	
 //	BOARD_NO	NUMBER
-//	USERNO	NUMBER
+//	USERNO	NUMBER		
+	// 이거는 원래 no인데 회원번호 조회해온거 필요 없을거같아서 회원이름으로 바꿀게요
 //	BOARD_TYPE	NUMBER
 //	BOARD_TITLE	VARCHAR2(60 BYTE)
 //	BOARD_CONTENT	VARCHAR2(4000 BYTE)
@@ -16,13 +17,13 @@ public class Board {
 //	COUNT	NUMBER
 	
 	private int boardNo;
-	private int userNo;
+	private String boardWriter;
 	private int boardType;
 	private String boardTitle;
 	private String boardContent;
 	private Date createDate;
 	private Date ModifyDate;
-	private int reCommend;
+	private int recommend;
 	private String status;
 	private int count;
 	
@@ -30,19 +31,29 @@ public class Board {
 	public Board() {
 		super();
 	}
-
-
-	public Board(int boardNo, int userNo, int boardType, String boardTitle, String boardContent, Date createDate,
-			Date modifyDate, int reCommend, String status, int count) {
+	
+	public Board(int boardNo, String boardWriter, int boardType, String boardTitle, Date createDate) {
 		super();
 		this.boardNo = boardNo;
-		this.userNo = userNo;
+		this.boardWriter = boardWriter;
+		this.boardType = boardType;
+		this.boardTitle = boardTitle;
+		this.createDate = createDate;
+	}
+
+
+
+	public Board(int boardNo, String boardWriter, int boardType, String boardTitle, String boardContent, Date createDate,
+			Date modifyDate, int recommend, String status, int count) {
+		super();
+		this.boardNo = boardNo;
+		this.boardWriter = boardWriter;
 		this.boardType = boardType;
 		this.boardTitle = boardTitle;
 		this.boardContent = boardContent;
 		this.createDate = createDate;
 		ModifyDate = modifyDate;
-		this.reCommend = reCommend;
+		this.recommend = recommend;
 		this.status = status;
 		this.count = count;
 	}
@@ -58,13 +69,13 @@ public class Board {
 	}
 
 
-	public int getUserNo() {
-		return userNo;
+	public String getBoardWriter() {
+		return boardWriter;
 	}
 
 
-	public void setUserNo(int userNo) {
-		this.userNo = userNo;
+	public void setUserNo(String boardWriter) {
+		this.boardWriter = boardWriter;
 	}
 
 
@@ -119,12 +130,12 @@ public class Board {
 
 
 	public int getReCommend() {
-		return reCommend;
+		return recommend;
 	}
 
 
-	public void setReCommend(int reCommend) {
-		this.reCommend = reCommend;
+	public void setReCommend(int recommend) {
+		this.recommend = recommend;
 	}
 
 
@@ -150,9 +161,9 @@ public class Board {
 
 	@Override
 	public String toString() {
-		return "Board [boardNo=" + boardNo + ", userNo=" + userNo + ", boardType=" + boardType + ", boardTitle="
+		return "Board [boardNo=" + boardNo + ", boardWriter=" + boardWriter + ", boardType=" + boardType + ", boardTitle="
 				+ boardTitle + ", boardContent=" + boardContent + ", createDate=" + createDate + ", ModifyDate="
-				+ ModifyDate + ", reCommend=" + reCommend + ", status=" + status + ", count=" + count + "]";
+				+ ModifyDate + ", recommend=" + recommend + ", status=" + status + ", count=" + count + "]";
 	}
 	
 	
