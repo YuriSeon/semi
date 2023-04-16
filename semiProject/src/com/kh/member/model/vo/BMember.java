@@ -2,7 +2,9 @@ package com.kh.member.model.vo;
 
 import java.sql.Date;
 
+
 public class BMember {
+
 
 	private int userNo;//		      USERNO NUMBER PRIMARY KEY,
 	private String userId;//		      USERID VARCHAR2(20) NOT NULL UNIQUE,

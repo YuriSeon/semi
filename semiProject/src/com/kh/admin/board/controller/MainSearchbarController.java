@@ -1,4 +1,4 @@
-package com.kh.food.controller;
+package com.kh.admin.board.controller;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -8,16 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class FoodMainController
+ * Servlet implementation class MainSearchbarController
  */
-@WebServlet("/realMain")
-public class FoodMainController extends HttpServlet {
+@WebServlet("/mainSearch.menu")
+public class MainSearchbarController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public FoodMainController() {
+    public MainSearchbarController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -26,7 +26,12 @@ public class FoodMainController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("views/food/afterLoginMain.jsp").forward(request, response);
+		
+		String search = request.getParameter("main-search");
+		
+		
+		
+		
 	}
 
 	/**
