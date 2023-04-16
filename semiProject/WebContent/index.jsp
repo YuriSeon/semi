@@ -1,15 +1,15 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
+<meta charset="UTF-8">
 <title>Break Time[Main]</title>
 </head>
 <body>
-	<h1>·Î±×ÀÎ ÆäÀÌÁö</h1>
+	<h1>ë¡œê·¸ì¸ í˜ì´ì§€</h1>
 	
-	<a href="<%=request.getContextPath() %>/realMain">·Î±×ÀÎ ¿Ï·á ÈÄ MainÀ¸·Î ÀÌµ¿ÇÕ´Ï´Ù.</a>
-	<h1>cÃß°¡</h1>
+	<a href="<%=request.getContextPath() %>/realMain">ë¡œê·¸ì¸ ì™„ë£Œ í›„ Mainìœ¼ë¡œ ì´ë™í•©ë‹ˆë‹¤.</a>
+	<h1>cì¶”ê°€</h1>
 </body>
 </html>

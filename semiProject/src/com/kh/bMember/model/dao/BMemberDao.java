@@ -1,5 +1,5 @@
-package com.kh.member.model.dao;
+package com.kh.bMember.model.dao;
 
-public class MemberDao {
+public class BMemberDao {
 
 }

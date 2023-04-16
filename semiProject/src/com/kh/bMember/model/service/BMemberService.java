@@ -1,5 +1,5 @@
-package com.kh.member.model.service;
+package com.kh.bMember.model.service;
 
-public class MemberService {
+public class BMemberService {
 
 }
