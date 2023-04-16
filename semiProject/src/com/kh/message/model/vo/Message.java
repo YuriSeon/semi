@@ -2,7 +2,12 @@ package com.kh.message.model.vo;
 
 import java.util.Date;
 
-public class Message { //메시지,쪽지 용
+public class Message { 
+//	  MSG_NO NUMBER PRIMARY KEY
+//    USERNO NUMBER NOT NULL FOREIGN KEY BMEMBER (USER_NO)
+//    MSG_CONTENT VARCHAR2(1000) NOT NULL
+//    MSG_SEND_DATE DATE DEFAULT SYSDATE
+//    ACCEPT_USER_NO NUMBER NOT NULL
 	private int msgNo; //메시지번호
 	private String userWriter; //유저번호인데 insert할때 유저번호 select할 때유저 이름도 담아야할거 같아서 String
 	private String msgContent; //메시지 내용
