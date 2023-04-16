@@ -1,8 +1,10 @@
-package com.kh.member.model.vo;
+package com.kh.bMember.model.vo;
 
 import java.sql.Date;
 
-public class Member {
+
+public class BMember {
+
 
 	private int userNo;//		      USERNO NUMBER PRIMARY KEY,
 	private String userId;//		      USERID VARCHAR2(20) NOT NULL UNIQUE,
@@ -21,11 +23,11 @@ public class Member {
 	private String school_st;//		      SCHOOL_ST VARCHAR2(5) DEFAULT 'N',
 	private int number;//		      POINT NUMBER NOT NULL,
 	
-	public Member() {
+	public BMember() {
 		super();
 	}
 
-	public Member(int userNo, String userId, String userPwd, String userName, String phone, String address,
+	public BMember(int userNo, String userId, String userPwd, String userName, String phone, String address,
 			String email, String ssn, String status, Date createDate, Date modifyDate, String userNick, int schoolNo,
 			String power, String school_st, int number) {
 		super();
