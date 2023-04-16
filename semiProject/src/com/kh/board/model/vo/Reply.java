@@ -8,11 +8,11 @@ public class Reply {
 //	  REPLY_CONTENT VARCHAR2(400) NOT NULL
 //	  CREATE_DATE DATE DEFAULT SYSDATE NOT NULL
 //	  STATUS VARCHAR2(1) DEFAULT 'Y' CHECK (STATUS IN ('Y', 'N'))
-	private int replyNo;
-	private int boardNo;
-	private String replyContent;
-	private Date createDate;
-	private String status;
+	private int replyNo; //댓글 번호
+	private int boardNo; //게시글 번호
+	private String replyContent; //댓글 내용
+	private Date createDate; //댓글 작성일
+	private String status; //댓글 삭제 여부
 	public Reply() {
 		super();
 	}

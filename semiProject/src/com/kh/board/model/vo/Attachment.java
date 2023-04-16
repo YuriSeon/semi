@@ -5,24 +5,28 @@ import java.util.Date;
 public class Attachment {
 //	  FILE_NO NUMBER PRIMARY KEY
 //	  BOARD_NO NUMBER NOT NULL
-//	  FILE_NAME VARCHAR2(255) NOT NULL
+//	  ORIGIN_NAME VARCHAR2(255) NOT NULL
+//	  CHANGE_NAME VARCHAR2(255) NOT NULL
 //	  FILE_PATH VARCHAR2(1000)
 //	  UPLOAD_DATE DATE DEFAULT SYSDATE NOT NULL
 //	  STATUS VARCHAR2(1) DEFAULT 'Y' CHECK(STATUS IN('Y', 'N'))
 	private int fileNo;	//파일번호
 	private int boardNo; //게시판번호
-	private String fileName; //파일 이름
+	private String originName; //파일  원본명
+	private String changeName; //파일 수정명
 	private String filePath; //파일 저장 경로
 	private Date uploadDate; // 업로드일
 	private String status; //삭제여부(Y , N삭제)
 	public Attachment() {
 		super();
 	}
-	public Attachment(int fileNo, int boardNo, String fileName, String filePath, Date uploadDate, String status) {
+	public Attachment(int fileNo, int boardNo, String originName, String changeName, String filePath, Date uploadDate,
+			String status) {
 		super();
 		this.fileNo = fileNo;
 		this.boardNo = boardNo;
-		this.fileName = fileName;
+		this.originName = originName;
+		this.changeName = changeName;
 		this.filePath = filePath;
 		this.uploadDate = uploadDate;
 		this.status = status;
@@ -39,11 +43,17 @@ public class Attachment {
 	public void setBoardNo(int boardNo) {
 		this.boardNo = boardNo;
 	}
-	public String getFileName() {
-		return fileName;
+	public String getOriginName() {
+		return originName;
 	}
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+	public void setOriginName(String originName) {
+		this.originName = originName;
+	}
+	public String getChangeName() {
+		return changeName;
+	}
+	public void setChangeName(String changeName) {
+		this.changeName = changeName;
 	}
 	public String getFilePath() {
 		return filePath;
@@ -65,8 +75,8 @@ public class Attachment {
 	}
 	@Override
 	public String toString() {
-		return "Attachment [fileNo=" + fileNo + ", boardNo=" + boardNo + ", fileName=" + fileName + ", filePath="
-				+ filePath + ", uploadDate=" + uploadDate + ", status=" + status + "]";
+		return "Attachment [fileNo=" + fileNo + ", boardNo=" + boardNo + ", originName=" + originName + ", changeName="
+				+ changeName + ", filePath=" + filePath + ", uploadDate=" + uploadDate + ", status=" + status + "]";
 	}
 	
 	
