@@ -8,22 +8,22 @@
 </head>
 <body>
 <body>
-	<form action="<%=request.getContextPath()%>/rankChellage.bo"
+	<form action="<%=request.getContextPath()%>/rankInsert.bo"
 		method="post">
 		<table>
 			<tr>
 				<th>제목</th>
-				<td><input type="text" name="Btitle"></td>
+				<td><input type="text" name="Btitle" required></td>
 			</tr>
 			<tr>
 				<th>내용</th>
 				<td><textarea rows="10" cols="30" name="content"
-						style="resize: none"></textarea></td>
+						style="resize: none" required></textarea></td>
 			</tr>
 			<tr>
 				<th>주소</th>
 				<td><input type="text" id="kakao_address" name="address"
-					readonly></td>
+					required></td>
 			</tr>
 			<tr>
 				<th>상세 주소</th>

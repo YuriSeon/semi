@@ -174,7 +174,7 @@ body{
     		timeFoodPhoto = foodPhoto[4];
     	}
     %>
-    <a class="card" href="<%=request.getContextPath() %>/foodm.bo">
+    <a class="card" href="<%=request.getContextPath() %>/foodmain.bo">
       <div class="card__background" style="background-image: url(<%=timeFoodPhoto%>)"></div>
         <div class="card__content">
         <p class="card__category">맛집 게시판</p>

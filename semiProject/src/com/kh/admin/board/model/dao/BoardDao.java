@@ -46,13 +46,13 @@ public class BoardDao {
 			rset = stmt.executeQuery(sql);
 			
 			while(rset.next()) {
-				list.add(new Board())
+				list.add(new Board());
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		return list;
 	}
 	
 	

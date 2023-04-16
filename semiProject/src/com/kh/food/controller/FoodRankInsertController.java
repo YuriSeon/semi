@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class FoodRankInsertController
  */
-@WebServlet("/rankChellage.bo")
+@WebServlet("/rankInsert.bo")
 public class FoodRankInsertController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -26,7 +26,7 @@ public class FoodRankInsertController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("views/food/foodInsert.jsp").forward(request, response);
+		request.getRequestDispatcher("views/food/foodRankInsert.jsp").forward(request, response);
 	}
 
 	/**
@@ -41,11 +41,13 @@ public class FoodRankInsertController extends HttpServlet {
 		String address1 = request.getParameter("address"); // 도로명 주소
 		String address2 = request.getParameter("addressDetail"); // 상세주소
 		// 도로명주소 + " " + 상세주소 해서 보여줘야한다.
-		String str = address1 + " " + address2;
-		request.setAttribute("fullAddress", str);
+		request.setAttribute("title", title);
+		request.setAttribute("content", content);
+		request.setAttribute("address1", address1);
+		request.setAttribute("address2", address2);
 		
 		// 원래는 sendRedirct로 해야한다. (
-		request.getRequestDispatcher("views/food/foodTogether.jsp").forward(request, response);
+		request.getRequestDispatcher("views/food/foodRankDetail.jsp").forward(request, response);
 	}
 
 }

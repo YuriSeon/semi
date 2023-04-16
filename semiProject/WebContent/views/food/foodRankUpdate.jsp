@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,26 +7,26 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<form action="<%=request.getContextPath()%>/rankChellage.bo"
+	<form action="<%=request.getContextPath()%>/rankInsert.bo"
 		method="post">
 		<table>
 			<tr>
 				<th>제목</th>
-				<td><input type="text" name="Btitle"></td>
+				<td><input type="text" name="Btitle"
+					value="<%=request.getAttribute("title")%>" required></td>
 			</tr>
 			<tr>
 				<th>내용</th>
 				<td><textarea rows="10" cols="30" name="content"
-						style="resize: none"></textarea></td>
+						style="resize: none" required>"<%=request.getAttribute("content")%>"</textarea></td>
 			</tr>
 			<tr>
 				<th>주소</th>
-				<td><input type="text" id="kakao_address" name="address"
-					readonly></td>
+				<td><input type="text" id="kakao_address" name="address" value="<%=request.getAttribute("address1") %>" required></td>
 			</tr>
 			<tr>
 				<th>상세 주소</th>
-				<td><input type="text" name="addressDetail"></td>
+				<td><input type="text" name="addressDetail" value="<%=request.getAttribute("address2") %>"></td>
 			</tr>
 		</table>
 		<button type="submit">등록하기</button>
