@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	
+	<entry key="boardListCount">
+		SELECT COUNT(*)"COUNT"
+		FROM BOARD
+		WHERE BOARD_TYPE = ?
+	</entry>
+	<entry key="boardSelectList"> 
+		SELECT *
+		FROM(SELECT A.*, ROWNUM RNUM
+				FROM (SELECT BOARD_NO, CATEGORY_TYPE, USERNAME , BOARD_TITLE, B.COUNT, B.CREATE_DATE
+						FROM BOARD B
+						JOIN BMEMBER M USING(USERNO)
+						JOIN CATEGORY C ON(CATEGORY_NO=BOARD_TYPE)
+						WHERE BOARD_TYPE = ?
+						AND B.STATUS = 'Y'
+						AND USERNO = 1
+						ORDER BY REPORT DESC BAD DESC ) A )
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	<entry key="">
+		
+	</entry>
+</properties>
+
