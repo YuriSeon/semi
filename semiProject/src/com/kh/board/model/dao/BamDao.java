@@ -10,7 +10,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import com.kh.board.model.vo.BamCategory;
 import com.kh.board.model.vo.Board;
+import com.kh.board.model.vo.Category;
 import com.kh.common.model.vo.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
 
@@ -102,6 +104,33 @@ public class BamDao {
 		
 		
 		
+		return list;
+	}
+
+	//대나무숲 카테고리 가져오기
+	public ArrayList<BamCategory> categoryList(Connection conn) {
+		ArrayList<BamCategory> list = new ArrayList<>();
+		ResultSet rset = null;
+		Statement stmt = null;
+		
+		String sql = prop.getProperty("BamCategoryList");
+		
+		try {
+			stmt = conn.createStatement();
+			
+			rset = stmt.executeQuery(sql);
+			
+			while(rset.next()) {
+				list.add(new BamCategory(rset.getInt("BAM_CATEGORY_NO"),
+									  rset.getString("BAM_CATEGORY_NAME")));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(stmt);
+		}
 		return list;
 	}
 	

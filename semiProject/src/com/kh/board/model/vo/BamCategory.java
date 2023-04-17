@@ -10,6 +10,13 @@ public class BamCategory {
 	public BamCategory() {
 		super();
 	}
+	
+	public BamCategory(int bamCategoryNo, String bamCategoryName) {
+		super();
+		this.bamCategoryNo = bamCategoryNo;
+		this.bamCategoryName = bamCategoryName;
+	}
+
 	public BamCategory(int bamCategoryNo, int categoryNo, String bamCategoryName) {
 		super();
 		this.bamCategoryNo = bamCategoryNo;

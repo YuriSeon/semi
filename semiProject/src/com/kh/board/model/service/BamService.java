@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.util.ArrayList;
 
 import com.kh.board.model.dao.BamDao;
+import com.kh.board.model.dao.BoardDao;
+import com.kh.board.model.vo.BamCategory;
 import com.kh.board.model.vo.Board;
+import com.kh.board.model.vo.Category;
 import com.kh.common.model.vo.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
 
@@ -28,6 +31,16 @@ public class BamService {
 		ArrayList<Board> list = new BamDao().selectList(conn,pi);
 		
 		JDBCTemplate.close(conn);
+		return list;
+	}
+
+	//대나무숲 카테고리 가져오기(일반,질문,연애등등)
+	public ArrayList<BamCategory> categoryList() {
+		Connection conn = JDBCTemplate.getConnection();
+		ArrayList<BamCategory> list = new BamDao().categoryList(conn);
+		
+		JDBCTemplate.close(conn);
+		
 		return list;
 	}
 	
