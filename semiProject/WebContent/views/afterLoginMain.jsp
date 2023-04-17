@@ -168,7 +168,7 @@ body{
     		timeFoodPhoto = foodPhoto[2];
     	}else if(timeNow >= 8){ // 아침시간은 토스트
     		timeFoodPhoto = foodPhoto[3];
-    	}else if(timeNow >= 2){ // 새벽 2시
+    	}else if(timeNow <= 2){ // 새벽 2시
     		timeFoodPhoto = foodPhoto[0];
     	} else{ // 그 외 시간은 평온한 음식사진
     		timeFoodPhoto = foodPhoto[4];
@@ -181,7 +181,6 @@ body{
         <h3 class="card__heading">같이 밥먹자</h3>
       </div>
     </a>
-    
   <div>
 </section>
 </body>

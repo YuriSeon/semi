@@ -22,31 +22,21 @@ public class Board {
 	private String boardContent;
 	private Date createDate;
 	private Date ModifyDate;
-	private int recommend;
+	private int good;
+	private int bad;
+	private int report;
 	private String status;
 	private int count;
 	
+	private String pointName; // 맛집 포인트에 따른 등급 부여를 위한 것임 신경쓸 필요없음
 	
+	
+
 	public Board() {
 		super();
 	}
-
-	
-
-	public Board(int boardNo, String boardWriter, String boardType, String boardTitle, Date createDate, int count) {
-		super();
-		this.boardNo = boardNo;
-		this.boardWriter = boardWriter;
-		this.boardType = boardType;
-		this.boardTitle = boardTitle;
-		this.createDate = createDate;
-		this.count = count;
-	}
-
-
-
-	public Board(int boardNo, String boardWriter, String boardType, String boardTitle, String boardContent, Date createDate,
-			Date modifyDate, int recommend, String status, int count) {
+	public Board(int boardNo, String boardWriter, String boardType, String boardTitle, String boardContent,
+			Date createDate, Date modifyDate, int good, int bad, int report, String status, int count) {
 		super();
 		this.boardNo = boardNo;
 		this.boardWriter = boardWriter;
@@ -54,121 +44,106 @@ public class Board {
 		this.boardTitle = boardTitle;
 		this.boardContent = boardContent;
 		this.createDate = createDate;
-		ModifyDate = modifyDate;
-		this.recommend = recommend;
+		this.ModifyDate = modifyDate;
+		this.good = good;
+		this.bad = bad;
+		this.report = report;
 		this.status = status;
 		this.count = count;
 	}
-
-
+	
+	
+	
+	// 맛집 게시판에 뿌릴 내용
+	public Board(int boardNo, String boardTitle, String boardContent, int good, Date createDate, String boardWriter, String pointName) {
+		this.boardNo = boardNo;
+		this.boardTitle = boardTitle;
+		this.boardContent = boardContent;
+		this.good = good;
+		this.createDate = createDate;
+		this.boardWriter = boardWriter;
+		this.pointName = pointName;
+	}
+	
+	
 	public int getBoardNo() {
 		return boardNo;
 	}
-
-
 	public void setBoardNo(int boardNo) {
 		this.boardNo = boardNo;
 	}
-
-
 	public String getBoardWriter() {
 		return boardWriter;
 	}
-
-
-	public void setUserNo(String boardWriter) {
+	public void setBoardWriter(String boardWriter) {
 		this.boardWriter = boardWriter;
 	}
-
-
 	public String getBoardType() {
 		return boardType;
 	}
-
-
 	public void setBoardType(String boardType) {
 		this.boardType = boardType;
 	}
-
-
 	public String getBoardTitle() {
 		return boardTitle;
 	}
-
-
 	public void setBoardTitle(String boardTitle) {
 		this.boardTitle = boardTitle;
 	}
-
-
 	public String getBoardContent() {
 		return boardContent;
 	}
-
-
 	public void setBoardContent(String boardContent) {
 		this.boardContent = boardContent;
 	}
-
-
 	public Date getCreateDate() {
 		return createDate;
 	}
-
-
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-
-
 	public Date getModifyDate() {
 		return ModifyDate;
 	}
-
-
 	public void setModifyDate(Date modifyDate) {
 		ModifyDate = modifyDate;
 	}
-
-
-	public int getReCommend() {
-		return recommend;
+	public int getGood() {
+		return good;
 	}
-
-
-	public void setReCommend(int recommend) {
-		this.recommend = recommend;
+	public void setGood(int good) {
+		this.good = good;
 	}
-
-
+	public int getBad() {
+		return bad;
+	}
+	public void setBad(int bad) {
+		this.bad = bad;
+	}
+	public int getReport() {
+		return report;
+	}
+	public void setReport(int report) {
+		this.report = report;
+	}
 	public String getStatus() {
 		return status;
 	}
-
-
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
-
 	public int getCount() {
 		return count;
 	}
-
-
 	public void setCount(int count) {
 		this.count = count;
 	}
-
-
-	@Override
-	public String toString() {
-		return "Board [boardNo=" + boardNo + ", boardWriter=" + boardWriter + ", boardType=" + boardType + ", boardTitle="
-				+ boardTitle + ", boardContent=" + boardContent + ", createDate=" + createDate + ", ModifyDate="
-				+ ModifyDate + ", recommend=" + recommend + ", status=" + status + ", count=" + count + "]";
+	
+	public String getPointName() {
+		return pointName;
+	}
+	public void setPointName(String pointName) {
+		this.pointName = pointName;
 	}
 	
-	
-	
-
 }

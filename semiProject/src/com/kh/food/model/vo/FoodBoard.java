@@ -34,7 +34,7 @@ public class FoodBoard {
 	public void setDetailType(int detailType) {
 		this.detailType = detailType;
 	}
-	public int getBoardNo() {
+	public int getBoardNo() { 
 		return boardNo;
 	}
 	public void setBoardNo(int boardNo) {
