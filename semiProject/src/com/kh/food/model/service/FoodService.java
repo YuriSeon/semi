@@ -16,4 +16,10 @@ public class FoodService {
 		return list;
 	}
 
+	public Board selectDetail(int bno) {
+		Connection conn = JDBCTemplate.getConnection();
+		Board b = new FoodDao().selectDetail(conn, bno);
+		return b;
+	}
+
 }
