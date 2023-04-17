@@ -1,4 +1,4 @@
-package com.kh.admin.list.model.vo;
+package com.kh.admin.userManage.model.vo;
 
 public class UserCondition {
 //	USERNO	NUMBER
