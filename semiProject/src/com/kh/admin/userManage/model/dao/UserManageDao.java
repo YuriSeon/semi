@@ -22,7 +22,7 @@ public class UserManageDao {
 	public UserManageDao() {
 		
 		
-		String filePath = UserManageDao.class.getResource("/sql/admin/userManage-mapper.xml").getPath();
+		String filePath = UserManageDao.class.getResource("/admin/userManage-mapper.xml").getPath();
 		
 		try {
 			prop.loadFromXML(new FileInputStream(filePath));
