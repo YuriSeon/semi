@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="selectListCount">
+	<!-- 대나무숲 게시글 갯수 카운트 -->
+		SELECT COUNT(*) "COUNT"
+		FROM BOARD
+		WHERE BOARD_TYPE=2
+		AND STATUS = 'Y'
+	</entry>
+	<entry key="selectList">
+	<!-- 대나무숲 게시글 페이지 목록으로 쓸 데이터 조회 -->
+	SELECT *	
+	FROM(SELECT ROWNUM RNUM, A.*
+		 FROM(SELECT BOARD_NO,USERNO
+		 			,BAM_CATEGORY_NAME,BOARD_TITLE
+		 			,BOARD_CONTENT,CREATE_DATE
+		 			,GOOD,COUNT
+                FROM BOARD B
+                JOIN CATEGORY C ON (BOARD_TYPE=C.CATEGORY_NO)
+                JOIN CATEGORY_BAM D USING (CATEGORY_NO)
+                WHERE BOARD_TYPE=2
+                AND STATUS = 'Y'
+                ORDER BY CREATE_DATE DESC) A)
+	WHERE RNUM BETWEEN ? AND ?	  
+	</entry>
+
+</properties>
