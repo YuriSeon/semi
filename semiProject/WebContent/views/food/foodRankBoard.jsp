@@ -43,7 +43,7 @@
 	</table>
 	<script>
 			$("#list-area tbody tr").click(function(){
-				location.href="<%=request.getContextPath() %>/foodRankingDetail.bo?bno=" + $(this).children().eq[0].text();
+				location.href="<%=request.getContextPath() %>/foodRankingDetail.bo?bno="+$(this).children().eq(0).text();
 			});
 	</script>
 </body>

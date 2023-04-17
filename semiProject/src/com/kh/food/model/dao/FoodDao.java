@@ -89,6 +89,7 @@ public class FoodDao {
 	}
 
 	public Board selectDetail(Connection conn, int bno) {
+		System.out.println("bno = " + bno);
 		ResultSet rset = null;
 		PreparedStatement pstmt = null;
 		String sql = prop.getProperty("selectDetail");
@@ -127,8 +128,40 @@ public class FoodDao {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
 		}
 		return b;
+	}
+
+	public int foodRankInsert(Connection conn, Board b, String newFoodName) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		String sql = prop.getProperty("newfoodRankInsert");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(2, b.getBoardTitle());
+			pstmt.setString(3, b.getBoardContent());
+			pstmt.setString(1, b.getBoardWriter());
+			pstmt.setString(4, b.getAbbress());
+			pstmt.setString(5, newFoodName);
+			
+			
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
+	}
+
+	public int foodRankInsert(Connection conn, Board b, int parseInt) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

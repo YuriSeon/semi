@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8" import="com.kh.board.model.vo.Board"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,24 +10,25 @@
 <!-- 
 		이쪽으로 넘어올때 boardNo랑 loginUser정보 가져오기
  -->
+ <%
+ 	Board b = (Board)request.getAttribute("FoodRanking");
+ 
+ %>
  
  	<h1>상세보기</h1>
 	<table id = "table-area">
 		<tr>
 			<th>제목</th>
-			<td><input type="text" name="Btitle" value="제목입니다." readOnly></td>
-			<%-- <%=request.getAttribute("Btitle") %> --%>
+			<td><input type="text" name="Btitle" value="<%=b.getBoardTitle() %>" readOnly></td>
 		</tr>
 		<tr>
 			<th>내용</th>
 			<td><textarea rows="10" cols="30" name="content"
-					style="resize: none" readOnly>내용입니다.</textarea></td>
-					<%-- <%=request.getAttribute("content") %> --%>
+					style="resize: none" readOnly><%=b.getBoardContent() %></textarea></td>
 		</tr>
 		<tr>
 			<th>주소</th>
-			<td><input type="text" id="address" value="주소입니다." readOnly></td>
-			<%-- <td><input type="text" id="address" value="<%=request.getAttribute("address1") %> <%=request.getAttribute("address2") %>%>" readOnly></td> --%>
+			<td><input type="text" id="address" value="<%=b.getAbbress() %>" readOnly></td>
 		</tr>
 	</table>
 	
@@ -58,7 +59,7 @@ var geocoder = new kakao.maps.services.Geocoder();
 
 // 주소로 좌표를 검색합니다
 <%-- geocoder.addressSearch('<%=request.getAttribute("address1")%> <%=request.getAttribute("address2")%>', function(result, status) { --%>
-geocoder.addressSearch('서울 마포구 독막로 5', function(result, status) {
+geocoder.addressSearch("<%=b.getAbbress()%>", function(result, status) {
 
     // 정상적으로 검색이 완료됐으면 
      if (status === kakao.maps.services.Status.OK) {

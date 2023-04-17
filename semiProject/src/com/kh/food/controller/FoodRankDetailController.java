@@ -34,6 +34,7 @@ public class FoodRankDetailController extends HttpServlet {
 		
 		Board b = new FoodService().selectDetail(bno);
 		request.setAttribute("FoodRanking", b);
+		System.out.println(b.getBoardTitle());
 		request.getRequestDispatcher("views/food/foodRankDetail.jsp").forward(request, response);
 	}
 

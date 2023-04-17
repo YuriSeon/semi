@@ -22,4 +22,23 @@ public class FoodService {
 		return b;
 	}
 
+	public int foodRankInsert(Board b, String foodCategoryNo, String newFoodName) {
+		Connection conn = JDBCTemplate.getConnection();
+		int num = 0;
+		if(foodCategoryNo.equals("0")) {
+			num = new FoodDao().foodRankInsert(conn, b, newFoodName);
+		}else {
+			num = new FoodDao().foodRankInsert(conn, b, Integer.parseInt(foodCategoryNo));
+		}
+		
+		if(num > 0) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+		return num;
+	}
+
 }

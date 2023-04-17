@@ -34,6 +34,18 @@ public class Board {
 	private String abbress;
 	
 
+	public String getFoodName() {
+		return foodName;
+	}
+	public void setFoodName(String foodName) {
+		this.foodName = foodName;
+	}
+	public String getAbbress() {
+		return abbress;
+	}
+	public void setAbbress(String abbress) {
+		this.abbress = abbress;
+	}
 	public Board() {
 		super();
 	}
