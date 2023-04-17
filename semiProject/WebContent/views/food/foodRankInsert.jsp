@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
 </head>
 <body>
 <body>
@@ -14,6 +15,21 @@
 			<tr>
 				<th>제목</th>
 				<td><input type="text" name="Btitle" required></td>
+			</tr>
+			<tr>
+				<th>음식 카테고리</th>
+				<td>
+					<select name="foodselect" id="foodselect" onchange="hiddenselect()">
+					<!-- 나중에 생각하기.... -->
+						<option value="1">떡볶이</option>
+						<option value="2">김밥</option>
+						<option value="3">치킨</option>
+						<option value="4">피자</option>
+						<option value="5">파스타</option>
+						<option value="0">기타</option>
+					</select>
+					<input type="text" id="hiddeninput" name="newfood" style="display:none;">
+				</td>
 			</tr>
 			<tr>
 				<th>내용</th>
@@ -31,10 +47,17 @@
 			</tr>
 		</table>
 		<button type="submit">등록하기</button>
-	</form>
+	</form> 	
 </body>
 <script
 	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script>
+		function hiddenselect(){
+			if($("#foodselect option:selected").val() == 0){
+				$("#hiddeninput").css("display", "block");
+			}
+		}					
+	</script>
 <script>
 	window.onload = function() {
 		document
