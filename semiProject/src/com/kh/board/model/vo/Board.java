@@ -35,6 +35,21 @@ public class Board {
 	public Board() {
 		super();
 	}
+	
+	//페이지 만들때 게시글 
+	public Board(int boardNo, String boardWriter, String boardType, String boardTitle, String boardContent,
+			Date createDate, int good, int count) {
+		super();
+		this.boardNo = boardNo;
+		this.boardWriter = boardWriter;
+		this.boardType = boardType;
+		this.boardTitle = boardTitle;
+		this.boardContent = boardContent;
+		this.createDate = createDate;
+		this.good = good;
+		this.count = count;
+	}
+
 	public Board(int boardNo, String boardWriter, String boardType, String boardTitle, String boardContent,
 			Date createDate, Date modifyDate, int good, int bad, int report, String status, int count) {
 		super();
