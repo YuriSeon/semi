@@ -27,7 +27,7 @@ public class CheckListMainController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
-		request.getRequestDispatcher("admin/views/list/checkListMain.jsp").forward(request, response);
+		request.getRequestDispatcher("admin/views/userManage/checkListMain.jsp").forward(request, response);
 	
 	}
 
