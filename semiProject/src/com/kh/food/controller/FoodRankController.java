@@ -1,11 +1,16 @@
 package com.kh.food.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.kh.board.model.vo.Board;
+import com.kh.food.model.service.FoodService;
 
 /**
  * Servlet implementation class FoodRankController
@@ -26,6 +31,9 @@ public class FoodRankController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		ArrayList<Board> list = new FoodService().selectFoodRanking();
+		request.setAttribute("list", list);
 		request.getRequestDispatcher("views/food/foodRankBoard.jsp").forward(request, response);
 	}
 
