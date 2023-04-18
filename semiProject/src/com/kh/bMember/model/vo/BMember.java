@@ -18,18 +18,18 @@ public class BMember {
 	private Date createDate;//		      CREATE_DATE DATE DEFAULT SYSDATE NOT NULL,
 	private Date modifyDate;//		      MODIFY_DATE DATE DEFAULT SYSDATE NOT NULL,
 	private String userNick;//		      USER_NICK VARCHAR2(100) NOT NULL,
-	private int schoolNo;//		      SCHOOL_NO NUMBER,
+	private String schoolNo;//		      SCHOOL_NO NUMBER,
 	private String power;//		      POWER VARCHAR2(20) DEFAULT 'N' NOT NULL,
 	private String school_st;//		      SCHOOL_ST VARCHAR2(5) DEFAULT 'N',
-	private int number;//		      POINT NUMBER NOT NULL,
+	private int point;//		      POINT NUMBER NOT NULL,
 	
 	public BMember() {
 		super();
 	}
 
 	public BMember(int userNo, String userId, String userPwd, String userName, String phone, String address,
-			String email, String ssn, String status, Date createDate, Date modifyDate, String userNick, int schoolNo,
-			String power, String school_st, int number) {
+			String email, String ssn, String status, Date createDate, Date modifyDate, String userNick, String schoolNo,
+			String power, String school_st, int point) {
 		super();
 		this.userNo = userNo;
 		this.userId = userId;
@@ -46,7 +46,7 @@ public class BMember {
 		this.schoolNo = schoolNo;
 		this.power = power;
 		this.school_st = school_st;
-		this.number = number;
+		this.point = point;
 	}
 
 	public int getUserNo() {
@@ -145,11 +145,11 @@ public class BMember {
 		this.userNick = userNick;
 	}
 
-	public int getSchoolNo() {
+	public String getSchoolNo() {
 		return schoolNo;
 	}
 
-	public void setSchoolNo(int schoolNo) {
+	public void setSchoolNo(String schoolNo) {
 		this.schoolNo = schoolNo;
 	}
 
@@ -169,12 +169,12 @@ public class BMember {
 		this.school_st = school_st;
 	}
 
-	public int getNumber() {
-		return number;
+	public int getPoint() {
+		return point;
 	}
 
-	public void setNumber(int number) {
-		this.number = number;
+	public void setPoint(int point) {
+		this.point = point;
 	}
 
 	@Override
@@ -182,7 +182,7 @@ public class BMember {
 		return "Member [userNo=" + userNo + ", userId=" + userId + ", userPwd=" + userPwd + ", userName=" + userName
 				+ ", phone=" + phone + ", address=" + address + ", email=" + email + ", ssn=" + ssn + ", status="
 				+ status + ", createDate=" + createDate + ", modifyDate=" + modifyDate + ", userNick=" + userNick
-				+ ", schoolNo=" + schoolNo + ", power=" + power + ", school_st=" + school_st + ", number=" + number
+				+ ", schoolNo=" + schoolNo + ", power=" + power + ", school_st=" + school_st + ", point=" + point
 				+ "]";
 	}
 	
