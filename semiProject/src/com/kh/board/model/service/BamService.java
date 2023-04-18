@@ -4,10 +4,9 @@ import java.sql.Connection;
 import java.util.ArrayList;
 
 import com.kh.board.model.dao.BamDao;
-import com.kh.board.model.dao.BoardDao;
+import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.BamCategory;
 import com.kh.board.model.vo.Board;
-import com.kh.board.model.vo.Category;
 import com.kh.common.model.vo.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
 
@@ -42,6 +41,83 @@ public class BamService {
 		JDBCTemplate.close(conn);
 		
 		return list;
+	}
+
+	//대나무숲 게시글 인서트(작성)
+	public int insertBam(Board b, Attachment at) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = new BamDao().insertBam(conn,b);
+		int result2=1;
+		if(at!= null) {
+			result2 = new BamDao().insertAttachment(conn,at);
+		}
+		if(result>0 && result2>0) {//작성성공
+			JDBCTemplate.commit(conn);
+			System.out.println("사진작성성공");
+		}else {//작성실패
+			JDBCTemplate.rollback(conn);
+		}
+		JDBCTemplate.close(conn);
+		
+		return result*result2;
+	}
+	
+	//조회수 증가 메소드
+	public int increaseCount(int boardNo) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = new BamDao().increaseCount(conn,boardNo);
+		
+		if(result>0) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+		
+		return result;
+	}
+
+	//게시글 조회 메소드
+	public Board selectBam(int boardNo) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		Board b = new BamDao().selectBam(conn,boardNo);
+		
+		JDBCTemplate.close(conn);
+		
+		return b;
+	}
+
+	//첨부파일 조회 메소드
+	public Attachment selectAttachment(int boardNo) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		Attachment at = new BamDao().selectAttachment(conn,boardNo);
+		
+		JDBCTemplate.close(conn);
+		
+		return at;
+	}
+
+	//게시글 삭제 메소드
+	public int deleteBam(int boardNo) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = new BamDao().deleteBam(conn,boardNo);
+		
+		if(result>0) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+		
+		
+		return result;
 	}
 	
 }

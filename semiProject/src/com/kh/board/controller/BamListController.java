@@ -60,7 +60,7 @@ public class BamListController extends HttpServlet {
 			endPage=maxPage;
 		}
 		
-		PageInfo pi = new PageInfo(listCount,currentPage,pageLimit,boardLimit,maxPage,startPage,endPage);
+		PageInfo pi = new PageInfo(listCount,currentPage,startPage,endPage,boardLimit,pageLimit,maxPage);
 		
 		ArrayList<Board> list = new BamService().selectList(pi);
 		
