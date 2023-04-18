@@ -15,6 +15,7 @@ import java.util.Properties;
 import com.kh.board.model.vo.Board;
 import com.kh.common.model.vo.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
+import com.kh.video.model.vo.Video;
 
 
 
@@ -24,7 +25,7 @@ public class VideoDao {
 	
 	public VideoDao() {
 		
-		String filePath = VideoDao.class.getResource("/sql/video.video-mapper.xml").getPath();
+		String filePath = VideoDao.class.getResource("/sql/video/video-mapper.xml").getPath();
 	
 		try {
 			prop.loadFromXML(new FileInputStream(filePath));
@@ -39,7 +40,7 @@ public class VideoDao {
 			e.printStackTrace();
 		}
 	}
-	//총
+	//총 게시글 개수 구하는 메소드
 	public int selectListCount(Connection conn) {
 		
 		int listCount = 0;
@@ -67,6 +68,7 @@ public class VideoDao {
 		return listCount;
 	}
 	
+	//게시글 리스트 조회
 	public ArrayList<Board> selectList(Connection conn, PageInfo pi) {
 
 		ArrayList<Board> list = new ArrayList<>();
@@ -88,7 +90,11 @@ public class VideoDao {
 			
 			while(rset.next()) {
 				list.add(new Board(rset.getInt("BOARD_NO")   
-						 
+						  ,rset.getString("BOARD_WRITER")
+						  ,rset.getString("BOARD_TYPE")
+						  ,rset.getString("BOARD_TITLE")
+						  ,rset.getDate("CREATE_DATE")
+						  ,rset.getInt("COUNT")));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -98,5 +104,16 @@ public class VideoDao {
 			JDBCTemplate.close(pstmt);
 		}
 		return list;
+	}
+	
+	//게시글 내용 
+	public int insertPhotoBoard(Connection conn, Board b) {
+		
+		return 0;
+	}
+	//비디오 리스트 
+	public int insertVideoList(Connection conn, ArrayList<Video> list) {
+
+		return 0;
 	}
 }
