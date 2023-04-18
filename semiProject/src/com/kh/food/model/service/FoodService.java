@@ -57,6 +57,9 @@ public class FoodService {
 			result2 = selectDetail(Integer.parseInt(bno)).getReport(); // 현재 신고수
 			break;
 		}
+		if(result == -1) {
+			System.out.println("User_Condition update error");
+		}
 		if(result > 0) {
 			JDBCTemplate.commit(conn);
 		}else {

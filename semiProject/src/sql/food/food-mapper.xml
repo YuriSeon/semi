@@ -45,8 +45,6 @@ SELECT * FROM DUAL
 </entry>
 
 
-
-
 <entry key="UpdateGood">
 	UPDATE BOARD
 	SET GOOD = GOOD + 1
@@ -65,6 +63,11 @@ SELECT * FROM DUAL
 	WHERE USERNO = ?
 </entry>
 
+<entry key="UpdateReportB">
+	UPDATE BOARD
+	SET REPORT = REPORT + 1
+	WHERE BOARD_NO = ?
+</entry>
 </properties>
 
 

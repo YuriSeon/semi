@@ -189,10 +189,21 @@ public class FoodDao {
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, bno);
 				break;
-			case "/reportbtn" :				
-				sql = prop.getProperty("UpdateReport"); // 관리자꺼 업데이트
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setInt(1, userNo);
+			case "/reportbtn" :
+				String[] sqlArr = {"UpdateReport", "UpdateReportB"};
+				for(int i = 0; i < 2; i++) {					
+					sql = prop.getProperty(sqlArr[i]); // 관리자꺼 업데이트
+					pstmt = conn.prepareStatement(sql);
+					if(i == 0) {
+						pstmt.setInt(1, userNo);
+						result = pstmt.executeUpdate();
+						if(result < 0) {
+							return -1;
+						}
+					}else {
+						pstmt.setString(1, bno);
+					}
+				}
 				break;
 			}
 			result = pstmt.executeUpdate();
