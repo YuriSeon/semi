@@ -34,24 +34,24 @@ public class VideoListController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//페이징 처리
-		int listCount;	//현재 총 게시글의 개수
-		int currentPage; //현재페이지
-		int pageLimit; //페이지 하단에 보여질 페이징바의 페이지 최대 개수
-		int boardLimit; //한 페이지에서 보여질 게시글 최대 개수
+		int listCount;	
+		int currentPage; 
+		int pageLimit; 
+		int boardLimit; 
 		
-		int maxPage; //가장 마지막 페이지가 몇인지(총페이지의 개수)
-		int startPage; //페이지 하단에 보여질 페이징바의 시작수
-		int endPage; //페이지 하단에 보여질 페이징바의 끝 수
+		int maxPage; 
+		int startPage; 
+		int endPage; 
 		
-		//listCount : 총 게시글 개수 구하기
+	
 		listCount = new VideoService().selectListCount();
 	
-		//currentPage : 현재페이지
+		
 		currentPage = Integer.parseInt(request.getParameter("currentPage"));
 	
-		//pageLimit : 페이지 하단에 보여질 페이징바의 페이지 최대 개수(목록 단위)
+		
 		pageLimit = 10;
-		//boardLimit : 한 페이지에 보여질 게시글 개수 (게시글 단위)
+	
 		boardLimit = 10;
 		
 		maxPage = (int)Math.ceil((double)listCount/boardLimit);
@@ -64,10 +64,9 @@ public class VideoListController extends HttpServlet {
 			endPage = maxPage;
 		}
 		
-		//페이지 정보들을 하나의 공간에 담아보내기
-		PageInfo pi = new PageInfo(listCount,currentPage,pageLimit,boardLimit,maxPage,startPage,endPage);
+		
+		PageInfo pi = new PageInfo(listCount,currentPage,startPage,endPage,boardLimit,pageLimit,maxPage);
 	
-		//현재 사용자가 요청한 페이지에 (currentPage)에 보여질 게시글 리스트 조회 
 		ArrayList<Board> list = new VideoService().selectList(pi);
 	
 		request.setAttribute("list", list);
