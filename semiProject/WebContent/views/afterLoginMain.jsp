@@ -146,7 +146,7 @@ body{
         <h3 class="card__heading">릴스 영상</h3>
       </div>
     </a>
-    <a class="card" href="#">
+    <a class="card" href="<%=request.getContextPath()%>/bamlist.bo?currentPage=1">
       <div class="card__background" style="background-image: url(https://images.unsplash.com/photo-1556680262-9990363a3e6d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60)"></div>
       <div class="card__content">
         <p class="card__category">익명게시판</p>

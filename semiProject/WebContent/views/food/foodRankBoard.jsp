@@ -1,22 +1,51 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8" import="java.util.*, com.kh.board.model.vo.Board"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
+<meta charset="UTF-8">
 <title>Break Time[Food_Rank]</title>
+<style>
+</style>
+<script src="https://code.jquery.com/jquery-3.6.4.js"integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="crossorigin="anonymous"></script>
 </head>
+<%
+	ArrayList<Board> list = (ArrayList<Board>)request.getAttribute("list");
+%>
 <body>
-	<h1>¸ÀÁı ·©Å·</h1>
-	<p>¿©±â¿¡ ±ÛµéÀÌ ÁÂ¸£¸¤</p>
-	<a href="<%=request.getContextPath()%>/rankInsert.bo">±ÛÀÛ¼º</a>
-	
-	
+	<a href="<%=request.getContextPath()%>/rankInsert.bo">ê¸€ì‘ì„±</a>
+	<table id="list-area">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>ì œëª©</th>
+				<th>ë©”ë‰´</th>
+				<th>ì¶”ì²œ</th>
+				<th>ì‘ì„±ë‚ ì§œ</th>
+				<th>ì‘ì„±ì</th>
+				<th>ë§›ë“±ê¸‰</th>
+			</tr>
+		</thead>
+		<tbody>
+		<%if(!list.isEmpty()){ %>
+		<%for(Board b : list){ %>
+			 <tr>
+			 	<td><%=b.getBoardNo() %></td>
+			 	<td><%=b.getBoardTitle() %></td>
+			 	<td><%=b.getBoardContent() %></td>
+			 	<td><%=b.getGood() %></td>
+			 	<td><%=b.getCreateDate() %></td>
+			 	<td><%=b.getBoardWriter() %></td>
+			 	<td><%=b.getPointName() %></td>
+			 </tr>
+		<%}} %>
+		</tbody>
+	</table>
 	<script>
-		document.querySelector("td").addEventLinster("click", function(){
-			location.href = "<%=request.getContextPath() %>/foodDtail?bno=1";
-			// ±ÛµéÇÑÅ× °¢ÀÚ board No ÀÖÀ¸´Ï±ñ »ó°ü¾ø´Ù.
-		});
+			$("#list-area tbody tr").click(function(){
+				location.href="<%=request.getContextPath() %>/foodRankingDetail.bo?bno="+$(this).children().eq(0).text();
+			});
 	</script>
 </body>
+
 </html>

@@ -28,13 +28,42 @@ public class Board {
 	private String status;
 	private int count;
 	
-	private String pointName; // 맛집 포인트에 따른 등급 부여를 위한 것임 신경쓸 필요없음
-	
+	// 맛집 포인트에 따른 등급 부여를 위한 것임 신경쓸 필요없음
+	private String pointName; 
+	private String foodName;
+	private String abbress;
 	
 
+	public String getFoodName() {
+		return foodName;
+	}
+	public void setFoodName(String foodName) {
+		this.foodName = foodName;
+	}
+	public String getAbbress() {
+		return abbress;
+	}
+	public void setAbbress(String abbress) {
+		this.abbress = abbress;
+	}
 	public Board() {
 		super();
 	}
+	
+	//페이지 만들때 게시글 
+	public Board(int boardNo, String boardWriter, String boardType, String boardTitle, String boardContent,
+			Date createDate, int good, int count) {
+		super();
+		this.boardNo = boardNo;
+		this.boardWriter = boardWriter;
+		this.boardType = boardType;
+		this.boardTitle = boardTitle;
+		this.boardContent = boardContent;
+		this.createDate = createDate;
+		this.good = good;
+		this.count = count;
+	}
+
 	public Board(int boardNo, String boardWriter, String boardType, String boardTitle, String boardContent,
 			Date createDate, Date modifyDate, int good, int bad, int report, String status, int count) {
 		super();
@@ -55,15 +84,29 @@ public class Board {
 	
 	
 	// 맛집 게시판에 뿌릴 내용
-	public Board(int boardNo, String boardTitle, String boardContent, int good, Date createDate, String boardWriter, String pointName) {
+	public Board(int boardNo, String boardTitle, String boardContent, int good, Date createDate, String boardWriter) {
 		this.boardNo = boardNo;
 		this.boardTitle = boardTitle;
 		this.boardContent = boardContent;
 		this.good = good;
 		this.createDate = createDate;
 		this.boardWriter = boardWriter;
-		this.pointName = pointName;
 	}
+	// 맛집 게시판 디테일 뷰 내용
+	public Board(String boardTitle, String boardContent, String foodName, int good, int bad,int report, Date createDate,String boardWriter
+			,String abbress) {
+		super();
+		this.boardTitle = boardTitle;
+		this.boardContent = boardContent;
+		this.foodName = foodName;
+		this.good = good;
+		this.bad = bad;
+		this.report = report;
+		this.createDate = createDate;
+		this.boardWriter = boardWriter;
+		this.abbress = abbress;
+	}
+	
 	
 	
 	public int getBoardNo() {

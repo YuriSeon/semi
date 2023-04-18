@@ -17,7 +17,7 @@ public class JDBCTemplate {
 		
 		Properties prop = new Properties();
 		
-		String filePath = JDBCTemplate.class.getResource("/driver/driver.properties").getPath();
+		String filePath = JDBCTemplate.class.getResource("/sql/driver/driver.properties").getPath();
 		
 		Connection conn = null;
 		
@@ -25,6 +25,7 @@ public class JDBCTemplate {
 			prop.load(new FileInputStream(filePath));
 			
 			Class.forName(prop.getProperty("driver"));
+			
 			
 			conn = DriverManager.getConnection(prop.getProperty("url"),prop.getProperty("userId"), prop.getProperty("userPwd"));
 			

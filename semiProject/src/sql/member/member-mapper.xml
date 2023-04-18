@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="loginMember">
+		SELECT * FROM BMEMBER
+		WHERE USERID = ?
+		AND USERPWD = ?
+		AND STATUS = 'Y'
+	</entry>
+</properties>
