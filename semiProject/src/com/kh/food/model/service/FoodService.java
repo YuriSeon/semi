@@ -41,4 +41,30 @@ public class FoodService {
 		return num;
 	}
 
+	public int UpdateBtn(String str, String bno) {
+		Connection conn = JDBCTemplate.getConnection();
+		int userNo = selectDetail(Integer.parseInt(bno)).getUn();
+		int result = new FoodDao().UpdateBtn(conn, str, bno, userNo);
+		int result2 = 0;
+		switch(str){
+		case "/goodbtn":
+			result2 = selectDetail(Integer.parseInt(bno)).getGood(); // 현재 추천수
+			break;
+		case "/badbtn":
+			result2 = selectDetail(Integer.parseInt(bno)).getBad(); // 현재 비추천수
+			break;
+		case "/reportbtn":
+			result2 = selectDetail(Integer.parseInt(bno)).getReport(); // 현재 신고수
+			break;
+		}
+		if(result > 0) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+		return result2;
+	}
+
 }

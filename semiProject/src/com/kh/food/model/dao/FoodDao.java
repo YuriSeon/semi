@@ -36,18 +36,6 @@ public class FoodDao {
 		String sql = prop.getProperty("selectFoodRanking");
 		ArrayList<Board> list = new ArrayList<>();
 		
-		// selectFoodRanking
-//		SELECT BOARD_NO, B.BOARD_TITLE, FC.FOOD_NAME, B.GOOD, B.CREATE_DATE, M.USERID, M.POINT
-//		FROM BOARD B
-//		JOIN BMEMBER M USING (USERNO)
-//		JOIN CATEGORY C ON (B.BOARD_TYPE = C.CATEGORY_NO)
-//		JOIN FOOD_BOARD FB USING (BOARD_NO)
-//		JOIN F_CATEGORY FC ON (FC.FOOD_CATEGORY = fb.food_category)
-//		WHERE c.category_no = 3
-//		AND FB.DETAIL_TYPE = 1
-//		AND B.STATUS = 'Y'
-//		ORDER BY GOOD DESC
-		
 		try {
 			stmt = conn.createStatement();
 			rset = stmt.executeQuery(sql);
@@ -72,6 +60,7 @@ public class FoodDao {
 		}
 		return list;
 	}
+	
 	private String pointCheck(int point) {
 		String name = "";
 		if(point > 9) {
@@ -121,7 +110,8 @@ public class FoodDao {
 							rset.getInt("REPORT"),
 							rset.getDate("CREATE_DATE"),
 							rset.getString("USERID"),
-							rset.getString("ADDRESS")
+							rset.getString("ADDRESS"),
+							rset.getInt("USERNO")
 						);
 				b.setPointName(pointCheck(rset.getInt("POINT")));
 			}
@@ -142,9 +132,9 @@ public class FoodDao {
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, b.getBoardWriter());
 			pstmt.setString(2, b.getBoardTitle());
 			pstmt.setString(3, b.getBoardContent());
-			pstmt.setString(1, b.getBoardWriter());
 			pstmt.setString(4, b.getAbbress());
 			pstmt.setString(5, newFoodName);
 			
@@ -159,9 +149,59 @@ public class FoodDao {
 		return result;
 	}
 
-	public int foodRankInsert(Connection conn, Board b, int parseInt) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int foodRankInsert(Connection conn, Board b, int foodCategoryNo) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		String sql = prop.getProperty("BasicfoodRankInsert");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, b.getBoardWriter());
+			pstmt.setString(2, b.getBoardTitle());
+			pstmt.setString(3, b.getBoardContent());
+			pstmt.setInt(4, foodCategoryNo);			
+			pstmt.setString(5, b.getAbbress());
+			
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
+	}
+
+
+	public int UpdateBtn(Connection conn, String str, String bno, int userNo) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = "";
+		try{
+			switch(str) {
+			case "/goodbtn" :
+				sql = prop.getProperty("UpdateGood");
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, bno);
+				break;
+			case "/badbtn" :
+				sql = prop.getProperty("UpdateBad");
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, bno);
+				break;
+			case "/reportbtn" :				
+				sql = prop.getProperty("UpdateReport"); // 관리자꺼 업데이트
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, userNo);
+				break;
+			}
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
 	}
 
 }

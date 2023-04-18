@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.kh.bMember.model.vo.BMember;
 import com.kh.board.model.vo.Board;
 import com.kh.food.model.service.FoodService;
 
@@ -50,12 +51,14 @@ public class FoodRankInsertController extends HttpServlet {
 		String content = request.getParameter("content"); // 내용
 		String address1 = request.getParameter("address"); // 도로명 주소
 		String address2 = request.getParameter("addressDetail"); // 상세주소
-//		String userno = request.getSession().getAttribute("loginUser").getUserNo(); // 로그인 유저 넘버 가져오기
+		String userno = String.valueOf(((BMember)request.getSession().getAttribute("loginUser")).getUserNo()); // 로그인 유저 넘버 가져오기
+		
+		
 		Board b = new Board();
 		b.setBoardTitle(title);
 		b.setBoardContent(content);
 		b.setAbbress(address1 + " " + address2);
-//		b.setBoardWriter(userno);
+		b.setBoardWriter(userno);
 		b.setBoardWriter("1"); // test용
 		int num = new FoodService().foodRankInsert(b, foodCategoryNo, newFoodName);
 		if(num > 0) {
