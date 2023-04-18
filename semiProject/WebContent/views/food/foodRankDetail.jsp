@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8" import="com.kh.board.model.vo.Board"%>
+	pageEncoding="UTF-8" import="com.kh.board.model.vo.Board, com.kh.bMember.model.vo.BMember"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,6 +15,7 @@
  -->
  <%
  	Board b = (Board)request.getAttribute("FoodRanking");
+ 	BMember m = ((BMember)request.getSession().getAttribute("loginUser"));
  %>
  
  	<h1>상세보기</h1>
@@ -113,11 +114,10 @@
 	
 	
 	
-	<!-- loginUser가 null이 아니고 관리자 또는 loginUser의 Id와 작성자의 Id가 같다면 -->
+	<%if(m != null && m.getUserNo() == b.getUn()){ %>
 	<button type="button" onclick="location.href='<%=request.getContextPath()%>/foodRankUpdate.bo?bno=<%=request.getParameter("bno")%>'">수정하기</button>
 	<button type="button" onclick="location.href='<%=request.getContextPath()%>/foodRankDelete.bo?bno=<%=request.getParameter("bno")%>'">삭제하기</button>
-	<!-- 그 외에는 없앤다. -->
-	
+	<%} %>
 	<button onlick="location.href=<%=request.getContextPath() %>/foodmain.bo">목록보기</button>
 	
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f91f4c1499628ccd44bb5d41070cb9a1&libraries=services"></script>

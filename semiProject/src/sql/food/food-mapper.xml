@@ -64,6 +64,7 @@ SELECT * FROM DUAL
 	SET BLOCK_C = BLOCK_C + 1
 	WHERE USERNO = ?
 </entry>
+
 </properties>
 
 

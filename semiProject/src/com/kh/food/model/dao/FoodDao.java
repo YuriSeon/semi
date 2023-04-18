@@ -190,7 +190,7 @@ public class FoodDao {
 				pstmt.setString(1, bno);
 				break;
 			case "/reportbtn" :				
-				sql = prop.getProperty("UpdateReport");
+				sql = prop.getProperty("UpdateReport"); // 관리자꺼 업데이트
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, userNo);
 				break;
