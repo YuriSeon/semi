@@ -24,5 +24,48 @@
                 ORDER BY CREATE_DATE DESC) A)
 	WHERE RNUM BETWEEN ? AND ?	  
 	</entry>
+	<entry key="BamCategoryList">
+	<!-- 대나무숲 카테고리 가져오기 -->
+	SELECT *
+	FROM CATEGORY_BAM
+	</entry>
+	<entry key="insertBam">
+	<!-- 대나무숲 게시글 인서트 -->
+	INSERT INTO BOARD (BOARD_NO,USERNO,BOARD_TYPE,BOARD_TITLE,BOARD_CONTENT)
+	VALUES (SEQ_BNO.NEXTVAL,?,2,?,?)
+	</entry>
+	<entry key="insertAttachment">
+	<!-- 대나무숲 첨부파일 인서트 -->
+	INSERT INTO ATTACHMENT (FILE_NO,BOARD_NO,ORIGIN_NAME,CHANGE_NAME,FILE_PATH)
+	VALUES (SEQ_FNO.NEXTVAL,SEQ_BNO.CURRVAL,?,?,?)
+	</entry>
+	<entry key="increaseCount">
+	<!-- 대나무숲 조회수 증가 -->
+	UPDATE BOARD
+	SET COUNT = COUNT + 1
+	WHERE STATUS = 'Y'
+	AND BOARD_NO = ?
+	</entry>
+	<entry key="selectBam">
+	<!-- 대나무숲 게시글 조회 -->
+	SELECT BOARD_NO,USERNO,BOARD_TYPE,BOARD_TITLE,BOARD_CONTENT,CREATE_DATE,MODIFY_DATE,GOOD,COUNT
+	FROM BOARD
+	WHERE BOARD_NO = ?
+	AND STATUS = 'Y'
+	</entry>
+	<entry key="selectAttachment">
+	<!-- 대나무숲 첨부파일 조회 -->
+	SELECT FILE_NO,ORIGIN_NAME,CHANGE_NAME,FILE_PATH,UPLOAD_DATE
+	FROM ATTACHMENT
+	WHERE BOARD_NO = ?
+	AND STATUS = 'Y'
+	</entry>
+	<entry key="deleteBam">
+	<!-- 대나무숲 게시글 삭제(상테창변경) -->
+	UPDATE BOARD
+	SET STATUS = 'N'
+	WHERE BOARD_NO = ?
+	AND STATUS = 'Y'
+	</entry>
 
 </properties>

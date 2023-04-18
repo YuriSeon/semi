@@ -63,7 +63,21 @@ public class Board {
 		this.good = good;
 		this.count = count;
 	}
-
+	
+	//대나무숲 게시글 디테일
+	public Board(int boardNo, String boardWriter, String boardType, String boardTitle, String boardContent,
+			Date createDate, Date modifyDate, int good, int count) {
+		super();
+		this.boardNo = boardNo;
+		this.boardWriter = boardWriter;
+		this.boardType = boardType;
+		this.boardTitle = boardTitle;
+		this.boardContent = boardContent;
+		this.createDate = createDate;
+		ModifyDate = modifyDate;
+		this.good = good;
+		this.count = count;
+	}
 	public Board(int boardNo, String boardWriter, String boardType, String boardTitle, String boardContent,
 			Date createDate, Date modifyDate, int good, int bad, int report, String status, int count) {
 		super();
@@ -80,6 +94,7 @@ public class Board {
 		this.status = status;
 		this.count = count;
 	}
+	
 	
 	
 	

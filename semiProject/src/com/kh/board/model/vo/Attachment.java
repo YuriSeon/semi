@@ -20,6 +20,17 @@ public class Attachment {
 	public Attachment() {
 		super();
 	}
+	
+	//대나무숲 첨부파일 용
+	public Attachment(int fileNo, String originName, String changeName, String filePath, Date uploadDate) {
+		super();
+		this.fileNo = fileNo;
+		this.originName = originName;
+		this.changeName = changeName;
+		this.filePath = filePath;
+		this.uploadDate = uploadDate;
+	}
+
 	public Attachment(int fileNo, int boardNo, String originName, String changeName, String filePath, Date uploadDate,
 			String status) {
 		super();
