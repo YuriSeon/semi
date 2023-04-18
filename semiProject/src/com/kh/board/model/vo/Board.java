@@ -106,6 +106,16 @@ public class Board {
 		this.boardWriter = boardWriter;
 		this.abbress = abbress;
 	}
+	//영상 페이징바
+	public Board(int boardNo, String boardWriter, String boardType, String boardTitle, Date createDate, int count) {
+		super();
+		this.boardNo = boardNo;
+		this.boardWriter = boardWriter;
+		this.boardType = boardType;
+		this.boardTitle = boardTitle;
+		this.createDate = createDate;
+		this.count = count;
+	}
 	
 	
 	
