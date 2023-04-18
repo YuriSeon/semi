@@ -5,6 +5,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Break Time[Detail]</title>
+<script src="https://code.jquery.com/jquery-3.6.4.js"
+	integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+	crossorigin="anonymous"></script>
 </head>
 <body>
 <!-- 
@@ -12,7 +15,6 @@
  -->
  <%
  	Board b = (Board)request.getAttribute("FoodRanking");
- 
  %>
  
  	<h1>상세보기</h1>
@@ -26,19 +28,94 @@
 			<td><textarea rows="10" cols="30" name="content"
 					style="resize: none" readOnly><%=b.getBoardContent() %></textarea></td>
 		</tr>
+		<%if(!b.getAbbress().equals("")){ %>
 		<tr>
 			<th>주소</th>
 			<td><input type="text" id="address" value="<%=b.getAbbress() %>" readOnly></td>
 		</tr>
+		<% } else { %>
+		<tr>
+			<th>주소</th>
+			<td><input type="text" id="address" value="입력된 주소가 없습니다." readOnly></td>
+		</tr>
+		<%} %>		
 	</table>
 	
-	<%--<%if(request.getAttribute("fullAddress") != null){ %> --%>
+	<%if(!b.getAbbress().equals("")){ %>
 	<div id="map" style="align:center;width:500px;height:350px;"></div>
-	<%-- <%} --%>
+	<%} %>
+	<br><br>
+	
+	
+	<button type="button" id="goodbtn">추천 <%=b.getGood() %></button>
+	<button type="button" id="badbtn">비추천 <%=b.getBad() %></button>
+	<button type="button" id="reportbtn">신고하기 <%=b.getReport() %></button>
+	
+	<script>
+		$(function(){
+			
+			$("#goodbtn").click(function(){
+				$.ajax({
+					url : "goodbtn",
+					data : {
+						bno : "<%=request.getParameter("bno") %>"
+					},
+					type : "get",
+					success : function(data){
+						// 추천 update 구문 실행
+							$("#goodbtn").html("추천 " + data);
+						console.log("추천" + data);
+					},
+					error : function (){
+						alert("추천 실패");
+					}
+				});	
+			});
+			
+			$("#badbtn").click(function(){
+				$.ajax({
+					url : "badbtn",
+					data : {
+						bno : "<%=request.getParameter("bno") %>"
+					},
+					type : "get",
+					success : function(data){
+						// 추천 update 구문 실행
+							$("#badbtn").html("비추천 " + data);
+						console.log("비추천" + data);
+					},
+					error : function (){
+						alert("비추천 실패");
+					}
+				});	
+			});
+			
+			$("#reportbtn").click(function(){
+				$.ajax({
+					url : "reportbtn",
+					data : {
+						bno : "<%=request.getParameter("bno") %>"
+					},
+					type : "get",
+					success : function(data){
+						// 추천 update 구문 실행
+							$("#report").html("신고 " + data);
+						console.log("신고" + data);
+					},
+					error : function (){
+						alert("신고 실패");
+					}
+				});	
+			});
+		});
+	</script>
+	
+	
+	
 	
 	<!-- loginUser가 null이 아니고 관리자 또는 loginUser의 Id와 작성자의 Id가 같다면 -->
-	<button type="button" onclick="<%=request.getContextPath()%>/foodRankUpdate.bo?bno=<%=request.getParameter("bno")%>">수정하기</button>
-	<button type="button" onclick="<%=request.getContextPath()%>/foodRankDelete.bo?bno=<%=request.getParameter("bno")%>">삭제하기</button>
+	<button type="button" onclick="location.href='<%=request.getContextPath()%>/foodRankUpdate.bo?bno=<%=request.getParameter("bno")%>'">수정하기</button>
+	<button type="button" onclick="location.href='<%=request.getContextPath()%>/foodRankDelete.bo?bno=<%=request.getParameter("bno")%>'">삭제하기</button>
 	<!-- 그 외에는 없앤다. -->
 	
 	<button onlick="location.href=<%=request.getContextPath() %>/foodmain.bo">목록보기</button>

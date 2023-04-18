@@ -32,8 +32,14 @@ public class Board {
 	private String pointName; 
 	private String foodName;
 	private String abbress;
-	
+	private int un;
 
+	public int getUn() {
+		return un;
+	}
+	public void setUn(int un) {
+		this.un = un;
+	}
 	public String getFoodName() {
 		return foodName;
 	}
@@ -94,7 +100,7 @@ public class Board {
 	}
 	// 맛집 게시판 디테일 뷰 내용
 	public Board(String boardTitle, String boardContent, String foodName, int good, int bad,int report, Date createDate,String boardWriter
-			,String abbress) {
+			,String abbress, int un) {
 		super();
 		this.boardTitle = boardTitle;
 		this.boardContent = boardContent;
@@ -105,6 +111,7 @@ public class Board {
 		this.createDate = createDate;
 		this.boardWriter = boardWriter;
 		this.abbress = abbress;
+		this.un = un;
 	}
 	
 	

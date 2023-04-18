@@ -1,6 +1,7 @@
 package com.kh.food.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,20 +9,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.kh.board.model.vo.Board;
+import com.google.gson.Gson;
 import com.kh.food.model.service.FoodService;
 
 /**
- * Servlet implementation class FoodRankDetailController
+ * Servlet implementation class FoodRankBtnClickController
  */
-@WebServlet("/foodRankingDetail.bo")
-public class FoodRankDetailController extends HttpServlet {
+@WebServlet(urlPatterns = {"/goodbtn", "/badbtn", "/reportbtn"})
+public class FoodRankBtnClickController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public FoodRankDetailController() {
+    public FoodRankBtnClickController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -30,16 +31,21 @@ public class FoodRankDetailController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int bno = Integer.parseInt(request.getParameter("bno"));
-		Board b = new FoodService().selectDetail(bno);
-		request.setAttribute("FoodRanking", b);
-		request.getRequestDispatcher("views/food/foodRankDetail.jsp").forward(request, response);
+		String str = request.getServletPath();
+		String bno = request.getParameter("bno");
+		int num = new FoodService().UpdateBtn(str, bno);
+		// 현재 추천수 비추천수 신고가 들어온다.
+		
+		response.getWriter().print(num);;
+		
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
 
 }
