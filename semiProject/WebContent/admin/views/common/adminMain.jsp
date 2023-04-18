@@ -219,7 +219,7 @@ h1 {
         </div>
         <div id="content2">
             <div id="tent1" class="card thumb"onclick="location.href='<%=contextPath%>/board.bo?currentPage=1&bType=2'"></div><!-- 게시판 메인으로 게시글 조회는 대나무숲 -->
-            <div id="tent2" class="card thumb"onclick="location.href='<%=contextPath%>/main.um?currentPage=1'"></div><!-- user관리페이지로 -->
+            <div id="tent2" class="card thumb"onclick="location.href='<%=contextPath%>/main.um?currentPage=1&status=Y'"></div><!-- user관리페이지로 -->
             <div id="tent3"class="card thumb"></div>
             <div id="tent4">
                 <div id="play1"class="card thumb"onclick="location.href='<%=contextPath%>/main.bl?currentPage=1&status=K'"></div><!-- blacklist로 이동 -->

@@ -28,6 +28,7 @@
 			</form>
 			<button type="button">작성하기</button>	
 			</div>
+			<hr>
 			<div id="con2">
 				<!-- 게시물 조회해와서 버튼이랑 같이 반복문으로 출력하기 -->
 				<table>

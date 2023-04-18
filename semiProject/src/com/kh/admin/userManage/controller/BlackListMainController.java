@@ -76,7 +76,7 @@ public class BlackListMainController extends HttpServlet {
 		
 		request.setCharacterEncoding("UTF-8");
 		
-		String input = (request.getParameter("input")).toUpperCase();
+		String input = (request.getParameter("input"));
 		
 		String option = request.getParameter("search_box");
 		

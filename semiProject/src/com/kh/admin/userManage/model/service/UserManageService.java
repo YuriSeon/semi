@@ -43,7 +43,46 @@ public class UserManageService {
 		return list;
 	
 	}
+
+	public ArrayList<Object> selectUserList(PageInfo pi) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		ArrayList<Object> list = new UserManageDao().selectSortFR(conn, pi);
+		
+		
+		JDBCTemplate.close(conn);
+		
+		return list;
+		
+	}
 	
+	public ArrayList<Object> selectSortFR(PageInfo pi) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		ArrayList<Object> list = new UserManageDao().selectSortFR(conn, pi);
+		
+		
+		JDBCTemplate.close(conn);
+		
+		return list;
+		
+	}
+	
+		public ArrayList<Object> selectSortAct(PageInfo pi) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		ArrayList<Object> list = new UserManageDao().selectSortAct(conn, pi);
+		
+		
+		JDBCTemplate.close(conn);
+		
+		return list;
+		
+	}
+
 	
 	
 
