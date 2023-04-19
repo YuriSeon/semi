@@ -27,6 +27,18 @@ public class BMember {
 		super();
 	}
 
+	 // 관리자 페이지에서 조회할때 필요해서 생성자 만들었습니다
+	public BMember(int userNo, String userId, String userName, String phone, String email, String schoolNo) {
+		super();
+		this.userNo = userNo;
+		this.userId = userId;
+		this.userName = userName;
+		this.phone = phone;
+		this.email = email;
+		this.schoolNo = schoolNo;
+	}
+
+
 	public BMember(int userNo, String userId, String userPwd, String userName, String phone, String address,
 			String email, String ssn, String status, Date createDate, Date modifyDate, String userNick, String schoolNo,
 			String power, String school_st, int point) {

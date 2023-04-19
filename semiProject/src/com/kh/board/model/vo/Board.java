@@ -34,6 +34,9 @@ public class Board {
 	private String abbress;
 	private int un;
 
+	// 공지사항 관리 위해서 필드 하나 추가 
+	private int typeNo;
+
 	public int getUn() {
 		return un;
 	}
@@ -138,6 +141,32 @@ public class Board {
 		this.createDate = createDate;
 		this.count = count;
 	}
+
+
+	// 관리자 페이지에 게시물조회에 사용할 생성자
+	public Board(int boardNo, String boardWriter, String boardType, String boardTitle, Date createDate, Date modifyDate,
+			int good, int count) {
+		super();
+		this.boardNo = boardNo;
+		this.boardWriter = boardWriter;
+		this.boardType = boardType;
+		this.boardTitle = boardTitle;
+		this.createDate = createDate;
+		ModifyDate = modifyDate;
+		this.good = good;
+		this.count = count;
+	}
+	
+	// 공지사항 insert 생성자
+	public Board(String boardWriter, String boardType, String boardTitle, String boardContent,
+			int typeNo) {
+		super();
+		this.boardWriter = boardWriter;
+		this.boardType = boardType;
+		this.boardTitle = boardTitle;
+		this.boardContent = boardContent;
+		this.typeNo = typeNo;
+	}
 	
 	
 	
@@ -219,6 +248,13 @@ public class Board {
 	}
 	public void setPointName(String pointName) {
 		this.pointName = pointName;
+	}
+	
+	public int getTypeNo() {
+		return typeNo;
+	}
+	public void setTypeNo(int typeNo) {
+		this.typeNo = typeNo;
 	}
 	
 }

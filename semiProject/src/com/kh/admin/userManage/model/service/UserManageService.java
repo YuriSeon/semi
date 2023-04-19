@@ -48,8 +48,7 @@ public class UserManageService {
 		
 		Connection conn = JDBCTemplate.getConnection();
 		
-		ArrayList<Object> list = new UserManageDao().selectSortFR(conn, pi);
-		
+		ArrayList<Object> list = new UserManageDao().selectUserList(conn, pi);
 		
 		JDBCTemplate.close(conn);
 		

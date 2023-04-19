@@ -236,9 +236,7 @@ public class UserManageDao {
 												, foodRank);
 				
 				list.add(b);
-				System.out.println(b);
 				list.add(um);
-				System.out.println(um);
 			}
 			
 		} catch (SQLException e) {
@@ -249,7 +247,6 @@ public class UserManageDao {
 			JDBCTemplate.close(rset);
 			JDBCTemplate.close(pstmt);
 		}
-		System.out.println(list);
 		return list;
 	}
 
@@ -296,7 +293,6 @@ public class UserManageDao {
 												, rset.getInt("BOARD_COUNT")
 												, rset.getInt("VIDEO_COUNT")
 												, foodRank);
-				
 				list.add(b);
 				list.add(um);
 			}
