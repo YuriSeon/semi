@@ -60,8 +60,9 @@ public class FoodDao {
 		}
 		return list;
 	}
-	
-	private String pointCheck(int point) {
+
+	public String pointCheck(int point) {
+
 		String name = "";
 		if(point > 9) {
 			name = "자칭 요리사";

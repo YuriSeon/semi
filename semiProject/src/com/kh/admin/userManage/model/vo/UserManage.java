@@ -1,6 +1,6 @@
 package com.kh.admin.userManage.model.vo;
 
-public class UserManage {
+public class UserManage extends User{
 	
 //	USERNO	NUMBER
 //	REPLY_COUNT	NUMBER
@@ -17,6 +17,16 @@ public class UserManage {
 	public UserManage() {
 		super();
 	}
+
+	
+	public UserManage(int userNo, int replyCount, int boardCount, int videoCount) {
+		super();
+		this.userNo = userNo;
+		this.replyCount = replyCount;
+		this.boardCount = boardCount;
+		this.videoCount = videoCount;
+	}
+
 
 	public UserManage(int userNo, int replyCount, int boardCount, int videoCount, String foodBStatus) {
 		super();

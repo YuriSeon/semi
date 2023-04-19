@@ -1,6 +1,6 @@
 package com.kh.admin.userManage.model.vo;
 
-public class BlackList {
+public class BlackList extends User{
 	
 //	USERNO	NUMBER
 //	USERID	VARCHAR2(20 BYTE)

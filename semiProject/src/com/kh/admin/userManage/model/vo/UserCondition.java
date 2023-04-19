@@ -1,6 +1,6 @@
 package com.kh.admin.userManage.model.vo;
 
-public class UserCondition {
+public class UserCondition extends User{
 //	USERNO	NUMBER
 //	BLOCK_C	NUMBER
 //	DM_BLOCK_C	NUMBER
@@ -22,6 +22,17 @@ public class UserCondition {
 		super();
 	}
 	
+	
+	public UserCondition(int userNo, int blockC, int dmBlockC, int falseBlockC) {
+		super();
+		this.userNo = userNo;
+		this.blockC = blockC;
+		this.dmBlockC = dmBlockC;
+		this.falseBlockC = falseBlockC;
+	}
+
+
+
 	public UserCondition(int userNo, int blockC, int dmBlockC, int falseBlockC, int yellowCard, int videoFiltering,
 			int replyFiltering) {
 		super();

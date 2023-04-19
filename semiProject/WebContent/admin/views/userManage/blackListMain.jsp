@@ -15,15 +15,16 @@
 	<div id="search_div">
         <form action="<%=contextPath %>/main.bl" method="post">
             <select name="search_box" >
-                <option value="USERID">ID</option>
-                <option value="USERNAME">NAME</option>
-                <option value="STATUS">재가입시도</option>
+                <option value="id">ID</option>
+                <option value="name">NAME</option>
+                <option value="status">재가입시도</option>
             </select>
             <input type="hidden" name="currentPage" value="1">
             <input type="search" name="input">
             <button type="submit">검색</button>
         </form>
     </div>
+    <hr>
 	<!-- 나중에 시간 되면 selectbox 선택되면 해당 선택내역으로 order by 비동기통신으로 해보기 onchange -->    
     <table id="list_table" border="1">
         <thead>
