@@ -38,8 +38,7 @@
 			</tr>
 			<tr>
 				<th>주소</th>
-				<td><input type="text" id="kakao_address" name="address"
-					required></td>
+				<td><input type="text" id="kakao_address" name="address"></td>
 			</tr>
 			<tr>
 				<th>상세 주소</th>
@@ -52,6 +51,12 @@
 <script
 	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script>
+	$(function(){
+		if($("kakao_address").val() != 0){
+			$("input[name=addressDetail]").attr("required" , true);
+		}
+	})
+	
 		function hiddenselect(){
 			if($("#foodselect option:selected").val() == 0){
 				$("#hiddeninput").css("display", "block");

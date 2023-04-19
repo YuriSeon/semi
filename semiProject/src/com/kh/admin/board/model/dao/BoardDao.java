@@ -112,6 +112,16 @@ public class BoardDao {
 		
 		return list;
 	}
+
+	//조회수 증가 메소드
+	public int increaseCount(Connection conn, int boardNo) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("increaseCount");
+		
+		return 0;
+	}
 	
 	
 	

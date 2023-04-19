@@ -1,16 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="java.util.ArrayList,com.kh.board.model.vo.BamCategory"%>
-<%
-	ArrayList<BamCategory> list = (ArrayList<BamCategory>)request.getAttribute("clist");
-%>
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>대나무숲 게시글작성</title>
+<title>대나무숲 수정폼</title>
 </head>
 <body>
-	<form action="<%=request.getContextPath() %>/baminsert.bo" method="post" enctype="multipart/form-data">
+<body>
+	<%@include file ="bamInsertView.jsp"%>
+	<form action="<%=request.getContextPath() %>/bamupdate.bo" method="post" enctype="multipart/form-data">
         <div style="width: 500px; background-color: gray; color: white;">
 			<!--  <input type="hidden" name="userNo" value="loginUser.getUserNo() ">-->
 			<input type="hidden" name="userNo" value="2">

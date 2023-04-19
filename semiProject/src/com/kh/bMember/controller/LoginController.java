@@ -52,7 +52,7 @@ public class LoginController extends HttpServlet {
 		}else {
 			request.getSession().setAttribute("loginUser", loginUser);
 			request.getSession().setAttribute("alertMsg", "로그인 성공");
-			response.sendRedirect("views/afterLoginMain.jsp");
+			response.sendRedirect(request.getContextPath()+"/Main.co");
 
 		}
 	}

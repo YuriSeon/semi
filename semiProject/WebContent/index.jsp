@@ -174,12 +174,10 @@
                 <input type="password" id="login_pwd" class="login_text" name="userPwd" placeholder="비밀번호를 입력해주세요" required>
             	<button id="login_btn" class="login_btn" type="submit">로그인</button>
             </form>
-            <a class="login_bottom" href="">아이디 또는 비밀번호를 잊으셨나요?</a>
+            <a class="login_bottom" href="<%=contextPath%>/views/member/memberIdpwdChk.jsp">아이디 또는 비밀번호를 잊으셨나요?</a>
             <p id="login_last">브레이크타임이 처음이신가요?  <a class="join" href="<%=contextPath%>/views/member/memberEnrollForm.jsp">회원가입</a> </p>
         
     </div>
-	
-	<a href="<%=request.getContextPath() %>/realMain">로그인 완료 후 Main으로 이동합니다.</a>
-	<h1>c추가</h1>
+
 </body>
 </html>

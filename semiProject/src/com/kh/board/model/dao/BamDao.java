@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.BamCategory;
 import com.kh.board.model.vo.Board;
 import com.kh.board.model.vo.Category;
@@ -133,5 +134,169 @@ public class BamDao {
 		}
 		return list;
 	}
+
+	//대나무숲 게시글 작성할때 게시글 제목,내용
+	public int insertBam(Connection conn, Board b) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("insertBam");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, b.getBoardWriter());
+			pstmt.setString(2, b.getBoardTitle());
+			pstmt.setString(3, b.getBoardContent());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
+	//대나무숲 게시글 작성할때 첨부파일
+	public int insertAttachment(Connection conn, Attachment at) {
+		int result2 =0;
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("insertAttachment");
+		System.out.println("사진작성중간");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, at.getOriginName());
+			pstmt.setString(2, at.getChangeName());
+			pstmt.setString(3, at.getFilePath());
+		
+			result2 = pstmt.executeUpdate();
+			System.out.println("사진작성끝");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return result2;
+	}
+	//조회수 증가 메소드
+		public int increaseCount(Connection conn, int boardNo) {
+			int result = 0;
+			PreparedStatement pstmt = null;
+			
+			String sql = prop.getProperty("increaseCount");
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, boardNo);
+				
+				result = pstmt.executeUpdate();
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			return result;
+		}
+
+		//대나무숲 게시글 조회 메소드
+		public Board selectBam(Connection conn,int boardNo) {
+			Board b = null;
+			PreparedStatement pstmt = null;
+			ResultSet rset = null;
+			
+			String sql = prop.getProperty("selectBam");
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, boardNo);
+				
+				rset = pstmt.executeQuery();
+				
+				if(rset.next()) {
+					b=new Board(rset.getInt("BOARD_NO")
+								,rset.getString("USERNO")
+								,rset.getString("BOARD_TYPE")
+								,rset.getString("BOARD_TITLE")
+								,rset.getString("BOARD_CONTENT")
+								,rset.getDate("CREATE_DATE")
+								,rset.getDate("MODIFY_DATE")
+								,rset.getInt("GOOD")
+								,rset.getInt("COUNT"));
+				}
+				
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(rset);
+				JDBCTemplate.close(pstmt);
+			}
+					
+			
+			
+			return b;
+		}
+
+		//첨부파일 조회 메소드
+		public Attachment selectAttachment(Connection conn, int boardNo) {
+			Attachment at = null;
+			PreparedStatement pstmt = null;
+			ResultSet rset = null;
+			
+			String sql = prop.getProperty("selectAttachment");
+			
+			try {
+				pstmt=conn.prepareStatement(sql);
+				pstmt.setInt(1, boardNo);
+				
+				rset=pstmt.executeQuery();
+				
+				if(rset.next()) {
+					System.out.println("트라이");
+					at = new Attachment(rset.getInt("FILE_NO")
+										,rset.getString("ORIGIN_NAME")
+										,rset.getString("CHANGE_NAME")
+										,rset.getString("FILE_PATH")
+										,rset.getDate("UPLOAD_DATE"));	
+				}
+				
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			return at;
+		}
+
+		//게시글 삭제(상태창변경) 메소드
+		public int deleteBam(Connection conn, int boardNo) {
+			int result = 0;
+			PreparedStatement pstmt = null;
+			
+			String sql = prop.getProperty("deleteBam");
+			
+			try {
+				pstmt=conn.prepareStatement(sql);
+				pstmt.setInt(1, boardNo);
+				
+				result = pstmt.executeUpdate();
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(pstmt);
+			}
+			
+			return result;
+		}
 	
 }
