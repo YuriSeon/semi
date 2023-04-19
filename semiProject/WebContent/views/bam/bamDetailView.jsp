@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="com.kh.board.model.vo.*"%>
+    pageEncoding="UTF-8" import="com.kh.board.model.vo.*,com.kh.bMember.model.vo.BMember"%>
 <%
 	Board b = (Board)request.getAttribute("b");
 	Attachment at = (Attachment)request.getAttribute("at");
+	BMember loginUser = (BMember)session.getAttribute("loginUser");
 %>
 <!DOCTYPE html>
 <html>
@@ -15,7 +16,13 @@
             <thead>
                 <tr>
                 
-                    <td width="20">일반</td>
+                    <%if(b.getBoardType().equals("1")){ %>
+	                		<td width="20">일반</td>
+	                	<%}else if(b.getBoardType().equals("2")){ %>
+	                		<td width="20">질문</td>
+	                	<%}else{ %>
+	                		<td width="20">연애</td>
+	                	<%} %>
                     <td>익명(사진)</td>
                     
                     <th width="350"><%=b.getBoardTitle() %></th>
@@ -52,12 +59,12 @@
          </table>
          <br>
         <br>
-        <!-- if(loginUser != null && loginUser.getUserId().equals(b.getBoardWriter())){ -->
+        <%if(loginUser != null && loginUser.getUserNo()==Integer.parseInt(b.getBoardWriter())||loginUser.getUserNo()==1){ %>
 	        <div align="center">
 	        	<button onclick="location.href='<%=request.getContextPath()%>/bamupdate.bo?bno=<%=b.getBoardNo()%>'" class="btn">수정하기</button>
 	        	<button onclick="location.href='<%=request.getContextPath()%>/bamdelete.bo?bno=<%=b.getBoardNo()%>'" class="btn">삭제하기</button>
 	        </div>
-        <!-- } -->
-            
+        <%} %> 
+            <button onclick="location.href='<%=request.getContextPath()%>/bamlist.bo?currentPage=1'" class="btn">글목록으로</button>
 </body>
 </html>

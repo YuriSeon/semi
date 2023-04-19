@@ -34,6 +34,7 @@ public class BamService {
 	}
 
 	//대나무숲 카테고리 가져오기(일반,질문,연애등등)
+	/* 안씀
 	public ArrayList<BamCategory> categoryList() {
 		Connection conn = JDBCTemplate.getConnection();
 		ArrayList<BamCategory> list = new BamDao().categoryList(conn);
@@ -42,6 +43,7 @@ public class BamService {
 		
 		return list;
 	}
+	*/
 
 	//대나무숲 게시글 인서트(작성)
 	public int insertBam(Board b, Attachment at) {
@@ -54,7 +56,7 @@ public class BamService {
 		}
 		if(result>0 && result2>0) {//작성성공
 			JDBCTemplate.commit(conn);
-			System.out.println("사진작성성공");
+			
 		}else {//작성실패
 			JDBCTemplate.rollback(conn);
 		}
@@ -118,6 +120,41 @@ public class BamService {
 		
 		
 		return result;
+	}
+
+	//대나무숲 게시글 수정
+	public int updateBam(Board b, Attachment at) {
+		Connection conn = JDBCTemplate.getConnection();
+		//게시글 수정
+		int result = new BamDao().updateBam(conn,b);
+		
+		//대나무숲 카테고리 수정
+		int result2 = new BamDao().updateCategory(conn,b);
+		
+		int result3 = 1;
+		if(at != null) {//새로운 첨부파일이 있을 경우
+			
+			if(at.getFileNo()!=0) {//기존의 첨부파일이 있었을 경우
+				
+				result3 = new BamDao().updateAttachment(conn,at);
+			}else {//기존의 첨부파일이 있었을 경우
+				
+				result3 = new BamDao().newInsertAttachment(conn,at);
+			}
+		}
+		
+		if(result>0&&result2>0&&result3>0) {
+			JDBCTemplate.commit(conn);
+		
+		}else {
+			JDBCTemplate.rollback(conn);
+			System.out.println("롤백함 ㅠㅠ");
+		}
+		
+		JDBCTemplate.close(conn);
+		
+		
+		return result*result2*result3;
 	}
 	
 }

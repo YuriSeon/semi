@@ -39,7 +39,13 @@
 			<%for(Board b : list){ %>
 	            <tr>
 	                <td><%=b.getBoardNo() %></td>
-	                <td><%=b.getBoardType() %></td>
+	                <%if(b.getBoardType().equals("1")){ %>
+	                		<td>일반</td>
+	                	<%}else if(b.getBoardType().equals("2")){ %>
+	                		<td>질문</td>
+	                	<%}else{ %>
+	                		<td>연애</td>
+	                	<%} %>
 	                <td>사진여부</td>
 	                <td>익명(사진)</td>
 	                <td><%=b.getBoardTitle() %></td>
@@ -68,7 +74,6 @@
 		<%} %>
         <%for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++ ){ %>
 				<!-- 내가 보고있는 페이지 버튼은 비활성화 하기  -->
-				<%System.out.println(i); %>
 				<%if(i != pi.getCurrentPage()){ %>
 					<button onclick="location.href='<%=request.getContextPath()%>/bamlist.bo?currentPage=<%=i%>';"><%=i %></button>
 				<%}else{ %> <!-- 내가 보고있는 페이지와 페이징바 버튼의 수가 같다면 i와 currentPage -->
