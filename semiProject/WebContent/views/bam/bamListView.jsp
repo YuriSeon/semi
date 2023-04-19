@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="java.util.ArrayList,com.kh.board.model.vo.Board,com.kh.common.model.vo.PageInfo"%>
+    pageEncoding="UTF-8" import="java.util.ArrayList,com.kh.board.model.vo.*,com.kh.common.model.vo.PageInfo"%>
 <%
 	ArrayList<Board> list = (ArrayList<Board>)request.getAttribute("list");
 	PageInfo pi = (PageInfo)request.getAttribute("pi");
+	
 %>
 <!DOCTYPE html>
 <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
@@ -12,7 +13,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-	
+	  <%@ include file ="../common/menubar.jsp"%> 
+	  
 	<div align="center">
 		<a href="<%=request.getContextPath() %>/baminsert.bo" class="btn btn-info">글작성</a>
 	</div>
@@ -39,13 +41,7 @@
 			<%for(Board b : list){ %>
 	            <tr>
 	                <td><%=b.getBoardNo() %></td>
-	                <%if(b.getBoardType().equals("1")){ %>
-	                		<td>일반</td>
-	                	<%}else if(b.getBoardType().equals("2")){ %>
-	                		<td>질문</td>
-	                	<%}else{ %>
-	                		<td>연애</td>
-	                	<%} %>
+	                <td><%=b.getBoardType() %></td>
 	                <td>사진여부</td>
 	                <td>익명(사진)</td>
 	                <td><%=b.getBoardTitle() %></td>

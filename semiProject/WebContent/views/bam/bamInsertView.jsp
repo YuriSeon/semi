@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" import="java.util.ArrayList,com.kh.board.model.vo.BamCategory,com.kh.bMember.model.vo.BMember"%>
 <%
-	ArrayList<BamCategory> list = (ArrayList<BamCategory>)request.getAttribute("clist");
+	ArrayList<BamCategory> clist = (ArrayList<BamCategory>)request.getAttribute("clist");
 	BMember loginUser = (BMember)session.getAttribute("loginUser");
+	
 %>
 <!DOCTYPE html>
 <html>
@@ -18,7 +19,7 @@
             <select name="category">
 					<option value="1">일반</option>
 					<option value="2">질문</option>
-					<option value="3">연애</option>
+            		<option value="3">연애</option>
 			</select>
             제목 : <input type="text" name="title" id="title">
         </div>

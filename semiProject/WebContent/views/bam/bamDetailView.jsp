@@ -16,13 +16,7 @@
             <thead>
                 <tr>
                 
-                    <%if(b.getBoardType().equals("1")){ %>
-	                		<td width="20">일반</td>
-	                	<%}else if(b.getBoardType().equals("2")){ %>
-	                		<td width="20">질문</td>
-	                	<%}else{ %>
-	                		<td width="20">연애</td>
-	                	<%} %>
+	                <td width="20"><%=b.getBoardType() %></td>
                     <td>익명(사진)</td>
                     
                     <th width="350"><%=b.getBoardTitle() %></th>
