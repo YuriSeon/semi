@@ -40,7 +40,10 @@ public class BamInsertController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//카테고리 불러와서 대나무숲 게시글 작성페이지로 넘어가기
+		ArrayList<BamCategory> clist = new BamService().categoryList();
+
 		
+		request.setAttribute("clist", clist);
 		request.getRequestDispatcher("views/bam/bamInsertView.jsp").forward(request, response);
 		
 	}

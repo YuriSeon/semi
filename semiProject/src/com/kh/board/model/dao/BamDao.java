@@ -107,7 +107,7 @@ public class BamDao {
 	}
 
 	//대나무숲 카테고리 가져오기
-	/* 안씀
+
 	public ArrayList<BamCategory> categoryList(Connection conn) {
 		ArrayList<BamCategory> list = new ArrayList<>();
 		ResultSet rset = null;
@@ -133,7 +133,7 @@ public class BamDao {
 		}
 		return list;
 	}
-	*/
+
 
 	//대나무숲 게시글 작성할때 게시글 제목,내용
 	public int insertBam(Connection conn, Board b) {

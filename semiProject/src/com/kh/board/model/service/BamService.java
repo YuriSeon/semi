@@ -34,7 +34,6 @@ public class BamService {
 	}
 
 	//대나무숲 카테고리 가져오기(일반,질문,연애등등)
-	/* 안씀
 	public ArrayList<BamCategory> categoryList() {
 		Connection conn = JDBCTemplate.getConnection();
 		ArrayList<BamCategory> list = new BamDao().categoryList(conn);
@@ -43,8 +42,7 @@ public class BamService {
 		
 		return list;
 	}
-	*/
-
+	
 	//대나무숲 게시글 인서트(작성)
 	public int insertBam(Board b, Attachment at) {
 		Connection conn = JDBCTemplate.getConnection();
