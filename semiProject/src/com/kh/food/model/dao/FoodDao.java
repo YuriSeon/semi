@@ -174,28 +174,24 @@ public class FoodDao {
 	}
 
 
-	public int UpdateBtn(Connection conn, String str, String bno, int userNo) {
+	public int UpdateBtn(Connection conn, String str, String bno) {
 		int result = 0;
 		PreparedStatement pstmt = null;
 		String sql = "";
 		try{
 			switch(str) {
 			case "/goodbtn" :
-				sql = prop.getProperty("UpdateGood");
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1, bno);
+				sql = prop.getProperty("UpdateGood"); // 트리거 사용해서 board 업데이트 시 bmember point 추가
 				break;
 			case "/badbtn" :
-				sql = prop.getProperty("UpdateBad");
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1, bno);
+				sql = prop.getProperty("UpdateBad"); // 트리거 사용해서 board 업데이트 시 bmember point 감소
 				break;
-			case "/reportbtn" :				
-				sql = prop.getProperty("UpdateReport"); // 관리자꺼 업데이트
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setInt(1, userNo);
+			case "/reportbtn" :
+					sql = prop.getProperty("UpdateReportB"); // 트리거 사용해서 board 업데이트 시 관리자 block_c 추가
 				break;
 			}
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, bno);
 			result = pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -204,5 +200,39 @@ public class FoodDao {
 		}
 		return result;
 	}
+
+	public int deleteFoodRank(Connection conn, int bno) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("deleteFoodRank");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bno);
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	public int UpdateFoodRank(Connection conn, Board b) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = "";
+		//prop.getProperty("UpdateFoodRank");
+		System.out.println(b.getFoodName().getClass().getName());
+		try {
+//			if(b.getFoodName().getClass().getName() == integer)
+			
+			pstmt = conn.prepareStatement(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
 
 }
