@@ -49,24 +49,37 @@ SELECT * FROM DUAL
 	UPDATE BOARD
 	SET GOOD = GOOD + 1
 	WHERE BOARD_NO = ?
+	AND STATUS = 'Y'
 </entry>
 
 <entry key="UpdateBad">
 	UPDATE BOARD
 	SET BAD = BAD + 1
 	WHERE BOARD_NO = ?
-</entry>
-
-<entry key="UpdateReport">
-	UPDATE USER_CONDITION
-	SET BLOCK_C = BLOCK_C + 1
-	WHERE USERNO = ?
+	AND STATUS = 'Y'
 </entry>
 
 <entry key="UpdateReportB">
 	UPDATE BOARD
 	SET REPORT = REPORT + 1
 	WHERE BOARD_NO = ?
+	AND STATUS = 'Y'
+</entry>
+
+<entry key="deleteFoodRank">
+	UPDATE BOARD
+	SET STATUS = 'N'
+	WHERE BOARD_NO = ?
+	AND STATUS = 'Y'
+</entry>
+
+
+<entry key="UpdateFoodRank">
+	UPDATE BOARD
+	SET BOARD_TITLE = ?,
+	BOARD_CONTENT = ?
+	WHERE BOARD_NO = ?
+	
 </entry>
 </properties>
 

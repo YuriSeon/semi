@@ -43,8 +43,7 @@ public class FoodService {
 
 	public int UpdateBtn(String str, String bno) {
 		Connection conn = JDBCTemplate.getConnection();
-		int userNo = selectDetail(Integer.parseInt(bno)).getUn();
-		int result = new FoodDao().UpdateBtn(conn, str, bno, userNo);
+		int result = new FoodDao().UpdateBtn(conn, str, bno);
 		int result2 = 0;
 		switch(str){
 		case "/goodbtn":
@@ -57,9 +56,6 @@ public class FoodService {
 			result2 = selectDetail(Integer.parseInt(bno)).getReport(); // 현재 신고수
 			break;
 		}
-		if(result == -1) {
-			System.out.println("User_Condition update error");
-		}
 		if(result > 0) {
 			JDBCTemplate.commit(conn);
 		}else {
@@ -68,6 +64,30 @@ public class FoodService {
 		
 		JDBCTemplate.close(conn);
 		return result2;
+	}
+
+	public int deleteFoodRank(int bno) {
+		Connection conn = JDBCTemplate.getConnection();
+		int result = new FoodDao().deleteFoodRank(conn, bno);
+		if (result > 0) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		JDBCTemplate.close(conn);
+		return result;
+	}
+
+	public int UpdateFoodBoard(Board b) {
+		Connection conn = JDBCTemplate.getConnection();
+		int result = new FoodDao().UpdateFoodRank(conn, b);
+		if (result > 0) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		JDBCTemplate.close(conn);
+		return result;
 	}
 
 }
