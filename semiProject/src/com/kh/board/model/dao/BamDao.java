@@ -83,16 +83,14 @@ public class BamDao {
 			while(rset.next()) {
 				list.add(new Board(rset.getInt("BOARD_NO")
 								,rset.getString("USERNO")
-								,rset.getString("BAM_CATEGORY_NAME")
+								,rset.getString("BAM_CATEGORY_NO")
 								,rset.getString("BOARD_TITLE")
 								,rset.getString("BOARD_CONTENT")
 								,rset.getDate("CREATE_DATE")
 								,rset.getInt("GOOD")
 								,rset.getInt("COUNT")));
 			}
-			for(Board b : list) {
-				System.out.println(b.getBoardNo());
-			}
+			
 			
 			
 		} catch (SQLException e) {
@@ -109,6 +107,7 @@ public class BamDao {
 	}
 
 	//대나무숲 카테고리 가져오기
+	/* 안씀
 	public ArrayList<BamCategory> categoryList(Connection conn) {
 		ArrayList<BamCategory> list = new ArrayList<>();
 		ResultSet rset = null;
@@ -134,6 +133,7 @@ public class BamDao {
 		}
 		return list;
 	}
+	*/
 
 	//대나무숲 게시글 작성할때 게시글 제목,내용
 	public int insertBam(Connection conn, Board b) {
@@ -147,6 +147,7 @@ public class BamDao {
 			pstmt.setString(1, b.getBoardWriter());
 			pstmt.setString(2, b.getBoardTitle());
 			pstmt.setString(3, b.getBoardContent());
+			pstmt.setString(4, b.getBoardType()); //
 			
 			result = pstmt.executeUpdate();
 			
@@ -166,7 +167,7 @@ public class BamDao {
 		PreparedStatement pstmt = null;
 		
 		String sql = prop.getProperty("insertAttachment");
-		System.out.println("사진작성중간");
+		
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, at.getOriginName());
@@ -174,7 +175,7 @@ public class BamDao {
 			pstmt.setString(3, at.getFilePath());
 		
 			result2 = pstmt.executeUpdate();
-			System.out.println("사진작성끝");
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -221,7 +222,7 @@ public class BamDao {
 				if(rset.next()) {
 					b=new Board(rset.getInt("BOARD_NO")
 								,rset.getString("USERNO")
-								,rset.getString("BOARD_TYPE")
+								,rset.getString("BAM_CATEGORY_NO")
 								,rset.getString("BOARD_TITLE")
 								,rset.getString("BOARD_CONTENT")
 								,rset.getDate("CREATE_DATE")
@@ -259,7 +260,7 @@ public class BamDao {
 				rset=pstmt.executeQuery();
 				
 				if(rset.next()) {
-					System.out.println("트라이");
+					
 					at = new Attachment(rset.getInt("FILE_NO")
 										,rset.getString("ORIGIN_NAME")
 										,rset.getString("CHANGE_NAME")
@@ -298,5 +299,110 @@ public class BamDao {
 			
 			return result;
 		}
+		
+		//대나무숲 게시글 수정
+		public int updateBam(Connection conn, Board b) {
+			int result = 0;
+			PreparedStatement pstmt = null;
+			
+			String sql = prop.getProperty("updateBam");
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, b.getBoardTitle());
+				pstmt.setString(2, b.getBoardContent());
+				pstmt.setInt(3, b.getBoardNo());
+				
+				result=pstmt.executeUpdate();
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(pstmt);
+			}
+			
+			return result;
+		}
+
+		//대나무숲 게시글 카테고리 수정
+		public int updateCategory(Connection conn, Board b) {
+			int result = 0;
+			PreparedStatement pstmt = null;
+			
+			String sql = prop.getProperty("updateBamCategory");
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, Integer.parseInt(b.getBoardType()));
+				pstmt.setInt(2, b.getBoardNo());
+				
+				result = pstmt.executeUpdate();
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(pstmt);
+			}
+			
+			
+			return result;
+		}
+
+		//대나무숲 기존첨부 있을때 첨부파일 수정
+		public int updateAttachment(Connection conn, Attachment at) {
+			int result = 0;
+			PreparedStatement pstmt = null;
+			
+			String sql = prop.getProperty("updateAttachment");
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, at.getOriginName());
+				pstmt.setString(2, at.getChangeName());
+				pstmt.setString(3, at.getFilePath());
+				pstmt.setInt(4, at.getFileNo());
+				
+				result =pstmt.executeUpdate();
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(pstmt);
+			}
+			
+			return result;
+		}
+
+		//대나무숲 기존파일 없을때 첨부파일 수정
+		public int newInsertAttachment(Connection conn, Attachment at) {
+			int result = 0;
+			PreparedStatement pstmt = null;
+			
+			String sql = prop.getProperty("newInsertAttachment");
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, at.getBoardNo());
+				pstmt.setString(2, at.getOriginName());
+				pstmt.setString(3, at.getChangeName());
+				pstmt.setString(4, at.getFilePath());
+				
+				result = pstmt.executeUpdate();
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(pstmt);
+			}
+			
+			
+			return result;
+		}
+
+		
 	
 }

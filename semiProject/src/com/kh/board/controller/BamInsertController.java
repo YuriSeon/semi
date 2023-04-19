@@ -40,9 +40,7 @@ public class BamInsertController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//카테고리 불러와서 대나무숲 게시글 작성페이지로 넘어가기
-		ArrayList<BamCategory> clist = new BamService().categoryList();
 		
-		request.setAttribute("clist", clist);
 		request.getRequestDispatcher("views/bam/bamInsertView.jsp").forward(request, response);
 		
 	}
@@ -78,7 +76,7 @@ public class BamInsertController extends HttpServlet {
 			
 			if(multiRequest.getOriginalFileName("upfile")!=null) {
 				//첨부파일이 있을때
-				System.out.println("사진작성시작");
+				
 				at = new Attachment();
 				at.setOriginName(multiRequest.getOriginalFileName("upfile"));
 				at.setChangeName(multiRequest.getFilesystemName("upfile"));

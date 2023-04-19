@@ -13,26 +13,27 @@
 	SELECT *	
 	FROM(SELECT ROWNUM RNUM, A.*
 		 FROM(SELECT BOARD_NO,USERNO
-		 			,BAM_CATEGORY_NAME,BOARD_TITLE
+		 			,BAM_CATEGORY_NO,BOARD_TITLE
 		 			,BOARD_CONTENT,CREATE_DATE
 		 			,GOOD,COUNT
-                FROM BOARD B
-                JOIN CATEGORY C ON (BOARD_TYPE=C.CATEGORY_NO)
-                JOIN CATEGORY_BAM D USING (CATEGORY_NO)
+                FROM BOARD 
+                JOIN CATEGORY_BAM USING (BOARD_NO)
                 WHERE BOARD_TYPE=2
                 AND STATUS = 'Y'
-                ORDER BY CREATE_DATE DESC) A)
+                ORDER BY BOARD_NO DESC) A)
 	WHERE RNUM BETWEEN ? AND ?	  
 	</entry>
 	<entry key="BamCategoryList">
 	<!-- 대나무숲 카테고리 가져오기 -->
-	SELECT *
+	SELECT BAM_CATEGORY_NO
 	FROM CATEGORY_BAM
 	</entry>
 	<entry key="insertBam">
-	<!-- 대나무숲 게시글 인서트 -->
-	INSERT INTO BOARD (BOARD_NO,USERNO,BOARD_TYPE,BOARD_TITLE,BOARD_CONTENT)
-	VALUES (SEQ_BNO.NEXTVAL,?,2,?,?)
+	<!-- 대나무숲 게시글 인서트+대나무숲카테고리 인서트 -->
+	INSERT ALL
+	INTO BOARD (BOARD_NO,USERNO,BOARD_TYPE,BOARD_TITLE,BOARD_CONTENT)VALUES (SEQ_BNO.NEXTVAL,?,2,?,?)
+	INTO CATEGORY_BAM (BOARD_NO,BAM_CATEGORY_NO) VALUES (SEQ_BNO.CURRVAL,?)
+	SELECT * FROM DUAL
 	</entry>
 	<entry key="insertAttachment">
 	<!-- 대나무숲 첨부파일 인서트 -->
@@ -48,8 +49,9 @@
 	</entry>
 	<entry key="selectBam">
 	<!-- 대나무숲 게시글 조회 -->
-	SELECT BOARD_NO,USERNO,BOARD_TYPE,BOARD_TITLE,BOARD_CONTENT,CREATE_DATE,MODIFY_DATE,GOOD,COUNT
+	SELECT BOARD_NO,USERNO,BAM_CATEGORY_NO,BOARD_TITLE,BOARD_CONTENT,CREATE_DATE,MODIFY_DATE,GOOD,COUNT
 	FROM BOARD
+    JOIN CATEGORY_BAM USING (BOARD_NO)
 	WHERE BOARD_NO = ?
 	AND STATUS = 'Y'
 	</entry>
@@ -66,6 +68,36 @@
 	SET STATUS = 'N'
 	WHERE BOARD_NO = ?
 	AND STATUS = 'Y'
+	</entry>
+	<entry key="updateBam">
+	<!-- 대나무숲 게시글 수정 -->
+	UPDATE BOARD
+	SET BOARD_TITLE = ?
+	, 	BOARD_CONTENT = ?
+	,  	MODIFY_DATE =SYSDATE
+	WHERE BOARD_NO = ?
+	AND STATUS = 'Y'
+	</entry>
+	<entry key="updateBamCategory">
+	<!-- 대나무숲 카테고리 수정 -->
+	UPDATE CATEGORY_BAM
+	SET BAM_CATEGORY_NO = ?
+	WHERE BOARD_NO = ?
+	</entry>
+	<entry key="updateAttachment">
+	<!--대나무숲 첨부파일 수정  -->
+	UPDATE ATTACHMENT
+	SET ORIGIN_NAME = ?
+	, 	CHANGE_NAME = ?
+	,	FILE_PATH = ?
+	,	UPLOAD_DATE = SYSDATE
+	WHERE FILE_NO = ?
+	AND STATUS = 'Y'
+	</entry>
+	<entry key="newInsertAttachment">
+	<!-- 대나무숲 게시글 수정할때 새로 첨부파일 넣은경우 -->
+	INSERT INTO ATTACHMENT(FILE_NO,BOARD_NO,ORIGIN_NAME,CHANGE_NAME,FILE_PATH)
+	VALUES (SEQ_FNO.NEXTVAL,?,?,?,?)
 	</entry>
 
 </properties>
