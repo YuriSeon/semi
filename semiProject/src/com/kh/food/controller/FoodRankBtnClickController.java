@@ -1,7 +1,6 @@
 package com.kh.food.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.gson.Gson;
 import com.kh.food.model.service.FoodService;
 
 /**
@@ -35,8 +33,7 @@ public class FoodRankBtnClickController extends HttpServlet {
 		String bno = request.getParameter("bno");
 		int num = new FoodService().UpdateBtn(str, bno);
 		// 현재 추천수 비추천수 신고가 들어온다.
-		
-		response.getWriter().print(num);;
+		response.getWriter().print(num+1); // 가져온거 + 1해야 눌렀을때 올라간다.
 		
 	}
 

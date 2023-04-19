@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.kh.food.model.service.FoodService;
+
 /**
  * Servlet implementation class FoodRankDeleteController
  */
@@ -27,7 +29,12 @@ public class FoodRankDeleteController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int bno = Integer.parseInt(request.getParameter("bno"));
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		int result = new FoodService().deleteFoodRank(bno);
+		if(result > 0) {
+			response.sendRedirect(request.getContextPath() + "/foodRanking.bo");
+		}else {
+			request.getRequestDispatcher("views/common/error.page").forward(request, response);
+		}
 	}
 
 	/**

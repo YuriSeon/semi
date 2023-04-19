@@ -59,7 +59,6 @@ public class FoodRankInsertController extends HttpServlet {
 		b.setBoardContent(content);
 		b.setAbbress(address1 + " " + address2);
 		b.setBoardWriter(userno);
-		b.setBoardWriter("1"); // test용
 		int num = new FoodService().foodRankInsert(b, foodCategoryNo, newFoodName);
 		if(num > 0) {
 			response.sendRedirect(request.getContextPath() + "/foodRanking.bo");

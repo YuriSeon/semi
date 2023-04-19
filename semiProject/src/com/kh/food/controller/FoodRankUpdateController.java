@@ -1,11 +1,15 @@
 package com.kh.food.controller;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.kh.board.model.vo.Board;
+import com.kh.food.model.service.FoodService;
 
 /**
  * Servlet implementation class FoodRankUpdateController
@@ -26,19 +30,55 @@ public class FoodRankUpdateController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		request.setAttribute("boardNo", request.getParameter("bno"));
-		request.setAttribute("title", request.getParameter("Btitle"));
-		request.setAttribute("content", request.getParameter("content"));
-		request.setAttribute("address1", request.getParameter("address1"));
-		request.setAttribute("address2", request.getParameter("address2"));
-		request.getRequestDispatcher("views/food/foodRankUpdate.jsp").forward(request, response);
+		int bno = Integer.parseInt(request.getParameter("bno"));
+		System.out.println("내가 필요한 정보 " + bno);
+		String title = request.getParameter("Btitle"); // 제목
+		int foodCategoryNo = Integer.parseInt(request.getParameter("foodselect")); // 0번이면 newFoodName이 필요 / 아니면 필요없음
+		String newFoodName = request.getParameter("newfood");
+		String content = request.getParameter("content"); // 내용
+		
+		String address1 = request.getParameter("address"); // 도로명 주소
+		String address2 = request.getParameter("addressDetail"); // 상세주소
+		
+		String fullAddress = address1 + (address2.equals("")?"":" "+address2);
+		
+		Board b = new Board();
+		b.setBoardNo(bno);
+		b.setBoardTitle(title);
+		b.setBoardContent(content);
+		b.setAbbress(fullAddress);
+		if(foodCategoryNo == 0) {
+			b.setFoodName(newFoodName);
+		}else {
+			b.setFoodName(String.valueOf(foodCategoryNo));
+		}
+		
+		b.setBoardNo(bno);
+		b.setBoardNo(bno);
+		b.setBoardNo(bno);
+		int result = new FoodService().UpdateFoodBoard(b);
+		
+		if(result > 0) {
+			response.sendRedirect(request.getContextPath() + "/foodRanking.bo");
+		}else {
+			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
+		}
+		
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		
+		request.setAttribute("boardNo", request.getParameter("bno"));
+		request.setAttribute("foodName", request.getParameter("foodCate"));
+		request.setAttribute("title", request.getParameter("Btitle"));
+		request.setAttribute("content", request.getParameter("content"));
+		request.setAttribute("address1", request.getParameter("address1"));
+		
+		request.getRequestDispatcher("views/food/foodRankUpdate.jsp").forward(request, response);
 	}
 
 }

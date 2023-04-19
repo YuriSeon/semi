@@ -5,16 +5,27 @@
 <head>
 <meta charset="UTF-8">
 <title>Break Time[Food_Rank]</title>
-<style>
-</style>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.js"integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="crossorigin="anonymous"></script>
+    <style>
+        body {margin:2em;}
+
+        td:last-child {text-align:center;}
+        
+        tbody tr {
+        	cursor: pointer;
+        }
+    </style>
 </head>
 <%
 	ArrayList<Board> list = (ArrayList<Board>)request.getAttribute("list");
 %>
 <body>
-	<a href="<%=request.getContextPath()%>/rankInsert.bo">글작성</a>
-	<table id="list-area">
+	<a href="<%=request.getContextPath()%>/rankInsert.bo" class="btn btn-primary">글작성</a>
+	<table id="example" class="table table-striped table-bordered" cellspacing="0" align="center"  style="text-align: center; width:80%">
 		<thead>
 			<tr>
 				<th>#</th>
@@ -42,7 +53,7 @@
 		</tbody>
 	</table>
 	<script>
-			$("#list-area tbody tr").click(function(){
+			$("#example tbody tr").click(function(){
 				location.href="<%=request.getContextPath() %>/foodRankingDetail.bo?bno="+$(this).children().eq(0).text();
 			});
 	</script>
