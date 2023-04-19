@@ -341,14 +341,71 @@ p {
 #logo{
 	width: 150px;
 	height: 150px;
-	/* 상부로 가운데 정렬 해야함 */
+}
+.modal-trigger{
+  display: inline-block;
+  background: white;
+  border: 0;
+  margin: 0;
+  font-family: 'Helvetica Neue';
+  font-weight: 300;
+  font-size: 18px;
+  padding: .5em 1em;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: 0 none;
+}
+
+.modal-wrap,
+.modal-bg,
+.modal-content{
+  display: none;
+  position: fixed;
+}
+
+.modal-wrap,
+.modal-bg{
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.modal-wrap{
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+}
+
+.modal-bg{
+  background: rgba(0,0,0,.6);
+}
+
+.modal-content{
+  text-align: right;
+  padding: 10px;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  height: 300px;
+  margin: -150px 0 0 -200px;
+  background: white;
+  border-radius: 9px;
+}
+
+.modal-close{
+  display: inline-block;
+  padding: 10px;
+  cursor: pointer;
 }
 </style>
+
+
 <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap"
 	rel="stylesheet">
 <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
 	rel="stylesheet">
+
 </head>
 <body>
 	<input type="checkbox" id="check">
@@ -360,7 +417,7 @@ p {
 		<a class="active"> <i class="fas fa-rocket"></i></a> 
 	<a href="<%=contextPath %>/main.bo?currentPage=1&bType=4"> <i class="fas fa-list"></i> <span>Board</span>
 	</a> <a href="<%=contextPath %>/main.re"> <i class="fas fa-film"></i> <span>Reels</span>
-	</a> <a href="<%=contextPath %>/main.um"> <i class="fas fa-user"></i><span>User_Manage</span>
+	</a> <a href="<%=contextPath %>/main.um?currentPage=1&status=Y"> <i class="fas fa-user"></i><span>User_Manage</span>
 	</a> <a href="<%=contextPath %>/main.ck"> <i class="fas fa-star"></i> <span>CheckList</span>
 	</a> <a href="<%=contextPath %>/main.bl?currentPage=1&status=K"> <i class="fas fa-poo"></i> <span>BlackList</span>
 	</a> <a href="<%=contextPath %>/main"> <i class="fas fa-heart"></i> <span>Go community</span> <!-- 매핑주소 확인 -->
@@ -387,11 +444,7 @@ p {
 			</div>
 		</form>
 	</div>
+	
 </body>
 
-
-
-</body>
-
-</body>
 </html>
