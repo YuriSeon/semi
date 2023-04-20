@@ -7,6 +7,7 @@ import com.kh.board.model.dao.BamDao;
 import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.BamCategory;
 import com.kh.board.model.vo.Board;
+import com.kh.board.model.vo.Reply;
 import com.kh.common.model.vo.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
 
@@ -34,7 +35,7 @@ public class BamService {
 	}
 
 	//대나무숲 카테고리 가져오기(일반,질문,연애등등)
-	/* 안씀
+	/* 대나무숲 카테고리 코드테이블이 없음
 	public ArrayList<BamCategory> categoryList() {
 		Connection conn = JDBCTemplate.getConnection();
 		ArrayList<BamCategory> list = new BamDao().categoryList(conn);
@@ -44,7 +45,7 @@ public class BamService {
 		return list;
 	}
 	*/
-
+	
 	//대나무숲 게시글 인서트(작성)
 	public int insertBam(Board b, Attachment at) {
 		Connection conn = JDBCTemplate.getConnection();
@@ -155,6 +156,49 @@ public class BamService {
 		
 		
 		return result*result2*result3;
+	}
+
+	//댓글 작성(인서트)
+	public int insertReply(Reply r) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = new BamDao().insertReply(conn,r);
+		
+		if(result>0) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		JDBCTemplate.close(conn);
+		
+		return result;
+	}
+
+	//게시글 댓글 리스트 불러오기
+	public ArrayList<Reply> selectReplyList(int bno) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		ArrayList<Reply> rlist = new BamDao().selectReplyList(conn,bno);
+		
+		JDBCTemplate.close(conn);
+		
+		return rlist;
+	}
+
+	public int reportBam(int boardNo) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = new BamDao().reportBam(conn,boardNo);
+		
+		if(result>0) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+		
+		return result;
 	}
 	
 }

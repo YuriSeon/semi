@@ -13,9 +13,10 @@
 	SELECT *	
 	FROM(SELECT ROWNUM RNUM, A.*
 		 FROM(SELECT BOARD_NO,USERNO
-		 			,BAM_CATEGORY_NO,BOARD_TITLE
+		 			,DECODE(BAM_CATEGORY_NO, '1', '일반', '2', '질문', '3', '연애') "BAM_CATEGORY_NO",BOARD_TITLE
 		 			,BOARD_CONTENT,CREATE_DATE
-		 			,GOOD,COUNT
+		 			,GOOD,REPORT
+		 			,COUNT
                 FROM BOARD 
                 JOIN CATEGORY_BAM USING (BOARD_NO)
                 WHERE BOARD_TYPE=2
@@ -25,7 +26,7 @@
 	</entry>
 	<entry key="BamCategoryList">
 	<!-- 대나무숲 카테고리 가져오기 -->
-	SELECT BAM_CATEGORY_NO
+	SELECT BAM_CATEGORY_NO,DECODE(BAM_CATEGORY_NO, '1', '일반', '2', '질문', '3', '연애') "BAM_CATEGORY_NAME"
 	FROM CATEGORY_BAM
 	</entry>
 	<entry key="insertBam">
@@ -49,7 +50,7 @@
 	</entry>
 	<entry key="selectBam">
 	<!-- 대나무숲 게시글 조회 -->
-	SELECT BOARD_NO,USERNO,BAM_CATEGORY_NO,BOARD_TITLE,BOARD_CONTENT,CREATE_DATE,MODIFY_DATE,GOOD,COUNT
+	SELECT BOARD_NO,USERNO,DECODE(BAM_CATEGORY_NO, '1', '일반', '2', '질문', '3', '연애') "BAM_CATEGORY_NO",BOARD_TITLE,BOARD_CONTENT,CREATE_DATE,MODIFY_DATE,GOOD,COUNT
 	FROM BOARD
     JOIN CATEGORY_BAM USING (BOARD_NO)
 	WHERE BOARD_NO = ?
@@ -98,6 +99,27 @@
 	<!-- 대나무숲 게시글 수정할때 새로 첨부파일 넣은경우 -->
 	INSERT INTO ATTACHMENT(FILE_NO,BOARD_NO,ORIGIN_NAME,CHANGE_NAME,FILE_PATH)
 	VALUES (SEQ_FNO.NEXTVAL,?,?,?,?)
+	</entry>
+	<entry key="insertReply">
+	<!-- 댓글 작성 -->
+	INSERT INTO REPLY(REPLY_NO,BOARD_NO,REPLY_CONTENT,USERNO)
+	VALUES (SEQ_RNO.NEXTVAL,?,?,?)
+	</entry>
+	<entry key="selectReplyList">
+	<!-- 한 게시글 댓글 조회 -->
+	SELECT REPLY_NO,BOARD_NO,REPLY_CONTENT,CREATE_DATE,USERNO
+	FROM REPLY
+	WHERE BOARD_NO=?
+	</entry>
+	<entry key="reportBam">
+	<!-- 게시글 신고 카운트 -->
+	UPDATE BOARD
+	SET REPORT = REPORT+1
+	,   STATUS = CASE WHEN (REPORT=10) THEN 'N'
+                  ELSE 'N'
+                  END
+	WHERE BOARD_NO = ?
+	AND STATUS = 'Y' 
 	</entry>
 
 </properties>

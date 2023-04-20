@@ -1,5 +1,7 @@
 package com.kh.admin.board.model.dao;
 
+
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
@@ -50,6 +52,7 @@ public class BoardDao {
 			
 			if(rset.next()) {
 				result = rset.getInt("COUNT");
+				System.out.println(result);
 			}
 			
 		} catch (SQLException e) {
@@ -62,7 +65,6 @@ public class BoardDao {
 			JDBCTemplate.close(pstmt);
 			
 		}
-		
 		return result;
 		
 	}
@@ -78,7 +80,7 @@ public class BoardDao {
 		int startRow = (pi.getCurrentPage() -1) *pi.getBoardLimit() +1;
 		
 		int endRow = startRow +pi.getBoardLimit() -1;
-		
+	
 		String sql = prop.getProperty("boardSelectList");
 		
 		try {
@@ -98,6 +100,8 @@ public class BoardDao {
 						, rset.getString("CATEGORY_TYPE")
 						, rset.getString("BOARD_TITLE")
 						, rset.getDate("CREATE_DATE")
+						, rset.getDate("MODIFY_DATE")
+						, rset.getInt("GOOD")
 						, rset.getInt("COUNT"));
 				list.add(b);
 			}
@@ -109,19 +113,150 @@ public class BoardDao {
 			JDBCTemplate.close(rset);
 			JDBCTemplate.close(pstmt);
 		}
-		
 		return list;
 	}
 
-	//조회수 증가 메소드
-	public int increaseCount(Connection conn, int boardNo) {
+	public int insertNotice(Connection conn, Board b) {
+		
 		int result = 0;
+		
+		int no = 0;
+		
 		PreparedStatement pstmt = null;
 		
-		String sql = prop.getProperty("increaseCount");
+		String sql = prop.getProperty("insertNotice");
 		
-		return 0;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, Integer.parseInt(b.getBoardWriter()));
+			
+			switch(b.getBoardType()) {
+			case "video" : no = 1; break;
+			case "bam" : no = 2; break;
+			case "food" : no = 3; 
+			
+			}
+			pstmt.setInt(2, no);
+			
+			pstmt.setString(3, b.getBoardTitle());
+			
+			pstmt.setString(4, b.getBoardContent());
+			
+			pstmt.setInt(5, b.getTypeNo());
+			
+			result = pstmt.executeUpdate();
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+		
 	}
+
+	public Board selectBoard(Connection conn, int bno) {
+		
+		Board b = null;
+		
+		int result =0;
+		
+		PreparedStatement pstmt = null;
+		
+		ResultSet rset = null;
+		
+		String sql = prop.getProperty("selectBoard");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, bno);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				
+				b= new Board();
+				
+				b.setBoardNo(rset.getInt("BOARD_NO"));
+				
+				b.setBoardTitle(rset.getString("BOARD_TITLE"));
+				
+				b.setBoardContent(rset.getString("BOARD_CONTENT"));
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return b;
+	}
+	
+	
+	public int updateBoard(Connection conn, Board b) {
+		
+		int result = 0;
+		
+		PreparedStatement pstmt = null;
+		
+		ResultSet rset = null;
+		
+		String sql = prop.getProperty("updateBoard");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, b.getBoardTitle());
+			
+			pstmt.setString(2, b.getBoardContent());
+			
+			pstmt.setInt(3, b.getBoardNo());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public int deleteBoard(Connection conn, int bno) {
+		
+		int result = 0;
+		
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("deleteBoard");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, bno);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
 	
 	
 	

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.kh.board.model.service.BamService;
+import com.kh.board.model.vo.BamCategory;
 import com.kh.board.model.vo.Board;
 import com.kh.common.model.vo.PageInfo;
 
@@ -63,6 +64,8 @@ public class BamListController extends HttpServlet {
 		PageInfo pi = new PageInfo(listCount,currentPage,startPage,endPage,boardLimit,pageLimit,maxPage);
 		
 		ArrayList<Board> list = new BamService().selectList(pi);
+		
+		
 		
 		request.setAttribute("list", list);
 		request.setAttribute("pi", pi);

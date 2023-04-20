@@ -35,6 +35,71 @@ public class BoardService {
 	
 	}
 
+	public int insertNotice(Board b) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = new BoardDao().insertNotice(conn, b);
+		
+		if(result>0) {
+			JDBCTemplate.commit(conn);
+		} else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+		
+		return result;
+	}
+
+	public Board selectBoard(int bno) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		Board b = new BoardDao().selectBoard(conn, bno);
+		
+		
+		JDBCTemplate.close(conn);
+		
+		return b;
+	}
+	
+	public int updateBoard(Board b) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = new BoardDao().updateBoard(conn, b);
+		
+		if(result>0) {
+			JDBCTemplate.commit(conn);
+		} else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+		
+		return result;
+	}
+
+	public int deleteBoard(int bno) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = new BoardDao().deleteBoard(conn, bno);
+		
+		if(result>0) {
+			JDBCTemplate.commit(conn);
+		} else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+		
+		return result;
+		
+	}
+
+
 	
 
 }
