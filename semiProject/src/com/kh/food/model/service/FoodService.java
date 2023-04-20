@@ -49,26 +49,35 @@ public class FoodService {
 		return num;
 	}
 
-	public int UpdateBtn(String str, String bno) {
+	public int UpdateBtn(String str, String bno, int userno) { // 중복 체크를 위한 userno
 		Connection conn = JDBCTemplate.getConnection();
-		int result = new FoodDao().UpdateBtn(conn, str, bno);
+		int result = 0;
 		int result2 = 0;
-		switch(str){
-		case "/goodbtn":
-			result2 = selectDetail(Integer.parseInt(bno)).getGood(); // 현재 추천수
-			break;
-		case "/badbtn":
-			result2 = selectDetail(Integer.parseInt(bno)).getBad(); // 현재 비추천수
-			break;
-		case "/reportbtn":
-			result2 = selectDetail(Integer.parseInt(bno)).getReport(); // 현재 신고수
-			break;
-		}
-		if(result > 0) {
+		int insertBtnCheck = new FoodDao().insertBtncheck(conn, bno, userno, str); // 버튼 누르면 일단 저장 > 만약 이미 있다면 -1을반환
+		// 버튼 중복 체크. 금요일날 오전에 할일
+//		if(insertBtnCheck > 0) {
 			JDBCTemplate.commit(conn);
-		}else {
-			JDBCTemplate.rollback(conn);
-		}
+			
+			result = new FoodDao().UpdateBtn(conn, str, bno);			
+			switch(str){
+			case "/goodbtn":
+				result2 = selectDetail(Integer.parseInt(bno)).getGood(); // 현재 추천수
+				break;
+			case "/badbtn":
+				result2 = selectDetail(Integer.parseInt(bno)).getBad(); // 현재 비추천수
+				break;
+			case "/reportbtn":
+				result2 = selectDetail(Integer.parseInt(bno)).getReport(); // 현재 신고수
+				break;
+			}
+			if(result > 0) {
+				JDBCTemplate.commit(conn);
+			}else {
+				JDBCTemplate.rollback(conn);
+			}
+//		} else {
+			
+//		}
 		
 		JDBCTemplate.close(conn);
 		return result2;

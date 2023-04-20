@@ -74,7 +74,8 @@
 					$.ajax({
 						url : this.id,
 						data : {
-							bno : "<%=request.getParameter("bno")%>"
+							bno : "<%=request.getParameter("bno")%>",
+							writer : "<%=b.getBoardWriter() %>"
 						},
 						success : function (data){
 							switch(btnName){
