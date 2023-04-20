@@ -12,13 +12,15 @@
 </head>
 <body>
 <body>
-	<form action="<%=request.getContextPath() %>/bamupdate.bo" id="bamup" method="post" enctype="multipart/form-data">
+	<%@ include file ="../common/menubar.jsp"%> 
+	
+	<form action="<%=contextPath%>/bamupdate.bo" id="bamup" method="post" enctype="multipart/form-data">
         <div style="width: 500px; background-color: gray; color: white;">
 			<input type="hidden" name="boardNo" value="<%=b.getBoardNo()%>">
             <script>
 				$(function(){
 					$("#bamup option").each(function(){
-						if($(this).val()=="<%=b.getBoardType()%>"){
+						if($(this).text()=="<%=b.getBoardType()%>"){
 							$(this).attr("selected",true);
 						}
 					});
@@ -46,5 +48,6 @@
             <button type="reset">취소</button>
             
         </form>
+	
 </body>
 </html>

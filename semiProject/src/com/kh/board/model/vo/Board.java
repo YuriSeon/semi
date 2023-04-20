@@ -61,7 +61,7 @@ public class Board {
 	
 	//페이지 만들때 게시글 
 	public Board(int boardNo, String boardWriter, String boardType, String boardTitle, String boardContent,
-			Date createDate, int good, int count) {
+			Date createDate, int good,int report, int count) {
 		super();
 		this.boardNo = boardNo;
 		this.boardWriter = boardWriter;
@@ -70,6 +70,7 @@ public class Board {
 		this.boardContent = boardContent;
 		this.createDate = createDate;
 		this.good = good;
+		this.report= report;
 		this.count = count;
 	}
 	

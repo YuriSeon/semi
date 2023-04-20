@@ -2,7 +2,7 @@
     pageEncoding="UTF-8" import="java.util.ArrayList,com.kh.board.model.vo.BamCategory,com.kh.bMember.model.vo.BMember"%>
 <%
 	ArrayList<BamCategory> clist = (ArrayList<BamCategory>)request.getAttribute("clist");
-	BMember loginUser = (BMember)session.getAttribute("loginUser");
+	
 	
 %>
 <!DOCTYPE html>
@@ -12,7 +12,8 @@
 <title>대나무숲 게시글작성</title>
 </head>
 <body>
-	<form action="<%=request.getContextPath() %>/baminsert.bo" method="post" enctype="multipart/form-data">
+	<%@ include file ="../common/menubar.jsp"%> 
+	<form action="<%=contextPath%>/baminsert.bo" method="post" enctype="multipart/form-data">
         <div style="width: 500px; background-color: gray; color: white;">
 			<input type="hidden" name="userNo" value="<%=loginUser.getUserNo()%>">
 			
