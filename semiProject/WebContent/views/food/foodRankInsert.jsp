@@ -44,10 +44,10 @@
 			</tr>
 			<tr>
 				<th>상세 주소</th>
-				<td><input type="text" name="addressDetail"></td>
+				<td><input type="text" name="addressDetail" id="iiii"></td>
 			</tr>
 			<tr>
-				<div id="map" style="align: center; width: 500px; height: 350px;"></div>
+				<div id="map" style="align: center; width: 500px; height: 350px;" tabindex="0" ></div>
 			</tr>
 		</table>
 		<button type="submit">등록하기</button>
@@ -65,11 +65,13 @@
 		function hiddenselect(){
 			if($("#foodselect option:selected").val() == 0){
 				$("#hiddeninput").css("display", "block");
+			}else{
+				$("#hiddeninput").css("display", "none");
 			}
 		}					
 	</script>
 <script>
-	window.onload = function() {
+ 	window.onload = function() {
 		document
 				.getElementById("kakao_address")
 				.addEventListener(
@@ -88,7 +90,28 @@
 										}
 									}).open();
 						});
-	}
+		document // 포커스로 한번 입력가능하게 만들기
+		.getElementById("kakao_address")
+		.addEventListener(
+				"focus",
+				function() { //주소입력칸을 클릭하면
+					//카카오 지도 발생
+					new daum.Postcode(
+							{
+								oncomplete : function(data) { //선택시 입력값 세팅
+									document
+											.getElementById("kakao_address").value = data.address; // 주소 넣기
+									document
+											.querySelector(
+													"input[name=addressDetail]")
+											.focus(); //상세입력 포커싱
+								}
+							}).open();
+				}, {once : true});
+
+		
+		
+	} 
 	
 	$("#iiii").on("focusin", function() {
 		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 

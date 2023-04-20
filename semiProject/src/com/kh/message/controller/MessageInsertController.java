@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.kh.bMember.model.vo.BMember;
-import com.kh.member.model.vo.Member;
 import com.kh.message.model.dao.MessageDao;
 import com.kh.message.model.vo.Message;
 	//메시지 인서트용

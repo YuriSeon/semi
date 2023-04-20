@@ -35,7 +35,7 @@
 
 
 <body>
-    <%@include file ="../common/menubar.jsp" %>
+    <%-- <%@include file ="../common/menubar.jsp" %> --%>
 
   
     <div class="outer">
@@ -45,7 +45,7 @@
 		
 		
 		<!-- 이렇게 작성하면 insert.ph라고 매핑 잡은 주소에 post방식으로도 처리할 수 있음 -->
-		<form action="<%=contextPath %>/insert.vd" method="post" id="enroll-form" enctype="multipart/form-data">
+		<form action="/insert.vd" method="post" id="enroll-form" enctype="multipart/form-data">
 		<table align="center">
 		<tr>
 			<th width="100">제목</th>
@@ -73,7 +73,7 @@
 	</div>
 </form>
 <script>
-$(function(){
+<!-- $(function(){
 	$("#file-area").hide();	
 	$("#titleImg").click(function(){
 		$("#file1").click();
@@ -94,7 +94,7 @@ $(function(){
 		}
 	}
 }
-</script>
+</script> -->
 		
 	<br><br>
 	</div>

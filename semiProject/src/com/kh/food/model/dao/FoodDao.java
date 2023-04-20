@@ -14,6 +14,7 @@ import java.util.Properties;
 
 import com.kh.board.model.vo.Board;
 import com.kh.common.model.vo.JDBCTemplate;
+import com.kh.food.model.vo.FoodCategory;
 
 public class FoodDao {
 	Properties prop = new Properties();
@@ -79,7 +80,6 @@ public class FoodDao {
 	}
 
 	public Board selectDetail(Connection conn, int bno) {
-		System.out.println("bno = " + bno);
 		ResultSet rset = null;
 		PreparedStatement pstmt = null;
 		String sql = prop.getProperty("selectDetail");
@@ -150,7 +150,7 @@ public class FoodDao {
 		return result;
 	}
 
-	public int foodRankInsert(Connection conn, Board b, int foodCategoryNo) {
+	public int foodRankInsert(Connection conn, Board b, FoodCategory fc) {
 		PreparedStatement pstmt = null;
 		int result = 0;
 		String sql = prop.getProperty("BasicfoodRankInsert");
@@ -160,7 +160,7 @@ public class FoodDao {
 			pstmt.setString(1, b.getBoardWriter());
 			pstmt.setString(2, b.getBoardTitle());
 			pstmt.setString(3, b.getBoardContent());
-			pstmt.setInt(4, foodCategoryNo);			
+			pstmt.setInt(4, fc.getFoodCategory());			
 			pstmt.setString(5, b.getAbbress());
 			
 			result = pstmt.executeUpdate();
@@ -216,23 +216,153 @@ public class FoodDao {
 		
 		return result;
 	}
-
-	public int UpdateFoodRank(Connection conn, Board b) {
+	/***
+	 * 
+	 * @param conn
+	 * @param b
+	 * @return FoodCategory [Object] 2 on
+	 */
+	public FoodCategory UpdateFoodRankF(Connection conn, Board b) {
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("SelectNewFood");
+		ResultSet rset = null;
+		FoodCategory fc = null;
+		try {
+				// 1. 게시물 수정시 db에 없는 메뉴로 수정한 경우  
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, b.getFoodName());
+				rset = pstmt.executeQuery();
+				if(rset.next()) {
+					// 이미 있는 메뉴라면
+					fc = new FoodCategory();
+					fc.setFoodCategory(rset.getInt(1));
+					fc.setFoodName(rset.getString(2));
+				}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return fc;
+	}
+	/***
+	 * 
+	 * @param conn
+	 * @param b
+	 * @return int (UPDATE FOOD_BOARD
+	SET FOOD_CATEGORY = SEQ_FCNO.CURRVAL,
+		ADDRESS = ?
+	WHERE BOARD_NO = ?)
+	 */
+	public int UpdateFoodRankFB(Connection conn, Board b) {
 		int result = 0;
 		PreparedStatement pstmt = null;
-		String sql = "";
-		//prop.getProperty("UpdateFoodRank");
-		System.out.println(b.getFoodName().getClass().getName());
+		String sql = prop.getProperty("NewUpdateFoodRank2");
+		
 		try {
-//			if(b.getFoodName().getClass().getName() == integer)
-			
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, b.getAbbress());
+			pstmt.setInt(2, b.getBoardNo());
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	/***
+	 * 
+	 * @param conn
+	 * @param b
+	 * @return int UPDATE BOARD
+	SET BOARD_TITLE = ?,
+		BOARD_CONTENT = ?
+	WHERE BOARD_NO = ?
+	 */
+	public int UpdateFoodRankB(Connection conn, Board b) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("NewUpdateFoodRank3");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, b.getBoardTitle());
+			pstmt.setString(2, b.getBoardContent());
+			pstmt.setInt(3, b.getBoardNo());
+			
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public FoodCategory selectFoodCategory(Connection conn, String foodName) {
+		ResultSet rset = null;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("SelectNewFood");
+		FoodCategory fc = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, foodName);
+			rset = pstmt.executeQuery();
+			if(rset.next()) {
+				fc = new FoodCategory();
+				fc.setFoodCategory(rset.getInt("FOOD_CATEGORY"));
+				fc.setFoodName(rset.getString("FOOD_NAME"));
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
+		return fc;
+	}
+	/***
+	 * 
+	 * @param conn
+	 * @param food_name
+	 * @return int (INSERT INTO F_CATEGORY VALUES (SEQ_FCNO.NEXTVAL, "FOOD_NAME")
+	 */
+	public int InsertNewFoodCate(Connection conn, String food_name) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("NewUpdateFoodRank1");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, food_name);
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return result;
 	}
+	/***
+	 * 
+	 * @param conn
+	 * @param b
+	 * @param fc
+	 * @return
+	 * @apiNote 이건말이죠..업데이트를 위한겁니다.
+ 	 */
+	public int UpdateFoodRankFB(Connection conn, Board b, FoodCategory fc) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("UpdateFoodRank2");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, fc.getFoodCategory());
+			pstmt.setString(2, b.getAbbress());
+			pstmt.setInt(3, b.getBoardNo());
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 
 
 }

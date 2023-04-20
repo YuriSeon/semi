@@ -90,7 +90,7 @@
     </style>
 </head>
 <body>
-	<%@include file ="../common/menubar.jsp" %>
+	<%-- <%@include file ="../common/menubar.jsp" %> --%>
 
     <div class="wrap">
         <div id="header">
@@ -118,7 +118,7 @@
 					
             </div>
             <div id="content_3">
-            	<a href="<%=contextPath%>/insert.vd" class="btn btn-info">글쓰기</a>
+            	<a href="/insert.vd" class="btn btn-info">글쓰기</a>
             </div>
         </div>
         
@@ -127,20 +127,20 @@
         </div>
         <div align="center" class="paging-area">
 			<%if(pi.getCurrentPage()!= 1){ %>
-				<button onclick="location.href='<%=contextPath%>/list.vd?currentPage=<%=pi.getCurrentPage()-1%>'">&lt;</button>
+				<button onclick="location.href='/list.vd?currentPage=<%=pi.getCurrentPage()-1%>'">&lt;</button>
 			<%} %>
 			
 			<%for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++ ){ %>
 				<!-- 내가 보고있는 페이지 버튼은 비활성화 하기  -->
 				<%if(i != pi.getCurrentPage()){ %>
-					<button onclick="location.href='<%=contextPath%>/list.vd?currentPage=<%=i%>';"><%=i %></button>
+					<button onclick="location.href='/list.vd?currentPage=<%=i%>';"><%=i %></button>
 				<%}else{ %> <!-- 내가 보고있는 페이지와 페이징바 버튼의 수가 같다면 i와 currentPage -->
 					<button disabled><%=i %></button>
 				<%} %>
 			<%} %>
 			
 			<%if(pi.getCurrentPage() != pi.getMaxPage()){ %>
-				<button onclick="location.href='<%=contextPath%>/list.vd?currentPage=<%=pi.getCurrentPage()+1%>'">&gt;</button>
+				<button onclick="location.href='/list.vd?currentPage=<%=pi.getCurrentPage()+1%>'">&gt;</button>
 			<%} %>
 		</div>
         

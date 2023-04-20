@@ -14,9 +14,10 @@
 </head>
 <body>
 	<form
-		action="<%=request.getContextPath()%>/foodRankUpdate.bo?bno=<%=request.getParameter("bno")%>"
+		action="<%=request.getContextPath()%>/foodRankUpdate.bo"
 		method="get">
 		<h1>수정하기</h1>
+		<input type="hidden" name="targetBoardNo" value="<%=request.getParameter("bno")%>">
 		<table>
 			<tr>
 				<th>제목</th>

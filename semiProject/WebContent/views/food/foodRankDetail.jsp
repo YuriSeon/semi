@@ -18,7 +18,7 @@
  	<h1>상세보기</h1>
  	<form action="<%=request.getContextPath() %>/foodRankUpdate.bo?bno=<%=request.getParameter("bno")%>" method="post">
 	<table id = "table-area">
-		<%if(m.getUserId() != b.getBoardWriter()){ %>
+		<%if(m.getUserId().equals(b.getBoardWriter())){ %>
 		<tr>
 			<th>작성자 : </th>
 			<td><%=b.getBoardWriter() %> </td>
