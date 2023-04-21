@@ -80,13 +80,13 @@
 						success : function (data){
 							switch(btnName){
 							case "goodbtn":
-								$("#goodbtn").html("추천" + data);
+								$("#goodbtn").html("추천 " + data);
 								break;
 							case "badbtn" :
-								$("#badbtn").html("비추천" + data);
+								$("#badbtn").html("비추천 " + data);
 								break;
 							case "reportbtn" :
-								$("#reportbtn").html("신고" + data);
+								$("#reportbtn").html("신고 " + data);
 								break;
 							}
 						},
@@ -106,7 +106,7 @@
 	<button type="submit">수정하기</button>
 	<button type="button" onclick="location.href='<%=request.getContextPath()%>/foodRankDelete.bo?bno=<%=request.getParameter("bno")%>'">삭제하기</button>
 	<%} %>
-	<button type="button" onclick="location.href=<%=request.getContextPath() %>/foodRanking.bo">목록보기</button>
+	<button type="button" onclick="history.back();">목록보기</button>
 	</form>
 <script>
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 

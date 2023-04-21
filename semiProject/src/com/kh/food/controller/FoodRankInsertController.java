@@ -65,7 +65,7 @@ public class FoodRankInsertController extends HttpServlet {
 		}
 
 		String content = request.getParameter("content"); // 내용
-		String address1 = request.getParameter("address"); // 도로명 주소
+		String address1 = request.getParameter("saveAddress"); // 지번
 		String address2 = request.getParameter("addressDetail"); // 상세주소
 		String userno = String.valueOf(((BMember)request.getSession().getAttribute("loginUser")).getUserNo()); // 로그인 유저 넘버 가져오기
 		
@@ -79,7 +79,7 @@ public class FoodRankInsertController extends HttpServlet {
 		if(num > 0) {
 			response.sendRedirect(request.getContextPath() + "/foodRanking.bo");
 		}else {
-			System.out.println("여기냐?");
+			System.out.println("FoodRankInsertController에서 오류 터졌어요");
 		}
 	}
 

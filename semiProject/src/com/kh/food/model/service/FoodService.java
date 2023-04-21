@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.kh.board.model.vo.Board;
 import com.kh.common.model.vo.JDBCTemplate;
 import com.kh.food.model.dao.FoodDao;
+import com.kh.food.model.vo.FoodBoard;
 import com.kh.food.model.vo.FoodCategory;
 
 public class FoodService {
@@ -119,6 +120,13 @@ public class FoodService {
 		}
 		JDBCTemplate.close(conn);
 		return result3;
+	}
+
+	public ArrayList<Board> locationFood(String dong) {
+		Connection conn = JDBCTemplate.getConnection();
+		ArrayList<Board> list = new FoodDao().locationFood(conn, dong);
+		JDBCTemplate.close(conn);
+		return list;
 	}
 
 }

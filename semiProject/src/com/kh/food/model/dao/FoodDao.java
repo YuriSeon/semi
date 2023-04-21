@@ -199,6 +199,8 @@ public class FoodDao {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
 		}
 
 		return result;
@@ -253,6 +255,8 @@ public class FoodDao {
 			result = pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
 		}
 		return result;
 	}
@@ -279,6 +283,8 @@ public class FoodDao {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
 		}
 		return result;
 	}
@@ -299,6 +305,9 @@ public class FoodDao {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
 		}
 
 		return fc;
@@ -322,6 +331,8 @@ public class FoodDao {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
 		}
 		return result;
 	}
@@ -347,6 +358,8 @@ public class FoodDao {
 			result = pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
 		}
 		return result;
 	}
@@ -372,8 +385,38 @@ public class FoodDao {
 		} catch (SQLException e) {
 			// 복합키에 걸릴경우
 			return -1;
+		} finally {
+			JDBCTemplate.close(pstmt);
 		}
 		return result;
+	}
+
+	public ArrayList<Board> locationFood(Connection conn, String dong) {
+		ResultSet rset = null;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("locationFood");
+		ArrayList<Board> list = new ArrayList<>();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dong);
+			rset = pstmt.executeQuery();
+			while(rset.next()) {
+				Board b = new Board();
+				b.setAbbress(rset.getString("ADDRESS"));
+				b.setFoodName(rset.getString("FOOD_NAME"));
+				b.setBoardNo(rset.getInt("BOARD_NO"));
+				b.setGood(rset.getInt("GOOD"));
+				list.add(b);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+				
+		return list;
 	}
 
 }

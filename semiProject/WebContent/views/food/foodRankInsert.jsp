@@ -39,7 +39,9 @@
 					</tr>
 					<tr>
 						<th>주소</th>
-						<td><input type="text" id="mainAddress" name="address" required></td>
+						<td><input type="text" id="mainAddress" name="address" required>
+							<input type="hidden" name="saveAddress" id="saveAddress">
+						</td>
 					</tr>
 					<tr>
 						<th>상세 주소</th>
@@ -49,6 +51,7 @@
 						<div id="map" style="width: 500px; height: 350px;" tabindex="0" align="center"></div>
 					</tr>
 				</table>
+				
 				<button type="submit">등록하기</button>
 			</form>
 		</body>
@@ -65,28 +68,44 @@
 				} else {
 					$("#hiddeninput").css("display", "none");
 				}
-			}					
+			}		
+			
 			window.onload = function () {
 				document.getElementById("mainAddress").addEventListener("click",function () { 
 							// 지도 오픈
 							new daum.Postcode(
 								{	oncomplete: function (data) { // 주소 선택시 자동으로 입력
+									var dongaddress = ""; // 모두 지번으로 받을꺼다.
+									if(data.autoJibunAddress == ""){
+										dongaddress = data.jibunAddress;
+									}else{
+										dongaddress = data.autoJibunAddress;
+									}
+									console.log(dongaddress);
+									console.log(data);
 													document.getElementById("mainAddress").value = data.address; // 주소 넣기
+													document.getElementById("saveAddress").value = dongaddress;
+													
 													document.querySelector("input[name=addressDetail]").focus(); //상세입력 포커싱
 			 									}
 								}).open();
 						})
 				// 이벤트 2개 걸기 (tab키로 작성시)
-				document.getElementById("mainAddress").addEventListener("focus", function () { 
+				document.getElementById("mainAddress").addEventListener("keyup", function () { 
 							// 지도 오픈
 							new daum.Postcode(
 								{	oncomplete: function (data) { //선택시 입력값 세팅
+									var dongaddress = ""; // 모두 지번으로 받을꺼다.
+									if(data.autoJibunAddress == ""){
+										dongaddress = data.jibunAddress;
+									}else{
+										dongaddress = data.autoJibunAddress;
 													document.getElementById("mainAddress").value = data.address;
+													document.getElementById("saveAddress").value = dongaddress;
 													document.querySelector("input[name=addressDetail]").focus(); 
 												}
-								}).open();
-						}, { once: true }); // 한번만 실행할꺼다.
-			}
+								}}).open(), { once: true } // 한번만 실행할꺼다.
+			});
 
 			$("#iiii").on("focusin", function () {
 				var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
@@ -114,6 +133,7 @@
 					}
 				});
 			});
+			}
 		</script>
 	</body>
 

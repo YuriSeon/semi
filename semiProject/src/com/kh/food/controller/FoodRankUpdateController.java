@@ -32,11 +32,11 @@ public class FoodRankUpdateController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int bno = Integer.parseInt(request.getParameter("targetBoardNo"));
 		String title = request.getParameter("Btitle"); // 제목
-//		int foodCategoryNo = Integer.parseInt(request.getParameter("foodselect")); // 0번이면 newFoodName이 필요 / 아니면 필요없음
+		System.out.println(title);
 		String newFoodName = request.getParameter("newfood");
 		String content = request.getParameter("content"); // 내용
 		
-		String address1 = request.getParameter("address"); // 도로명 주소
+		String address1 = request.getParameter("saveAddress"); // 도로명 주소
 		String address2 = request.getParameter("addressDetail"); // 상세주소
 		
 		String fullAddress = address1 + (address2.equals("")?"":" "+address2);
