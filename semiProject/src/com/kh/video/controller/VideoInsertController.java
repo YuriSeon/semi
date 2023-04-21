@@ -1,6 +1,5 @@
 package com.kh.video.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -12,13 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
-import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.Board;
-import com.kh.common.model.vo.MyFileRenamePolicy;
 import com.kh.video.model.service.VideoService;
 import com.kh.video.model.vo.Video;
 import com.oreilly.servlet.MultipartRequest;
-import com.oreilly.servlet.multipart.FileRenamePolicy;
 
 /**
  * Servlet implementation class InsInsertController
@@ -54,7 +50,7 @@ public class VideoInsertController extends HttpServlet {
 			
 			String savePath=request.getSession().getServletContext().getRealPath("/resources/video_files/");
 			
-			MultipartRequest multiRequest = new MultipartRequest(request, savePath,maxSize,"UTF-8",new MyFileRenamePolicy()); 
+			MultipartRequest multiRequest = new MultipartRequest(request, savePath,maxSize,"UTF-8"/*,new MyFileRenamePolicy()*/); // 쓰고 싶으면 만들어야함 
 				
 			Board b = new Board();
 			Video vi = new Video();

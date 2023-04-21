@@ -73,13 +73,40 @@ SELECT * FROM DUAL
 	AND STATUS = 'Y'
 </entry>
 
+<entry key="SelectNewFood">
+	SELECT *
+	FROM F_CATEGORY
+	WHERE FOOD_NAME = ?
+</entry>
 
-<entry key="UpdateFoodRank">
+<entry key="NewUpdateFoodRank1"> 
+	INSERT INTO F_CATEGORY VALUES (SEQ_FCNO.NEXTVAL, ?)
+</entry>
+<entry key="NewUpdateFoodRank2">
+	UPDATE FOOD_BOARD
+	SET FOOD_CATEGORY = SEQ_FCNO.CURRVAL,
+		ADDRESS = ?
+	WHERE BOARD_NO = ?
+</entry>
+<entry key="NewUpdateFoodRank3">
 	UPDATE BOARD
 	SET BOARD_TITLE = ?,
-	BOARD_CONTENT = ?
+		BOARD_CONTENT = ?
 	WHERE BOARD_NO = ?
-	
+</entry>
+
+<entry key="UpdateFoodRank2">
+UPDATE FOOD_BOARD SET FOOD_CATEGORY = ?, ADDRESS = ? WHERE BOARD_NO = ?</entry>
+
+
+
+<entry key="locationFood">
+	SELECT ADDRESS, FOOD_NAME, BOARD_NO, GOOD
+FROM BOARD B
+JOIN FOOD_BOARD FB USING (BOARD_NO)
+JOIN F_CATEGORY FC ON (FB.FOOD_CATEGORY = FC.FOOD_CATEGORY)
+WHERE ADDRESS LIKE '%'||?||'%'
+ORDER BY GOOD DESC
 </entry>
 </properties>
 

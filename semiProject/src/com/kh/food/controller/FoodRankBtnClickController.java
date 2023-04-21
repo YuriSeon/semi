@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.kh.bMember.model.vo.BMember;
 import com.kh.food.model.service.FoodService;
 
 /**
@@ -31,7 +32,8 @@ public class FoodRankBtnClickController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String str = request.getServletPath();
 		String bno = request.getParameter("bno");
-		int num = new FoodService().UpdateBtn(str, bno);
+		int userno = ((BMember)request.getSession().getAttribute("loginUser")).getUserNo();
+		int num = new FoodService().UpdateBtn(str, bno, userno);
 		// 현재 추천수 비추천수 신고가 들어온다.
 		response.getWriter().print(num+1); // 가져온거 + 1해야 눌렀을때 올라간다.
 		
