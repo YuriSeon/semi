@@ -9,10 +9,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
+import com.kh.admin.userManage.model.service.UserManageService;
 import com.kh.admin.userManage.model.vo.BlackList;
+import com.kh.admin.userManage.model.vo.User;
+import com.kh.admin.userManage.model.vo.UserCondition;
 import com.kh.admin.userManage.model.vo.UserManage;
 import com.kh.bMember.model.vo.BMember;
 import com.kh.common.model.vo.JDBCTemplate;
@@ -192,9 +196,9 @@ public class UserManageDao {
 		return list;
 	}
 	
-	public ArrayList<Object> selectUserList(Connection conn, PageInfo pi) {
+	public ArrayList<User> selectUserList(Connection conn, PageInfo pi, String select) {
 		
-		ArrayList<Object> list = new ArrayList<>();
+		ArrayList<User> list = new ArrayList<>();
 		
 		ResultSet rset = null;
 		
@@ -204,9 +208,18 @@ public class UserManageDao {
 		
 		int endRow = startRow +pi.getBoardLimit() +1;
 		
-		String sql = prop.getProperty("selectUserList");
+		String sql = null;
 		
-		
+		switch(select) {
+		case "recently" : sql = prop.getProperty("selectUserList");
+			break;
+			
+		case "foodRank" : sql = prop.getProperty("selectSortFR");
+			break;
+	
+		case "total" : sql = prop.getProperty("selectSortFR");
+			break;
+		}
 		try {
 			
 			pstmt = conn.prepareStatement(sql);
@@ -232,7 +245,6 @@ public class UserManageDao {
 				UserManage um = new UserManage(rset.getInt("USERNO")
 												, rset.getInt("REPLY_COUNT")
 												, rset.getInt("BOARD_COUNT")
-												, rset.getInt("VIDEO_COUNT")
 												, foodRank);
 				
 				list.add(b);
@@ -251,9 +263,112 @@ public class UserManageDao {
 	}
 
 
-	public ArrayList<Object> selectSortFR(Connection conn, PageInfo pi) {
+	public ArrayList<BMember> checkList(Connection conn, PageInfo pi, int option) {
 		
-		ArrayList<Object> list = new ArrayList<>();
+		ArrayList<BMember> list = new ArrayList<>();
+		
+		ResultSet rset = null;
+		
+		PreparedStatement pstmt = null;
+		
+		int startRow = (pi.getCurrentPage()-1)/pi.getBoardLimit() *pi.getBoardLimit() +1;
+		
+		int endRow = startRow + pi.getBoardLimit() -1;
+		
+		String sql = null;
+		
+		switch(option) {
+		
+		case 1 : sql = prop.getProperty("checkListRecent"); break;
+		
+		case 2 : sql = prop.getProperty("checkListBlock"); break;
+		
+		case 3 : sql = prop.getProperty("checkListFiltering"); 
+		
+		}
+		
+		try {
+			pstmt= conn.prepareStatement(sql);
+			
+			pstmt.setInt(1,startRow);
+			
+			pstmt.setInt(2, endRow);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				
+				list.add(new BMember(rset.getInt("USERNO")
+										, rset.getString("USERID")
+										, rset.getString("USERNAME")
+										, rset.getDate("CREATE_DATE")
+										, rset.getDate("MODIFY_DATE")
+										, rset.getInt("POINT")
+										, rset.getInt("BLOCK")
+										, rset.getInt("FILTERING")));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return list;
+	}
+
+
+
+
+	public int ckCount(Connection conn, int select, String search) {
+		
+		int result = 0;
+		
+		PreparedStatement pstmt = null;
+		
+		ResultSet rset= null;
+		
+		String sql = null;
+
+		switch(select) {
+		
+		case 1 : sql = prop.getProperty("ckCountId"); break;
+			
+		case 2 : sql = prop.getProperty("ckCountB"); break;
+			
+		case 3 : sql = prop.getProperty("ckCountF");
+		
+		}
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, search);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				
+				result = rset.getInt("COUNT");
+			} 
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public ArrayList<BMember> checkSelectList(Connection conn, PageInfo pi, int select, String search) {
+		
+		ArrayList<BMember> list = new ArrayList<>();
 		
 		ResultSet rset = null;
 		
@@ -263,11 +378,98 @@ public class UserManageDao {
 		
 		int endRow = startRow +pi.getBoardLimit() +1;
 		
-		String sql = prop.getProperty("selectSortFR");
+		String sql = null;
 		
+		switch(select) {
+		
+		case 1 : sql = prop.getProperty("checkSelectId"); break;
+		
+		case 2 : sql = prop.getProperty("checkSelectB"); break;
+		
+		case 3 : sql = prop.getProperty("checkSelectF"); 
+		
+		}
 		
 		try {
+			pstmt= conn.prepareStatement(sql);
 			
+			pstmt.setInt(1,startRow);
+			
+			pstmt.setInt(2, endRow);
+			
+			pstmt.setString(3, search);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				
+				list.add(new BMember(rset.getInt("USERNO")
+						, rset.getString("USERID")
+						, rset.getString("USERNAME")
+						, rset.getDate("CREATE_DATE")
+						, rset.getDate("MODIFY_DATE")
+						, rset.getInt("POINT")
+						, rset.getInt("BLOCK")
+						, rset.getInt("FILTERING")));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return list;
+		
+	}
+
+	public int importantCount(Connection conn) {
+		
+		int result = 0;
+		
+		ResultSet rset = null;
+		
+		Statement stmt = null;
+		
+		String sql = prop.getProperty("importantCount");
+		
+		try {
+			stmt = conn.createStatement();
+			
+			rset = stmt.executeQuery(sql);
+			
+			if(rset.next()) {
+				result = rset.getInt("COUNT");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(stmt);
+		}
+		
+		return result;		
+		
+	}
+
+	public ArrayList<User> importantList(Connection conn, PageInfo pi) {
+		
+		ArrayList<User> list = new ArrayList<>();
+		
+		ResultSet rset = null;
+		
+		PreparedStatement pstmt = null;
+		
+		int startRow = (pi.getCurrentPage()-1)/pi.getBoardLimit() *pi.getBoardLimit() +1;
+		
+		int endRow = startRow +pi.getBoardLimit() +1;
+		
+		String sql = prop.getProperty("importantList");
+		
+		try {
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setInt(1, startRow);
@@ -277,98 +479,183 @@ public class UserManageDao {
 			rset = pstmt.executeQuery();
 			
 			while(rset.next()) {
-				
-				BMember b = new BMember(rset.getInt("USERNO")
-										, rset.getString("USERID")
-										, rset.getString("USERNAME")
-										, rset.getString("PHONE")
-										, rset.getString("EMAIL")
-										, rset.getString("SNAME"));
-				
-				//foodRank 구하는 메소드 이미 있어서 사용
-				String foodRank = new FoodDao().pointCheck(rset.getInt("POINT"));
-				
-				UserManage um = new UserManage(rset.getInt("USERNO")
-												, rset.getInt("REPLY_COUNT")
-												, rset.getInt("BOARD_COUNT")
-												, rset.getInt("VIDEO_COUNT")
-												, foodRank);
+				BMember b = new BMember();
+				b.setUserNo(rset.getInt("USERNO"));
+				b.setUserId(rset.getString("USERID"));
+				b.setUserName(rset.getString("USERNAME"));
 				list.add(b);
-				list.add(um);
+				
+				list.add(new UserCondition(rset.getInt("USERNO")
+											, rset.getInt("BLOCK_C")
+											, rset.getInt("DM_BLOCK_C")
+											, rset.getInt("FALSE_BLOCK_C")
+											, rset.getInt("YELLOW_CARD")
+											, rset.getInt("BOARD_FILTERING")
+											, rset.getInt("REPLY_FILTERING")
+											, rset.getInt("TOTAL_B")
+											, rset.getInt("TOTAL_F")));
+				
 			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return list;
+		
+				
+	}
+
+
+	public int yellowCard(Connection conn, int userNo) {
+		
+		int result = 0;
+		
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("yellowCard");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, userNo);
+			
+			result = pstmt.executeUpdate();
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
+
+	public User UserCount(Connection conn, String[] sArr) {
+		
+		User u = null;
+		
+		PreparedStatement pstmt = null;
+		
+		ResultSet rset = null;
+		
+		String sql = prop.getProperty("listCount");
+		
+		int[] iArr = new int[4];
+		
+		try {
+			for(int i=0; i<sArr.length; i++) {
+				
+				if(i==1) {
+					sql = prop.getProperty("recentUserCount");
+				}
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setString(1, sArr[i]);
+				
+				rset = pstmt.executeQuery();
+				
+				if(rset.next()) {
+					iArr[i] = rset.getInt("COUNT");
+				}
+			}
+			
+			u = new User(iArr[0], iArr[1], iArr[2], iArr[3]);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
 			JDBCTemplate.close(rset);
 			JDBCTemplate.close(pstmt);
 		}
 		
-		return list;
+		return u;
+	}
+
+
+	public int[] checkCount(Connection conn) {
+		// 최근 신고 당한 회원, 경고수마다 회원수, 체크가 필요한 회원 수
+		int[] result = new int[6];
+		
+		Statement stmt = null;
+		
+		ResultSet rset = null;
+		
+		String sql = null;
+		
+		try {
+			for(int i=0; i<result.length; i++) {
+				
+				switch(i) {
+				case 0 : sql = prop.getProperty("checkCount"); break;
+				case 1 : result [i] = yellowCount(conn, i); i++;
+				case 2 : result [i] = yellowCount(conn, i); i++;
+				case 3 : result [i] = yellowCount(conn, i); i++;
+				case 4 : result [i] = yellowCount(conn, i); i++;
+				case 5 : sql = prop.getProperty("importantCount");
+				}
+					
+				stmt = conn.createStatement();
+				
+				rset = stmt.executeQuery(sql);
+				
+				if(rset.next()) {
+					result[i]= rset.getInt("COUNT");
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(stmt);
+		}
+		
+		return result;
 	}
 	
-	public ArrayList<Object> selectSortAct(Connection conn, PageInfo pi) {
+	public int yellowCount(Connection conn, int i) {
 		
-		ArrayList<Object> list = new ArrayList<>();
-		
-		ResultSet rset = null;
+		int result = 0;
 		
 		PreparedStatement pstmt = null;
 		
-		int startRow = (pi.getCurrentPage()-1)/pi.getBoardLimit() *pi.getBoardLimit() +1;
+		ResultSet rset = null;
 		
-		int endRow = startRow +pi.getBoardLimit() +1;
-		
-		String sql = prop.getProperty("selectSortFR");
-		
+		String sql = prop.getProperty("yellowCount");
 		
 		try {
-			
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setInt(1, startRow);
-			
-			pstmt.setInt(2, endRow);
+			pstmt.setInt(1, i);
 			
 			rset = pstmt.executeQuery();
 			
-			while(rset.next()) {
-				
-				BMember b = new BMember(rset.getInt("USERNO")
-										, rset.getString("USERID")
-										, rset.getString("USERNAME")
-										, rset.getString("PHONE")
-										, rset.getString("EMAIL")
-										, rset.getString("SNAME"));
-				
-				//foodRank 구하는 메소드 이미 있어서 사용
-				String foodRank = new FoodDao().pointCheck(rset.getInt("POINT"));
-				
-				UserManage um = new UserManage(rset.getInt("USERNO")
-												, rset.getInt("REPLY_COUNT")
-												, rset.getInt("BOARD_COUNT")
-												, rset.getInt("VIDEO_COUNT")
-												, foodRank);
-				
-				list.add(b);
-				list.add(um);
+			if(rset.next()) {
+				result = rset.getInt("COUNT");
 			}
-			
+					
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			
 			JDBCTemplate.close(rset);
 			JDBCTemplate.close(pstmt);
 		}
 		
-		return list;
+		return result;
+		
+		
 	}
 
-	
+
 
 
 }

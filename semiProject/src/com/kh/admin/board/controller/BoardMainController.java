@@ -18,7 +18,7 @@ import com.kh.common.model.vo.PageInfo;
  */
 
 //게시판탭 클릭시 가장 먼저 나오는 화면으로 이동
-@WebServlet("/main.bo")
+@WebServlet("/main.abo")
 public class BoardMainController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -35,13 +35,30 @@ public class BoardMainController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		// url에 있는 값 꺼내기
-		int typeNo = Integer.parseInt(request.getParameter("typeNo"));
-		System.out.println(typeNo);
+		// 공지사항 타입 꺼내기
+		int typeNo;
+		
+		if(request.getParameter("typeNo")==null) { // 쿼리스트링으로 typeNo가 넘어오지 않았을때
+			
+			typeNo = (int)request.getAttribute("typeNo");
+			
+		} else {
+			
+			typeNo = Integer.parseInt(request.getParameter("typeNo"));
+		}
 		// 게시글 페이징처리
-		int listCount = new BoardService().boardListCount(typeNo);
-		System.out.println(listCount);
-		int currentPage = Integer.parseInt(request.getParameter("currentPage"));
+		int listCount = new BoardService().boardCount(typeNo);
+		
+		int currentPage = 0;
+		
+		if(request.getParameter("currentPage")==null) { // 쿼리스트링으로 currentPage가 넘어오지 않았을때
+			
+			currentPage = (int)request.getAttribute("currentPage");
+			
+		} else {
+			
+			currentPage = Integer.parseInt(request.getParameter("currentPage"));
+		}
 		
 		int pageLimit = 10;
 		
@@ -61,7 +78,7 @@ public class BoardMainController extends HttpServlet {
 		PageInfo pi = new PageInfo(listCount, currentPage, startPage, endPage, boardLimit, pageLimit, maxPage);
 		
 		// board main 페이지에 들어가면 가장 먼저 나올 공지사항 전체 조회
-		ArrayList<Board> blist = new BoardService().boardSelectList(pi, typeNo);
+		ArrayList<Board> blist = new BoardService().boardList(pi, typeNo);
 		
 		if(listCount==0 || !blist.isEmpty()) { // 게시글리스트 총 수가 0이거나 list가 비어있지 않으면 조회 성공 
 			
