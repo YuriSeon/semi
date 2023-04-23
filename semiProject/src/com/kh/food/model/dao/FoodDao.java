@@ -14,6 +14,7 @@ import java.util.Properties;
 
 import com.kh.board.model.vo.Board;
 import com.kh.common.model.vo.JDBCTemplate;
+import com.kh.food.model.vo.FoodBtnCheck;
 import com.kh.food.model.vo.FoodCategory;
 
 public class FoodDao {
@@ -364,31 +365,31 @@ public class FoodDao {
 		return result;
 	}
 
-	public int insertBtncheck(Connection conn, String bno, int userno, String str) {
-		int result = 0;
+	public FoodBtnCheck SelectBtncheck(Connection conn, String bno, int userno) {
+		ResultSet rset = null;
 		PreparedStatement pstmt = null;
-		String sql = prop.getProperty("insertBtncheck");
-
+		String sql = prop.getProperty("selectBtncheck");
+		FoodBtnCheck fbc = null;
+		
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, Integer.parseInt(bno));
 			pstmt.setInt(2, userno);
-			if(str.equals("/goodbtn")) {
-				str = "g";
-			}else if(str.equals("/badbtn")) {
-				str = "b";
-			}else if(str.equals("/reportbtn")) {
-				str = "r";
+			rset = pstmt.executeQuery();
+			if(rset.next()) {
+				System.out.println("객체가 존재한다.");
+				fbc = new FoodBtnCheck();
+				fbc.setBoardNo(rset.getInt("BOARD_NO"));
+				fbc.setUserNo(rset.getInt("USERNO"));
+				fbc.setBtnStyle(rset.getString("BTNTYPE"));
 			}
-			pstmt.setString(3, str);
-			result = pstmt.executeUpdate();
 		} catch (SQLException e) {
-			// 복합키에 걸릴경우
-			return -1;
+			e.printStackTrace();
 		} finally {
 			JDBCTemplate.close(pstmt);
+			JDBCTemplate.close(rset);
 		}
-		return result;
+		return fbc;
 	}
 
 	public ArrayList<Board> locationFood(Connection conn, String dong) {
@@ -419,4 +420,139 @@ public class FoodDao {
 		return list;
 	}
 
+	public int insertBtnCheck(Connection conn, String bno, int userno, String str) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("insertBtnCheck");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, Integer.parseInt(bno));
+			pstmt.setInt(2, userno);
+			pstmt.setString(3, str);
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
+	}
+
+	public int UpdatePlusButton(Connection conn, String str, String bno) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("updatePlusButton" + str);
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, Integer.parseInt(bno));
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
+	}
+
+	public int deleteBtnCheck(Connection conn, String bno, int userno) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("deleteBtnCheck");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, bno);
+			pstmt.setInt(2, userno);
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
+	}
+
+	public int UpdateMiusButton(Connection conn, String str, String bno) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("updateMiusButton" + str);
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, Integer.parseInt(bno));
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
+	}
+//
+//	public int changeBtnCheck(Connection conn, String bno, int userno, String str) {
+//		int result = 0;
+//		PreparedStatement pstmt = null;
+//		String sql = prop.getProperty("changeBtnCheck");
+//		
+//		try {
+//			pstmt = conn.prepareStatement(sql);
+//			pstmt.setString(1, str);
+//			pstmt.setString(2, bno);
+//			pstmt.setInt(3, userno);
+//			result = pstmt.executeUpdate();
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		} finally {
+//			JDBCTemplate.close(pstmt);
+//		}
+//		return result;
+//	}
+
+	public int updateBtncheck(Connection conn, String str, int userno, String bno) {
+		// TODO Auto-generated method stub
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("updateBtnCheck");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, str);
+			pstmt.setString(2, bno);
+			pstmt.setInt(3, userno);
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
+	}
+
+	public FoodBtnCheck selectUserBtn(Connection conn, int bno, int userNo) {
+		ResultSet rset = null;
+		String sql = prop.getProperty("selectUserBtn");
+		PreparedStatement pstmt = null;
+		FoodBtnCheck fbc = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bno);
+			pstmt.setInt(2, userNo);
+			rset = pstmt.executeQuery();
+			if(rset.next()) {
+				fbc = new FoodBtnCheck();
+				fbc.setBoardNo(rset.getInt("BOARD_NO"));
+				fbc.setUserNo(rset.getInt("USERNO"));
+				fbc.setBtnStyle(rset.getString("BTNTYPE"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+			
+		}
+		
+		return fbc;
+	}
 }

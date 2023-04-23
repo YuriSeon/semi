@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import com.kh.board.model.vo.Board;
 import com.kh.common.model.vo.JDBCTemplate;
 import com.kh.food.model.dao.FoodDao;
-import com.kh.food.model.vo.FoodBoard;
+import com.kh.food.model.vo.FoodBtnCheck;
 import com.kh.food.model.vo.FoodCategory;
 
 public class FoodService {
@@ -53,35 +53,55 @@ public class FoodService {
 	public int UpdateBtn(String str, String bno, int userno) { // 중복 체크를 위한 userno
 		Connection conn = JDBCTemplate.getConnection();
 		int result = 0;
-		int result2 = 0;
-		int insertBtnCheck = new FoodDao().insertBtncheck(conn, bno, userno, str); // 버튼 누르면 일단 저장 > 만약 이미 있다면 -1을반환
-		// 버튼 중복 체크. 금요일날 오전에 할일
-//		if(insertBtnCheck > 0) {
-			JDBCTemplate.commit(conn);
-			
-			result = new FoodDao().UpdateBtn(conn, str, bno);			
-			switch(str){
-			case "/goodbtn":
-				result2 = selectDetail(Integer.parseInt(bno)).getGood(); // 현재 추천수
-				break;
-			case "/badbtn":
-				result2 = selectDetail(Integer.parseInt(bno)).getBad(); // 현재 비추천수
-				break;
-			case "/reportbtn":
-				result2 = selectDetail(Integer.parseInt(bno)).getReport(); // 현재 신고수
-				break;
-			}
-			if(result > 0) {
-				JDBCTemplate.commit(conn);
-			}else {
-				JDBCTemplate.rollback(conn);
-			}
-//		} else {
-			
-//		}
+		if(str.equals("/goodbtn")) {
+			str = "GOOD";
+		}else if (str.equals("/badbtn")) {
+			str = "BAD";
+		}else {
+			str = "REPORT";
+		}
+		FoodBtnCheck fbc = new FoodDao().SelectBtncheck(conn, bno, userno);
 		
+		if(fbc == null) { // 없다면
+			result = new FoodDao().insertBtnCheck(conn, bno, userno, str);
+			if(result > 0) { // 추가
+				result = new FoodDao().UpdatePlusButton(conn, str, bno); 
+			}
+		}else if(fbc.getBtnStyle().equals(str)) { // 이미 버튼이 눌렸는데 그게 같은 버튼일 경우
+			result = new FoodDao().deleteBtnCheck(conn, bno, userno);
+			if(result > 0) { // 삭제
+				result = new FoodDao().UpdateMiusButton(conn, str, bno);
+			}
+		}else {
+			// 이미 있는데 다른 버튼 클릭 했을때 이거 해야한다!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			/*
+			 * 추천 수 비추천 수 감소 했을때 트리거로 포인트 변경 하는 거 만들기
+			 * report 취소시 userCondition block_c 감소 트리거 만들기
+			 * 
+			 * */
+			result = new FoodDao().UpdatePlusButton(conn, str, bno);
+			if(result > 0) {
+				result = new FoodDao().updateBtncheck(conn, str, userno, bno);
+				result = new FoodDao().UpdateMiusButton(conn, fbc.getBtnStyle(), bno);
+			}
+		}
+		if(result > 0) {			
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
 		JDBCTemplate.close(conn);
-		return result2;
+		/*
+		 * 1. selectbtnCheck로 btncheck테이블에 자료가 있는지 확인한다.
+		 * 2. 없다면 누른 버튼을 board테이블에서  +1 update 해준다. -- 트리거로 인해 포인트 변화
+		 * 3. 똑같은 버튼을 눌렀다면 btncheck테이블에서 delete해준다.
+		 * 3-1. board테이블에서 -1 update 해준다. -- 트리거 만들어서 포인트 차감
+		 * 4. 있는데 다른 버튼을 클릭 했다면
+		 * 4-1. board테이블에서 기존에 있는 버튼 -1해준다.
+		 * 4-2. board테이블에서 이번에 클릭한 버튼을 +1 해준다. -- 트리거로 인해 포인트 변화
+		 */ 
+		
+		return result;
 	}
 
 	public int deleteFoodRank(int bno) {
@@ -100,13 +120,11 @@ public class FoodService {
 		Connection conn = JDBCTemplate.getConnection();
 		int result1 = 0, result2 = 0, result3 = 0, result4 = 0;
 		FoodCategory fc = new FoodDao().UpdateFoodRankF(conn, b); // select를 사용해서 진짜 새로운 음식 인지 확인
-		
 		if(fc == null) {
 			result1 = new FoodDao().InsertNewFoodCate(conn, b.getFoodName()); // 새로운 음식이라면 추가
 		}else {
 			result4 = new FoodDao().UpdateFoodRankFB(conn, b, fc);
 		}
-		
 		if(result1 > 0) {
 			result2 = new FoodDao().UpdateFoodRankFB(conn, b); // food_board에 주소를 해당하는 board_no에서 수정한다.
 		}
@@ -127,6 +145,13 @@ public class FoodService {
 		ArrayList<Board> list = new FoodDao().locationFood(conn, dong);
 		JDBCTemplate.close(conn);
 		return list;
+	}
+
+	public FoodBtnCheck useBtn(int bno, int userNo) {
+		Connection conn = JDBCTemplate.getConnection();
+		FoodBtnCheck fbc = new FoodDao().selectUserBtn(conn, bno, userNo);
+		JDBCTemplate.close(conn);
+		return fbc;
 	}
 
 }

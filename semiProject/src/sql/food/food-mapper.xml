@@ -106,7 +106,93 @@ FROM BOARD B
 JOIN FOOD_BOARD FB USING (BOARD_NO)
 JOIN F_CATEGORY FC ON (FB.FOOD_CATEGORY = FC.FOOD_CATEGORY)
 WHERE ADDRESS LIKE '%'||?||'%'
+AND GOOD > 5
 ORDER BY GOOD DESC
+</entry>
+
+<entry key="selectBtncheck">
+		SELECT BOARD_NO, BC.USERNO, BTNTYPE
+		FROM BOARD B
+        JOIN BTNCHECK BC USING (BOARD_NO)
+		WHERE B.STATUS = 'Y'
+		AND BOARD_NO = ?
+        AND BC.USERNO = ?
+</entry>
+
+<entry key="deleteBtn">
+DELETE FROM BTNCHECK WHERE USERNO = ?
+</entry>
+
+<entry key="insertBtnCheck">
+INSERT INTO BTNCHECK VALUES (?, ?, ?) 
+</entry>
+
+<entry key="updatePlusButtonGOOD">
+UPDATE BOARD
+SET GOOD = GOOD + 1
+WHERE BOARD_NO = ?
+</entry>
+<entry key="updatePlusButtonBAD">
+UPDATE BOARD
+SET BAD = BAD + 1
+WHERE BOARD_NO = ?
+</entry>
+<entry key="updatePlusButtonREPORT">
+UPDATE BOARD
+SET REPORT = REPORT + 1
+WHERE BOARD_NO = ?
+</entry>
+
+<entry key="updateMiusButtonGOOD">
+UPDATE BOARD
+SET GOOD = GOOD - 1
+WHERE BOARD_NO = ?
+</entry>
+<entry key="updateMiusButtonBAD">
+UPDATE BOARD
+SET BAD = BAD - 1
+WHERE BOARD_NO = ?
+</entry>
+<entry key="updateMiusButtonREPORT">
+UPDATE BOARD
+SET REPORT = REPORT - 1
+WHERE BOARD_NO = ?
+</entry>
+
+<entry key="deleteBtnCheck">
+DELETE BTNCHECK
+WHERE BOARD_NO = ?
+AND USERNO = ?
+</entry>
+
+<entry key="AfterDeleteBoardGOOD">
+UPDATE BOARD
+SET GOOD = GOOD-1
+WHERE BOARD_NO = ?
+</entry>
+<entry key="AfterDeleteBoardBAD">
+UPDATE BOARD
+SET BAD = BAD-1
+WHERE BOARD_NO = ?
+</entry>
+<entry key="AfterDeleteBoardREPORT">
+UPDATE BOARD
+SET REPORT = REPORT-1
+WHERE BOARD_NO = ?
+</entry>
+
+<entry key="updateBtnCheck">
+UPDATE BTNCHECK
+SET BTNTYPE = ?
+WHERE BOARD_NO = ?
+AND USERNO = ?
+</entry>
+
+<entry key="selectUserBtn">
+SELECT BOARD_NO, USERNO, BTNTYPE
+FROM BTNCHECK
+WHERE BOARD_NO = ?
+AND USERNO = ?
 </entry>
 </properties>
 
