@@ -26,7 +26,7 @@ public class FoodTogetherBoardController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("views/food/foodTogether.bo").forward(request, response);
+		request.getRequestDispatcher("views/food/foodTogether.jsp").forward(request, response);
 		
 	}
 

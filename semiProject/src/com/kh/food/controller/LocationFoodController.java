@@ -33,9 +33,11 @@ public class LocationFoodController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String location = request.getParameter("location");
+		System.out.println(location);
 		String dong = location.split(" ")[2];
 		
 		ArrayList<Board> list = new FoodService().locationFood(dong);
+		System.out.println("list " + list);
 		response.setContentType("json/application; charset=UTF-8");
 		Gson gson = new Gson();
 		gson.toJson(list, response.getWriter());

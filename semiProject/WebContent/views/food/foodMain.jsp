@@ -73,7 +73,7 @@ body {
 		</div>
 	</div>
 	<div id="locactionFood" style="display:none">
-	<button type="button" id="returnMain">종료하기</button>
+		<button type="button" id="returnMain">종료하기</button>
 		<button id="prebtn"> &lt </button>
 		<div id="foodSlide">
 			
@@ -117,12 +117,8 @@ body {
 	                'Authorization': 'KakaoAK 443a788ac3404e8299a0b6615292d7b9'
 	            },
 	            success: function (data) {
-	            	if(data.documents[0].road_address == null){
 		                $("#userCurrLo").val(data.documents[0].address.address_name);            		
-	            	}else{
-		                $("#userCurrLo").val(data.documents[0].road_address.address_name);            				            		
-	            	}
-	            },
+	            }	,
 	            
 	            error : function (e) {
 	                console.log("error");
@@ -191,7 +187,7 @@ body {
             },
             error : function(){
                 // 이건 그냥 통신 x
-                $("#foodSlide").text("Sorry");
+                $("#foodSlide").text("this is error");
                 console.log("Error");
             },
             complete: function(){
@@ -199,18 +195,17 @@ body {
             }
         });
     };
-
-    $("#nextbtn").on("click", function(){
-        let userLocation = $("#userCurrLo").val();
-        number = number + 1;
-        showList(userLocation);
-    }); 
     
-    $("#prebtn").on("click", function(){
-    	let userLocation = $("#userCurrLo").val();
-    	console.log("prebtn " + userLocation);
-    	number = number - 1;
-    	showList(userLocation);
+    $("#locactionFood").on("click", "button", function(){
+    	if(this.id == "nextbtn" || this.id == "prebtn"){
+    		let userLocation = $("#userCurrLo").val();
+    		if(this.id == "nextbtn"){
+    			number = number +1;
+    		}else{
+    			number = number - 1;
+    		}
+    		showList(userLocation);
+    	}
     });
 	
 	$("#returnMain").on("click", function(){
@@ -219,7 +214,11 @@ body {
 	});
 	
 	$("#foodSlide").on("click",function(){
-		location.href = "<%=request.getContextPath() %>/foodRankingDetail.bo?bno=" + $("#justbno").val();
+		if($("#justbno").val() == null){
+			alert("현재 맛집없는데 클릭했어요...");
+		}else{			
+			location.href = "<%=request.getContextPath() %>/foodRankingDetail.bo?bno=" + $("#justbno").val();
+		}
 	})
 	
     </script>
