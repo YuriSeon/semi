@@ -12,130 +12,144 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Document</title>
 <style>
-*{
-  margin: 0;
-  padding: 0;
-  text-decoration: none;
-}
-:root {
-  --accent-color: #fff;
-  --gradient-color: #FBFBFB;
-}
-body{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-   width: 100vw;
-  height: 100vh;
-  background-image: linear-gradient(-45deg, #e3eefe 0%, #efddfb 100%);
+* {
+	margin: 0;
+	padding: 0;
+	text-decoration: none;
 }
 
-.sidebar{
-  position: fixed;
-  width: 240px;
-  left: -240px;
-  height: 100%;
-  background-color: #fff;
-  transition: all .5s ease;
+:root { 
+	--accent-color: #fff; 
+	--gradient-color: #FBFBFB;
 }
-.sidebar header{
-  font-size: 28px;
-  color: #353535;
-  line-height: 70px;
-  text-align: center;
-  background-color: #fff;
-  user-select: none;
-  font-family: 'Lato', sans-serif;
+
+body {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	height: 100vh;
+	background-image: linear-gradient(-45deg, #e3eefe 0%, #d9edfa 100%);
 }
-.sidebar a{
-  display: block;
-  height: 65px;
-  width: 100%;
-  color: #353535;
-  line-height: 65px;
-  padding-left: 30px;
-  box-sizing: border-box;
-  border-left: 5px solid transparent;
-  font-family: 'Lato', sans-serif;
-  transition: all .5s ease;
+
+.sidebar {
+	position: fixed;
+	width: 240px;
+	left: -240px;
+	height: 100%;
+	background-color: #fff;
+	transition: all .5s ease;
 }
-a.active,a:hover{
-  border-left: 5px solid var(--accent-color);
-  color: #fff;
-   background: linear-gradient(to left, var(--accent-color), var(--gradient-color));
+
+.sidebar header {
+	font-size: 28px;
+	color: #ffffff;
+	line-height: 70px;
+	text-align: center;
+	background-color: #fff;
+	user-select: none;
+	font-family: 'Lato', sans-serif;
 }
-.sidebar a i{
-  font-size: 23px;
-  margin-right: 16px;
+
+.sidebar a {
+	display: block;
+	height: 65px;
+	width: 100%;
+	color: #131529;
+	line-height: 65px;
+	padding-left: 30px;
+	box-sizing: border-box;
+	border-left: 5px solid transparent;
+	font-family: 'Lato', sans-serif;
+	transition: all .5s ease;
 }
-.sidebar a span{
-  letter-spacing: 1px;
-  text-transform: uppercase;
+
+a.active, a:hover {
+	border-left: 5px solid var(--accent-color);
+	color: #ffffff;
+	background: linear-gradient(to left, var(--accent-color),
+		var(--gradient-color));
 }
-#check{
-  display: none;
+
+.sidebar a i {
+	font-size: 23px;
+	margin-right: 16px;
 }
-label #btn,label #cancel{
-  position: absolute;
-  left: 5px;
-  cursor: pointer;
-  color: #d6adff;
-  border-radius: 5px;
-  margin: 15px 30px;
-  font-size: 29px;
-  background-color: #e8d1ff;
-  box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
-    inset -7px -7px 10px 0px rgba(0,0,0,.1),
-   3.5px 3.5px 20px 0px rgba(0,0,0,.1),
-   2px 2px 5px 0px rgba(0,0,0,.1);
-  height: 45px;
-  width: 45px;
-  text-align: center;
-  text-shadow: 2px 2px 3px rgba(255,255,255,0.5);
-  line-height: 45px;
-  transition: all .5s ease;
+
+.sidebar a span {
+	letter-spacing: 1px;
+	text-transform: uppercase;
 }
-label #cancel{
-  opacity: 0;
-  visibility: hidden;
+
+#check {
+	display: none;
 }
-#check:checked ~ .sidebar{
-  left: 0;
+
+label #btn, label #cancel {
+	position: absolute;
+	left: 5px;
+	cursor: pointer;
+	color: #5dd3ee;
+	border-radius: 5px;
+	margin: 15px 30px;
+	font-size: 29px;
+	background-color: #ace7fb;
+	box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5), inset -7px
+		-7px 10px 0px rgba(0, 0, 0, .1), 3.5px 3.5px 20px 0px
+		rgba(0, 0, 0, .1), 2px 2px 5px 0px rgba(0, 0, 0, .1);
+	height: 45px;
+	width: 45px;
+	text-align: center;
+	text-shadow: 2px 2px 3px rgba(255, 255, 255, 0.5);
+	line-height: 45px;
+	transition: all .5s ease;
 }
-#check:checked ~ label #btn{
-  margin-left: 245px;
-  opacity: 0;
-  visibility: hidden;
+
+label #cancel {
+	opacity: 0;
+	visibility: hidden;
 }
-#check:checked ~ label #cancel{
-  margin-left: 245px;
-  opacity: 1;
-  visibility: visible;
+
+#check:checked ~ .sidebar {
+	left: 0;
 }
-@media(max-width : 860px){
-  .sidebar{
-    height: auto;
-    width: 70px;
-    left: 0;
-    margin: 100px 0;
-  }
-  header,#btn,#cancel{
-    display: none;
-  }
-  span{
-    position: absolute;
-    margin-left: 23px;
-    opacity: 0;
-    visibility: hidden;
-  }
-  .sidebar a{
-    height: 60px;
-  }
-  .sidebar a i{
-    margin-left: -10px;
-  }
-  a:hover {
+
+#check:checked ~ label #btn {
+	margin-left: 245px;
+	opacity: 0;
+	visibility: hidden;
+}
+
+#check:checked ~ label #cancel {
+	margin-left: 245px;
+	opacity: 1;
+	visibility: visible;
+}
+
+@media ( max-width : 860px) {
+	.sidebar {
+		height: auto;
+		width: 70px;
+		left: 0;
+		margin: 100px 0;
+	}
+	header, #btn, #cancel {
+		display: none;
+	}
+	span {
+		position: absolute;
+		margin-left: 23px;
+		opacity: 0;
+		visibility: hidden;
+	}
+	.sidebar a {
+		height: 60px;
+	}
+	.sidebar a i {
+		margin-left: -10px;
+	}
+	a:hover {
     width: 200px;
     background: inherit;
   }
@@ -147,38 +161,11 @@ label #cancel{
 
 .sidebar > a.active,.sidebar > a:hover:nth-child(even) {
   --accent-color: #52d6f4;
-  --gradient-color: #c1b1f7;
+  --gradient-color: #b1e2f7;
 }
 .sidebar a.active,.sidebar > a:hover:nth-child(odd) {
-  --accent-color: #c1b1f7;
-  --gradient-color: #A890FE;
-}
-
-
-.frame {
-  width: 50%;
-  height: 30%;
-  margin: auto;
-  text-align: center;
-}
-
-h2 {
-  position: relative;
-  text-align: center;
-  color: #353535;
-  font-size: 60px;
-  font-family: 'Lato', sans-serif;
-  margin: 0;
-  color: #a759f5;
-}
-
-p {
-  font-family: 'Lato', sans-serif;
-  font-weight: 300;
-  text-align: center;
-  font-size: 30px;
-  color: #d6adff;
-  margin: 0;
+  --accent-color: #4ad7f7;
+  --gradient-color: #a2e1fb;
 }
 
 #head * {
@@ -216,9 +203,9 @@ p {
     width: 550px;
     padding: 10px;
     margin: -80px auto 0 auto;
-    background-color: #a1c2ff;
+    background-color: #71d6ec;
     border-radius: 20px;
-    box-shadow: 0 10px 40px #a5b7ff, 0 0 0 20px #ffffffeb;
+    box-shadow: 0 10px 40px #a5d5ff, 0 0 0 20px #ffffffeb;
     transform: scale(0.6);
     border: 10px green;
 }
@@ -320,7 +307,6 @@ p {
 }
 #s-cover:hover button span:before,
 #s-cover:hover button span:after {
-	/* border: 2px solid red; */
   right: 0px;
   width: 33px;
   background-color: #fff;
@@ -341,17 +327,18 @@ p {
 		class="fas fa-times" id="cancel"></i>
 	</label>
 	<div class="sidebar">
-		<header>Menu</header>
-		<a class="active"> <i class="fas fa-rocket"></i></a> 
-	<a href="<%=contextPath %>/main.bo?currentPage=1&typeNo=1"> <i class="fas fa-list"></i> <span>Board</span>
-	</a> <a href="<%=contextPath %>/main.re"> <i class="fas fa-film"></i> <span>Reels</span>
+		<header>안보이지메롱 언제다하냐</header>
+		<a class="active"> <!-- 매핑주소 확인하고 메인으로 넘어가는것도 넣기  -->
+			<i class=""></i><span style="font-size: 28px; text-align: center; font-weight: 800;">&nbsp;&nbsp;&nbsp;&nbsp;Menu</span></a>
+	<a href="<%=contextPath %>/main.bo?currentPage=1&bType=4"> <i class="fas fa-list"></i> <span>Board</span>
 	</a> <a href="<%=contextPath %>/main.um?currentPage=1&status=Y"> <i class="fas fa-user"></i><span>User_Manage</span>
-	</a> <a href="<%=contextPath %>/main.ck"> <i class="fas fa-star"></i> <span>CheckList</span>
+	</a> <a href="<%=contextPath %>/main.ck?option=1&currentPage=1"> <i class="fas fa-star"></i> <span>CheckList</span>
 	</a> <a href="<%=contextPath %>/main.bl?currentPage=1&status=K"> <i class="fas fa-poo"></i> <span>BlackList</span>
-	</a> <a href="<%=contextPath %>/main"> <i class="fas fa-heart"></i> <span>Go community</span> <!-- 매핑주소 확인 -->
+	</a> <a href="<%=contextPath %>/main.admin"> <i class="fas fa-heart"></i> <span>Go community</span> <!-- 매핑주소 확인 -->
 	</a><a href="<%=contextPath %>/logout.me"> <i class="fas fa-rocket"></i> <span>Go Home</span> 
 		</a>
 	</div>
+	
 	<div id="head">
 		<!-- <div id="logo">
 			<img src="../../../resources/로고_투명배경.png" alt="커뮤니티 로고">
@@ -360,7 +347,7 @@ p {
 			<div id="cover" >
 				<form method="get" action="<%=contextPath %>"/mainSearch.menu"">
 					<div class="tb">
-						<div class="td"><input type="text" placeholder="Search" required></div>
+						<div class="td"><input type="text" name="search" placeholder="Search" required></div>
 						<div class="td" id="s-cover">
 							<button type="submit">
 								<div id="s-circle"></div>

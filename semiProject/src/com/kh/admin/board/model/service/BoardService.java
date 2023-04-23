@@ -10,11 +10,11 @@ import com.kh.common.model.vo.PageInfo;
 
 public class BoardService {
 	
-	public int boardListCount(int bType) {
+	public int boardCount(int typeNo) {
 		
 		Connection conn = JDBCTemplate.getConnection();
 		
-		int result = new BoardDao().boardListCount(conn, bType);
+		int result = new BoardDao().boardCount(conn, typeNo);
 		
 		JDBCTemplate.close(conn);
 		
@@ -23,11 +23,11 @@ public class BoardService {
 	}
 	
 	// board main 페이지에 들어가면 가장 먼저 나올 공지사항 전체 조회
-	public ArrayList<Board> boardSelectList(PageInfo pi, int bType) {
+	public ArrayList<Board> boardList(PageInfo pi, int typeNo) {
 		
 		Connection conn = JDBCTemplate.getConnection();
 		
-		ArrayList<Board> list = new BoardDao().boardSelectList(conn, pi, bType);
+		ArrayList<Board> list = new BoardDao().boardList(conn, pi, typeNo);
 		
 		JDBCTemplate.close(conn);
 		
@@ -97,6 +97,72 @@ public class BoardService {
 		
 		return result;
 		
+	}
+	
+
+	public int boardSelectCount(String searchContent, int category) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = new BoardDao().boardSelectCount(conn, searchContent, category);
+		
+		JDBCTemplate.close(conn);
+		
+		return result;
+		
+	}
+
+	public ArrayList<Board> boardselectList(PageInfo pi, Board b) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		ArrayList<Board> list = new BoardDao().boardselectList(conn, pi, b);
+		
+		JDBCTemplate.close(conn);
+		
+		return list;
+	}
+
+	public Board detailBoard(int bno, String status) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		Board b = new BoardDao().detailBoard(conn, bno, status);
+		
+		JDBCTemplate.close(conn);
+		
+		return b;
+	}
+
+	public int blurListCount() {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = new BoardDao().blurListCount(conn);
+		
+		JDBCTemplate.close(conn);
+		
+		return result;
+	}
+
+	public ArrayList<Board> blurList(PageInfo pi) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		ArrayList<Board> list = new BoardDao().blurList(conn, pi);
+		
+		JDBCTemplate.close(conn);
+		
+		return list;
+	}
+
+	public int[][] totalBoardCount() {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int[][] result = new BoardDao().totalBoardCount(conn);
+		
+		JDBCTemplate.close(conn);
+		
+		return result;
 	}
 
 

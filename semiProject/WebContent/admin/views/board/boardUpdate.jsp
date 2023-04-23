@@ -14,6 +14,7 @@
     <form action="<%=contextPath %>/update.abo" method="post">
         <div>
         <input type="hidden" name="bno" value="<%=b.getBoardNo() %>">
+        
 			<div>
 				<label for="updateTitle">제목 : </label><input type="text" name="updateTitle" id="updateTitle" value="<%=b.getBoardTitle()%>">
 			</div>

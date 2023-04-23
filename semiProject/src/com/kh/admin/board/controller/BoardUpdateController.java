@@ -55,6 +55,8 @@ public class BoardUpdateController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		request.setCharacterEncoding("UTF-8");
+		
 		String title = request.getParameter("updateTitle");
 		
 		String content = request.getParameter("content");
@@ -75,7 +77,7 @@ public class BoardUpdateController extends HttpServlet {
 			
 			request.getSession().setAttribute("alertMsg", "게시물 수정 성공");
 			
-			response.sendRedirect(request.getContextPath()+"/admin/views/board/boardMain.jsp?");
+			response.sendRedirect(request.getContextPath()+"/main.abo?typeNo=1&currentPage=1");
 		} else {
 			
 			request.setAttribute("errorMsg", "게시물 수정 실패");
