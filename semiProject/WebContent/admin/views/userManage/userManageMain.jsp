@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" 
     import="java.util.ArrayList, com.kh.common.model.vo.PageInfo, 
-    		com.kh.admin.userManage.model.vo.UserManage, com.kh.bMember.model.vo.BMember"%>
+    		com.kh.admin.userManage.model.vo.*, com.kh.bMember.model.vo.BMember"%>
     
 <% 
-	ArrayList<Object> list = (ArrayList<Object>)request.getAttribute("list");
+	ArrayList<User> list = (ArrayList<User>)request.getAttribute("list");
 	PageInfo pi = (PageInfo)request.getAttribute("pi");
 	int j = 0;
 %>
@@ -103,7 +103,6 @@ body{
 				<th>EMAIL</th>
 				<th>UNIVERSITY</th>
 				<th>UPLOAD BOARD</th>
-				<th>UPLOAD VIDEO</th>
 				<th>UPLOAD REPLY</th>
 				<th>FOOD RANK</th>
 				<th>INFO UPDATE</th>
@@ -126,7 +125,6 @@ body{
 						<% i++; %>
 						<%if(list.get(i) instanceof UserManage) {%>
 						<td><%=((UserManage)list.get(i)).getBoardCount() %></td>
-						<td><%=((UserManage)list.get(i)).getVideoCount() %></td>
 						<td><%=((UserManage)list.get(i)).getReplyCount() %></td>
 						<td><%=((UserManage)list.get(i)).getFoodBStatus() %></td>
 						<td><button type="button" >회원정보수정</button></td>
@@ -197,7 +195,6 @@ body{
 								i++;
 								str+=
 								"<td>"+list[i].boardCount+"</td>"
-								+"<td>"+list[i].videoCount+"</td>"
 								+"<td>"+list[i].replyCount+"</td>"
 								+"<td>"+list[i].foodBStatus+"</td>"
 								//+"<td>"<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">회원정보수정</button>"</td>"
@@ -215,7 +212,6 @@ body{
 								i--;
 								str+=
 								"<td>"+list[i].boardCount+"</td>"
-								+"<td>"+list[i].videoCount+"</td>"
 								+"<td>"+list[i].replyCount+"</td>"
 								+"<td>"+list[i].foodBStatus+"</td>"
 								//+"<td>"<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">회원정보수정</button>"</td>"

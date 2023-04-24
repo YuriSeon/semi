@@ -66,17 +66,27 @@ body {
 <body>
 	<div class="wrap">
 		<div class="search">
-			<button type="submit" class="searchButton">
-				<a>O</a>
+			<button type="submit" class="searchButton" id="locationFoodBtn">
+				O
 			</button>
-			<input type="text" class="searchTerm" id="userCurrLo" readOnly>
-
+			<input id="userCurrLo" type="text" class="searchTerm" name="userCurrLo" readOnly>
 		</div>
 	</div>
-	현재 위치 :
-	<a href="<%=request.getContextPath()%>/foodRanking.bo">맛집 순위</a>
-	<a href="<%=request.getContextPath()%>/foodTogether.bo">같이 먹을 사람</a>
-	<a href="<%=request.getContextPath()%>">뭐 먹지?</a>
+	<div id="locactionFood" style="display:none">
+		<button type="button" id="returnMain">종료하기</button>
+		<button id="prebtn"> &lt </button>
+		<div id="foodSlide">
+			
+		</div>
+		<button id="nextbtn"> &gt </button>
+		<input type='hidden' name='locationbno'>
+	</div>
+	<div id="UserShowPage">
+		현재 위치 :
+		<a href="<%=request.getContextPath()%>/foodRanking.bo">맛집 순위</a>
+		<a href="<%=request.getContextPath()%>/foodTogether.bo">같이 먹을 사람</a>
+		<a href="<%=request.getContextPath()%>">뭐 먹지?</a>
+	</div>
 	<script>
 	$(function(){
 		try{			
@@ -107,12 +117,8 @@ body {
 	                'Authorization': 'KakaoAK 443a788ac3404e8299a0b6615292d7b9'
 	            },
 	            success: function (data) {
-	            	if(data.documents[0].road_address == null){
 		                $("#userCurrLo").val(data.documents[0].address.address_name);            		
-	            	}else{
-		                $("#userCurrLo").val(data.documents[0].road_address.address_name);            				            		
-	            	}
-	            },
+	            }	,
 	            
 	            error : function (e) {
 	                console.log("error");
@@ -138,7 +144,83 @@ body {
 								});
 			}
 	});
-    </script>
+	
+     var number = 0; // 전역으로 사용할 내용
 
+    $("#locationFoodBtn").on("click", function(){
+        if($("#userCurrLo").val() == ""){
+            alert("아직 위치 추적중입니다.");
+            
+        }else{
+            $("#UserShowPage").css("display", "none");
+            $("#locactionFood").css("display", "block");
+            
+            var userLocation = $("#userCurrLo").val();
+            showList(userLocation);
+        }
+    });
+
+    function showList(userLocation){
+        $.ajax({
+            type : "get",
+            url : "locationFood.bo",
+            data : {
+                location : userLocation
+            },
+            success : function(data){
+                var length = data.length;
+                console.log("length " + length);
+                if(data.length == 0){
+                    $("#foodSlide").html("지금 준비된 음식 이 없습니다.");
+                }else{
+                	console.log("number "+number);
+                    if(number > length-1){
+                        number = 0;
+                    }else if(number < 0){
+                    	number = data.length-1;
+                    }
+                    var foodStart = "";
+                    foodStart += "메뉴 : " + data[number].foodName + "<br>주소 : " + data[number].abbress + "<br>추천수 : " + data[number].good;
+                    foodStart += "<input id='justbno' just type='hidden' value='"+ data[number].boardNo +"'>";
+                    $("#foodSlide").html(foodStart);
+                }
+            },
+            error : function(){
+                // 이건 그냥 통신 x
+                $("#foodSlide").text("this is error");
+                console.log("Error");
+            },
+            complete: function(){
+            	console.log("end");
+            }
+        });
+    };
+    
+    $("#locactionFood").on("click", "button", function(){
+    	if(this.id == "nextbtn" || this.id == "prebtn"){
+    		let userLocation = $("#userCurrLo").val();
+    		if(this.id == "nextbtn"){
+    			number = number +1;
+    		}else{
+    			number = number - 1;
+    		}
+    		showList(userLocation);
+    	}
+    });
+	
+	$("#returnMain").on("click", function(){
+		$("#locactionFood").css("display", "none");
+		$("#UserShowPage").css("display", "block");
+	});
+	
+	$("#foodSlide").on("click",function(){
+		if($("#justbno").val() == null){
+			alert("현재 맛집없는데 클릭했어요...");
+		}else{			
+			location.href = "<%=request.getContextPath() %>/foodRankingDetail.bo?bno=" + $("#justbno").val();
+		}
+	})
+	
+    </script>
 </body>
 </html>

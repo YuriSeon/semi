@@ -169,7 +169,35 @@ public class Board {
 		this.typeNo = typeNo;
 	}
 	
+	// 관리자 페이지 게시물 상세보기에 사용
+	public Board(int boardNo, String boardWriter, String boardType, String boardTitle, String boardContent,
+			Date createDate, int good, int bad, int report, int count) {
+		super();
+		this.boardNo = boardNo;
+		this.boardWriter = boardWriter;
+		this.boardType = boardType;
+		this.boardTitle = boardTitle;
+		this.boardContent = boardContent;
+		this.createDate = createDate;
+		this.good = good;
+		this.bad = bad;
+		this.report = report;
+		this.count = count;
+	}
 	
+	// blur처리된 게시판 조회시 사용
+	public Board(int boardNo, String boardWriter, String boardType, String boardTitle, Date createDate, int bad,
+			int report, int count) {
+		super();
+		this.boardNo = boardNo;
+		this.boardWriter = boardWriter;
+		this.boardType = boardType;
+		this.boardTitle = boardTitle;
+		this.createDate = createDate;
+		this.bad = bad;
+		this.report = report;
+		this.count = count;
+	}
 	
 	public int getBoardNo() {
 		return boardNo;

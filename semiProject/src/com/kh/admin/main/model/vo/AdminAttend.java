@@ -1,4 +1,4 @@
-package com.kh.admin.admin.model.vo;
+package com.kh.admin.main.model.vo;
 
 public class AdminAttend {
 	

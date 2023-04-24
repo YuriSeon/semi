@@ -73,13 +73,126 @@ SELECT * FROM DUAL
 	AND STATUS = 'Y'
 </entry>
 
+<entry key="SelectNewFood">
+	SELECT *
+	FROM F_CATEGORY
+	WHERE FOOD_NAME = ?
+</entry>
 
-<entry key="UpdateFoodRank">
+<entry key="NewUpdateFoodRank1"> 
+	INSERT INTO F_CATEGORY VALUES (SEQ_FCNO.NEXTVAL, ?)
+</entry>
+<entry key="NewUpdateFoodRank2">
+	UPDATE FOOD_BOARD
+	SET FOOD_CATEGORY = SEQ_FCNO.CURRVAL,
+		ADDRESS = ?
+	WHERE BOARD_NO = ?
+</entry>
+<entry key="NewUpdateFoodRank3">
 	UPDATE BOARD
 	SET BOARD_TITLE = ?,
-	BOARD_CONTENT = ?
+		BOARD_CONTENT = ?
 	WHERE BOARD_NO = ?
-	
+</entry>
+
+<entry key="UpdateFoodRank2">
+UPDATE FOOD_BOARD SET FOOD_CATEGORY = ?, ADDRESS = ? WHERE BOARD_NO = ?</entry>
+
+
+
+<entry key="locationFood">
+	SELECT ADDRESS, FOOD_NAME, BOARD_NO, GOOD
+FROM BOARD B
+JOIN FOOD_BOARD FB USING (BOARD_NO)
+JOIN F_CATEGORY FC ON (FB.FOOD_CATEGORY = FC.FOOD_CATEGORY)
+WHERE ADDRESS LIKE '%'||?||'%'
+AND GOOD > 5
+ORDER BY GOOD DESC
+</entry>
+
+<entry key="selectBtncheck">
+		SELECT BOARD_NO, BC.USERNO, BTNTYPE
+		FROM BOARD B
+        JOIN BTNCHECK BC USING (BOARD_NO)
+		WHERE B.STATUS = 'Y'
+		AND BOARD_NO = ?
+        AND BC.USERNO = ?
+</entry>
+
+<entry key="deleteBtn">
+DELETE FROM BTNCHECK WHERE USERNO = ?
+</entry>
+
+<entry key="insertBtnCheck">
+INSERT INTO BTNCHECK VALUES (?, ?, ?) 
+</entry>
+
+<entry key="updatePlusButtonGOOD">
+UPDATE BOARD
+SET GOOD = GOOD + 1
+WHERE BOARD_NO = ?
+</entry>
+<entry key="updatePlusButtonBAD">
+UPDATE BOARD
+SET BAD = BAD + 1
+WHERE BOARD_NO = ?
+</entry>
+<entry key="updatePlusButtonREPORT">
+UPDATE BOARD
+SET REPORT = REPORT + 1
+WHERE BOARD_NO = ?
+</entry>
+
+<entry key="updateMiusButtonGOOD">
+UPDATE BOARD
+SET GOOD = GOOD - 1
+WHERE BOARD_NO = ?
+</entry>
+<entry key="updateMiusButtonBAD">
+UPDATE BOARD
+SET BAD = BAD - 1
+WHERE BOARD_NO = ?
+</entry>
+<entry key="updateMiusButtonREPORT">
+UPDATE BOARD
+SET REPORT = REPORT - 1
+WHERE BOARD_NO = ?
+</entry>
+
+<entry key="deleteBtnCheck">
+DELETE BTNCHECK
+WHERE BOARD_NO = ?
+AND USERNO = ?
+</entry>
+
+<entry key="AfterDeleteBoardGOOD">
+UPDATE BOARD
+SET GOOD = GOOD-1
+WHERE BOARD_NO = ?
+</entry>
+<entry key="AfterDeleteBoardBAD">
+UPDATE BOARD
+SET BAD = BAD-1
+WHERE BOARD_NO = ?
+</entry>
+<entry key="AfterDeleteBoardREPORT">
+UPDATE BOARD
+SET REPORT = REPORT-1
+WHERE BOARD_NO = ?
+</entry>
+
+<entry key="updateBtnCheck">
+UPDATE BTNCHECK
+SET BTNTYPE = ?
+WHERE BOARD_NO = ?
+AND USERNO = ?
+</entry>
+
+<entry key="selectUserBtn">
+SELECT BOARD_NO, USERNO, BTNTYPE
+FROM BTNCHECK
+WHERE BOARD_NO = ?
+AND USERNO = ?
 </entry>
 </properties>
 

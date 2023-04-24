@@ -15,6 +15,7 @@ import com.kh.message.model.vo.MessageBlock;
 
 public class MessageDao {
 	private Properties prop = new Properties();
+
 	
 	public MessageDao() {
 		String filePath = BamDao.class.getResource("/sql/message/message-mapper.xml").getPath();
@@ -106,5 +107,6 @@ public class MessageDao {
 		
 		return result;
 	}
+
 
 }

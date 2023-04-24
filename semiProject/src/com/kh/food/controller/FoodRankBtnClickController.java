@@ -1,6 +1,7 @@
 package com.kh.food.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,7 +9,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import com.kh.bMember.model.vo.BMember;
+import com.kh.board.model.vo.Board;
 import com.kh.food.model.service.FoodService;
+import com.kh.food.model.vo.FoodBtnCheck;
 
 /**
  * Servlet implementation class FoodRankBtnClickController
@@ -31,9 +36,21 @@ public class FoodRankBtnClickController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String str = request.getServletPath();
 		String bno = request.getParameter("bno");
-		int num = new FoodService().UpdateBtn(str, bno);
-		// 현재 추천수 비추천수 신고가 들어온다.
-		response.getWriter().print(num+1); // 가져온거 + 1해야 눌렀을때 올라간다.
+		int userno = Integer.parseInt(request.getParameter("gestNo"));
+		
+		int num = new FoodService().UpdateBtn(str, bno, userno);
+		if(num > 0) {
+			// 조회해오기
+			FoodBtnCheck fbc = new FoodService().useBtn(Integer.parseInt(bno),((BMember)request.getSession().getAttribute("loginUser")).getUserNo());
+			Board btnselect = new FoodService().selectDetail(Integer.parseInt(bno));
+			Object[] data = {fbc, btnselect};
+			response.setContentType("json/application; charset=UTF-8");
+			Gson gson = new Gson();
+			gson.toJson(data, response.getWriter());
+		}else {
+			System.out.println("에러 발생");
+		}
+		
 		
 	}
 

@@ -25,6 +25,7 @@
 %>
 <body>
 	<a href="<%=request.getContextPath()%>/rankInsert.bo" class="btn btn-primary">글작성</a>
+	<a href="<%=request.getContextPath()%>/foodmain.bo" class="btn btn-primary">뒤로가기</a>
 	<table id="example" class="table table-striped table-bordered" cellspacing="0" align="center"  style="text-align: center; width:80%">
 		<thead>
 			<tr>

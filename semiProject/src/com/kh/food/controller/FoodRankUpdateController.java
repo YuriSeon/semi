@@ -30,14 +30,13 @@ public class FoodRankUpdateController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int bno = Integer.parseInt(request.getParameter("bno"));
-		System.out.println("내가 필요한 정보 " + bno);
+		int bno = Integer.parseInt(request.getParameter("targetBoardNo"));
 		String title = request.getParameter("Btitle"); // 제목
-		int foodCategoryNo = Integer.parseInt(request.getParameter("foodselect")); // 0번이면 newFoodName이 필요 / 아니면 필요없음
+		System.out.println(title);
 		String newFoodName = request.getParameter("newfood");
 		String content = request.getParameter("content"); // 내용
 		
-		String address1 = request.getParameter("address"); // 도로명 주소
+		String address1 = request.getParameter("saveAddress"); // 도로명 주소
 		String address2 = request.getParameter("addressDetail"); // 상세주소
 		
 		String fullAddress = address1 + (address2.equals("")?"":" "+address2);
@@ -47,16 +46,12 @@ public class FoodRankUpdateController extends HttpServlet {
 		b.setBoardTitle(title);
 		b.setBoardContent(content);
 		b.setAbbress(fullAddress);
-		if(foodCategoryNo == 0) {
+//		if(foodCategoryNo == 0) {
 			b.setFoodName(newFoodName);
-		}else {
-			b.setFoodName(String.valueOf(foodCategoryNo));
-		}
-		
-		b.setBoardNo(bno);
-		b.setBoardNo(bno);
-		b.setBoardNo(bno);
-		int result = new FoodService().UpdateFoodBoard(b);
+//		}else {
+//			b.setFoodName(String.valueOf(foodCategoryNo));
+//		}	
+		int result = new FoodService().UpdateFoodBoard(b); // 최종적으로 Dao에서 Board에 수정한 결과 값을 리턴해준다.
 		
 		if(result > 0) {
 			response.sendRedirect(request.getContextPath() + "/foodRanking.bo");

@@ -5,39 +5,40 @@ public class UserManage extends User{
 //	USERNO	NUMBER
 //	REPLY_COUNT	NUMBER
 //	BOARD_COUNT	NUMBER
-//	VIDEO_COUNT	NUMBER
 //	FOODBOARD_STATUS	VARCHAR2(1 BYTE)
+//	CK	VARCHAR2(5 BYTE)
 	
 	private int userNo;
 	private int replyCount;
 	private int boardCount;
-	private int videoCount;
 	private String foodBStatus;
+	private String ck;
 	
 	public UserManage() {
 		super();
 	}
-
 	
-	public UserManage(int userNo, int replyCount, int boardCount, int videoCount) {
+	
+	
+	public UserManage(int userNo, int replyCount, int boardCount, String foodBStatus) {
 		super();
 		this.userNo = userNo;
 		this.replyCount = replyCount;
 		this.boardCount = boardCount;
-		this.videoCount = videoCount;
-	}
-
-
-	public UserManage(int userNo, int replyCount, int boardCount, int videoCount, String foodBStatus) {
-		super();
-		this.userNo = userNo;
-		this.replyCount = replyCount;
-		this.boardCount = boardCount;
-		this.videoCount = videoCount;
 		this.foodBStatus = foodBStatus;
 	}
 
-	
+
+
+	public UserManage(int userNo, int replyCount, int boardCount, String foodBStatus, String ck) {
+		super();
+		this.userNo = userNo;
+		this.replyCount = replyCount;
+		this.boardCount = boardCount;
+		this.foodBStatus = foodBStatus;
+		this.ck = ck;
+	}
+
 	public int getUserNo() {
 		return userNo;
 	}
@@ -62,14 +63,6 @@ public class UserManage extends User{
 		this.boardCount = boardCount;
 	}
 
-	public int getVideoCount() {
-		return videoCount;
-	}
-
-	public void setVideoCount(int videoCount) {
-		this.videoCount = videoCount;
-	}
-
 	public String getFoodBStatus() {
 		return foodBStatus;
 	}
@@ -78,11 +71,18 @@ public class UserManage extends User{
 		this.foodBStatus = foodBStatus;
 	}
 
-	
+	public String getCk() {
+		return ck;
+	}
+
+	public void setCk(String ck) {
+		this.ck = ck;
+	}
+
 	@Override
 	public String toString() {
 		return "UserManage [userNo=" + userNo + ", replyCount=" + replyCount + ", boardCount=" + boardCount
-				+ ", videoCount=" + videoCount + ", foodBStatus=" + foodBStatus + "]";
+				+ ", foodBStatus=" + foodBStatus + ", ck=" + ck + "]";
 	}
 	
 	

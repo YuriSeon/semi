@@ -11,7 +11,7 @@
 	<form action="<%=contextPath %>/insert.abo " method="post">
 		<div>
 			<div id="cont">
-				<input type="hidden" name=typeno value="1"> 
+				<input type="hidden" name="bType" value="4"> 
 				<select name="boardtype" id="boardtype">
 					<option value="video">영상</option>
 					<option value="bam">대나무숲</option>

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8" import="com.kh.board.model.vo.Board, com.kh.bMember.model.vo.BMember"%>
+	pageEncoding="UTF-8" import="com.kh.board.model.vo.Board, com.kh.bMember.model.vo.BMember, com.kh.food.model.vo.FoodBtnCheck"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,19 +14,21 @@
  <%
  	Board b = (Board)request.getAttribute("FoodRanking");
  	BMember m = ((BMember)request.getSession().getAttribute("loginUser"));
+ 	FoodBtnCheck fbc = (FoodBtnCheck)request.getAttribute("FoodBtnCheck");
  %>
+ 	<%@include file="../common/menubar.jsp" %>
  	<h1>상세보기</h1>
  	<form action="<%=request.getContextPath() %>/foodRankUpdate.bo?bno=<%=request.getParameter("bno")%>" method="post">
 	<table id = "table-area">
-		<%if(m.getUserId() != b.getBoardWriter()){ %>
+		<%if(m.getUserId().equals(b.getBoardWriter())){ %>
 		<tr>
 			<th>작성자 : </th>
-			<td><%=b.getBoardWriter() %> </td>
+			<td>본인</td>
 		</tr>
 		<%} else { %>
 		<tr>
 			<th>작성자 : </th>
-			<td>본인</td>
+			<td><%=b.getBoardWriter() %> </td>
 		</tr>
 		<%} %>
 		<tr>
@@ -63,38 +65,77 @@
 	
 	<div id="button3">
 	<button type="button" id="goodbtn">추천 <%=b.getGood() %></button>
+	
 	<button type="button" id="badbtn">비추천 <%=b.getBad() %></button>
 	<button type="button" id="reportbtn">신고 <%=b.getReport() %></button>
 	</div>
 	
 	<script>
+	
+	// 뒤로가기 버튼 제어하기 -------------------------------------------------------------
+	window.onpopstate = function(event) {
+	    history.pushState(null, null, '<%=request.getHeader("Referer")%>');
+	    location.reload();
+	}
+	history.pushState(null, null, null);
+	// ----------------------------------------------------------------------------
 			$(function(){
 				$("#button3").children().click(function(){
 					var btnName = this.id;
 					$.ajax({
 						url : this.id,
 						data : {
-							bno : "<%=request.getParameter("bno")%>"
+							bno : "<%=request.getParameter("bno")%>",
+							writer : "<%=b.getBoardWriter() %>",
+							gestNo : "<%=m.getUserNo()%>"
 						},
 						success : function (data){
-							switch(btnName){
-							case "goodbtn":
-								$("#goodbtn").html("추천" + data);
-								break;
-							case "badbtn" :
-								$("#badbtn").html("비추천" + data);
-								break;
-							case "reportbtn" :
-								$("#reportbtn").html("신고" + data);
-								break;
-							}
-						},
+								if(data[0] != null){
+									var btn = data[0].btnStyle;
+									console.log("button = " + btn);
+									if(btn == "GOOD"){
+										$("#goodbtn").css("color", "red");
+										$("#badbtn").css("color", "black");
+										$("#reportbtn").css("color", "black");
+									}else if (btn == "BAD"){
+										$("#badbtn").css("color", "red");			
+										$("#goodbtn").css("color", "black");
+										$("#reportbtn").css("color", "black");
+									}else{
+										$("#reportbtn").css("color", "red");			
+										$("#badbtn").css("color", "black");
+										$("#goodbtn").css("color", "black");
+									}
+								}else{
+									$("#goodbtn").css("color", "black");
+									$("#badbtn").css("color", "black");
+									$("#reportbtn").css("color", "black");
+								}
+								
+								$("#goodbtn").html("추천 " + data[1].good);
+								$("#badbtn").html("비추천 " + data[1].bad);
+								$("#reportbtn").html("신고 " + data[1].report);
+							},
 						error : function(){
 							console.log(this.id + " error ");
 						}
 					});
 				});
 			});
+		$(function(){
+			<% if(fbc != null){%>
+				var btn = "<%=fbc.getBtnStyle() %>";
+				console.log("button = " + btn);
+				if(btn == "GOOD"){
+					$("#goodbtn").css("color", "red");
+				}else if (btn == "BAD"){
+					$("#badbtn").css("color", "red");			
+				}else{
+					$("#reportbtn").css("color", "red");			
+				}
+			<%}%>
+		})
+			
 			
 	</script>
 	
@@ -105,7 +146,9 @@
 	<button type="submit">수정하기</button>
 	<button type="button" onclick="location.href='<%=request.getContextPath()%>/foodRankDelete.bo?bno=<%=request.getParameter("bno")%>'">삭제하기</button>
 	<%} %>
-	<button type="button" onclick="location.href=<%=request.getContextPath() %>/foodRanking.bo">목록보기</button>
+	
+	<!-- <button type="button" onclick="location.href='<%=request.getHeader("Referer")%>'">목록보기</button> -->
+	<button type="button" onclick="history.back();">목록보기</button>
 	</form>
 <script>
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 

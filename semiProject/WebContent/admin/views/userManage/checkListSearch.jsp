@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" 
+    pageEncoding="UTF-8"
     import="com.kh.common.model.vo.PageInfo, com.kh.bMember.model.vo.BMember, java.util.ArrayList"%>
  <%
  	PageInfo pi = (PageInfo)request.getAttribute("pi");
@@ -9,10 +9,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>USER CHECKLIST</title>
+<title>checkList search</title>
 </head>
 <body>
-	<%@include file="../common/menubar.jsp"%>
+    <%@include file="../common/menubar.jsp"%>
 	<div>
 		<form action="<%=contextPath %>/select.ck" method="post">
 			<div id="search_div">
@@ -36,15 +36,10 @@
 	</div>
 
 	<hr>
-	<div>
-	<select id="box" name="box" id="search_select" onchange="selectboxP();">
-					<option value="1" selected>최근 업데이트순 </option>
-					<option value="2">차단 합계</option>
-					<option value="3">게시물 필터링 수</option>
-				</select>
-	</div>
 	<%if(!list.isEmpty()) { %>
         
+        <p style="text-align: center; font-weight: bold; font-size:large">검색하신 결과입니다.</p>
+    
     <table id="tab" border="1">
 		<thead>
 			<tr>
@@ -75,7 +70,7 @@
 		</tbody>
 	</table>
     <% } else { %>
-        <p style="text-align: center; font-weight: bold; font-size:large">검색에 일치하는 결과가 없습니다.</p>
+        <p style="text-align: center; font-weight: bold; font-size:large">검색내역에 일치하는 결과가 없습니다.</p>
     <% } %>
 	<div>
 		<!-- 페이징처리 -->
@@ -112,41 +107,6 @@
 		        $("#search_input").attr("placeholder","기준치를 입력하세요.");
 		    }
        }
-    	
-    	$("#box").on("change", function() {
-			var box = $("#box option:selected").val();
-			
-			$.ajax({
-				url : "main.ck",
-				data : {
-					check : "na",
-					option : box,
-					currentPage : "1"
-				},
-				type : "get",
-				success : function(list) {
-					var str = "";
-						for(var i=0;i<list.length; i++){
-							str +="<tr>"
-								+"<td>"+list[i].userNo+"</td>"
-								+"<td>"+list[i].userId+"</td>"
-								+"<td>"+list[i].userName+"</td>"
-								+"<td>"+list[i].block+"</td>"
-								+"<td>"+list[i].filtering+"</td>"
-								+"<td>"+list[i].point+"</td>"
-								+"<td>"+list[i].createDate+"</td>"
-								+"<td>"+list[i].modifyDate+"</td>"
-								+"</tr>";
-						}
-						
-					$("#tab tbody").html(str);
-						
-				},
-				error : function() {
-					console.log("통신실패");
-				}
-			});
-		});
-   </script>
+    </script>
 </body>
 </html>
