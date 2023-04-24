@@ -64,10 +64,14 @@ public class BamListController extends HttpServlet {
 		PageInfo pi = new PageInfo(listCount,currentPage,startPage,endPage,boardLimit,pageLimit,maxPage);
 		
 		ArrayList<Board> list = new BamService().selectList(pi);
+		if(currentPage==1) {//현재 페이지가 1이면 공지사항 가져옴
+			ArrayList<Board> nlist = new BamService().selectNoticeList();
+			nlist.addAll(list);
+			request.setAttribute("list", nlist);
+		}else {//1페이지가 아니면 공지사항 안가져옴
+			request.setAttribute("list", list);
+		}
 		
-		
-		
-		request.setAttribute("list", list);
 		request.setAttribute("pi", pi);
 		request.getRequestDispatcher("views/bam/bamListView.jsp").forward(request, response);
 	}

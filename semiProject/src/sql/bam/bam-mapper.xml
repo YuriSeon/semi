@@ -13,7 +13,7 @@
 	SELECT *	
 	FROM(SELECT ROWNUM RNUM, A.*
 		 FROM(SELECT BOARD_NO,USERNO
-		 			,DECODE(BAM_CATEGORY_NO, '1', '일반', '2', '질문', '3', '연애') "BAM_CATEGORY_NO",BOARD_TITLE
+		 			,DECODE(BAM_CATEGORY_NO, '1', '일반', '2', '질문', '3', '연애','4','공지') "BAM_CATEGORY_NO",BOARD_TITLE
 		 			,BOARD_CONTENT,CREATE_DATE
 		 			,GOOD,REPORT
 		 			,COUNT
@@ -21,19 +21,31 @@
                 JOIN CATEGORY_BAM USING (BOARD_NO)
                 WHERE BOARD_TYPE=2
                 AND STATUS = 'Y'
+                AND TYPE_NO = 0
                 ORDER BY BOARD_NO DESC) A)
 	WHERE RNUM BETWEEN ? AND ?	  
 	</entry>
-	<entry key="BamCategoryList">
-	<!-- 대나무숲 카테고리 가져오기 -->
-	SELECT BAM_CATEGORY_NO,DECODE(BAM_CATEGORY_NO, '1', '일반', '2', '질문', '3', '연애') "BAM_CATEGORY_NAME"
-	FROM CATEGORY_BAM
+	<entry key="selectNoticeList">
+	<!-- 공지사항 조회 -->
+	SELECT BOARD_NO,USERNO,BOARD_TITLE,BOARD_CONTENT,CREATE_DATE,GOOD,REPORT,COUNT
+	FROM BOARD
+	WHERE BOARD_TYPE =2
+	AND STATUS = 'Y'
+	AND TYPE_NO = 1
+	ORDER BY BOARD_NO DESC
 	</entry>
 	<entry key="insertBam">
 	<!-- 대나무숲 게시글 인서트+대나무숲카테고리 인서트 -->
 	INSERT ALL
 	INTO BOARD (BOARD_NO,USERNO,BOARD_TYPE,BOARD_TITLE,BOARD_CONTENT)VALUES (SEQ_BNO.NEXTVAL,?,2,?,?)
 	INTO CATEGORY_BAM (BOARD_NO,BAM_CATEGORY_NO) VALUES (SEQ_BNO.CURRVAL,?)
+	SELECT * FROM DUAL
+	</entry>
+	<entry key="insertNoticeBam">
+	<!-- 공지사항 작성 -->
+	INSERT ALL
+	INTO BOARD (BOARD_NO,USERNO,BOARD_TYPE,BOARD_TITLE,BOARD_CONTENT,TYPE_NO)VALUES (SEQ_BNO.NEXTVAL,?,2,?,?,1)
+	INTO CATEGORY_BAM (BOARD_NO,BAM_CATEGORY_NO) VALUES (SEQ_BNO.CURRVAL,4)
 	SELECT * FROM DUAL
 	</entry>
 	<entry key="insertAttachment">
@@ -50,7 +62,7 @@
 	</entry>
 	<entry key="selectBam">
 	<!-- 대나무숲 게시글 조회 -->
-	SELECT BOARD_NO,USERNO,DECODE(BAM_CATEGORY_NO, '1', '일반', '2', '질문', '3', '연애') "BAM_CATEGORY_NO",BOARD_TITLE,BOARD_CONTENT,CREATE_DATE,MODIFY_DATE,GOOD,COUNT
+	SELECT BOARD_NO,USERNO,DECODE(BAM_CATEGORY_NO, '1', '일반', '2', '질문', '3', '연애', '4','공지') "BAM_CATEGORY_NO",BOARD_TITLE,BOARD_CONTENT,CREATE_DATE,MODIFY_DATE,GOOD,COUNT
 	FROM BOARD
     JOIN CATEGORY_BAM USING (BOARD_NO)
 	WHERE BOARD_NO = ?
@@ -110,6 +122,14 @@
 	SELECT REPLY_NO,BOARD_NO,REPLY_CONTENT,CREATE_DATE,USERNO
 	FROM REPLY
 	WHERE BOARD_NO=?
+	AND STATUS = 'Y'
+	</entry>
+	<entry key="deleteReply">
+	<!-- 댓글 삭제 -->
+	UPDATE REPLY
+	SET STATUS = 'N'
+	WHERE STATUS = 'Y'
+	AND REPLY_NO = ?
 	</entry>
 	<entry key="reportBam">
 	<!-- 게시글 신고 카운트 -->

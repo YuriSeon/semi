@@ -11,6 +11,14 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style >
+	.bam-area>thead th{
+		border:1px solid black;
+	}
+	.bam-area>tbody td{
+		border:1px solid black;
+	}
+</style>
 </head>
 <body>
 	  <%@ include file ="../common/menubar.jsp"%> 
@@ -19,7 +27,7 @@
 		<a href="<%=contextPath%>/baminsert.bo" class="btn btn-info">글작성</a>
 	</div>
 	<div align="center">
-	<table border="1" class="bam-area">
+	<table border="1" style="border:1px solid black;" class="bam-area">
         <thead>
             <tr>
                 <th width="50">글번호</th>
@@ -61,6 +69,7 @@
     		
 	    	$(".bam-area>tbody>tr").click(function(){
 	    		var bno = $(this).children().eq(0).text();
+	    		console.log(bno);
 	            location.href="<%=contextPath%>/bamdetail.bo?bno="+bno;
 	    	});
     	});

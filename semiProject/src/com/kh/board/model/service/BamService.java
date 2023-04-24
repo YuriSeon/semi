@@ -34,23 +34,31 @@ public class BamService {
 		return list;
 	}
 
-	//대나무숲 카테고리 가져오기(일반,질문,연애등등)
-	/* 대나무숲 카테고리 코드테이블이 없음
-	public ArrayList<BamCategory> categoryList() {
-		Connection conn = JDBCTemplate.getConnection();
-		ArrayList<BamCategory> list = new BamDao().categoryList(conn);
-		
-		JDBCTemplate.close(conn);
-		
-		return list;
-	}
-	*/
-	
 	//대나무숲 게시글 인서트(작성)
 	public int insertBam(Board b, Attachment at) {
 		Connection conn = JDBCTemplate.getConnection();
 		
 		int result = new BamDao().insertBam(conn,b);
+		int result2=1;
+		if(at!= null) {
+			result2 = new BamDao().insertAttachment(conn,at);
+		}
+		if(result>0 && result2>0) {//작성성공
+			JDBCTemplate.commit(conn);
+			
+		}else {//작성실패
+			JDBCTemplate.rollback(conn);
+		}
+		JDBCTemplate.close(conn);
+		
+		return result*result2;
+	}
+	
+	//공지사항 작성(인서트)
+	public int insertNoticeBam(Board b, Attachment at) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = new BamDao().insertNoticeBam(conn,b);
 		int result2=1;
 		if(at!= null) {
 			result2 = new BamDao().insertAttachment(conn,at);
@@ -185,6 +193,7 @@ public class BamService {
 		return rlist;
 	}
 
+	//게시글 신고하기
 	public int reportBam(int boardNo) {
 		Connection conn = JDBCTemplate.getConnection();
 		
@@ -200,5 +209,33 @@ public class BamService {
 		
 		return result;
 	}
+
+	//댓글 삭제 메소드
+	public int deleteReply(int replyNo) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = new BamDao().deleteReply(conn,replyNo);
+		
+		if(result>0) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		JDBCTemplate.close(conn);
+				
+		return result;
+	}
+
+	//공지사항 리스트 가져오기
+	public ArrayList<Board> selectNoticeList() {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		ArrayList<Board> nlist = new BamDao().selectNoticeList(conn);
+		
+		JDBCTemplate.close(conn);
+		
+		return nlist;
+	}
+
 	
 }
