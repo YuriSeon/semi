@@ -10,6 +10,14 @@
 <head>
 <meta charset="UTF-8">
 <title>게시판 디테일</title>
+<style>
+	#detail-area>thead th,td{
+		border:1px solid black;
+	}
+	#detail-area>tbody th{
+		border:1px solid black;
+	}
+</style>
 </head>
 <body>	
 	<%@ include file ="../common/menubar.jsp"%> 
@@ -54,6 +62,7 @@
          </table>
          <br>
         <br>
+        	<button onclick="">추천하기</button>
         <%if(loginUser != null && loginUser.getUserNo()==Integer.parseInt(b.getBoardWriter())||loginUser.getUserNo()==1){ %>
 	        <div align="center">
 	        	<button onclick="location.href='<%=contextPath%>/bamupdate.bo?bno=<%=b.getBoardNo()%>'" class="btn">수정하기</button>
@@ -87,7 +96,7 @@
                         <td style="text-align: center;">2023-04-20 10:30</td>
                     </tr>
                 	 -->
-                
+                	
             </table>
             <br><br><br>
             
@@ -136,14 +145,15 @@
                 					replyWriter +=count;
                 					count++;
                 				}
+                				console.log(rlist[i].replyNo);
                 				result+="<tr>"
                                 		+"<td style="+"text-align: center;"+">"+replyWriter+"</td>"
                                 		+"<td colspan="+2+" rowspan="+2+" width="+400+">"+rlist[i].replyContent+"</td>"
                             			+"</tr>"
                             			+"<tr>"
                                 		+"<td style="+"text-align: center;"+">"+rlist[i].createDate+"</td>"
-                            			+"</tr>"
-                            			+"<br>";
+                                		+"<td rowspan="+2+"><button onclick='"+"deleteReply(this);'"+"value='"+rlist[i].replyNo+"'id='deleteRe'>삭제</button></td>"
+                            			+"</tr>";
                 			}
                 			
                 			$("#reply-area ").html(result);
@@ -153,6 +163,10 @@
                 		}
                 	});
                 };
+                function deleteReply(d){
+                	location.href="<%=contextPath%>/deletereply.bo?replyNo="+$(d).attr("value")+"&bno="+<%=b.getBoardNo()%>;
+                	
+                }
             </script>
       	
 </body>

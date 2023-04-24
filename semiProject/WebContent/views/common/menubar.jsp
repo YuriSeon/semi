@@ -10,6 +10,10 @@
 %>    
 <!DOCTYPE html>
 <html>
+<!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">    
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 <!-- jQuery library -->
 <script src="https://code.jquery.com/jquery-3.6.4.js"integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="crossorigin="anonymous"></script>
 <head>
@@ -138,6 +142,9 @@
         }
 
         /* 메뉴바 - 메뉴1 끝 */
+        #myModal{
+        width: 200px;
+    	}
 
     </style>
 </head>
@@ -166,10 +173,12 @@
             </a>
             </li>
             <li>
-            <a href="<%=contextPath%>/list.vd?currentPage=1" class="block">
+            
+            <a href="<--%=contextPath%>/list.vd?currentPage=1" class="block">
                 <i class="fa-brands fa-instagram"></i>
                 <span>릴스</span>
             </a>
+             
             </li>
             <li>
             <a href="<%=contextPath%>/bamlist.bo?currentPage=1" class="block">
@@ -188,6 +197,130 @@
         </nav>
     </div>
     </header>
+    <table id="table">
+        <tbody>
+            <tr>
+            	<!-- 자기 자신은 클릭 못하게 -->
+            	
+                <td><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#myModal" id="userNick">닉네임</a></td>
+            </tr>
+        </tbody>
+    </table>
+    <%if(loginUser.getUserNick().equals("닉네임")){ %>
+    
+    <%}else{ %>
+    <div class="modal fade" id="myModal" tabindex="-1" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+            	<div class="modal-header">
+            		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            	</div>
+                <div class="modal-body">
+                    <table border="1" id="nickname-layer">
+                        <tr>
+                            <td><button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#msgEnroll">메시지 보내기</button></td>
+                        </tr>
+                        <tr>
+	                        <td><button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#msgBlock">차단하기</button></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%} %>
+    
+        <!-- 메시지 입력 모달 -->
+    <div class="modal fade" id="msgEnroll" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">닉네임:</label>
+                            <input type="text" class="form-control" id="recipient-name" readonly>
+                        </div>
+                         <div class="mb-3">
+                            <label for="message-text" class="col-form-label">내용:</label>
+                            <textarea class="form-control" id="message-text"></textarea>
+                </div>
+             </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="msgEnroll();">Send message</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+        <!-- 차단 등록 모달 -->
+    <div class="modal fade" id="msgBlock" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">차단 등록</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">닉네임:</label>
+                            <input type="text" class="form-control" id="block-name" readonly>
+                        </div>
+                         <div class="mb-3">
+                            <label for="message-text" class="col-form-label">차단 메모:</label>
+                            <textarea class="form-control" id="block-text"></textarea>
+                </div>
+             </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="msgBlock();">차단 등록</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+     <script >
+	     $("#userNick").click(function(){
+	    	userNick = $(this).html(); //전역 변수 선언
+	    	$("#recipient-name").val(userNick); //메시지 입력창 닉네임 넣기
+	    	$("#block-name").val(userNick);	//차단 등록창 닉네임 넣기
+	     });
+	     
+	    function msgBlock(){ //메시지 차단 등록
+	    	
+	    	var blockContent = $("#block-text").val(); //차단 메모
+	    	//정보 보내기
+			location.href="<%=contextPath%>/msgblock.dm?userNick="+userNick+"&blockContent="+blockContent;	    	
+	    }
+	    
+	     
+     	function msgEnroll(){//메시지 보내기
+     		
+     		$.ajax({
+     			url:"insertMsg.dm",
+     			data:{
+     				//받는회원 닉네임
+     				acceptNick:$("#recipient-name").val(),
+     				//메시지 내용
+     				msgContent:$("#message-text").val()
+     			},
+     			type:"post",
+     			success:function(result){
+     				if(result>0){//인서트(작성) 성공
+     					alert("메시지를 보냈습니다.")
+     					
+     				}else{//인서트 실패
+     					alert("메시지 전송 실패")
+     				}
+     			},
+     			error:function(){
+     				console.log("통신실패")
+     			}
+     		});
+     	}
+     </script>
 
 </body>
 </html>

@@ -30,6 +30,9 @@
 				<option value="1">일반</option>
 				<option value="2">질문</option>
 				<option value="3">연애</option>
+			<%if(loginUser !=null&& loginUser.getUserNo()==1){ %>
+				<option value="4">공지</option>            		
+            <%} %>
 			</select>
             제목 : <input type="text" name="title" id="title" value="<%=b.getBoardTitle()%>">
         </div>

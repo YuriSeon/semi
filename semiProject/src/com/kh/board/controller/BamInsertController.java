@@ -85,7 +85,14 @@ public class BamInsertController extends HttpServlet {
 				at.setChangeName(multiRequest.getFilesystemName("upfile"));
 				at.setFilePath("/resources/bam_files");
 			}
-			int result =new BamService().insertBam(b,at);
+			
+			int result;
+			
+			if(!category.equals("4")) {//공지사항이 아니라면
+				result =new BamService().insertBam(b,at);
+			}else {//공지사항이 맞다면
+				result = new BamService().insertNoticeBam(b,at);
+			}
 			
 			if(result>0) {
 				
