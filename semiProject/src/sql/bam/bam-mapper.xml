@@ -8,6 +8,14 @@
 		WHERE BOARD_TYPE=2
 		AND STATUS = 'Y'
 	</entry>
+	<entry key="searchListCount">
+	<!-- 검색했을때 게시글 갯수 공지사항 갯수 못세는 오류가 있음 -->
+		SELECT COUNT(*) "COUNT"
+		FROM BOARD
+		WHERE BOARD_TYPE=2
+		AND STATUS = 'Y'
+		AND BOARD_TITLE LIKE ?
+	</entry>
 	<entry key="selectList">
 	<!-- 대나무숲 게시글 페이지 목록으로 쓸 데이터 조회 -->
 	SELECT *	
@@ -27,12 +35,31 @@
 	</entry>
 	<entry key="selectNoticeList">
 	<!-- 공지사항 조회 -->
-	SELECT BOARD_NO,USERNO,BOARD_TITLE,BOARD_CONTENT,CREATE_DATE,GOOD,REPORT,COUNT
+	SELECT BOARD_NO,DECODE(BAM_CATEGORY_NO, '1', '일반', '2', '질문', '3', '연애','4','공지') "BAM_CATEGORY_NO",USERNO,BOARD_TITLE,BOARD_CONTENT,CREATE_DATE,GOOD,REPORT,COUNT
 	FROM BOARD
+	JOIN CATEGORY_BAM USING (BOARD_NO)
 	WHERE BOARD_TYPE =2
 	AND STATUS = 'Y'
 	AND TYPE_NO = 1
 	ORDER BY BOARD_NO DESC
+	</entry>
+	<entry key="selectsearchList">
+	<!-- 제목으로 검색해서 게시글 조회 -->
+	SELECT *	
+	FROM(SELECT ROWNUM RNUM, A.*
+		 FROM(SELECT BOARD_NO,USERNO
+		 			,DECODE(BAM_CATEGORY_NO, '1', '일반', '2', '질문', '3', '연애','4','공지') "BAM_CATEGORY_NO",BOARD_TITLE
+		 			,BOARD_CONTENT,CREATE_DATE
+		 			,GOOD,REPORT
+		 			,COUNT
+                FROM BOARD 
+                JOIN CATEGORY_BAM USING (BOARD_NO)
+                WHERE BOARD_TYPE=2
+                AND STATUS = 'Y'
+                AND TYPE_NO = 0
+                AND BOARD_TITLE LIKE ?
+                ORDER BY BOARD_NO DESC) A)
+	WHERE RNUM BETWEEN ? AND ?
 	</entry>
 	<entry key="insertBam">
 	<!-- 대나무숲 게시글 인서트+대나무숲카테고리 인서트 -->
@@ -119,7 +146,7 @@
 	</entry>
 	<entry key="selectReplyList">
 	<!-- 한 게시글 댓글 조회 -->
-	SELECT REPLY_NO,BOARD_NO,REPLY_CONTENT,CREATE_DATE,USERNO
+	SELECT REPLY_NO,BOARD_NO,USERNO,REPLY_CONTENT,CREATE_DATE
 	FROM REPLY
 	WHERE BOARD_NO=?
 	AND STATUS = 'Y'
@@ -136,10 +163,15 @@
 	UPDATE BOARD
 	SET REPORT = REPORT+1
 	,   STATUS = CASE WHEN (REPORT=10) THEN 'N'
-                  ELSE 'N'
+                  ELSE 'Y'
                   END
 	WHERE BOARD_NO = ?
 	AND STATUS = 'Y' 
+	</entry>
+	<entry key="reportInsertBam">
+	<!-- 신고 중복방지 테이블 인서트 -->
+	INSERT INTO BTNCHECK (BOARD_NO,USERNO,BTNTYPE)
+	VALUES (?,?,'신고')
 	</entry>
 
 </properties>

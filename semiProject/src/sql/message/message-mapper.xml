@@ -15,9 +15,24 @@
 	VALUES (SEQ_MNO.NEXTVAL,?,?,?) 
 </entry>
 <entry key="insertBlock">
-<!-- 메시지 차단 등록 -->
+<!-- 메시지 차단 등록  만약 이미 차단되어있다면 인서트 안됨-->
+	<!-- 데이터베이스 제약조건 안걸었을때 
+	INSERT INTO DM_BLOCK (USERNO,BLOCK_USER,BLOCK_CONTENT)
+	SELECT ?,?,?
+	FROM DUAL
+	WHERE NOT EXISTS (SELECT USERNO
+	                    FROM DM_BLOCK
+	                    WHERE USERNO=? AND BLOCK_USER=?)
+	 -->
 	INSERT INTO DM_BLOCK (USERNO,BLOCK_USER,BLOCK_CONTENT)
 	VALUES (?,?,?)
+</entry>
+<entry key="checkBlock">
+<!-- 메시지 차단 확인 -->
+	SELECT USERNO
+	FROM DM_BLOCK
+	WHERE USERNO = ?
+	AND BLOCK_USER = ?
 </entry>
 
 

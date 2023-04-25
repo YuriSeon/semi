@@ -31,15 +31,18 @@ public class BamReportController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//게시글 신고
 		int boardNo = Integer.parseInt(request.getParameter("bno"));
+		//신고하는 유저
+		int userNo = Integer.parseInt(request.getParameter("userNo"));
 		
-		int result = new BamService().reportBam(boardNo);
+		int result = new BamService().reportBam(boardNo,userNo);
+		
 		
 		if(result>0) {
-			request.setAttribute("alertMsg", "신고 완료");
+			request.getSession().setAttribute("alertMsg", "신고 완료");
 			response.sendRedirect(request.getContextPath()+"/bamdetail.bo?bno="+boardNo);
 		}else {
-			request.setAttribute("errorPage", "이미 신고하셨습니다.");
-			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
+			request.getSession().setAttribute("alertMsg", "이미 신고하셨습니다.");
+			response.sendRedirect(request.getContextPath()+"/bamdetail.bo?bno="+boardNo);
 		}
 		
 	}

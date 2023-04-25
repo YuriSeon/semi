@@ -56,5 +56,16 @@ public class MessageService {
 
 		return result;
 	}
+
+	//메시지 차단 당한경우
+	public String checkBlock(Message msg) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		String block = new MessageDao().checkBlock(conn,msg);
+		
+		JDBCTemplate.close(conn);
+		
+		return block;
+	}
 	
 }

@@ -95,8 +95,8 @@ public class MessageDao {
 			pstmt.setString(2, mb.getBlockUser());
 			pstmt.setString(3, mb.getBlockContent());
 			
-			
 			result = pstmt.executeUpdate();
+			System.out.println(result);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -106,6 +106,37 @@ public class MessageDao {
 		}
 		
 		return result;
+	}
+
+	//메시지 차단 확인
+	public String checkBlock(Connection conn, Message msg) {
+		String block = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String sql = prop.getProperty("checkBlock");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, msg.getUserWriter());
+			pstmt.setString(2, msg.getAcceptUser());
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				block=rset.getString("USERNO");
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		
+		return block;
 	}
 
 

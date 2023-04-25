@@ -194,12 +194,19 @@ public class BamService {
 	}
 
 	//게시글 신고하기
-	public int reportBam(int boardNo) {
+	public int reportBam(int boardNo,int userNo) {
 		Connection conn = JDBCTemplate.getConnection();
 		
-		int result = new BamDao().reportBam(conn,boardNo);
+		//신고 중복 방지 테이블 인서트
+		int result = new BamDao().reportInsertBam(conn,boardNo,userNo);
+	
+		int result2 = 0;
+		if(result>0) {//신고가 중복이 아니라면
+			//게시글 신고수 업데이트
+			result2 = new BamDao().reportBam(conn,boardNo);
+		}
 		
-		if(result>0) {
+		if(result>0&&result2>0) {//신고가 중복도 아니고 게시글 신고수 업데이트 성공
 			JDBCTemplate.commit(conn);
 		}else {
 			JDBCTemplate.rollback(conn);
@@ -207,7 +214,7 @@ public class BamService {
 		
 		JDBCTemplate.close(conn);
 		
-		return result;
+		return result*result2;
 	}
 
 	//댓글 삭제 메소드
@@ -236,6 +243,28 @@ public class BamService {
 		
 		return nlist;
 	}
+	//검색결과 게시글 수
+	public int searchListCount( String keyword) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int count = new BamDao().searchListCount(conn,keyword);
+		
+		JDBCTemplate.close(conn);
+		
+		return count;
+	}
+
+	//검색(제목) 게시글 조회
+	public ArrayList<Board> searchList(String keyword,PageInfo pi) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		ArrayList<Board> list = new BamDao().searchList(conn,keyword,pi);
+		
+		JDBCTemplate.close(conn);
+		
+		return list;
+	}
+
 
 	
 }

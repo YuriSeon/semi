@@ -200,15 +200,17 @@
     <table id="table">
         <tbody>
             <tr>
-            	<!-- 자기 자신은 클릭 못하게 -->
-            	
-                <td><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#myModal" id="userNick">닉네임</a></td>
+            	<!-- 자기 자신은 클릭 못하게 
+            			닉네임 적힌곳들에 유저 닉네임 넣으시면 됩니다. -->
+			    <%if(loginUser.getUserNick().equals("닉네임")){ %>
+        			<td>닉네임</td>    	
+			    <%}else{ %>
+                	<td><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#myModal" id="userNick">닉네임</a></td>
+			    <%} %>
             </tr>
         </tbody>
     </table>
-    <%if(loginUser.getUserNick().equals("닉네임")){ %>
-    
-    <%}else{ %>
+    	
     <div class="modal fade" id="myModal" tabindex="-1" >
         <div class="modal-dialog">
             <div class="modal-content">
@@ -228,7 +230,6 @@
             </div>
         </div>
     </div>
-    <%} %>
     
         <!-- 메시지 입력 모달 -->
     <div class="modal fade" id="msgEnroll" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -245,7 +246,7 @@
                         </div>
                          <div class="mb-3">
                             <label for="message-text" class="col-form-label">내용:</label>
-                            <textarea class="form-control" id="message-text"></textarea>
+                            <textarea class="form-control" id="message-text" style="resize:none"></textarea>
                 </div>
              </div>
                 <div class="modal-footer">
@@ -270,7 +271,7 @@
                         </div>
                          <div class="mb-3">
                             <label for="message-text" class="col-form-label">차단 메모:</label>
-                            <textarea class="form-control" id="block-text"></textarea>
+                            <textarea class="form-control" id="block-text" style="resize:none"></textarea>
                 </div>
              </div>
                 <div class="modal-footer">
@@ -283,7 +284,7 @@
     
      <script >
 	     $("#userNick").click(function(){
-	    	userNick = $(this).html(); //전역 변수 선언
+	    	userNick = $(this).html(); //전역 변수 선언(닉네임 클릭했을때 닉네임 가져옴)
 	    	$("#recipient-name").val(userNick); //메시지 입력창 닉네임 넣기
 	    	$("#block-name").val(userNick);	//차단 등록창 닉네임 넣기
 	     });
@@ -311,8 +312,8 @@
      				if(result>0){//인서트(작성) 성공
      					alert("메시지를 보냈습니다.")
      					
-     				}else{//인서트 실패
-     					alert("메시지 전송 실패")
+     				}else{//인서트 실패or차단 당함
+     					alert("차단 당하셨습니다.")
      				}
      			},
      			error:function(){
