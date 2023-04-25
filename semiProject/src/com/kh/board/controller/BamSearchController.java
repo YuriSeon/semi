@@ -10,21 +10,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.kh.board.model.service.BamService;
-import com.kh.board.model.vo.BamCategory;
 import com.kh.board.model.vo.Board;
 import com.kh.common.model.vo.PageInfo;
 
 /**
- * Servlet implementation class BamListController
+ * Servlet implementation class BamSearchController
  */
-@WebServlet("/bamlist.bo")
-public class BamListController extends HttpServlet {
+@WebServlet("/search.bo")
+public class BamSearchController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public BamListController() {
+    public BamSearchController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -38,34 +37,39 @@ public class BamListController extends HttpServlet {
 		int currentPage; //현재 페이지
 		int pageLimit; //페이지 하단에 보여질 페이징바의 페이지 최대 개수
 		int boardLimit; //한 페이지에서 보여질 게시글 최대 개수
-		
+				
 		int maxPage; //가장 마지막 페이지가 몇인지 (총페이지의 개수)
 		int startPage; //페이지 하단에 보여질 페이징바의 시작수
 		int endPage; //페이지 하단에 보여질 페이징바의 끝 수 
+				
+		//어떤 걸로 검색할지 (제목(BOARD_TITLE),내용(BOARD_CONTENT))
+		String category = request.getParameter("searchCategory");
+		//검색 키워드
+		String keyword = request.getParameter("keyword");
 		
-		listCount = new BamService().selectListCount();
+		listCount = new BamService().searchListCount(keyword);
+	
 		
+				
 		currentPage = Integer.parseInt(request.getParameter("currentPage"));
-		
+				
 		pageLimit =10;
-		
+				
 		boardLimit= 10;
-		
+				
 		maxPage =(int)Math.ceil((double)listCount/boardLimit);
-		
+				
 		startPage = (currentPage-1)/pageLimit * pageLimit +1;
-		
+				
 		endPage = startPage+pageLimit-1;
-		
+				
 		if(endPage>maxPage) {
 			endPage=maxPage;
 		}
-		
+				
 		PageInfo pi = new PageInfo(listCount,currentPage,startPage,endPage,boardLimit,pageLimit,maxPage);
-		
-		ArrayList<Board> list = new BamService().selectList(pi);
-		
-		
+				
+		ArrayList<Board> list = new BamService().searchList(keyword,pi);
 		
 		if(currentPage==1) {//현재 페이지가 1이면 공지사항 가져옴
 			ArrayList<Board> nlist = new BamService().selectNoticeList();
@@ -77,6 +81,10 @@ public class BamListController extends HttpServlet {
 		
 		request.setAttribute("pi", pi);
 		request.getRequestDispatcher("views/bam/bamListView.jsp").forward(request, response);
+		
+	
+						
+				
 	}
 
 	/**

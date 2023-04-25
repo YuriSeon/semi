@@ -42,10 +42,17 @@ public class NoticeInsertController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		request.setCharacterEncoding("UTF-8");
+
+		int bType; // board type 확인 후 공지사항 여부 확인 할 변수 지정
 		
-		int typeno = Integer.parseInt(request.getParameter("typeno"));
+		if(request.getParameter("bType").equals("4")) {
+			
+			bType = 1; // 4라면 공지사항이라는거니까 1로 초기화
+		} else {
+			bType = 0;
+		}
 		
-		String bType = request.getParameter("boardtype");
+		String category = request.getParameter("boardtype");
 		
 		String title = request.getParameter("insertTitle");
 		
@@ -56,13 +63,15 @@ public class NoticeInsertController extends HttpServlet {
 		
 		int userNo = 1; // 확인용
 		
-		Board b = new Board(String.valueOf(userNo),bType, title, content, typeno);
+		//dao에서 BMEMBER table join 안하려고 userno 스트링으로 바꿔서 보냄
+		Board b = new Board(String.valueOf(userNo),category, title, content, bType);
 		
 		int result = new BoardService().insertNotice(b);
 		
 		if(result>0) {
-			request.setAttribute("alertMsg", "게시글 등록 성공");
-			response.sendRedirect(request.getContextPath()+"admin/views/board/boardMain.jsp");
+		
+			request.getSession().setAttribute("alertMsg", "게시글 등록 성공");
+			response.sendRedirect(request.getContextPath()+"/main.abo?currentPage=1&typeNo=1");
 			
 		} else {
 			request.setAttribute("errorMsg", "게시물 등록 실패");

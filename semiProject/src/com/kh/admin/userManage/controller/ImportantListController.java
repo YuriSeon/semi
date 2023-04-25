@@ -11,20 +11,20 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.kh.admin.userManage.model.service.UserManageService;
-import com.kh.bMember.model.vo.BMember;
+import com.kh.admin.userManage.model.vo.User;
 import com.kh.common.model.vo.PageInfo;
 
 /**
- * Servlet implementation class CheckListMainController
+ * Servlet implementation class ImportantListController
  */
-@WebServlet("/main.ck")
-public class CheckListMainController extends HttpServlet {
+@WebServlet("/important.ck")
+public class ImportantListController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CheckListMainController() {
+    public ImportantListController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,21 +34,8 @@ public class CheckListMainController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String status = "Y"; // 가입자 중 활동중인 사람 전체를 조회할거라서 고정값으로 넣음
-		
-		int option;
-		
-		if(request.getParameter("option")==null) { // 쿼리스트링으로 옵션값이 넘어오지 않는다면 
-			
-			option = (int)request.getAttribute("option");
-			
-		} else {// 쿼리스트링으로 넘어온다
-			
-			option = Integer.parseInt(request.getParameter("option"));
-		}
-		
-		int listCount = new UserManageService().listCount(status);
-		
+		int listCount = new UserManageService().importantCount();
+
 		int currentPage = Integer.parseInt(request.getParameter("currentPage"));
 
 		int boardLimit = 10;
@@ -68,36 +55,30 @@ public class CheckListMainController extends HttpServlet {
 		
 		PageInfo pi = new PageInfo(listCount, currentPage, startPage, endPage, boardLimit, pageLimit, maxPage);
 		
-		ArrayList<BMember> list = new UserManageService().checkListRecent(pi, option);
+		ArrayList<User> list = new UserManageService().importantList(pi);
 		
-		if(list.isEmpty()) {
-			request.setAttribute("errorMsg", "회원 조회 실패");
-			request.getRequestDispatcher("views/common/error.jsp").forward(request, response);
-			
-		} else {
-			
-			if(request.getParameter("check")==null) {
-				
-				request.setAttribute("list", list);
-				request.setAttribute("pi", pi);
-				request.getRequestDispatcher("admin/views/userManage/checkListMain.jsp").forward(request, response);
-				
-			} else {
-				
-				response.setContentType("json/application; charset=UTF8");
-				new Gson().toJson(list, response.getWriter());
-			}
-			
-		}
-	
+		request.setAttribute("list", list);
+		
+		request.setAttribute("pi", pi);
+		
+		request.setAttribute("currentPage", currentPage);
+		
+		request.getRequestDispatcher("admin/views/userManage/checkImportant.jsp").forward(request, response);
+		
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		
+		int userNo = Integer.parseInt(request.getParameter("userNo"));
+		
+		int result = new UserManageService().yellowCard(userNo);
+		
+		response.setContentType("json/application; charset=UTF-8");
+		
+		new Gson().toJson(result, response.getWriter());
 	}
 
 }

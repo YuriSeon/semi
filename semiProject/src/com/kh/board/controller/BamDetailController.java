@@ -50,7 +50,7 @@ public class BamDetailController extends HttpServlet {
 			request.getRequestDispatcher("views/bam/bamDetailView.jsp").forward(request, response);
 		}else {//조회수증가 실패
 			request.setAttribute("errorMsg", "게시글 조회 실패");
-			
+			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
 		}
 		
 		

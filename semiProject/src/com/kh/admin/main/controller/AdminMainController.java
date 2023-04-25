@@ -1,4 +1,4 @@
-package com.kh.admin.board.controller;
+package com.kh.admin.main.controller;
 
 import java.io.IOException;
 
@@ -9,18 +9,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.kh.admin.board.model.service.BoardService;
+import com.kh.admin.userManage.model.service.UserManageService;
+import com.kh.admin.userManage.model.vo.User;
 
 /**
- * Servlet implementation class BoardDeleteController
+ * Servlet implementation class AdminMainController
  */
-@WebServlet("/delete.abo")
-public class BoardDeleteController extends HttpServlet {
+@WebServlet("/main.admin")
+public class AdminMainController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public BoardDeleteController() {
+    public AdminMainController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -30,20 +32,25 @@ public class BoardDeleteController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		int bno = Integer.parseInt(request.getParameter("bno"));
+		// 게시판 영역에 들어갈 내용 조회
+		int[][] boardArr = new BoardService().totalBoardCount(); 
 		
-		int result = new BoardService().deleteBoard(bno);
+		// 회원관리 영역에 들어갈 내용 조회
+		String[] sArr = {"Y", "Y", "N", "K"}; // 회원 상태값 배열로 회원 수 조회
 		
-		if(result>0) {
-			
-			request.getSession().setAttribute("alertMsg", "삭제되었습니다.");
-			
-			response.sendRedirect(request.getContextPath()+"/main.abo?typeNo=1&currentPage=1");
-		} else {
-			request.setAttribute("errorMsg", "삭제 실패");
-			
-			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
-		}
+		User u = new UserManageService().UserCount(sArr);
+		
+		// 관리필요한 회원 리스트 영역에 들어갈 내용 조회
+		int[] checkArr = new UserManageService().checkCount();
+		
+		request.setAttribute("boardArr", boardArr);
+		
+		request.setAttribute("u", u);
+		
+		request.setAttribute("checkArr", checkArr);
+		
+		request.getRequestDispatcher("admin/views/common/adminMain.jsp").forward(request, response);
+		
 	}
 
 	/**

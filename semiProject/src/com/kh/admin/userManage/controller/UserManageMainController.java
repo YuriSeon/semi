@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.kh.admin.userManage.model.service.UserManageService;
+import com.kh.admin.userManage.model.vo.User;
 import com.kh.common.model.vo.PageInfo;
 
 /**
@@ -34,6 +35,8 @@ public class UserManageMainController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		String select = "recently";
+		
 		String status = request.getParameter("status");
 
 		int listCount = new UserManageService().listCount(status);
@@ -57,7 +60,7 @@ public class UserManageMainController extends HttpServlet {
 		
 		PageInfo pi = new PageInfo(listCount, currentPage, startPage, endPage, boardLimit, pageLimit, maxPage);
 		
-		ArrayList<Object> list = new UserManageService().selectUserList(pi);
+		ArrayList<User> list = new UserManageService().selectUserList(pi, select);
 		
 		request.setAttribute("list", list);
 		
@@ -77,7 +80,7 @@ public class UserManageMainController extends HttpServlet {
 		String select = request.getParameter("select");
 		
 		String sort = request.getParameter("sort");
-		System.out.println(select +" + "+ sort);
+		
 		int listCount = new UserManageService().listCount(status);
 		
 		int currentPage = Integer.parseInt(request.getParameter("currentPage"));
@@ -98,49 +101,22 @@ public class UserManageMainController extends HttpServlet {
 		}
 		
 		PageInfo pi = new PageInfo(listCount, currentPage, startPage, endPage, boardLimit, pageLimit, maxPage);
-		
-		ArrayList<Object> list = new ArrayList<>();
-		
-		//리스트 가져오기
-		switch(select) {
-		
-		case "recently" :
-				if(sort.equals("asc")) { // 오름차순 정렬
-					// 맛집 게시물 랭킹순
-					list = new UserManageService().selectUserList(pi);
-				} else {
-					Collections.reverse(list = new UserManageService().selectUserList(pi));
-				}
-				break;
-				
-		case "foodRank" : 
-				if(sort.equals("asc")) { // 오름차순 정렬
-					// 맛집 게시물 랭킹순
-					list = new UserManageService().selectSortFR(pi);
-				} else {
-					Collections.reverse(list = new UserManageService().selectSortFR(pi));
-				}
-				break;
-		
-		case "total" : 
-				if(sort.equals("asc")) { // 오름차순 정렬
-					// 맛집 게시물 랭킹순
-					list = new UserManageService().selectSortAct(pi);
-				} else {
-					Collections.reverse(list = new UserManageService().selectSortAct(pi));
-					for(Object o : list) {
-						
-						System.out.println(o);
-					}
-				}
-				break;
-				
+
+		ArrayList<User> list = new ArrayList<>();
+
+		if (sort.equals("asc")) { // 오름차순 정렬
+			
+			list = new UserManageService().selectUserList(pi, select);
+			
+		} else {
+			
+			Collections.reverse(list = new UserManageService().selectUserList(pi, select));
 		}
-	
+
 		response.setContentType("json/application; charset=UTF-8");
-		
+
 		new Gson().toJson(list, response.getWriter());
-		
+
 	}
 
 }

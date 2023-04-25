@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.kh.bMember.model.vo.BMember;
-import com.kh.message.model.dao.MessageDao;
+
+import com.kh.message.model.service.MessageService;
+
 import com.kh.message.model.vo.Message;
 	//메시지 인서트용
 /**
@@ -40,18 +42,33 @@ public class MessageInsertController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//메시지 내용
-		String msgCon=request.getParameter("con");
+		String msgContent=request.getParameter("msgContent");
 		//유저 번호
 		BMember loginUser = (BMember)request.getSession().getAttribute("loginUser");
 		String userNo = Integer.toString(loginUser.getUserNo());
+		//받는 유저닉네임
+		String acceptNick = request.getParameter("acceptNick");
+		//닉네임으로 받는 유저 번호 조회
+		String acceptUserNo= Integer.toString(new MessageService().selectUserNo(acceptNick));
 		
 		Message msg = new Message();
 		msg.setUserWriter(userNo);
+		msg.setAcceptUser(acceptUserNo);
+		msg.setMsgContent(msgContent);
+		
+		//차단당했는지 확인하기
+		String block = new MessageService().checkBlock(msg);
+		
+		int result = 0; 
+		
+		if(block !=null) {//차단 안당했을 경우 인서트
+			result = new MessageService().insertMessage(msg);
+		}
+			response.getWriter().print(result);
 		
 		
-		int result = new MessageDao().insertMessage();
 		
-		response.getWriter().print(result);
+		
 		
 	}
 

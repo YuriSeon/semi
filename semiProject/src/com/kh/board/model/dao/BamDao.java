@@ -107,15 +107,13 @@ public class BamDao {
 		
 		return list;
 	}
-
-	//대나무숲 카테고리 가져오기
-	/* 대나무숲 카테고리 코드테이블이 없음
-	public ArrayList<BamCategory> categoryList(Connection conn) {
-		ArrayList<BamCategory> list = new ArrayList<>();
-		ResultSet rset = null;
+	//공지사항 리스트 가져오기
+	public ArrayList<Board> selectNoticeList(Connection conn) {
+		ArrayList<Board> nlist = new ArrayList<>();
 		Statement stmt = null;
+		ResultSet rset = null;
 		
-		String sql = prop.getProperty("BamCategoryList");
+		String sql = prop.getProperty("selectNoticeList");
 		
 		try {
 			stmt = conn.createStatement();
@@ -123,19 +121,28 @@ public class BamDao {
 			rset = stmt.executeQuery(sql);
 			
 			while(rset.next()) {
-				list.add(new BamCategory(rset.getInt("BAM_CATEGORY_NO"),
-									  rset.getString("BAM_CATEGORY_NAME")));
+				nlist.add(new Board(rset.getInt("BOARD_NO")
+									,rset.getString("USERNO")
+									,rset.getString("BAM_CATEGORY_NO")
+									,rset.getString("BOARD_TITLE")
+									,rset.getString("BOARD_CONTENT")
+									,rset.getDate("CREATE_DATE")
+									,rset.getInt("GOOD")
+									,rset.getInt("REPORT")
+									,rset.getInt("COUNT")));
 			}
+			
+			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}finally {
 			JDBCTemplate.close(rset);
 			JDBCTemplate.close(stmt);
 		}
-		return list;
+		
+		return nlist;
 	}
-	*/
 
 	//대나무숲 게시글 작성할때 게시글 제목,내용
 	public int insertBam(Connection conn, Board b) {
@@ -150,6 +157,31 @@ public class BamDao {
 			pstmt.setString(2, b.getBoardTitle());
 			pstmt.setString(3, b.getBoardContent());
 			pstmt.setString(4, b.getBoardType()); //
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+	
+	//공지사항 작성(인서트)
+	public int insertNoticeBam(Connection conn, Board b) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("insertNoticeBam");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, b.getBoardWriter());
+			pstmt.setString(2, b.getBoardTitle());
+			pstmt.setString(3, b.getBoardContent());
 			
 			result = pstmt.executeUpdate();
 			
@@ -486,6 +518,131 @@ public class BamDao {
 			
 			return result;
 		}
+
+		//댓글 삭제 메소드
+		public int deleteReply(Connection conn, int replyNo) {
+			int result = 0;
+			PreparedStatement pstmt = null;
+			
+			String sql = prop.getProperty("deleteReply");
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, replyNo);
+				
+				result = pstmt.executeUpdate();
+				
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(pstmt);
+			}
+			
+			return result;
+		}
+
+		//검색 결과 게시글 수
+		public int searchListCount(Connection conn, String keyword) {
+			int count = 0;
+			PreparedStatement pstmt = null;
+			ResultSet rset = null;
+			
+			String sql = prop.getProperty("searchListCount");
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				keyword = '%'+keyword+'%';
+				pstmt.setString(1, keyword);
+				
+				rset = pstmt.executeQuery();
+				
+				if(rset.next()) {
+					count = rset.getInt("COUNT");
+				}
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(rset);
+				JDBCTemplate.close(pstmt);
+			}
+			return count;
+		}
+		//(검색:제목)게시글 조회
+		public ArrayList<Board> searchList(Connection conn, String keyword, PageInfo pi) {
+			ArrayList<Board> list = new ArrayList<>();
+			PreparedStatement pstmt = null;
+			ResultSet rset = null;
+			
+			String sql = prop.getProperty("selectsearchList");
+			
+			//현재 페이지에서 가장 낮은 게시글번호
+			int startRow = (pi.getCurrentPage()-1)*pi.getBoardLimit()+1;
+			//현재 페이지에서 가장 높은 게시글 번호
+			int endRow = (startRow+pi.getBoardLimit()) - 1;
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				keyword = '%'+keyword+'%';
+				pstmt.setString(1, keyword);
+				pstmt.setInt(2, startRow);
+				pstmt.setInt(3, endRow);
+				
+				
+				rset = pstmt.executeQuery();
+				
+				while(rset.next()) {
+					list.add(new Board(rset.getInt("BOARD_NO")
+									,rset.getString("USERNO")
+									,rset.getString("BAM_CATEGORY_NO")
+									,rset.getString("BOARD_TITLE")
+									,rset.getString("BOARD_CONTENT")
+									,rset.getDate("CREATE_DATE")
+									,rset.getInt("GOOD")
+									,rset.getInt("REPORT")
+									,rset.getInt("COUNT")));
+				}
+				
+			} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(rset);
+				JDBCTemplate.close(pstmt);
+			}
+			return list;
+		}
+
+		//신고 중복 방지 테이블 인서트
+		public int reportInsertBam(Connection conn, int boardNo, int userNo) {
+			int result = 0;
+			PreparedStatement pstmt = null;
+			ResultSet rset = null;
+			
+			String sql = prop.getProperty("reportInsertBam");
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, boardNo);
+				pstmt.setInt(2, userNo);
+				
+				result = pstmt.executeUpdate();
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(pstmt);
+			}
+			return result;
+		}
+
+
+		
+
 
 		
 	

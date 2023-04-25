@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<entry key="selectUserNo">
+<!-- 유저 닉네임으로 회원번호 찾기 -->
+	SELECT USERNO
+	FROM BMEMBER
+	WHERE USER_NICK = ?
+	AND STATUS = 'Y'
+</entry>
+
+<entry key="insertMessage">
+<!-- 메시지 인서트(작성) 차단기능 만들면 바꿔야됨 -->
+	INSERT INTO MESSAGE (MSG_NO,USERNO,MSG_CONTENT,ACCEPT_USER_NO)
+	VALUES (SEQ_MNO.NEXTVAL,?,?,?) 
+</entry>
+<entry key="insertBlock">
+<!-- 메시지 차단 등록  만약 이미 차단되어있다면 인서트 안됨-->
+	<!-- 데이터베이스 제약조건 안걸었을때 
+	INSERT INTO DM_BLOCK (USERNO,BLOCK_USER,BLOCK_CONTENT)
+	SELECT ?,?,?
+	FROM DUAL
+	WHERE NOT EXISTS (SELECT USERNO
+	                    FROM DM_BLOCK
+	                    WHERE USERNO=? AND BLOCK_USER=?)
+	 -->
+	INSERT INTO DM_BLOCK (USERNO,BLOCK_USER,BLOCK_CONTENT)
+	VALUES (?,?,?)
+</entry>
+<entry key="checkBlock">
+<!-- 메시지 차단 확인 -->
+	SELECT USERNO
+	FROM DM_BLOCK
+	WHERE USERNO = ?
+	AND BLOCK_USER = ?
+</entry>
+
+
+</properties>

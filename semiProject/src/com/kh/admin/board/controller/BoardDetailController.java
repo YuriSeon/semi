@@ -1,4 +1,4 @@
-package com.kh.board.controller;
+package com.kh.admin.board.controller;
 
 import java.io.IOException;
 
@@ -8,19 +8,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.kh.board.model.service.BamService;
+import com.kh.admin.board.model.service.BoardService;
+import com.kh.board.model.vo.Board;
 
 /**
- * Servlet implementation class BamReportController
+ * Servlet implementation class BoardDetailController
  */
-@WebServlet("/bamreport.bo")
-public class BamReportController extends HttpServlet {
+@WebServlet("/detail.abo")
+public class BoardDetailController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public BamReportController() {
+    public BoardDetailController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -29,21 +30,25 @@ public class BamReportController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//게시글 신고
-		int boardNo = Integer.parseInt(request.getParameter("bno"));
-		//신고하는 유저
-		int userNo = Integer.parseInt(request.getParameter("userNo"));
 		
-		int result = new BamService().reportBam(boardNo,userNo);
+		int bno = Integer.parseInt(request.getParameter("bno"));
 		
+		String status = request.getParameter("status");
 		
-		if(result>0) {
-			request.getSession().setAttribute("alertMsg", "신고 완료");
-			response.sendRedirect(request.getContextPath()+"/bamdetail.bo?bno="+boardNo);
-		}else {
-			request.getSession().setAttribute("alertMsg", "이미 신고하셨습니다.");
-			response.sendRedirect(request.getContextPath()+"/bamdetail.bo?bno="+boardNo);
+		Board b = new BoardService().detailBoard(bno, status);
+		
+		if(b!=null) {
+			request.setAttribute("b", b);
+			request.getRequestDispatcher("admin/views/board/boardDetail.jsp").forward(request, response);
+			
+		} else {
+			request.setAttribute("errorMsg", "게시물 조회 실패");
+			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
+			
 		}
+		
+		
+		
 		
 	}
 

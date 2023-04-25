@@ -11,6 +11,14 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style >
+	.bam-area>thead th{
+		border:1px solid black;
+	}
+	.bam-area>tbody td{
+		border:1px solid black;
+	}
+</style>
 </head>
 <body>
 	  <%@ include file ="../common/menubar.jsp"%> 
@@ -19,7 +27,7 @@
 		<a href="<%=contextPath%>/baminsert.bo" class="btn btn-info">글작성</a>
 	</div>
 	<div align="center">
-	<table border="1" class="bam-area">
+	<table border="1" style="border:1px solid black;" class="bam-area">
         <thead>
             <tr>
                 <th width="50">글번호</th>
@@ -61,11 +69,12 @@
     		
 	    	$(".bam-area>tbody>tr").click(function(){
 	    		var bno = $(this).children().eq(0).text();
+	    		console.log(bno);
 	            location.href="<%=contextPath%>/bamdetail.bo?bno="+bno;
 	    	});
     	});
     </script>
-    
+    <br>
     <div align="center" class="paging-area">
     	<%if(pi.getCurrentPage()!= 1){ %>
 				<button onclick="location.href='<%=contextPath%>/bamlist.bo?currentPage=<%=pi.getCurrentPage()-1%>'">&lt;</button>
@@ -83,6 +92,18 @@
 				<button onclick="location.href='<%=contextPath%>/bamlist.bo?currentPage=<%=pi.getCurrentPage()+1%>'">&gt;</button>
 			<%} %>
 	</div>
-    
+	<br>
+	<div align="center">
+		<form action="<%=contextPath %>/search.bo">
+			<input type="hidden" name="currentPage" value="1">
+			<select name="searchCategory">
+				<option value="BOARD_TITLE">제목</option>
+				<option value="BOARD_CONTENT">내용</option>
+			</select>
+		    <input type="search" name="keyword" placeholder="검색하실 제목">
+		    <button type="submit">검색</button>
+		</form>
+	</div>
+	<br><br><br>
 </body>
 </html>
