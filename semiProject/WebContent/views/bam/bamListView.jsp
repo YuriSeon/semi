@@ -74,7 +74,7 @@
 	    	});
     	});
     </script>
-    
+    <br>
     <div align="center" class="paging-area">
     	<%if(pi.getCurrentPage()!= 1){ %>
 				<button onclick="location.href='<%=contextPath%>/bamlist.bo?currentPage=<%=pi.getCurrentPage()-1%>'">&lt;</button>
@@ -92,6 +92,18 @@
 				<button onclick="location.href='<%=contextPath%>/bamlist.bo?currentPage=<%=pi.getCurrentPage()+1%>'">&gt;</button>
 			<%} %>
 	</div>
-    
+	<br>
+	<div align="center">
+		<form action="<%=contextPath %>/search.bo">
+			<input type="hidden" name="currentPage" value="1">
+			<select name="searchCategory">
+				<option value="BOARD_TITLE">제목</option>
+				<option value="BOARD_CONTENT">내용</option>
+			</select>
+		    <input type="search" name="keyword" placeholder="검색하실 제목">
+		    <button type="submit">검색</button>
+		</form>
+	</div>
+	<br><br><br>
 </body>
 </html>

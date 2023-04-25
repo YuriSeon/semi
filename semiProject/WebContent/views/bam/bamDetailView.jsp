@@ -71,7 +71,7 @@
         <%} %> 
       	<div align="center">
             <button onclick="location.href='<%=contextPath%>/bamlist.bo?currentPage=1'" class="btn">글목록으로</button>
-            <button onclick="location.href='<%=contextPath%>/bamreport.bo?bno=<%=b.getBoardNo()%>'" class="btn">신고하기</button>
+            <button onclick="location.href='<%=contextPath%>/bamreport.bo?bno=<%=b.getBoardNo()%>&userNo=<%=loginUser.getUserNo()%>'" class="btn">신고하기</button>
       	</div>
       	
       	
@@ -145,14 +145,16 @@
                 					replyWriter +=count;
                 					count++;
                 				}
-                				console.log(rlist[i].replyNo);
+                				
                 				result+="<tr>"
                                 		+"<td style="+"text-align: center;"+">"+replyWriter+"</td>"
                                 		+"<td colspan="+2+" rowspan="+2+" width="+400+">"+rlist[i].replyContent+"</td>"
                             			+"</tr>"
                             			+"<tr>"
                                 		+"<td style="+"text-align: center;"+">"+rlist[i].createDate+"</td>"
+                                		//+"<"+"%if(loginUser != null && loginUser.getUserNo()==Integer.parseInt("+rlist[i].replyWriter+")||loginUser.getUserNo()==1){ %>"
                                 		+"<td rowspan="+2+"><button onclick='"+"deleteReply(this);'"+"value='"+rlist[i].replyNo+"'id='deleteRe'>삭제</button></td>"
+                                		//+"<"+"%}%>"
                             			+"</tr>";
                 			}
                 			
