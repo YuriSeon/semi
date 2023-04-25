@@ -9,13 +9,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
+import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.Board;
 import com.kh.common.model.vo.JDBCTemplate;
 import com.kh.food.model.vo.FoodBtnCheck;
 import com.kh.food.model.vo.FoodCategory;
+import com.kh.food.model.vo.FoodTogether;
 
 public class FoodDao {
 	Properties prop = new Properties();
@@ -116,30 +119,34 @@ public class FoodDao {
 		return b;
 	}
 
-	public int foodRankInsert(Connection conn, Board b, String newFoodName) {
+	public int foodRankInsert(Connection conn, Board b, String newFoodName, Attachment att) {
 		PreparedStatement pstmt = null;
 		int result = 0;
 		String sql = prop.getProperty("newfoodRankInsert");
 
 		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, b.getBoardWriter());
-			pstmt.setString(2, b.getBoardTitle());
-			pstmt.setString(3, b.getBoardContent());
-			pstmt.setString(4, b.getAbbress());
-			pstmt.setString(5, newFoodName);
 
-			result = pstmt.executeUpdate();
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, b.getBoardWriter());
+				pstmt.setString(2, b.getBoardTitle());
+				pstmt.setString(3, b.getBoardContent());
+				pstmt.setString(4, b.getAbbress());
+				pstmt.setString(5, newFoodName);
+				pstmt.setString(6, att.getOriginName());
+				pstmt.setString(7, att.getChangeName());
+				pstmt.setString(8, att.getFilePath());
+				result = pstmt.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			JDBCTemplate.close(pstmt);
 		}
+		
 		return result;
 	}
 
-	public int foodRankInsert(Connection conn, Board b, FoodCategory fc) {
+	public int foodRankInsert(Connection conn, Board b, FoodCategory fc, Attachment att) {
 		PreparedStatement pstmt = null;
 		int result = 0;
 		String sql = prop.getProperty("BasicfoodRankInsert");
@@ -151,6 +158,9 @@ public class FoodDao {
 			pstmt.setString(3, b.getBoardContent());
 			pstmt.setInt(4, fc.getFoodCategory());
 			pstmt.setString(5, b.getAbbress());
+			pstmt.setString(6, att.getOriginName());
+			pstmt.setString(7, att.getChangeName());
+			pstmt.setString(8, att.getFilePath());
 
 			result = pstmt.executeUpdate();
 		} catch (SQLException e) {
@@ -377,7 +387,6 @@ public class FoodDao {
 			pstmt.setInt(2, userno);
 			rset = pstmt.executeQuery();
 			if(rset.next()) {
-				System.out.println("객체가 존재한다.");
 				fbc = new FoodBtnCheck();
 				fbc.setBoardNo(rset.getInt("BOARD_NO"));
 				fbc.setUserNo(rset.getInt("USERNO"));
@@ -554,5 +563,205 @@ public class FoodDao {
 		}
 		
 		return fbc;
+	}
+
+	public int FoodRankInsertImg(Connection conn, Attachment att) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("FoodRankInsertImg");
+		try {
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, att.getOriginName());
+					pstmt.setString(2, att.getChangeName());
+					pstmt.setString(3, att.getFilePath());
+					result = pstmt.executeUpdate();					
+				
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
+	}
+
+//	public ArrayList<Attachment> selectAttachment(Connection conn, int bno) {
+//		ResultSet rset = null;
+//		String sql = prop.getProperty("selectAttachment");
+//		PreparedStatement pstmt = null;
+//		ArrayList<Attachment> attList = null;
+//		try {
+//			pstmt = conn.prepareStatement(sql);
+//			pstmt.setInt(1, bno);
+//			rset = pstmt.executeQuery();
+//			while(rset.next()) {
+//				attList = new ArrayList<>();
+//				Attachment att = new Attachment();
+//				att.setChangeName(rset.getString("CHANGE_NAME"));
+//				att.setFilePath("FILE_PATH");
+//				attList.add(att);
+//			}
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} finally {
+//			JDBCTemplate.close(rset);
+//			JDBCTemplate.close(pstmt);
+//			
+//		}
+//		
+//		return attList;
+//	}
+
+	public Attachment selectAttachmentDetail(Connection conn, int bno) {
+		ResultSet rset = null;
+		String sql = prop.getProperty("selectAttachmentDetail");
+		PreparedStatement pstmt = null;
+		Attachment att = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bno);
+			rset = pstmt.executeQuery();
+			if(rset.next()) {
+				att = new Attachment();
+				att.setOriginName("ORIGIN_NAME");
+				att.setChangeName(rset.getString("CHANGE_NAME"));
+				att.setFilePath(rset.getString("FILE_PATH"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+			
+		}
+		
+		return att;
+	}
+
+	public ArrayList<Attachment> selectLocationFoodImg(Connection conn, ArrayList<Integer> locationBoard_no) {
+		ResultSet rset = null;
+		String sql = prop.getProperty("selectLocationFoodImg");
+		PreparedStatement pstmt = null;
+		ArrayList<Attachment> list = new ArrayList<>();
+		Attachment att = null;
+		try {
+			for(int i = 0; i < locationBoard_no.size(); i++) {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, locationBoard_no.get(i));
+				rset = pstmt.executeQuery();
+				if(rset.next()) {
+					att = new Attachment();
+					att.setChangeName(rset.getString("CHANGE_NAME"));
+					att.setFilePath(rset.getString("FILE_PATH"));
+					list.add(att);
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return list;
+	}
+
+	public int foodUpdateImg(Connection conn, int bno, Attachment att) {
+		int result = 0;
+		String sql = prop.getProperty("foodUpdateImg");
+		PreparedStatement pstmt = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, att.getOriginName());
+			pstmt.setString(2, att.getChangeName());
+			pstmt.setString(3, att.getFilePath());
+			pstmt.setInt(4, bno);
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
+	}
+
+	public int deleteFoodImg(Connection conn, int bno) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("deleteFoodImg");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bno);
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(conn);
+		}
+		
+		return result;
+	}
+	
+	/***
+	 * 
+	 * @return int
+	 * @apiNote Board와 Attachment 두개를 INSERT ALL로 저장
+	 */
+	public int foodToInsert(Connection conn, Board b, Attachment att, FoodTogether ft) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("foodToInsert");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, b.getUn());
+			pstmt.setString(2, b.getBoardTitle());
+			pstmt.setString(3, b.getBoardContent());
+			pstmt.setString(4, ft.getMainAdress());
+			pstmt.setString(5, ft.getSubAddress());
+			pstmt.setInt(6, ft.getPerson());
+			pstmt.setString(7, ft.getEndTime());
+			pstmt.setString(8,att.getOriginName());
+			pstmt.setString(9,att.getChangeName());
+			pstmt.setString(10,att.getFilePath());
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+
+		return result;
+	}
+
+	public ArrayList<HashMap<String, String>> selectFoodTogether(Connection conn) {
+		ResultSet rset = null;
+		String sql = prop.getProperty("selectFoodTogether");
+		ArrayList<HashMap<String, String>> list = new ArrayList<>();
+		Statement stmt = null;
+		try {
+			stmt = conn.createStatement();
+			rset = stmt.executeQuery(sql);
+			while(rset.next()) {
+				HashMap<String, String> map = new HashMap<>();
+				map.put("changeName", rset.getString("CHANGE_NAME"));
+				map.put("boarTitle", rset.getString("BOARD_TITLE"));
+				map.put("person", rset.getString("PERSON"));
+				map.put("endTime", rset.getString("END_TIME"));
+				map.put("userId", rset.getString("USERID"));
+				map.put("filePath", rset.getString("FILE_PATH"));
+				list.add(map);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 }

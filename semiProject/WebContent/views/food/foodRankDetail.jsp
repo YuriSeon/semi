@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8" import="com.kh.board.model.vo.Board, com.kh.bMember.model.vo.BMember, com.kh.food.model.vo.FoodBtnCheck"%>
+	pageEncoding="UTF-8" import="com.kh.board.model.vo.Board, com.kh.bMember.model.vo.BMember, com.kh.food.model.vo.FoodBtnCheck, com.kh.board.model.vo.Attachment, java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,10 +15,13 @@
  	Board b = (Board)request.getAttribute("FoodRanking");
  	BMember m = ((BMember)request.getSession().getAttribute("loginUser"));
  	FoodBtnCheck fbc = (FoodBtnCheck)request.getAttribute("FoodBtnCheck");
+ 	Attachment att = (Attachment)request.getAttribute("att");
  %>
  	<%@include file="../common/menubar.jsp" %>
  	<h1>상세보기</h1>
- 	<form action="<%=request.getContextPath() %>/foodRankUpdate.bo?bno=<%=request.getParameter("bno")%>" method="post">
+ 	<form action="<%=request.getContextPath() %>/foodRankUpdate.bo?bno=<%=request.getParameter("bno")%>" method="get">
+ 	<input type="hidden" name="helloworld"value="<%=request.getParameter("bno") %>">
+ 	<input type="hidden" name="imgname"value="<%=att.getChangeName() %>">
 	<table id = "table-area">
 		<%if(m.getUserId().equals(b.getBoardWriter())){ %>
 		<tr>
@@ -44,17 +47,17 @@
 			<td><textarea rows="10" cols="30" name="content"
 					style="resize: none" readOnly><%=b.getBoardContent() %></textarea></td>
 		</tr>
-		<%if(!b.getAbbress().equals("")){ %>
+		<tr>
+			<th>음식 사진 </th>
+			<td>
+				<img alt="대표이미지" src="<%=contextPath+att.getFilePath()+"/"+att.getChangeName()%>" id="mainImg" name="mainImg" style="width:150px; height:150px;">
+			</td>
+		</tr>
 		<tr>
 			<th>주소</th>
 			<td><input type="text" id="address" name="address1" value="<%=b.getAbbress() %>" readOnly></td>
 		</tr>
-		<% } else { %>
-		<tr>
-			<th>주소</th>
-			<td><input type="text" id="address" name="addresss1" value="입력된 주소가 없습니다." readOnly></td>
-		</tr>
-		<%} %>		
+	
 	</table>
 	
 	<%if(!b.getAbbress().equals("")){ %>
@@ -165,7 +168,17 @@ var geocoder = new kakao.maps.services.Geocoder();
 
 // 주소로 좌표를 검색합니다
 <%-- geocoder.addressSearch('<%=request.getAttribute("address1")%> <%=request.getAttribute("address2")%>', function(result, status) { --%>
-geocoder.addressSearch("<%=b.getAbbress()%>", function(result, status) {
+
+<%
+	String showAddress = "";
+	String[] arr = b.getAbbress().split(" ");
+	for (int i = 0; i < arr.length - 1; i++){
+		showAddress += arr[i] + " ";
+	}
+%>
+
+geocoder.addressSearch("<%=showAddress%>", function(result, status) {
+// 해결 방법 그냥 주소에 메인 주소 / 상세 주소 나눠두면 그냥 더 좋게 할 수 있지만 그러지 않았따...
 
     // 정상적으로 검색이 완료됐으면 
      if (status === kakao.maps.services.Status.OK) {

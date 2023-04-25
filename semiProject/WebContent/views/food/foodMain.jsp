@@ -63,6 +63,7 @@ body {
 }
 </style>
 </head>
+<%@include file="../common/menubar.jsp" %>
 <body>
 	<div class="wrap">
 		<div class="search">
@@ -79,6 +80,7 @@ body {
 			
 		</div>
 		<button id="nextbtn"> &gt </button>
+		<button id="togeterbtn">같이 먹을 사람 찾으러 가기</button>
 		<input type='hidden' name='locationbno'>
 	</div>
 	<div id="UserShowPage">
@@ -169,29 +171,28 @@ body {
             },
             success : function(data){
                 var length = data.length;
-                console.log("length " + length);
-                if(data.length == 0){
+                console.log(data);
+                if(data[0].length == 0){
                     $("#foodSlide").html("지금 준비된 음식 이 없습니다.");
                 }else{
-                	console.log("number "+number);
                     if(number > length-1){
                         number = 0;
                     }else if(number < 0){
                     	number = data.length-1;
                     }
+                    // 현재 0에는 board list 1에는 attachment list
+                    var imgadd = "<%=contextPath %>" + data[1][number].filePath + "/" + data[1][number].changeName;
                     var foodStart = "";
-                    foodStart += "메뉴 : " + data[number].foodName + "<br>주소 : " + data[number].abbress + "<br>추천수 : " + data[number].good;
-                    foodStart += "<input id='justbno' just type='hidden' value='"+ data[number].boardNo +"'>";
+                    foodStart += "메뉴 : " + data[0][number].foodName + "<br>주소 : " + data[0][number].abbress + "<br>추천수 : " + data[0][number].good;
+                    foodStart += "<input id='justbno' just type='hidden' value='"+ data[0][number].boardNo +"'>";
+                    foodStart += "<img alt='대표이미지' src='" + imgadd + "' style='width:150px; height:150px;'>";
                     $("#foodSlide").html(foodStart);
                 }
             },
             error : function(){
                 // 이건 그냥 통신 x
-                $("#foodSlide").text("this is error");
+                $("#foodSlide").text("현재 통신에 문제가 있습니다.");
                 console.log("Error");
-            },
-            complete: function(){
-            	console.log("end");
             }
         });
     };

@@ -12,14 +12,14 @@
 	<body>
 
 		<body>
-			<form action="<%=request.getContextPath()%>/rankInsert.bo" method="post">
+			<form action="<%=request.getContextPath()%>/rankInsert.bo" method="post" enctype="multipart/form-data">
 				<table>
 					<tr>
-						<th>제목</th>
+						<th>*제목</th>
 						<td><input type="text" name="Btitle" required></td>
 					</tr>
 					<tr>
-						<th>음식 카테고리</th>
+						<th>*음식 카테고리</th>
 						<td>
 							<select name="foodselect" id="foodselect" onchange="hiddenselect()">
 								<!-- 나중에 생각하기.... -->
@@ -34,11 +34,18 @@
 						</td>
 					</tr>
 					<tr>
-						<th>내용</th>
+						<th>*내용</th>
 						<td><textarea rows="10" cols="30" name="content" style="resize: none" required></textarea></td>
 					</tr>
 					<tr>
-						<th>주소</th>
+						<th>*대표 이미지</th>
+						<td>
+							<input type="file" id="insertImg" name="firstImg">
+							<img id="miri" style="display:none;">
+						</td>
+					</tr>
+					<tr>
+						<th>*주소</th>
 						<td><input type="text" id="mainAddress" name="address" required>
 							<input type="hidden" name="saveAddress" id="saveAddress">
 						</td>
@@ -56,6 +63,26 @@
 			</form>
 		</body>
 		<script>
+		
+		$("#insertImg").on("change", (e)=>{readImg(e.target)});
+		
+		function readImg(input){
+			const reader = new FileReader();
+			
+			reader.onload = e =>{
+				$("#miri").css("display", "block");
+				$("#miri").attr("src", e.target.result);
+				$("#miri").css("width", "150px").css("height", "150px");
+			}
+			try{				
+				reader.readAsDataURL(input.files[0])
+			}catch(err){
+				alert("현재 파일이 없습니다.");
+			}
+		}
+		
+		
+		
 			$(function () {
 				if ($("mainAddress").val() != 0) {
 					$("input[name=addressDetail]").attr("required", true);
@@ -99,12 +126,12 @@
 									if(data.autoJibunAddress == ""){
 										dongaddress = data.jibunAddress;
 									}else{
-										dongaddress = data.autoJibunAddress;
+										dongaddress = data.autoJibunAddress;}
 													document.getElementById("mainAddress").value = data.address;
 													document.getElementById("saveAddress").value = dongaddress;
 													document.querySelector("input[name=addressDetail]").focus(); 
-												}
-								}}).open(), { once: true } // 한번만 실행할꺼다.
+												
+								}}).open() // 한번만 실행할꺼다.
 			});
 
 			$("#iiii").on("focusin", function () {
@@ -118,7 +145,7 @@
 				// 주소-좌표 변환 객체를 생성합니다
 				var geocoder = new kakao.maps.services.Geocoder();
 				// 주소로 좌표를 검색합니다
-				var pickAddress = $("#mainAddress").val() + " " + $("#iiii").val();
+				var pickAddress = $("#mainAddress").val();
 				geocoder.addressSearch(pickAddress, function (result, status) {
 					// 정상적으로 검색이 완료됐으면 
 					if (status === kakao.maps.services.Status.OK) {

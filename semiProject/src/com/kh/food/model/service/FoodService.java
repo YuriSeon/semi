@@ -2,12 +2,15 @@ package com.kh.food.model.service;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.Board;
 import com.kh.common.model.vo.JDBCTemplate;
 import com.kh.food.model.dao.FoodDao;
 import com.kh.food.model.vo.FoodBtnCheck;
 import com.kh.food.model.vo.FoodCategory;
+import com.kh.food.model.vo.FoodTogether;
 
 public class FoodService {
 
@@ -30,22 +33,26 @@ public class FoodService {
 		
 	}
 
-	public int foodRankInsert(Board b, String newFoodName) {
+	public int foodRankInsert(Board b, String newFoodName, Attachment att) {
 		Connection conn = JDBCTemplate.getConnection();
 		int num = 0;
 		FoodCategory fc = selectFoodCategory(conn, newFoodName);
+		
+		// 여긴 음식 카테고리가 새로운 음식인지 기존 음식인지 보고 Board, Food_Board, F_category에 INSERT해주는  곳
 		if(fc == null) {
-			num = new FoodDao().foodRankInsert(conn, b, newFoodName); // 아예 새로운 음식			
+			num = new FoodDao().foodRankInsert(conn, b, newFoodName, att); // 아예 새로운 음식			
 		}else {
-			num = new FoodDao().foodRankInsert(conn, b, fc);
+			num = new FoodDao().foodRankInsert(conn, b, fc, att);
 		}
 		
+		
+		// 만약 Board, Food_Board, F_category에 INSERT가 완료되었을때 실행되는 구문
 		if(num > 0) {
+			// 우선 COMMIT
 			JDBCTemplate.commit(conn);
 		}else {
 			JDBCTemplate.rollback(conn);
 		}
-		
 		JDBCTemplate.close(conn);
 		return num;
 	}
@@ -73,12 +80,6 @@ public class FoodService {
 				result = new FoodDao().UpdateMiusButton(conn, str, bno);
 			}
 		}else {
-			// 이미 있는데 다른 버튼 클릭 했을때 이거 해야한다!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			/*
-			 * 추천 수 비추천 수 감소 했을때 트리거로 포인트 변경 하는 거 만들기
-			 * report 취소시 userCondition block_c 감소 트리거 만들기
-			 * 
-			 * */
 			result = new FoodDao().UpdatePlusButton(conn, str, bno);
 			if(result > 0) {
 				result = new FoodDao().updateBtncheck(conn, str, userno, bno);
@@ -90,17 +91,7 @@ public class FoodService {
 		}else {
 			JDBCTemplate.rollback(conn);
 		}
-		JDBCTemplate.close(conn);
-		/*
-		 * 1. selectbtnCheck로 btncheck테이블에 자료가 있는지 확인한다.
-		 * 2. 없다면 누른 버튼을 board테이블에서  +1 update 해준다. -- 트리거로 인해 포인트 변화
-		 * 3. 똑같은 버튼을 눌렀다면 btncheck테이블에서 delete해준다.
-		 * 3-1. board테이블에서 -1 update 해준다. -- 트리거 만들어서 포인트 차감
-		 * 4. 있는데 다른 버튼을 클릭 했다면
-		 * 4-1. board테이블에서 기존에 있는 버튼 -1해준다.
-		 * 4-2. board테이블에서 이번에 클릭한 버튼을 +1 해준다. -- 트리거로 인해 포인트 변화
-		 */ 
-		
+		JDBCTemplate.close(conn);	
 		return result;
 	}
 
@@ -154,4 +145,76 @@ public class FoodService {
 		return fbc;
 	}
 
+//	public ArrayList<Attachment> selectAttachment(int bno) {
+//		Connection conn = JDBCTemplate.getConnection();
+//		ArrayList<Attachment> attList = new FoodDao().selectAttachment(conn, bno);
+//		
+//		JDBCTemplate.close(conn);
+//		return attList;
+//	}
+
+	public Attachment selectFoodImg(int bno) {
+		Connection conn = JDBCTemplate.getConnection();
+		Attachment att = new FoodDao().selectAttachmentDetail(conn, bno);
+		
+		JDBCTemplate.close(conn);
+		return att;
+	}
+
+	public ArrayList<Attachment> selectLocationFoodImg(ArrayList<Integer> locationBoard_no) {
+		Connection conn = JDBCTemplate.getConnection();
+		ArrayList<Attachment> list = new FoodDao().selectLocationFoodImg(conn, locationBoard_no);
+		
+		JDBCTemplate.close(conn);
+		
+		return list;
+	}
+
+	public int foodUpdateImg(int bno, Attachment att) {
+		Connection conn = JDBCTemplate.getConnection();
+		int result = new FoodDao().foodUpdateImg(conn, bno, att);
+		if(result > 0) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+		return result;
+	}
+
+	public int deleteFoodImg(int bno) {
+		Connection conn = JDBCTemplate.getConnection();
+		int result = new FoodDao().deleteFoodImg(conn, bno);
+		if(result > 0) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		JDBCTemplate.close(conn);
+		return result;
+	}
+
+	/***
+	 * 
+	 * @return int
+	 * @apiNote Board와 Attachment 두개를 INSERT ALL로 저장
+	 */
+	public int foodToInsert(Board b,FoodTogether ft, Attachment att  ) {
+		Connection conn = JDBCTemplate.getConnection();
+		int result = new FoodDao().foodToInsert(conn, b, att, ft);
+		if(result < 0) {
+			JDBCTemplate.rollback(conn);
+			return result;
+		}
+		JDBCTemplate.commit(conn);
+		return result;
+	}
+
+	public ArrayList<HashMap<String, String>> selectFoodTogether() {
+		Connection conn = JDBCTemplate.getConnection();
+		ArrayList<HashMap<String, String>> list = new FoodDao().selectFoodTogether(conn);
+		JDBCTemplate.close(conn);
+		return list;
+	}
 }

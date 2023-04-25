@@ -1,5 +1,6 @@
 package com.kh.food.controller;
 
+import java.io.File;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,6 +31,15 @@ public class FoodRankDeleteController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int bno = Integer.parseInt(request.getParameter("bno"));
 		int result = new FoodService().deleteFoodRank(bno);
+		if(result > 0) {
+			String savePath = request.getSession().getServletContext().getRealPath("/resources/food_files/");
+			String deleteName = request.getParameter("imgname");
+			result = new FoodService().deleteFoodImg(bno);
+			if(result > 0) {				
+				File f = new File(savePath + deleteName);
+				f.delete();
+			}
+		}
 		if(result > 0) {
 			response.sendRedirect(request.getContextPath() + "/foodRanking.bo");
 		}else {

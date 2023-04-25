@@ -1,11 +1,16 @@
 package com.kh.food.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.kh.food.model.service.FoodService;
 
 /**
  * Servlet implementation class FoodTogetherBoardController
@@ -26,6 +31,11 @@ public class FoodTogetherBoardController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		ArrayList<HashMap<String, String>> list = new FoodService().selectFoodTogether();
+		
+		System.out.println(list.get(0).get("changeName"));
+		
+		request.setAttribute("list", list);
 		request.getRequestDispatcher("views/food/foodTogether.jsp").forward(request, response);
 		
 	}

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
+import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.Board;
 import com.kh.food.model.service.FoodService;
 
@@ -37,10 +38,22 @@ public class LocationFoodController extends HttpServlet {
 		String dong = location.split(" ")[2];
 		
 		ArrayList<Board> list = new FoodService().locationFood(dong);
-		System.out.println("list " + list);
+		
+		ArrayList<Integer> bnoArr = new ArrayList<>();
+		
+		for(Board b : list) {
+			bnoArr.add(b.getBoardNo());
+		}
+		
+		ArrayList<Attachment> attList = new FoodService().selectLocationFoodImg(bnoArr);
+		
+		ArrayList<Object> objList = new ArrayList<>();
+		objList.add(list);
+		objList.add(attList);
+		
 		response.setContentType("json/application; charset=UTF-8");
 		Gson gson = new Gson();
-		gson.toJson(list, response.getWriter());
+		gson.toJson(objList, response.getWriter());
 	}
 
 	/**

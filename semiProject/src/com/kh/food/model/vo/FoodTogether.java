@@ -4,12 +4,28 @@ public class FoodTogether {
 
     // BOARD_NO NUMBER NOT NULL,
     // DETAIL_TYPE NUMBER DEFAULT 2 NOT NULL,
-    // --  2¹øÀÌ ¹ä °°ÀÌ ¸ÔÀ» »ç¶÷ °Ô½ÃÆÇÀÌ´Ù.
-    // END_TIME DATE NOT NULL
+    // --  2ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ô½ï¿½ï¿½ï¿½ï¿½Ì´ï¿½.
+    // END_TIME String NOT NULL
 	
 	private int boardNo;
 	private int detailType;
+	private String mainAdress;
+	private String subAddress;
+	private int person;
 	private String endTime;
+	
+	public FoodTogether(int boardNo, int detailType, String mainAdress, String subAddress, int person, String endTime) {
+		super();
+		this.boardNo = boardNo;
+		this.detailType = detailType;
+		this.mainAdress = mainAdress;
+		this.subAddress = subAddress;
+		this.person = person;
+		this.endTime = endTime;
+	}
+	
+	
+	
 	public FoodTogether() {
 		super();
 	}
@@ -18,6 +34,26 @@ public class FoodTogether {
 		this.boardNo = boardNo;
 		this.detailType = detailType;
 		this.endTime = endTime;
+	}
+	
+	
+	public String getMainAdress() {
+		return mainAdress;
+	}
+	public void setMainAdress(String mainAdress) {
+		this.mainAdress = mainAdress;
+	}
+	public String getSubAddress() {
+		return subAddress;
+	}
+	public void setSubAddress(String subAddress) {
+		this.subAddress = subAddress;
+	}
+	public int getPerson() {
+		return person;
+	}
+	public void setPerson(int person) {
+		this.person = person;
 	}
 	public int getBoardNo() {
 		return boardNo;

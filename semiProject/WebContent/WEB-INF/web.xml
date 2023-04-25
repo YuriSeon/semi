@@ -15,4 +15,6 @@
 		<error-code>404</error-code>
 		<location>/views/common/errorPage.jsp</location>
 	</error-page>
+	
+	<!-- 500page -->
 </web-app>
