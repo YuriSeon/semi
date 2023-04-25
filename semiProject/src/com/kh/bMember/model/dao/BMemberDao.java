@@ -77,6 +77,98 @@ public class BMemberDao {
 		
 		return m;
 	}
+
+	public String idChk(Connection conn, String userName, String email) {
+		String userId = null;
+		ResultSet  rset = null;
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("idChk");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, userName);
+			pstmt.setString(2, email);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				userId = rset.getString("USERID");
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return userId;
+	}
+
+	public String pwdChk(Connection conn, String userName, String userId) {
+		String userPwd = null;
+		ResultSet rset = null;
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("pwdChk");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, userName);
+			pstmt.setString(2, userId);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				userPwd = rset.getString("USERPWD");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+
+		return userPwd;
+	}
+
+	public int insertMember(Connection conn, BMember m) {
+
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("insertMember");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, m.getUserId());
+			pstmt.setString(2, m.getUserPwd());
+			pstmt.setString(3, m.getUserName());
+			pstmt.setString(4, m.getPhone());
+			pstmt.setString(5, m.getAddress());
+			pstmt.setString(6, m.getEmail());
+			pstmt.setString(7, m.getSsn());
+			pstmt.setString(8, m.getUserNick());
+			pstmt.setString(9, m.getSchoolNo());
+			if(Integer.parseInt(m.getSchoolNo())>0) {
+				pstmt.setString(10, "Y");
+			}else {
+				pstmt.setString(10, m.getSchool_st());
+			}
+			
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
 	
 	
 

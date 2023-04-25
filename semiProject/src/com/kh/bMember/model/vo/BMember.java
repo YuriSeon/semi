@@ -26,6 +26,22 @@ public class BMember {
 	public BMember() {
 		super();
 	}
+	
+	public BMember(String userId, String userPwd, String userName, String phone, String address, String email,
+			String ssn, String userNick, String schoolNo, String school_st) {
+		super();
+		this.userId = userId;
+		this.userPwd = userPwd;
+		this.userName = userName;
+		this.phone = phone;
+		this.address = address;
+		this.email = email;
+		this.ssn = ssn;
+		this.userNick = userNick;
+		this.schoolNo = schoolNo;
+		this.school_st ="N"; //학교 인증여부 기본값
+	}
+	
 
 	 // 관리자 페이지에서 조회할때 필요해서 생성자 만들었습니다
 	public BMember(int userNo, String userId, String userName, String phone, String email, String schoolNo) {
