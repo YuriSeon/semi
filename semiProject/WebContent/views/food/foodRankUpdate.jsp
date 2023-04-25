@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" import="com.kh.board.model.vo.Attachment" %>
 	<!DOCTYPE html>
 	<html>
 
@@ -12,10 +12,14 @@
 
 	</head>
 
+<%
+	Attachment att = (Attachment)request.getAttribute("Attachment");
+%>
 	<body>
-		<form action="<%=request.getContextPath()%>/foodRankUpdate.bo" method="get">
+	<%@include file="../common/menubar.jsp" %>
+		<form action="<%=request.getContextPath()%>/foodRankUpdate.bo?bno=<%=request.getAttribute("boardNo")%>" method="post" enctype="multipart/form-data">
 			<h1>수정하기</h1>
-			<input type="hidden" name="targetBoardNo" value="<%=request.getParameter("bno")%>">
+			<input type="hidden" name="targetBoardNo" value="<%=request.getAttribute("boardNo")%>">
 			<table>
 				<tr>
 					<th>제목</th>
@@ -39,11 +43,21 @@
 								$("#foodselect option").each(function () {
 									if (this.text == "<%=food%>") {
 										$(this).prop("selected", true);
+										
 									} else {
 										$("#etc").prop("selected", true);
 										$("#hiddeninput").css("display", "block").val("<%=food%>");
 									}
 								});
+								
+								function hiddenselect() {
+									if ($("#foodselect option:selected").val() == 0) {
+										$("#hiddeninput").css("display", "block");
+									} else {
+										$("#hiddeninput").css("display", "none");
+										$("#hiddeninput").val($("#foodselect option:selected").text())
+									}
+								}
 							</script>
 					</td>
 				</tr>
@@ -51,6 +65,14 @@
 					<th>내용</th>
 					<td><textarea rows="10" cols="30" name="content" style="resize: none"
 							required><%=(String) request.getAttribute("content")%></textarea></td>
+				</tr>
+				<tr>
+					<th>음식 사진</th>
+					<td>
+							<img alt="대표이미지" src="<%=contextPath+att.getFilePath()+"/"+att.getChangeName()%>" id="mainImg" name="mainImg" style="width:150px; height:150px;">
+							<input type="file" id="reupload" name="reupload" style="display:none;">
+							<img alt="??" id="miri" style="display:none">
+					</td>
 				</tr>
 				<tr>
 					<th>주소</th>
@@ -68,6 +90,31 @@
 	</body>
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script>
+		$("#mainImg").on("click", function(){
+			$("#reupload").click();
+			
+			$("#reupload").on("change", function(e){
+				$("#reupload").css("display", "block");
+				$("#miri").css("display", "block");
+				$("#mainImg").css("display", "none");
+				
+				readImg(e.target);
+			});
+		});
+		
+		function readImg(input){
+			const reader = new FileReader();
+			
+			reader.onload = e =>{
+
+				$("#miri").attr("src", e.target.result);
+				$("#miri").css("width", "150px").css("height", "150px");
+			}
+			try{				
+				reader.readAsDataURL(input.files[0])
+			}catch(err){
+			}
+		}
 
 
 		window.onload = function () {

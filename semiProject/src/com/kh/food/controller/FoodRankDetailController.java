@@ -1,6 +1,7 @@
 package com.kh.food.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.kh.bMember.model.vo.BMember;
+import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.Board;
 import com.kh.food.model.service.FoodService;
 import com.kh.food.model.vo.FoodBtnCheck;
@@ -36,8 +38,12 @@ public class FoodRankDetailController extends HttpServlet {
 		Board b = new FoodService().selectDetail(bno);
 		
 		FoodBtnCheck fbc = new FoodService().useBtn(bno,((BMember)request.getSession().getAttribute("loginUser")).getUserNo());
+		Attachment att = new FoodService().selectFoodImg(bno);
+//		ArrayList<Attachment> attList = new FoodService().selectAttachment(bno);
 		request.setAttribute("FoodRanking", b);
 		request.setAttribute("FoodBtnCheck", fbc);
+		request.setAttribute("att", att);
+		request.setAttribute("bno", bno);
 		request.getRequestDispatcher("views/food/foodRankDetail.jsp").forward(request, response);
 	}
 
