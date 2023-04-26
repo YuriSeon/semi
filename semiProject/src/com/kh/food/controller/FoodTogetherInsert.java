@@ -90,7 +90,7 @@ public class FoodTogetherInsert extends HttpServlet {
 			att = new Attachment();
 			att.setOriginName(multiRequest.getOriginalFileName("togetherImg"));
 			att.setChangeName(multiRequest.getFilesystemName("togetherImg"));
-			att.setFilePath("/resources/food_files");
+			att.setFilePath("resources/food_files");
 			result = new FoodService().foodToInsert(b, ft, att);
 		}
 		

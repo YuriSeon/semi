@@ -171,7 +171,7 @@ body {
             },
             success : function(data){
                 var length = data.length;
-                console.log(data);
+                console.log("뭔데이터야?" + data);
                 if(data[0].length == 0){
                     $("#foodSlide").html("지금 준비된 음식 이 없습니다.");
                 }else{

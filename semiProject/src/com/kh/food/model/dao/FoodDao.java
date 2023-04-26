@@ -720,19 +720,18 @@ public class FoodDao {
 		String sql = prop.getProperty("foodToInsert");
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, b.getUn());
+			pstmt.setInt(1,    b.getUn());
 			pstmt.setString(2, b.getBoardTitle());
 			pstmt.setString(3, b.getBoardContent());
 			pstmt.setString(4, ft.getMainAdress());
 			pstmt.setString(5, ft.getSubAddress());
-			pstmt.setInt(6, ft.getPerson());
+			pstmt.setInt(6,    ft.getPerson());
 			pstmt.setString(7, ft.getEndTime());
-			pstmt.setString(8,att.getOriginName());
-			pstmt.setString(9,att.getChangeName());
+			pstmt.setString(8, att.getOriginName());
+			pstmt.setString(9, att.getChangeName());
 			pstmt.setString(10,att.getFilePath());
 			result = pstmt.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			JDBCTemplate.close(pstmt);
@@ -752,16 +751,74 @@ public class FoodDao {
 			while(rset.next()) {
 				HashMap<String, String> map = new HashMap<>();
 				map.put("changeName", rset.getString("CHANGE_NAME"));
-				map.put("boarTitle", rset.getString("BOARD_TITLE"));
-				map.put("person", rset.getString("PERSON"));
-				map.put("endTime", rset.getString("END_TIME"));
-				map.put("userId", rset.getString("USERID"));
-				map.put("filePath", rset.getString("FILE_PATH"));
+				map.put("boarTitle",  rset.getString("BOARD_TITLE"));
+				map.put("person", 	  rset.getString("PERSON"));
+				map.put("endTime",    rset.getString("END_TIME"));
+				map.put("userId",     rset.getString("USERID"));
+				map.put("filePath",   rset.getString("FILE_PATH"));
+				map.put("boardNo",    rset.getString("BOARD_NO"));
 				list.add(map);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(stmt);
 		}
 		return list;
+	}
+
+	public HashMap<String, String> foodTogetherDetail(Connection conn, int boardNo) {
+		ResultSet rset = null;
+		String sql = prop.getProperty("foodTogetherDetail");
+		HashMap<String, String> map = new HashMap<>();
+		// controller에서 비어있는지로 확인할꺼기 때문이다.
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, boardNo);
+			rset = pstmt.executeQuery();
+			if(rset.next()) {
+				// Detail view에서 필요한 것들 : 재목, 내용, 작성자 아이디, 작성자번호, 바뀐사진이름, 사진저장위치, 주소(main, sub),참여인원,종료시간
+				map.put("title",      rset.getString("BOARD_TITLE"));
+				map.put("content",    rset.getString("BOARD_CONTENT"));
+				map.put("userId",     rset.getString("USERID"));
+				map.put("userNo",     rset.getString("USERNO"));
+				map.put("changeName", rset.getString("CHANGE_NAME"));
+				map.put("filePath",   rset.getString("FILE_PATH"));
+				map.put("mainAddress",rset.getString("MAINADDRESS"));
+				map.put("subAddress", rset.getString("SUBADDRESS"));
+				map.put("person",     rset.getString("PERSON"));
+				map.put("endTime",    rset.getString("END_TIME"));
+				map.put("boardNo",    rset.getString("boardNo"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		return map;
+	}
+
+	public int deleteTogether(Connection conn, int bno) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String[] str = {"board", "att"}; // 2개다 상태 값 바꿔주자..
+		for(int i = 0; i < str.length; i++) {			
+			String sql = prop.getProperty("deleteTogether" + str[i]);
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, bno);
+				result = pstmt.executeUpdate();
+				if(result < 0) return 0;
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				JDBCTemplate.close(pstmt);
+			}
+		}
+		
+		return result;
 	}
 }

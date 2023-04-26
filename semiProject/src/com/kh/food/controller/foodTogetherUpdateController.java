@@ -1,28 +1,23 @@
 package com.kh.food.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.kh.food.model.service.FoodService;
-
 /**
- * Servlet implementation class FoodTogetherBoardController
+ * Servlet implementation class foodTogetherUpdateController
  */
-@WebServlet("/foodTogether.bo")
-public class FoodTogetherBoardController extends HttpServlet {
+@WebServlet("/foodTogetherUpdate.bo")
+public class foodTogetherUpdateController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public FoodTogetherBoardController() {
+    public foodTogetherUpdateController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,19 +26,16 @@ public class FoodTogetherBoardController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ArrayList<HashMap<String, String>> list = new FoodService().selectFoodTogether();
-		
-		request.setAttribute("list", list);
-		request.getRequestDispatcher("views/food/foodTogether.jsp").forward(request, response);
-		
+		// 수정 버큰 클릭시 이쪽으로 이동 수정 가능한 jsp파일을 보여준다..
+		int bno = Integer.parseInt(request.getParameter("bno"));
+		String title = request.getParameter("title");
+		String content = request.getParameter("content");
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
 	}
 
 }

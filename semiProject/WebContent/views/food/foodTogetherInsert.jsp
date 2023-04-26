@@ -47,8 +47,8 @@
                 
             </tr>
             <tr>
-                <th>모집 인원 (필수 아님)</th>
-                <td><input type="number" name="person"></td>
+                <th>모집 인원</th>
+                <td><input type="number" name="person" required></td>
             </tr>
             <tr>
             	<th>종료시간</th>
@@ -57,6 +57,7 @@
             <tr>
                 <th>등록하기</th>
                 <td><button type="submit">등록하기</button></td>
+                <td><button type="button" onclick="history.back();">돌아가기</button></td>
             </tr>
         </table>
     </form>
