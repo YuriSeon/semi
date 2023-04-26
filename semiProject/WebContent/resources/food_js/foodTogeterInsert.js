@@ -3,9 +3,10 @@ $(function () {
     $("#timer").on("change", function () {
         let now = new Date();
         let nowTime = Number(now.getHours()) * 60 + Number(now.getMinutes()); // 분단위로 계산
-
         let end = $(this).val().split(":");
         let endTime = Number(end[0]) * 60 + Number(end[1]);
+        console.log(nowTime);
+        console.log(endTime);
         if (nowTime > endTime + 30) {
             $("#timer").val("");
             alert("30분 이내로 종료할 수 없습니다.");
@@ -16,8 +17,7 @@ $(function () {
     $("#togetherImg").on("change", e => readImg(e.target));
     function readImg(e) {
         const reader = new FileReader();
-
-        reader.onload = e => { $("#miriImg").attr("src", e.target.result).css("width", "150px").css("height", "150px").css("display", "block"); }
+        reader.onload = e => { $("#miriImg").attr("src", e.target.result).css("width", "200px").css("height", "200px").css("display", "block"); }
         try {
             reader.readAsDataURL(e.files[0])
         } catch (err) {
@@ -27,7 +27,8 @@ $(function () {
     }
 
     // 모집 인원 조건 이벤트
-    $("input[name=person]").on("focusout", function () {
+    $("input[name=person]").on("focusout", function() {
+    	console.log($(this))
         if ($(this).val() < 1) {
             alert("모집인원의 최소는 1명입니다.");
             $(this).val("");
@@ -37,7 +38,7 @@ $(function () {
         $(this).attr("type", "text").val(personNum);
     });
 
-    $("input[name=person]").on("focusin", function () {
+    $("input[name=person]").on("focusin", function() {
         let num = $(this).val().substring(0, $(this).val().length - 1); // 저장 해두기 위해
         $(this).attr("type", "number").val(num);
 
@@ -45,47 +46,44 @@ $(function () {
 
 
     // 지도 관련 이벤트
-    document.getElementById("mainAddress").addEventListener("click", function () {
+    document.getElementById("mainAddress").addEventListener("click", ()=> {
         // 지도 오픈
-
         new daum.Postcode(
             {
-                oncomplete: function (data) { // 주소 선택시 자동으로 입력
+                oncomplete: (data) => { // 주소 선택시 자동으로 입력
                     var dongaddress = ""; // 모두 지번으로 받을꺼다.
                     if (data.autoJibunAddress == "") {
                         dongaddress = data.jibunAddress;
                     } else {
                         dongaddress = data.autoJibunAddress;
                     }
-                    document.getElementById("mainAddress").value = data.address; // 주소 넣기
+                    $("#mainAddress").val(data.address);
                     $("#maptr").css("display", "block");
-
-                    document.querySelector("input[name=subAddress]").focus(); //상세입력 포커싱
+                    $("input[name=subAddress]").focus();
                 }
             }).open();
     })
 
-    document.getElementById("mainAddress").addEventListener("keyup", function () {
-        // 지도 오픈
-        new daum.Postcode(
-            {
-                oncomplete: function (data) { //선택시 입력값 세팅
-                    var dongaddress = ""; // 모두 지번으로 받을꺼다.
-                    if (data.autoJibunAddress == "") {
-                        dongaddress = data.jibunAddress;
-                    } else {
-                        dongaddress = data.autoJibunAddress;
+    $("#mainAddress").on("keyup",()=>{
+    	new daum.Postcode(
+                {
+                    oncomplete: (data) => { //선택시 입력값 세팅
+                        var dongaddress = ""; // 모두 지번으로 받을꺼다.
+                        if (data.autoJibunAddress == "") {
+                            dongaddress = data.jibunAddress;
+                        } else {
+                            dongaddress = data.autoJibunAddress;
+                        }
+                        $("#mainAddress").val(data.address);
+                        $("#maptr").css("display", "block");
+                        $("input[name=subAddress]").focus();
                     }
-                    document.getElementById("mainAddress").value = data.address;
-                    $("#maptr").css("display", "block");
-                    document.querySelector("input[name=subAddress]").focus();
+                }).open()
+    })
 
-                }
-            }).open()
-    });
 
-    $("input[name=subAddress]").on("focusin", function () {
-        var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+    $("input[name=subAddress]").on("focusin", () => {
+    	var mapContainer = document.getElementById('map'),// 지도를 표시할 div 
             mapOption = {
                 center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
                 level: 3 // 지도의 확대 레벨

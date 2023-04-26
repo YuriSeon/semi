@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.js"
+	integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+	crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="1번게시글 " data-timeleft="60">1번 게시글</div>
+    <div id="2번게시글" data-timeleft="120">2반 게시글</div>
+    <div id="3번게시글" data-timeleft="190">3번 게시글</div>
+
+    <button id="cre">생성</button>
+
+<script>
+let num = 4;
+$("#cre").click(function(){
+        var div = $("<div></div>");
+        div.attr("id", num + "번 게시글");
+        div.html("테스트 ");
+        var ran = parseInt(Math.random()  * 3000);
+        div.attr("data-timeleft", ran);
+        $("body").append(div);
+        num++;
+})
+
+// 게시물 동적으로 생성되면 자동으로 시간 계산 할꺼임... 
+function updateElements(){
+        $.each($("[data-timeleft]"), function(){
+            const timeLeft = parseInt($(this)[0].dataset.timeleft);
+            if(timeLeft > 0){
+                $(this)[0].dataset.timeleft = timeLeft - 1;
+                $(this).text($(this).attr("id") + ":" + parseInt($(this)[0].dataset.timeleft/60) + "분" + $(this)[0].dataset.timeleft % 60 + "초") 
+            }else{
+                $(this).text("---");
+            }
+        })
+}
+
+setInterval(updateElements, 1000);
+
+
+
+
+// 변수명?.객체?.key >> 지금 객체에 해당key값이 있냐
+if (Game?.position?.x) {
+  move(x);
+}
+
+//옵셔널 체이닝 
+
+</script>
+</body>
+</html>

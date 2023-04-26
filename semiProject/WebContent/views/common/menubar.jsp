@@ -146,6 +146,14 @@
         #myModal{
         width: 200px;
     	}
+    	
+    	.exit{
+            margin-left: 1200px;
+        }
+        .exit a{
+            text-decoration: none;
+            color: darkgrey;
+        }
 
     </style>
 </head>
@@ -161,6 +169,12 @@
         
         </a>
     </div>
+    
+        <div class="exit">
+        <a href="<%=contextPath%>/logout.me">로그아웃</a>
+        <img src="resources/로그아웃_투명.png" style="width: 30px;" alt="">
+    </div>
+    
     </header>
 
     <header class="menu-bar con-min-width">

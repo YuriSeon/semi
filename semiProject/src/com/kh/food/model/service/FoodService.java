@@ -217,4 +217,23 @@ public class FoodService {
 		JDBCTemplate.close(conn);
 		return list;
 	}
+
+	public HashMap<String, String> foodTogetherDetail(int boardNo) {
+		Connection conn = JDBCTemplate.getConnection();
+		HashMap<String, String> map = new FoodDao().foodTogetherDetail(conn, boardNo);
+		JDBCTemplate.close(conn);
+		return map;
+	}
+
+	public int deleteTogether(int bno) {
+		Connection conn = JDBCTemplate.getConnection();
+		int result = new FoodDao().deleteTogether(conn, bno);
+		if(result > 0) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		JDBCTemplate.close(conn);
+		return result;
+	}
 }

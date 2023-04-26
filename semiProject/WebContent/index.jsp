@@ -150,13 +150,13 @@
 <body>
 	<script>
 	
-		var msg = "<%=alertMsg %>";
+		//var msg = "<%=alertMsg %>";
 		
-		if(msg != "null"){
-			alert(msg);
+		//if(msg != "null"){
+			//alert(msg);
 			
-			<%session.removeAttribute("alertMsg");%>
-		}
+			//<%session.removeAttribute("alertMsg");%>
+		//}
 	
 	</script>
     <div class="login_wrapper">

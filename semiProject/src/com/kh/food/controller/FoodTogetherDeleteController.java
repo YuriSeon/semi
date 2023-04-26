@@ -1,8 +1,7 @@
 package com.kh.food.controller;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,16 +12,16 @@ import javax.servlet.http.HttpServletResponse;
 import com.kh.food.model.service.FoodService;
 
 /**
- * Servlet implementation class FoodTogetherBoardController
+ * Servlet implementation class FoodTogetherDeleteController
  */
-@WebServlet("/foodTogether.bo")
-public class FoodTogetherBoardController extends HttpServlet {
+@WebServlet("/deleteTogether.bo")
+public class FoodTogetherDeleteController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public FoodTogetherBoardController() {
+    public FoodTogetherDeleteController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,10 +30,19 @@ public class FoodTogetherBoardController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ArrayList<HashMap<String, String>> list = new FoodService().selectFoodTogether();
+		// TODO Auto-generated method stub
+		// 삭제
+		int bno = Integer.parseInt(request.getParameter("bno"));
+		String changeName = request.getParameter("");
+		int result = new FoodService().deleteTogether(bno);
 		
-		request.setAttribute("list", list);
-		request.getRequestDispatcher("views/food/foodTogether.jsp").forward(request, response);
+		if(result > 0) {
+			File f = new File(request.getSession().getServletContext().getRealPath("/resources/food_files/") + request.getParameter("changeName"));
+			f.delete();
+			response.sendRedirect(request.getContextPath() + "/foodTogether.bo");
+		}else {
+			request.getRequestDispatcher("views/common/errorPage.jsp");
+		}
 		
 	}
 
@@ -43,7 +51,6 @@ public class FoodTogetherBoardController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
 	}
 
 }

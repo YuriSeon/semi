@@ -54,8 +54,8 @@ public class LoginController extends HttpServlet {
 			}else {//메인페이지 이동
 				request.getSession().setAttribute("loginUser", loginUser);
 				request.getSession().setAttribute("alertMsg", "로그인 성공");
-				//response.sendRedirect(request.getContextPath()+"/mainPage.jsp");
-				response.sendRedirect(request.getContextPath()+"/views/afterLoginMain.jsp");//나중에 바꿈
+				response.sendRedirect(request.getContextPath()+"/Main.co");
+
 			}
 		}else {
 			request.setAttribute("errorMsg", "로그인 실패하였습니다.");
