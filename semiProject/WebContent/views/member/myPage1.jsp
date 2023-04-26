@@ -1,17 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%
-	String alertMsg = (String)session.getAttribute("alertMsg");
-	String contextPath = request.getContextPath();
-%>
+    pageEncoding="UTF-8" import="com.kh.board.model.vo.*"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
 <title>마이페이지_쪽지</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+
 </head>
 <style>
     
@@ -35,6 +31,8 @@
             width: 1000px;
             height: 900px;
             margin-left: -500px;
+            font-family: 'GmarketSansMedium';
+            margin-top : -70px;
         }
 
         #head{
@@ -55,7 +53,7 @@
             flex-wrap: wrap;            
         }
 
-        .btn{
+        .btnmenu{
             width: 140px;
             height: 40px;
             margin-top: 20px;
@@ -68,7 +66,7 @@
             font-family: 'GmarketSansMedium';          
         }
 
-        .btn:hover{
+        .btnmenu:hover{
             background-color:#fff;
             color:deepskyblue;
             border: 1px solid deepskyblue;
@@ -124,7 +122,7 @@
             color: darkgrey;
         }
 
-        #myModal{    
+        #myModal1{    
             position: fixed;
             width: 600px;
             height: 300px;
@@ -135,9 +133,10 @@
             border: 1px solid #888;
             border-radius: 10px;
             color: #888;
+            font-family: 'GmarketSansMedium';
         }
 
-        .modal-header{
+        .modal-header1{
             background-color: deepskyblue;
             color: #fefefe;
         }
@@ -147,7 +146,7 @@
             float: right;
             font-size: 13px;           
         }
-        #modal-content{
+        #modal-content1{
             font-size: 15px;
         }
 
@@ -170,18 +169,30 @@
             color: #fff;
             background-color: deepskyblue;
         }
+        
+        .modal-footer1>button{
+        	background-color: deepskyblue;
+        	width:80px;
+        	height:30px;
+        	border-radius: 5px;
+            border-style: none;
+            cursor: pointer;
+        	float:right;
+        	color: #fefefe;
+        	text-align:center;
+        }
 
    
 </style>
 <body>
-
+	<%@ include file ="../common/menubar.jsp"%> 
     <div class="wrapper">
         <div id="head">마이 페이지</div>
         <hr>
         <div id="button-area">
-            <button class="btn" onclick="location.href='<%=contextPath %>/myPage1.me'" id="message">내 쪽지함</button>
-            <button class="btn" onclick="location.href='<%=contextPath %>/myPage2.me'" id="myinfo">프로필 수정</button>
-            <button class="btn" onclick="location.href='<%=contextPath %>/myPage3.me'" id="like">좋아요</button>
+            <button class="btnmenu" onclick="location.href='<%=contextPath %>/myPage1.me'" id="message">내 쪽지함</button>
+            <button class="btnmenu" onclick="location.href='<%=contextPath %>/myPage2.me'" id="myinfo">프로필 수정</button>
+            <button class="btnmenu" onclick="location.href='<%=contextPath %>/myPage3.me'" id="like">좋아요</button>
         </div>
 
         <div class="message_area" id="message_area">
@@ -264,10 +275,10 @@
     </div>
 
 
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModal1Label" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
+            <div class="modal-content1">
+                <div class="modal-header1">
                     <h4 class="modal-title" id="myModalLabel">브레이크타임_메세지</h4>
                 </div>
                 <div class="modal-body">
@@ -275,8 +286,8 @@
                     <div id="modal-time">전송 시간 : 10:45 AM</div>
                     <div id="modal-content">내용 : </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>                    
+                <div class="modal-footer1">
+                    <button type="button" data-dismiss="modal">닫기</button>                    
                 </div>
             </div>
         </div>
@@ -287,9 +298,6 @@
     <script>
         $(document).ready(function(){
         	
-        	<%if(request.getSession().getAttribute("alertMsg")!=null){%>
-        	alert("<%=request.getSession().getAttribute("alertMsg")%>");
-        	<%}%>
         	
             $('#message_area').on('click', '.message_box', function(event){
 
@@ -300,15 +308,15 @@
 
                 $('#modal-name').text(name);
                 $('#modal-time').text(time);
-                $('#modal-content').html(content);
+                $('#modal-content1').html(content);
 
-                $('#myModal').modal('show');
+                $('#myModal1').modal('show');
         
 
-                $('#myModal').on('hidden.bs.modal', function (e) {
+                $('#myModal1').on('hidden.bs.modal', function (e) {
                     $(this).find('#modal-name').text('');
                     $(this).find('#modal-time').text('');
-                    $(this).find('#modal-content').html('');
+                    $(this).find('#modal-content1').html('');
                     $(this).modal('hide');
         });
     });
@@ -316,8 +324,8 @@
     
     
         $(document).ready(function() {
-            $('.modal-footer button').on('click', function() {
-                $('#myModal').modal('hide');
+            $('.modal-footer1 button').on('click', function() {
+                $('#myModal1').modal('hide');
             });
         });
     
