@@ -144,29 +144,19 @@
             margin-left: -380px;
         }
 
-    </style>
-    <script>
-		function login() {
-			var userId = document.getElementById("userId").value;
-			var password = document.getElementById("userPwd").value;
-
-			if (userId === "admin" && password === "1234") {
-				window.location.href = "";
-			}
-		}
-	</script>    
+    </style>  
 
 </head>
 <body>
 	<script>
 	
-		var msg = "<%=alertMsg %>";
+		//var msg = "<%=alertMsg %>";
 		
-		if(msg != "null"){
-			alert(msg);
+		//if(msg != "null"){
+			//alert(msg);
 			
-			<%session.removeAttribute("alertMsg");%>
-		}
+			//<%session.removeAttribute("alertMsg");%>
+		//}
 	
 	</script>
     <div class="login_wrapper">
@@ -185,8 +175,8 @@
                 <input type="password" id="login_pwd" class="login_text" name="userPwd" placeholder="비밀번호를 입력해주세요" required>
             	<button id="login_btn" class="login_btn" type="submit" onclick="login();">로그인</button>
             </form>
-            <a class="login_bottom" href="<%=contextPath%>/views/member/memberIdpwdChk.jsp">아이디 또는 비밀번호를 잊으셨나요?</a>
-            <p id="login_last">브레이크타임이 처음이신가요?  <a class="join" href="<%=contextPath%>/views/member/memberEnrollForm.jsp">회원가입</a> </p>
+            <a class="login_bottom" href="<%=contextPath%>/find.me">아이디 또는 비밀번호를 잊으셨나요?</a>
+            <p id="login_last">브레이크타임이 처음이신가요?  <a class="join" href="<%=contextPath%>/enrollForm.me">회원가입</a> </p>
         
     </div>
 

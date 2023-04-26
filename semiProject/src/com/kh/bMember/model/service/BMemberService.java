@@ -20,4 +20,47 @@ public class BMemberService {
 		
 	}
 
+	public String idChk(String userName, String email) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		String userId = new BMemberDao().idChk(conn,userName,email);
+		
+		JDBCTemplate.close(conn);
+		
+		return userId;
+	}
+
+	public String pwdChk(String userName, String userId) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		String userPwd = new BMemberDao().pwdChk(conn,userName,userId);
+		
+		JDBCTemplate.close(conn);
+		
+		return userPwd;
+	}
+
+	public int insertMemer(BMember m) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = new BMemberDao().insertMember(conn,m);
+		
+		if(result>0) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		return result;
+	}
+
+	public int checkId(String checkId) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int count = new BMemberDao().checkId(conn, checkId);
+		
+		JDBCTemplate.close(conn);
+		
+		return count;
+	}
+
 }

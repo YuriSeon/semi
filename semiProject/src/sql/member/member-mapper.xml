@@ -7,4 +7,29 @@
 		AND USERPWD = ?
 		AND STATUS = 'Y'
 	</entry>
+	<entry key="idChk">
+		SELECT USERID
+		FROM BMEMBER
+		WHERE USERNAME=?
+		AND EMAIL =?
+	</entry>
+	<entry key="pwdChk">
+		SELECT USERPWD
+		FROM BMEMBER
+		WHERE USERNAME = ?
+		AND USERID = ?
+	</entry>
+	<entry key="insertMember">
+    INSERT INTO BMEMBER (
+        USERNO, USERID, USERPWD, USERNAME, PHONE, ADDRESS, EMAIL,
+        SSN,USER_NICK, SCHOOL_NO,SCHOOL_ST
+    ) VALUES (
+        SEQ_USERNO.NEXTVAL,?,?,?,?,?,?,?,?,?,?
+    )    
+	</entry>
+	<entry key="checkId">
+		SELECT COUNT(*) "COUNT"
+		FROM BMEMBER
+		WHERE USERID = ?
+	</entry>	
 </properties>

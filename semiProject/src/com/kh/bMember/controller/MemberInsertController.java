@@ -1,7 +1,6 @@
 package com.kh.bMember.controller;
 
 import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,16 +11,16 @@ import com.kh.bMember.model.service.BMemberService;
 import com.kh.bMember.model.vo.BMember;
 
 /**
- * Servlet implementation class LoginController
+ * Servlet implementation class MemberInsertController
  */
-@WebServlet("/login.me")
-public class LoginController extends HttpServlet {
+@WebServlet("/insert.me")
+public class MemberInsertController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LoginController() {
+    public MemberInsertController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -30,36 +29,41 @@ public class LoginController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("index.jsp").forward(request, response);
+		// TODO Auto-generated method stub
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		request.setCharacterEncoding("UTF-8");
 		
 		String userId = request.getParameter("userId");
 		String userPwd = request.getParameter("userPwd");
+		String userName = request.getParameter("userName");
+		String phone = request.getParameter("phone");
+		String address = request.getParameter("address");
+		String email = request.getParameter("email");
+		String ssn = request.getParameter("ssn");
+		String userNick = request.getParameter("userNick");
+		String schoolNo = null;
+		String schoolNoParam = request.getParameter("schoolNo");
+		String school_st = "";
 		
-		BMember loginUser = new BMemberService().loginMember(userId,userPwd);
+		if(schoolNoParam != null) {
+			schoolNo = schoolNoParam;			
+		}
 		
-		if(loginUser != null) {
-			
-			if(loginUser.getPower().equals(("A"))) {//관리자페이지 이동
-				request.getSession().setAttribute("loginUser", loginUser);
-				request.getSession().setAttribute("alertMsg", "관리자 페이지로 이동합니다.");
-				response.sendRedirect(request.getContextPath()+"/views/common/admin.jsp");
-			}else {//메인페이지 이동
-				request.getSession().setAttribute("loginUser", loginUser);
-				request.getSession().setAttribute("alertMsg", "로그인 성공");
-				response.sendRedirect(request.getContextPath()+"/Main.co");
-			}
+		BMember m = new BMember(userId,userPwd,userName,phone,address,email,ssn,userNick,schoolNo,school_st);
+		
+		int result = new BMemberService().insertMemer(m);
+		if(result>0) {
+			request.getSession().setAttribute("alertMsg", "환영합니다!");
+			response.sendRedirect(request.getContextPath()+"/Main.co");
 		}else {
-			request.setAttribute("errorMsg", "로그인 실패하였습니다.");
+			request.setAttribute("errorMsg", "가입 실패");
 			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
-
 		}
 	}
 
