@@ -176,7 +176,7 @@
             	<button id="login_btn" class="login_btn" type="submit" onclick="login();">로그인</button>
             </form>
             <a class="login_bottom" href="<%=contextPath%>/find.me">아이디 또는 비밀번호를 잊으셨나요?</a>
-            <p id="login_last">브레이크타임이 처음이신가요?  <a class="join" href="<%=contextPath%>/views/member/memberEnrollForm.jsp">회원가입</a> </p>
+            <p id="login_last">브레이크타임이 처음이신가요?  <a class="join" href="<%=contextPath%>/enrollForm.me">회원가입</a> </p>
         
     </div>
 

@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%
 	String alertMsg = (String)session.getAttribute("alertMsg");
+	String contextPath = request.getContextPath();
 %>
 <!DOCTYPE html>
 <html>
@@ -173,17 +174,14 @@
    
 </style>
 <body>
-<%
-System.out.println(request.getSession().getAttribute("alertMsg"));
-%>
 
     <div class="wrapper">
         <div id="head">마이 페이지</div>
         <hr>
         <div id="button-area">
-            <button class="btn" id="message">내 쪽지함</button>
-            <button class="btn" id="myinfo">프로필 수정</button>
-            <button class="btn" id="like">좋아요</button>
+            <button class="btn" onclick="location.href='<%=contextPath %>/myPage1.me'" id="message">내 쪽지함</button>
+            <button class="btn" onclick="location.href='<%=contextPath %>/myPage2.me'" id="myinfo">프로필 수정</button>
+            <button class="btn" onclick="location.href='<%=contextPath %>/myPage3.me'" id="like">좋아요</button>
         </div>
 
         <div class="message_area" id="message_area">

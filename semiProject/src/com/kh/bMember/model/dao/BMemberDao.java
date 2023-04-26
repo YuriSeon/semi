@@ -169,6 +169,33 @@ public class BMemberDao {
 		
 		return result;
 	}
+
+	public int checkId(Connection conn, String checkId) {
+
+		int count = 0;
+		ResultSet rset = null;
+		PreparedStatement pstmt = null;
+		
+		String sql =prop.getProperty("checkId");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, checkId);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				count = rset.getInt("COUNT");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		return count;
+	}
 	
 	
 
