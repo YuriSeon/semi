@@ -53,4 +53,14 @@ public class BMemberService {
 		return result;
 	}
 
+	public int checkId(String checkId) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int count = new BMemberDao().checkId(conn, checkId);
+		
+		JDBCTemplate.close(conn);
+		
+		return count;
+	}
+
 }

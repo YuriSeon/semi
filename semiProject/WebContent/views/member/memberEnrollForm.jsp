@@ -200,6 +200,43 @@
     </div>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script>
+    
+    function idCheck(){
+		
+    	var $checkId = $("#join_form input[name=userId]");
+		
+		$.ajax({
+			type : "GET",
+			url : "idCheck.do",
+			data : {
+				checkId : $checkId.val()
+			},
+			success : function(result){
+				if(result == "NNNNN"){
+					alert("이미 존재하거나 탈퇴한 유저의 아이디입니다.");
+	                $checkId.val("").focus();
+	                $condition1.html("사용 불가한 아이디입니다.");
+	                $condition1.css("color","red");
+	                return;
+				}else{
+					if(confirm("사용 가능한 아이디입니다. 사용하시겠습니까?")){
+						$("#enroll-form button[type=submit]").removeAttr("disabled");
+						$checkId.attr("readonly", true);
+						$condition1.html("사용 가능한 아이디입니다.");
+						$condition1.css("color","deepskyblue")
+					}else{
+						$checkId.val("").focus();
+	
+					}
+				}
+			},
+			error : function() {
+				console.log("요청 실패");
+			}
+		});
+	}
+    
+    
 
         
         function validate(){
@@ -236,7 +273,6 @@
                 }else{
                     condition1.innerHTML = "사용 가능한 아이디입니다!";
                     condition1.style.color = "deepskyblue";
-                    inputId.focus();
                 }
                 });
 
@@ -246,7 +282,7 @@
                     if(!regExp2.test(inputPwd.value)){
                         condition2.innerHTML = "비밀번호 형식이 올바르지 않습니다.";
                         condition2.style.color = "red"
-                        inputPwd.focus();
+                        //inputPwd.focus();
                     
                     }else{
                         condition2.innerHTML="✔";
@@ -463,39 +499,7 @@
         }).open();
         }
     
-    	function idCheck(){
-    		
-    		var $checkId = $("#join_form input[name=userId]");
-    		
-    		$.ajax({
-    			type : "GET",
-    			url : "idCheck.do",
-    			data : {
-    				checkId : $checkId.val()
-    			},
-    			success : function(result){
-    				if(result == "NNNNN"){
-    					alert("이미 존재하거나 탈퇴한 유저의 아이디입니다.");
-    					$checkId.focus();
-    				}else{
-    					if(confirm("사용 가능한 아이디입니다. 사용하시겠습니까?")){
-    						$("#enroll-form button[type=submit]").removeAttr("disabled");
-    						$checkId.attr("readonly", true);
-    					}else{
-    						$checkId.focus();
-    					}
-    				}
-    			},
-    			error : function() {
-    				console.log("요청 실패");
-    			}
-    		});
-    	}
-
-    
-
-
-        
+      
            
     </script>
 </body>
