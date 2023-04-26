@@ -132,14 +132,14 @@ body{
 
 <section class="hero-section">
   <div class="card-grid">
-    <a class="card" href="????????????????????????????????????????????">
+    <a class="card" href="<%=request.getContextPath()%>/myPage1.me">
       <div class="card__background" style="background-image: url(https://images.unsplash.com/photo-1557177324-56c542165309?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80)"></div>
       <div class="card__content">
         <p class="card__category">MyPage</p>
         <h3 class="card__heading">마이페이지</h3>
       </div>
     </a>
-    <a class="card" href="<%=request.getContextPath()%>/myPage1.jsp">
+    <a class="card" href="#">
       <div class="card__background" style="background-image: url(https://images.unsplash.com/photo-1557187666-4fd70cf76254?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60)"></div>
       <div class="card__content">
         <p class="card__category">영상게시판</p>
