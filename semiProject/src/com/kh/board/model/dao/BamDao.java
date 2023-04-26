@@ -13,6 +13,7 @@ import java.util.Properties;
 import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.BamCategory;
 import com.kh.board.model.vo.Board;
+import com.kh.board.model.vo.BtnCheck;
 import com.kh.board.model.vo.Category;
 import com.kh.board.model.vo.Reply;
 import com.kh.common.model.vo.JDBCTemplate;
@@ -89,7 +90,7 @@ public class BamDao {
 								,rset.getString("BOARD_CONTENT")
 								,rset.getDate("CREATE_DATE")
 								,rset.getInt("GOOD")
-								,rset.getInt("REPORT")
+								,rset.getString("FILE_NO")
 								,rset.getInt("COUNT")));
 			}
 			
@@ -128,7 +129,7 @@ public class BamDao {
 									,rset.getString("BOARD_CONTENT")
 									,rset.getDate("CREATE_DATE")
 									,rset.getInt("GOOD")
-									,rset.getInt("REPORT")
+									,rset.getString("FILE_NO")
 									,rset.getInt("COUNT")));
 			}
 			
@@ -602,7 +603,7 @@ public class BamDao {
 									,rset.getString("BOARD_CONTENT")
 									,rset.getDate("CREATE_DATE")
 									,rset.getInt("GOOD")
-									,rset.getInt("REPORT")
+									,rset.getString("FILE_NO")
 									,rset.getInt("COUNT")));
 				}
 				
@@ -638,6 +639,228 @@ public class BamDao {
 				JDBCTemplate.close(pstmt);
 			}
 			return result;
+		}
+
+		//중복방지 테이블 셀렉트
+		public BtnCheck selectBtnCheck(Connection conn, int boardNo, int userNo) {
+			BtnCheck bc = null;
+			PreparedStatement pstmt = null;
+			ResultSet rset = null;
+			
+			String sql = prop.getProperty("selectBtnCheck");
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, boardNo);
+				pstmt.setInt(2, userNo);
+				
+				rset=pstmt.executeQuery();
+				
+				if(rset.next()) {
+					bc=new BtnCheck(rset.getInt("BOARD_NO")
+									,rset.getInt("USERNO")
+									,rset.getString("BTNTYPE"));
+				}
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(rset);
+				JDBCTemplate.close(pstmt);
+			}
+			
+			return bc;
+			
+		}
+
+		//게시글 추천수 증가
+		public int updateBamGood(Connection conn,int boardNo) {
+			int result = 0;
+			PreparedStatement pstmt = null;
+			String sql = prop.getProperty("updateBamGood");
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, boardNo);
+				
+				result=pstmt.executeUpdate();
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(pstmt);
+			}
+			return result;
+		}
+
+		//추천 취소(게시글 추천수 감소)
+		public int cancelBamGood(Connection conn, int boardNo) {
+			int result = 0;
+			PreparedStatement pstmt = null;
+			String sql = prop.getProperty("cancelBamGood");
+			
+			try {
+				pstmt=conn.prepareStatement(sql);
+				pstmt.setInt(1, boardNo);
+				
+				result=pstmt.executeUpdate();
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(pstmt);
+			}
+			
+			
+			return result;
+		}
+
+		//중복방지 테이블(BTNCHECK)에 추천 인서트
+		public int insertBamGood(Connection conn, int boardNo, int userNo) {
+			int result = 0;
+			PreparedStatement pstmt = null;
+			
+			String sql = prop.getProperty("insertBamGood");
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, boardNo);
+				pstmt.setInt(2, userNo);
+				result=pstmt.executeUpdate();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(pstmt);
+			}
+			
+			
+			return result;
+		}
+
+		//중복방지 테이블에서 삭제
+		public int deleteBtnCheck(Connection conn, int boardNo, int userNo) {
+			int result = 0;
+			PreparedStatement pstmt = null;
+			
+			String sql = prop.getProperty("deleteBtnCheck");
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, boardNo);
+				pstmt.setInt(2, userNo);
+				result=pstmt.executeUpdate();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(pstmt);
+			}
+			
+			return result;
+		}
+
+		//BTNTYPE에 추천만 삭제
+		public int deleteGoodBtnCheck(Connection conn, int boardNo, int userNo) {
+			int result = 0;
+			PreparedStatement pstmt = null;
+			
+			String sql = prop.getProperty("deleteGoodBtnCheck");
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, boardNo);
+				pstmt.setInt(2, userNo);
+				result=pstmt.executeUpdate();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(pstmt);
+			}
+			
+			return result;
+		}
+
+		//BTNTYPE에 추천 추가
+		public int updateGoodBtnCheck(Connection conn, int boardNo, int userNo) {
+			int result = 0;
+			PreparedStatement pstmt = null;
+			
+			String sql = prop.getProperty("updateGoodBtnCheck");
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, boardNo);
+				pstmt.setInt(2, userNo);
+				result=pstmt.executeUpdate();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(pstmt);
+			}
+			
+			return result;
+		}
+
+		//BTNTYPE에 신고 추가
+		public int updateReportBtnCheck(Connection conn, int boardNo, int userNo) {
+			int result = 0;
+			PreparedStatement pstmt = null;
+			
+			String sql = prop.getProperty("updateReportBtnCheck");
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, boardNo);
+				pstmt.setInt(2, userNo);
+				result=pstmt.executeUpdate();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(pstmt);
+			}
+			
+			return result;
+		}
+
+		//댓글 작성자 회원 번호 조회
+		public Reply selectReply(Connection conn, int replyNo) {
+			Reply r = null;
+			PreparedStatement pstmt = null;
+			ResultSet rset = null;
+			
+			String sql = prop.getProperty("selectReply");
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1,replyNo);
+				rset = pstmt.executeQuery();
+				
+				if(rset.next()) {
+					r=new Reply(rset.getInt("REPLY_NO")
+							,rset.getInt("BOARD_NO")
+							,rset.getString("USERNO")
+							,rset.getString("REPLY_CONTENT")
+							,rset.getDate("CREATE_DATE"));
+				}
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(rset);
+				JDBCTemplate.close(pstmt);
+			}
+			
+			
+			
+			return r;
 		}
 
 

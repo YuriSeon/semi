@@ -17,6 +17,9 @@
 	#detail-area>tbody th{
 		border:1px solid black;
 	}
+	#reply-area td{
+		border:1px solid black;
+	}
 </style>
 </head>
 <body>	
@@ -31,7 +34,7 @@
                     <th width="350"><%=b.getBoardTitle() %></th>
                     
                     <td><%=b.getCount() %></td>
-                    <td><%=b.getGood() %></td>
+                    <td id="goodCount"><%=b.getGood() %></td>
                     <td><%=b.getCreateDate() %></td>
                 </tr>
             </thead>
@@ -62,7 +65,9 @@
          </table>
          <br>
         <br>
-        	<button onclick="">추천하기</button>
+        	<div align="center">
+	        	<button id="good" onclick="boardGood();">추천</button>
+        	</div>
         <%if(loginUser != null && loginUser.getUserNo()==Integer.parseInt(b.getBoardWriter())||loginUser.getUserNo()==1){ %>
 	        <div align="center">
 	        	<button onclick="location.href='<%=contextPath%>/bamupdate.bo?bno=<%=b.getBoardNo()%>'" class="btn">수정하기</button>
@@ -101,60 +106,57 @@
             <br><br><br>
             
             <script>
-            	$(function(){
+            	$(function(){ //페이지 열자마자 댓글 불러오기
+            		btncheck();
             		selectReply();
             	});
             
-                function replyInsert(){
+                function replyInsert(){//댓글 작성
                     $.ajax({
                         url : "bamreply.bo",
                         type:"post",
                         data:{
-                            con:$("#recon").val(),
-                            bno:<%=b.getBoardNo()%>
+                            con:$("#recon").val(), //댓글 내용
+                            bno:<%=b.getBoardNo()%> //게시글 번호
                         },
                         success :function(result){
-                            if(result>0){
+                            if(result>0){ //작성 성공
                             	
                             	selectReply();
                             	$("#recon").val("");
-                            }else{
+                            }else{ //작성 실패
 	                        	alert("작성오류");
                             }
                         },
-                        error :function(){
+                        error :function(){ //통신 실패
                             alert("오류")
                         }
                     });
                 }
                 
-                function selectReply(){
+                function selectReply(){ //댓글 불러오기
                 	$.ajax({
                 		url : "bamreply.bo",
-                		data :{ bno:<%=b.getBoardNo()%>},
-                		success : function(rlist){
-                			var boardWriter = <%=b.getBoardWriter()%>
-                			var result = "";
-                			var replyWriter;
-                			var count = 1;
-                			for(var i=0; i<rlist.length; i++){
+                		data :{ bno:<%=b.getBoardNo()%>},  //게시글 번호
+                		success : function(rlist){ //불러오기 성공
+                			var boardWriter = <%=b.getBoardWriter()%>; //게시글 작성자 판별하기 위한 게시글 작성자번호
+                			var result = ""; 	//댓글 출력위해 빈문자열
+                			var replyWriter;	//댓글 작성자 '익명' 담기위한 변수
+                			var count = 1;		//익명뒤에 붙일 숫자 (아마 지울예정)
+                			for(var i=0; i<rlist.length; i++){ //댓글 작성자 익명 붙이기
                 				replyWriter = "익명";
-                				if(rlist[i].replyWriter==boardWriter){
+                				if(rlist[i].replyWriter==boardWriter){ //댓글작성자 = 게시글 작성자
                 					replyWriter +="(작성자)";
-                				}else{
+                				}else{ //게시글 작성자가 아닌 댓글 작성자한테 번호 붙이기
                 					replyWriter +=count;
                 					count++;
                 				}
                 				
                 				result+="<tr>"
-                                		+"<td style="+"text-align: center;"+">"+replyWriter+"</td>"
-                                		+"<td colspan="+2+" rowspan="+2+" width="+400+">"+rlist[i].replyContent+"</td>"
-                            			+"</tr>"
-                            			+"<tr>"
                                 		+"<td style="+"text-align: center;"+">"+rlist[i].createDate+"</td>"
-                                		//+"<"+"%if(loginUser != null && loginUser.getUserNo()==Integer.parseInt("+rlist[i].replyWriter+")||loginUser.getUserNo()==1){ %>"
-                                		+"<td rowspan="+2+"><button onclick='"+"deleteReply(this);'"+"value='"+rlist[i].replyNo+"'id='deleteRe'>삭제</button></td>"
-                                		//+"<"+"%}%>"
+                                		+"<td style="+"text-align: center;"+">"+replyWriter+"</td>"
+                                		+"<td colspan="+1+" rowspan="+1+" width="+400+">"+rlist[i].replyContent+"</td>"
+                                		+"<td rowspan="+1+"><button onclick='"+"deleteReply(this);'"+"value='"+rlist[i].replyNo+"'id='deleteRe'>삭제</button></td>"
                             			+"</tr>";
                 			}
                 			
@@ -165,9 +167,69 @@
                 		}
                 	});
                 };
-                function deleteReply(d){
-                	location.href="<%=contextPath%>/deletereply.bo?replyNo="+$(d).attr("value")+"&bno="+<%=b.getBoardNo()%>;
-                	
+                
+                function deleteReply(d){ //댓글삭제하기
+                	//location.href="<--%=contextPath%>/deletereply.bo?replyNo="+$(d).attr("value")+"&bno="+<--%=b.getBoardNo()%>;
+                	$.ajax({
+                		url: "deletereply.bo",
+                		data:{
+                			replyNo:$(d).attr("value"),
+                			bno:<%=b.getBoardNo()%>,
+                			userNo:<%=loginUser.getUserNo()%>
+                		},
+                		success:function(result){
+                				if(result>0){//댓글 삭제 성공
+                					alert("댓글 삭제 완료");
+                					selectReply();
+                				}else{//댓글 삭제 실패
+                					alert("자신이 쓴 댓글만 지울수 있습니다.");
+                				}
+                		},
+                		error: function(){
+                			console.log("통신실패");
+                		}
+                	})
+                }
+                function boardGood(){//게시글 추천하기
+                	$.ajax({
+                		url:"boardGood.bo",
+                		data : {
+                			bno:<%=b.getBoardNo()%>,
+                			userNo:<%=loginUser.getUserNo()%>
+                		},
+                		type : "post",
+                		success: function(result){
+                			if(result>0){//추천 or 추천취소 성공
+                				btncheck();
+                			}else{//추천 실패?
+                				alert("알수없는 오류");
+                				console.log("설마");
+                			}
+                		},
+                		error: function(){
+                			console.log("추천실패");
+                		}
+                	})
+                }
+                function btncheck(){//추천 눌렀엇는지 버튼이벤트+추천수 변경
+                	$.ajax({
+                		url:"boardGood.bo",
+                		data :{
+                			bno:<%=b.getBoardNo()%>,
+                			userNo:<%=loginUser.getUserNo()%>
+                		},
+                		success : function(arr){
+                			$("#goodCount").html(arr[1]);
+                			if(arr[0]>0){
+                				$("#good").css("border-color","red");
+                			}else{
+                				$("#good").css("border-color","black");
+                			}
+                		},
+                		error : function (){
+                			console.log("실패");
+                		}
+                	})
                 }
             </script>
       	

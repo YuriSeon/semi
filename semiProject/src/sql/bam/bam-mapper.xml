@@ -23,23 +23,25 @@
 		 FROM(SELECT BOARD_NO,USERNO
 		 			,DECODE(BAM_CATEGORY_NO, '1', '일반', '2', '질문', '3', '연애','4','공지') "BAM_CATEGORY_NO",BOARD_TITLE
 		 			,BOARD_CONTENT,CREATE_DATE
-		 			,GOOD,REPORT
-		 			,COUNT
-                FROM BOARD 
+		 			,GOOD,COUNT
+		 			,FILE_NO
+                FROM BOARD B
+                LEFT JOIN ATTACHMENT USING(BOARD_NO)
                 JOIN CATEGORY_BAM USING (BOARD_NO)
                 WHERE BOARD_TYPE=2
-                AND STATUS = 'Y'
+                AND B.STATUS = 'Y'
                 AND TYPE_NO = 0
                 ORDER BY BOARD_NO DESC) A)
 	WHERE RNUM BETWEEN ? AND ?	  
 	</entry>
 	<entry key="selectNoticeList">
 	<!-- 공지사항 조회 -->
-	SELECT BOARD_NO,DECODE(BAM_CATEGORY_NO, '1', '일반', '2', '질문', '3', '연애','4','공지') "BAM_CATEGORY_NO",USERNO,BOARD_TITLE,BOARD_CONTENT,CREATE_DATE,GOOD,REPORT,COUNT
-	FROM BOARD
+	SELECT BOARD_NO,DECODE(BAM_CATEGORY_NO, '1', '일반', '2', '질문', '3', '연애','4','공지') "BAM_CATEGORY_NO",USERNO,BOARD_TITLE,BOARD_CONTENT,CREATE_DATE,GOOD,FILE_NO,COUNT
+	FROM BOARD B
 	JOIN CATEGORY_BAM USING (BOARD_NO)
+	LEFT JOIN ATTACHMENT USING (BOARD_NO)
 	WHERE BOARD_TYPE =2
-	AND STATUS = 'Y'
+	AND B.STATUS = 'Y'
 	AND TYPE_NO = 1
 	ORDER BY BOARD_NO DESC
 	</entry>
@@ -50,12 +52,13 @@
 		 FROM(SELECT BOARD_NO,USERNO
 		 			,DECODE(BAM_CATEGORY_NO, '1', '일반', '2', '질문', '3', '연애','4','공지') "BAM_CATEGORY_NO",BOARD_TITLE
 		 			,BOARD_CONTENT,CREATE_DATE
-		 			,GOOD,REPORT
+		 			,GOOD,FILE_NO
 		 			,COUNT
-                FROM BOARD 
+                FROM BOARD B
                 JOIN CATEGORY_BAM USING (BOARD_NO)
+                LEFT JOIN ATTACHMENT USING (BOARD_NO)
                 WHERE BOARD_TYPE=2
-                AND STATUS = 'Y'
+                AND B.STATUS = 'Y'
                 AND TYPE_NO = 0
                 AND BOARD_TITLE LIKE ?
                 ORDER BY BOARD_NO DESC) A)
@@ -145,10 +148,17 @@
 	VALUES (SEQ_RNO.NEXTVAL,?,?,?)
 	</entry>
 	<entry key="selectReplyList">
-	<!-- 한 게시글 댓글 조회 -->
+	<!-- 한 게시글 댓글들 조회 -->
 	SELECT REPLY_NO,BOARD_NO,USERNO,REPLY_CONTENT,CREATE_DATE
 	FROM REPLY
 	WHERE BOARD_NO=?
+	AND STATUS = 'Y'
+	</entry>
+	<entry key="selectReply">
+	<!-- 댓글 한개 정보 조회 -->
+	SELECT REPLY_NO,BOARD_NO,USERNO,REPLY_CONTENT,CREATE_DATE
+	FROM REPLY
+	WHERE REPLY_NO = ?
 	AND STATUS = 'Y'
 	</entry>
 	<entry key="deleteReply">
@@ -172,6 +182,57 @@
 	<!-- 신고 중복방지 테이블 인서트 -->
 	INSERT INTO BTNCHECK (BOARD_NO,USERNO,BTNTYPE)
 	VALUES (?,?,'신고')
+	</entry>
+	<entry key="selectBtnCheck">
+	<!-- 하려는 행동이 중복인지 -->
+	SELECT BOARD_NO,USERNO,BTNTYPE
+	FROM BTNCHECK
+	WHERE BOARD_NO = ?
+	AND USERNO = ?
+	</entry>
+	<entry key="updateBamGood">
+	<!-- 게시글 조회수 증가 -->
+	UPDATE BOARD
+	SET GOOD = GOOD+1
+	WHERE BOARD_NO = ?
+	AND STATUS = 'Y'
+	</entry>
+	<entry key="cancelBamGood">
+	UPDATE BOARD
+	SET GOOD = GOOD-1
+	WHERE BOARD_NO = ?
+	AND STATUS = 'Y'
+	</entry>
+	<entry key="insertBamGood">
+	<!-- 중복방지 테이블에 추천했다고 인서트 -->
+	INSERT INTO BTNCHECK VALUES(?,?,'추천')
+	</entry>
+	<entry key="deleteBtnCheck">
+	<!-- 추천 취소되서 중복방지 테이블에서 삭제 -->
+	DELETE FROM BTNCHECK
+	WHERE BOARD_NO = ?
+	AND USERNO = ?
+	</entry>
+	<entry key="deleteGoodBtnCheck">
+	<!-- 중복방지 테이블에서 신고만 나두고 추천만 삭제 -->
+	UPDATE BTNCHECK
+	SET BTNTYPE = REPLACE(BTNTYPE,'추천','')
+	WHERE BOARD_NO = ?
+	AND USERNO = ?
+	</entry>
+	<entry key="updateGoodBtnCheck">
+	<!-- 중복방지 테이블에서 신고에 추천 추가 -->
+	UPDATE BTNCHECK
+	SET BTNTYPE = '추천'||BTNTYPE
+	WHERE BOARD_NO = ?
+	AND USERNO = ?
+	</entry>
+	<entry key="updateReportBtnCheck">
+	<!-- 중복방지 테이블에서 추천에 신고 추가 -->
+	UPDATE BTNCHECK
+	SET BTNTYPE = BTNTYPE||'신고'
+	WHERE BOARD_NO = ?
+	AND USERNO = ?
 	</entry>
 
 </properties>

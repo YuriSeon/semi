@@ -103,7 +103,8 @@
         .logo {
         font-size:3rem;
         display:inline-block;
-        padding:20px 0;
+        padding:20px;
+        
 
         }
 
@@ -156,7 +157,7 @@
     <header class="logo-bar con-min-width">
     <div class="com text-align-center">
         <a href="./" class="logo">
-        <img src="../../resources/로고_투명배경.png" style="width: 200px;">
+        <img src="resources/로고_투명배경.png" style="width: 200px;">
         
         </a>
     </div>
