@@ -21,7 +21,7 @@
 </style>
 </head>
 <body>
-	  <%@ include file ="../common/menubar.jsp"%> 
+	<%@ include file ="../common/menubar.jsp"%> 
 	  
 	<div align="center">
 		<a href="<%=contextPath%>/baminsert.bo" class="btn btn-info">글작성</a>
@@ -51,7 +51,11 @@
 		            <tr>
 		                <td><%=b.getBoardNo() %></td>
 		                <td><%=b.getBoardType() %></td>
-		                <td>사진여부</td>
+		                <%if(b.getFileNo()!=null){%>
+		                	<td>사진</td>
+		                <%}else{ %>
+		                	<td>사진없음</td>
+		                <%} %>
 		                <td>익명(사진)</td>
 		                <td><%=b.getBoardTitle() %></td>
 		                <td><%=b.getCreateDate() %></td>
@@ -69,7 +73,6 @@
     		
 	    	$(".bam-area>tbody>tr").click(function(){
 	    		var bno = $(this).children().eq(0).text();
-	    		console.log(bno);
 	            location.href="<%=contextPath%>/bamdetail.bo?bno="+bno;
 	    	});
     	});
