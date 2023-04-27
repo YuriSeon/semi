@@ -8,13 +8,21 @@
 		WHERE BOARD_TYPE=2
 		AND STATUS = 'Y'
 	</entry>
-	<entry key="searchListCount">
-	<!-- 검색했을때 게시글 갯수 공지사항 갯수 못세는 오류가 있음 -->
+	<entry key="searchTitleCount">
+	<!-- 제목으로 검색했을때 게시글 갯수 공지사항 갯수 못세는 오류가 있음 -->
 		SELECT COUNT(*) "COUNT"
 		FROM BOARD
 		WHERE BOARD_TYPE=2
 		AND STATUS = 'Y'
 		AND BOARD_TITLE LIKE ?
+	</entry>
+	<entry key="searchContentCount">
+	<!-- 내용으로 검색했을때 게시글 갯수 -->
+		SELECT COUNT(*) "COUNT"
+		FROM BOARD
+		WHERE BOARD_TYPE=2
+		AND STATUS = 'Y'
+		AND BOARD_CONTENT LIKE ?
 	</entry>
 	<entry key="selectList">
 	<!-- 대나무숲 게시글 페이지 목록으로 쓸 데이터 조회 -->
@@ -45,7 +53,7 @@
 	AND TYPE_NO = 1
 	ORDER BY BOARD_NO DESC
 	</entry>
-	<entry key="selectsearchList">
+	<entry key="searchTitleList">
 	<!-- 제목으로 검색해서 게시글 조회 -->
 	SELECT *	
 	FROM(SELECT ROWNUM RNUM, A.*
@@ -61,6 +69,25 @@
                 AND B.STATUS = 'Y'
                 AND TYPE_NO = 0
                 AND BOARD_TITLE LIKE ?
+                ORDER BY BOARD_NO DESC) A)
+	WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	<entry key="searchContentList">
+	<!-- 내용으로 검색해서 게시글 조회 -->
+	SELECT *	
+	FROM(SELECT ROWNUM RNUM, A.*
+		 FROM(SELECT BOARD_NO,USERNO
+		 			,DECODE(BAM_CATEGORY_NO, '1', '일반', '2', '질문', '3', '연애','4','공지') "BAM_CATEGORY_NO",BOARD_TITLE
+		 			,BOARD_CONTENT,CREATE_DATE
+		 			,GOOD,FILE_NO
+		 			,COUNT
+                FROM BOARD B
+                JOIN CATEGORY_BAM USING (BOARD_NO)
+                LEFT JOIN ATTACHMENT USING (BOARD_NO)
+                WHERE BOARD_TYPE=2
+                AND B.STATUS = 'Y'
+                AND TYPE_NO = 0
+                AND BOARD_CONTENT LIKE ?
                 ORDER BY BOARD_NO DESC) A)
 	WHERE RNUM BETWEEN ? AND ?
 	</entry>
