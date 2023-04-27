@@ -251,11 +251,11 @@ public class BamService {
 		
 		return nlist;
 	}
-	//검색결과 게시글 수
-	public int searchListCount( String keyword) {
+	//제목으로 검색결과 게시글 수
+	public int searchTitleCount( String keyword) {
 		Connection conn = JDBCTemplate.getConnection();
 		
-		int count = new BamDao().searchListCount(conn,keyword);
+		int count = new BamDao().searchTitleCount(conn,keyword);
 		
 		JDBCTemplate.close(conn);
 		
@@ -263,16 +263,37 @@ public class BamService {
 	}
 
 	//검색(제목) 게시글 조회
-	public ArrayList<Board> searchList(String keyword,PageInfo pi) {
+	public ArrayList<Board> searchTitleList(String keyword,PageInfo pi) {
 		Connection conn = JDBCTemplate.getConnection();
 		
-		ArrayList<Board> list = new BamDao().searchList(conn,keyword,pi);
+		ArrayList<Board> list = new BamDao().searchTitleList(conn,keyword,pi);
 		
 		JDBCTemplate.close(conn);
 		
 		return list;
 	}
 
+	//내용으로 검색 게시글 수
+	public int searchContentCount(String keyword) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int count = new BamDao().searchContentCount(conn,keyword);
+		
+		JDBCTemplate.close(conn);
+		
+		return count;
+	}
+	//검색(내용) 게시글 조회
+	public ArrayList<Board> searchContentList(String keyword,PageInfo pi) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		ArrayList<Board> list = new BamDao().searchContentList(conn,keyword,pi);
+		
+		JDBCTemplate.close(conn);
+		
+		return list;
+	}
+	
 	//중복방지 테이블 조회
 	public BtnCheck selectBtnCheck(int boardNo, int userNo) {
 		Connection conn = JDBCTemplate.getConnection();
@@ -338,6 +359,7 @@ public class BamService {
 		
 		return r;
 	}
+
 
 
 	
