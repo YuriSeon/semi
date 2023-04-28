@@ -1,3 +1,4 @@
+<%@page import="java.sql.PreparedStatement"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" import="java.util.*"%>
 <!DOCTYPE html>
@@ -10,14 +11,15 @@
 </head>
 <body>
 <%@ include file="../common/menubar.jsp" %>
-	<h1>foodTogetherDetail</h1>
-	
 	<%
 		HashMap<String, String> map = (HashMap<String, String>)request.getAttribute("map");
 	%>
-	
-	    <form action="<%=contextPath %>/foodTogetherUpdate.bo %>" method="get">
+	    <form action="<%=contextPath %>/foodTogetherUpdate.bo" method="get">
         <table align="center">
+        	<tr>
+        		<th>작성자</th>
+        		<td><%=map.get("userId") %></td>
+        	</tr>
             <tr>
                 <th style="width:200px;">제목</th>
                 <td><input type="text" name="title" value="<%=map.get("title") %>" readOnly></td>
@@ -30,21 +32,15 @@
             	<td></td>
             	<td align="center"><img id="miriImg" src='<%=map.get("filePath")  + "/"+ map.get("changeName")%>' style="width:150px; height:150px"></td>
             </tr>
-            
             <tr>
                 <th>주소</th>
                 <td><input type="text" name="mainAddress" id="mainAddress" value="<%=map.get("mainAddress") %>" readOnly>
                 <input type="text" name="subAddress" id="subAddress" value="<%=(map.get("subAddress")==null)?"":map.get("subAddress") %>" style="width: 50px;" readOnly></td>
-                
-                
             </tr>
-		
             <tr id="maptr" align="center" >
-            
             	<td >
                     <div id="map" style="width: 200px; height: 200px;" align="center"></div>
                 </td>
-                
             </tr>
             <tr>
                 <th>모집 인원</th>
@@ -55,15 +51,17 @@
             	<td><input type="time" id="timer" name="endTime" value="<%=map.get("endTime") %>" readOnly></td>
             	<td><input type="hidden" id="bno" name="boardNo" value="<%=map.get("boardNo") %>" readOnly></td>
             	<td><input type="hidden" name="changeName" value="<%=map.get("changeName") %>"></td>
+            	<td><input type="hidden" name="filePath" value="<%=map.get("filePath") %>"></td>
+            	<td><input type="hidden" name="bno" value="<%=map.get("boardNo") %>"></td>
+            	<td><input type="hidden" name="originName" value="<%=map.get("originName") %>"></td>            	
             </tr>
             <tr>
 	            <td>
-            
-    	        	<%if(true){ %>
+    	        	<%if(map.get("userId").equals(((BMember)request.getSession().getAttribute("loginUser")).getUserId())){ %>
         	    		<button type="submit"> 수정하기 </button>
-            			<button type="button" onclick="location.href='<%=contextPath %>/deleteTogether.bo'"> 삭제하기</button>
+            			<button type="button" onclick="location.href='<%=contextPath %>/deleteTogether.bo?bno=<%=request.getParameter("bno")%>'">삭제하기</button>
             		<%} else { %>
-            			<button type="button" onclick="go();">참여하기</button>
+            			<button type="button" id="nadu">참여하기</button>
             		<%} %>
             		<button type="button" onclick="history.back();">돌아가기</button>
             	</td>
@@ -72,7 +70,24 @@
     </form>
     
     <script>
-    $(function(){    	
+    
+	window.onpopstate = function(event) {
+	    history.pushState(null, null, '<%=request.getHeader("Referer")%>');
+	    location.reload();
+	}
+	history.pushState(null, null, null);
+	
+	
+    $(function(){
+    	
+    	if(("<%=(int)request.getAttribute("check")%>") > 0){
+    		console.log("???"  + "<%=(int)request.getAttribute("check")%>");
+    		if("<%=(int)request.getAttribute("check")%>" == "<%=Integer.parseInt(map.get("boardNo")) %>"){
+	    		$("#nadu").css("color", "red");    			
+    		}
+    	}
+    	
+    	
     	var mapContainer = document.getElementById('map'),// 지도를 표시할 div 
     					   mapOption = {center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
         								level: 3};// 지도의 확대 레벨
@@ -94,7 +109,37 @@
         // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
         map.setCenter(coords);
     	}});
-    })
+		
+		
+		$("#nadu").on("click", function nadu(){
+			$.ajax({
+				url : "togetherCheck.bo",
+				data : {
+					userNo : "<%=((BMember)request.getSession().getAttribute("loginUser")).getUserNo()%>", // 참여자 번호
+					bno : "<%=map.get("boardNo") %>", // 해당 글번호
+					writerId : "<%=map.get("userId")%>", // 작성자 아이디 (uniqe)
+					person : "<%=map.get("person") %>"
+				},
+				type : "get",
+				success : function(data){
+					if(data == "err"){
+						this.error(data);
+					}
+					if(data == 1){
+						console.log("참여 이력이 없고 참여 되었다.");
+						$("#nadu").css("color", "red");
+					}else{
+						alert("이전 참여 이력이 사라집니다.");
+						$("#nadu").css("color", "black");
+					}
+				},
+				error : function(data){
+					console.log("ajax error");
+				}
+			})
+		})
+		
+    });
     </script>
 </body>
 </html>

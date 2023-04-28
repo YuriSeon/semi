@@ -1,6 +1,7 @@
 package com.kh.admin.board.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.kh.admin.board.model.service.BoardService;
+import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.Board;
+import com.kh.board.model.vo.Reply;
 
 /**
  * Servlet implementation class BlurDetailController
@@ -33,18 +36,26 @@ public class BlurDetailController extends HttpServlet {
 		
 		int bno = Integer.parseInt(request.getParameter("bno"));
 		
-		String status = request.getParameter("status");
+		String status = "C"; // 블러처리된 게시글 상태값
 		
 		Board b = new BoardService().detailBoard(bno, status) ;
 		
+		Attachment a = new BoardService().selectAttachment(bno); 
+		
+		ArrayList<Reply> rList = new BoardService().selectReply(bno);
+		
 		if(b!=null) {
-			
-			request.setAttribute("errorMsg", "게시물 조회 실패");
-			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
-		} else {
-			
+			if(a!=null) {
+				request.setAttribute("a", a);
+			}
+			if(!rList.isEmpty()) {
+				request.setAttribute("rList", rList);
+			}
 			request.setAttribute("b", b);
 			request.getRequestDispatcher("admin/views/board/blurDetail.jsp").forward(request, response);
+		} else {
+			
+			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
 		}
 	}
 

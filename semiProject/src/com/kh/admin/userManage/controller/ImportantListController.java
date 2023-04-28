@@ -76,9 +76,39 @@ public class ImportantListController extends HttpServlet {
 		
 		int result = new UserManageService().yellowCard(userNo);
 		
-		response.setContentType("json/application; charset=UTF-8");
-		
-		new Gson().toJson(result, response.getWriter());
+		if(result>0) {
+			
+			int listCount = new UserManageService().importantCount();
+
+			int currentPage = Integer.parseInt(request.getParameter("currentPage"));
+
+			int boardLimit = 10;
+			
+			int pageLimit = 10;
+			
+			int startPage = (currentPage-1)/pageLimit *pageLimit +1;
+			
+			int endPage = startPage +pageLimit -1;
+			
+			int maxPage = (int)Math.ceil((double)listCount/boardLimit);
+			
+			if(endPage>maxPage) {
+				
+				endPage = maxPage;
+			}
+			
+			PageInfo pi = new PageInfo(listCount, currentPage, startPage, endPage, boardLimit, pageLimit, maxPage);
+			
+			ArrayList<User> list = new UserManageService().importantList(pi);
+			
+			response.setContentType("json/application; charset=UTF-8");
+			
+			new Gson().toJson(list, response.getWriter());
+			
+		} else {
+			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
+		}
+	
 	}
 
 }

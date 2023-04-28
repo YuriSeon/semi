@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="java.util.*"%>
+    pageEncoding="UTF-8" import="java.util.*, java.text.SimpleDateFormat"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,6 +11,7 @@
 <%
 	ArrayList<HashMap<String, String>> list = (ArrayList<HashMap<String, String>>)request.getAttribute("list");
 	// list에는 현재 밥 같이 먹기 게시판의 내용이 다 들어있다.
+	int check = (int)request.getAttribute("check");
 %>
 
 <!-- 
@@ -45,13 +46,41 @@
 		</thead>
 		<tbody>
 		<%for(int i = 0; i < list.size(); i++){%>
+		<%
+			String[] timearr = list.get(i).get("endTime").split(":");
+			int timeM = Integer.parseInt(timearr[0])*3600 + Integer.parseInt(timearr[1])*60; // 종료 시간 초 단위
+			Date d = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			String now = sdf.format(d);
+			String[] noewTime = now.split(":");
+			int nowM = Integer.parseInt(noewTime[0])*3600 + Integer.parseInt(noewTime[1])*60 + Integer.parseInt(noewTime[2]);
+			int showtime = timeM - nowM;
+			int hour = showtime/3600;
+			int min = (showtime%3600)/60;
+			int sec = (showtime%3600)%60;	
+			// 서버가 종료되면 시간이 가지 않는다.
+		%>
+		<%if(check == Integer.parseInt(list.get(i).get("boardNo"))){ %>
 			 <tr>
-			 	<td><%=list.get(i).get("boardNo") %></td>
+			 	<td style="background-color:red"><%=list.get(i).get("boardNo") %></td>
 			 	<td><%=list.get(i).get("boarTitle") %></td>
 			 	<td><%=list.get(i).get("userId") %></td>
 			 	<td><%=list.get(i).get("person") %></td>
-			 	<td><%=list.get(i).get("endTime") %></td>
+			 	<td data-timeleft="<%=timeM - nowM%>">
+			 		<%=hour==0?"":hour + " : " %><%=min==0?"":min+" : " %><%=sec %>
+			 	</td>
 			 </tr>
+		 <%}else{ %>
+		 <tr>
+			 	<td><%=list.get(i).get("boardNo") %></td>
+			 	<td><%=list.get(i).get("boarTitle") %></td>
+			 	<td><%=list.get(i).get("userId") %></td>
+			 	<td><%=list.get(i).get("nowpt")%> / <%=list.get(i).get("person") %></td>
+			 	<td data-timeleft="<%=timeM - nowM%>">
+			 		<%=hour==0?"":hour + " : " %><%=min==0?"":min+" : " %><%=sec %>
+			 	</td>
+			 </tr>
+		 <%} %>
 		<%} %>
 		</tbody>
 	</table>
@@ -59,10 +88,48 @@
 		<h1>아무 글 도 없습니다.</h1>
 	<%} %>
 	
-		<script>
+	<script>
 			$("#example tbody tr").click(function(){
+				console.log(this);
 				location.href="<%=request.getContextPath() %>" + "/foodtogetherdetail.bo?bno=" + $(this).children().eq(0).text();
 			});
+			
+			function updateElements(){
+		        $.each($("[data-timeleft]"), function(){
+		            const timeLeft = parseInt($(this)[0].dataset.timeleft);
+		            //movePage(navigator);
+		           <%-- // $("#example").load("<%=request.getContextPath()%>/foodTogether.bo #example"); --%>
+		            
+		            //location.reload();
+		            if(timeLeft > 1){
+		                $(this)[0].dataset.timeleft = timeLeft - 1;
+		                let hour = parseInt($(this)[0].dataset.timeleft/3600);		             
+		                let min = parseInt(($(this)[0].dataset.timeleft%3600)/60);
+		                let sec = parseInt($(this)[0].dataset.timeleft%3600)%60;
+			                $(this).text(((hour==0)?"":hour+" : ") + ((min==0)?"":min + " : ") + sec); 		                	
+		            }else{
+		                // $(this).text("---");
+		                // console.log($(this).parents("tr").children().eq(0).text()); // 0초 된거
+		                // 새로운 iframe을 만들고 거기서 지속적으로 새로고침을 시키며 데이터만 이쪽으로 넘겨주면 깜빡거림을 아예 없앨 수 있을 꺼 같다.
+		                $.ajax({
+		                	url : "deleteTogether.bo",
+		                	type : "get",
+		                	data : {
+		                		bno : $(this).parents("tr").children().eq(0).text()
+		                	},
+		                	success : function(data){
+		                		location.href="<%=request.getContextPath()%>/foodTogether.bo";
+		                	},
+		                	error : function(){
+		                		console.log("ajax error");
+		                	}
+		                })
+		                
+		            }
+		        })
+		} 
+	
+		setInterval(updateElements, 1000);
 	</script>
   	
 

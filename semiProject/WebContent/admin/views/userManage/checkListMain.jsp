@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" 
-    import="com.kh.common.model.vo.PageInfo, com.kh.bMember.model.vo.BMember, java.util.ArrayList"%>
+    import="com.kh.common.model.vo.PageInfo, com.kh.bMember.model.vo.BMember, 
+    		java.util.ArrayList, com.google.gson.Gson"%>
  <%
  	PageInfo pi = (PageInfo)request.getAttribute("pi");
  	ArrayList<BMember> list = (ArrayList<BMember>)request.getAttribute("list");
@@ -10,80 +11,102 @@
 <head>
 <meta charset="UTF-8">
 <title>USER CHECKLIST</title>
+<style>
+	#select, input{
+		height: 30px;
+		margin: 0;
+		padding: 0;
+	}
+	.btn-11{
+		vertical-align: middle;
+		font-size: medium;
+		margin-top: 13px;
+	}
+	tbody>tr:hover{
+		background-color: rgb(241, 241, 241);
+		cursor: pointer;
+	}
+	#box{
+		height : 25px;
+		margin-top :10px;
+		margin-bottom : 5px;
+	}
+</style>
 </head>
 <body>
 	<%@include file="../common/menubar.jsp"%>
-	<div>
-		<form action="<%=contextPath %>/select.ck" method="post">
-			<div id="search_div">
-				<input type="hidden" name="currentPage" value="1">
-				<select id="select" name="select" id="search_select" onchange="selectboxP();">
-					<option value="1" selected>ID</option>
-					<option value="2">차단 합계</option>
-					<option value="3">게시물 필터링 수</option>
-				</select>
-			</div>
+	<div id="wrapper">
+		<div id="bb"><br>
+			<form action="<%=contextPath %>/select.ck" method="post">
+				<div id="search_div">
+					<input type="hidden" name="currentPage" value="1">
+					<select id="select" name="select" id="search_select" onchange="selectboxP();">
+						<option value="1" selected>ID</option>
+						<option value="2">차단 합계</option>
+						<option value="3">게시물 필터링 수</option>
+					</select>
+				</div>
+				<div>
+					<input type="search" name="search_input" id="search_input" placeholder="검색할 ID를 입력하세요.">
+				</div>
+				<div>
+					<button type="submit" class="custom-btn btn-10">검색</button>
+				</div>
+			</form>
+				<!-- 만약 리스트가 비어있다면 비활성화 하기 조건문  -->
+				<button type="button" id="checkL" class="custom-btn btn-11" onclick="location.href='<%=contextPath%>/important.ck?currentPage=1'">★ Check</button>
 			<div>
-				<input type="search" name="search_input" id="search_input" placeholder="검색할 ID를 입력하세요.">
 			</div>
-			<div>
-				<button type="submit">검색</button>
-			</div>
-		</form>
-		<div>
-			<button type="button" onclick="location.href='<%=contextPath%>/important.ck?currentPage=1'">★ Check</button>
-		</div>
-	</div>
-
-	<hr>
-	<div>
-	<select id="box" name="box" id="search_select" onchange="selectboxP();">
+			<br>
+			<div><br>
+				<select id="box" name="box" id="search_select" onchange="selectboxP();">
 					<option value="1" selected>최근 업데이트순 </option>
 					<option value="2">차단 합계</option>
 					<option value="3">게시물 필터링 수</option>
 				</select>
-	</div>
-	<%if(!list.isEmpty()) { %>
-        
-    <table id="tab" border="1">
-		<thead>
-			<tr>
-				<th>NO</th>
-				<th>ID</th>
-				<th>NAME</th>
-				<th>Block Count</th>
-				<th>Filtering Count</th>
-				<th>Food point</th>
-				<th>Enroll Date</th>
-				<th>Update Date</th>
-			</tr>
-		</thead>
-		<tbody>
-				<%for(int i=0; i<list.size(); i++) {%>
+			</div>
+		</div>
+		<%if(!list.isEmpty()) { %>
+		    <table id="tab">
+				<thead>
 					<tr>
-						<td><%=((BMember)list.get(i)).getUserNo()%></td>
-						<td><%=((BMember)list.get(i)).getUserId() %></td>
-						<td><%=((BMember)list.get(i)).getUserName() %></td>
-						<td><%=((BMember)list.get(i)).getBlock()%></td>
-						<td><%=((BMember)list.get(i)).getFiltering() %></td>
-						<td><%=((BMember)list.get(i)).getPoint() %></td>
-						<td><%=((BMember)list.get(i)).getCreateDate() %></td>
-						<td><%=((BMember)list.get(i)).getModifyDate() %></td>
-
+						<th>NO</th>
+						<th>ID</th>
+						<th>Name</th>
+						<th>Block Count</th>
+						<th>Filtering Count</th>
+						<th>Food point</th>
+						<th>Enroll Date</th>
+						<th>Update Date</th>
 					</tr>
-					<% } %>
-		</tbody>
-	</table>
-    <% } else { %>
-        <p style="text-align: center; font-weight: bold; font-size:large">검색에 일치하는 결과가 없습니다.</p>
-    <% } %>
+				</thead>
+				<tbody>
+						<%for(int i=0; i<list.size(); i++) {%>
+							<tr>
+								<td><%=((BMember)list.get(i)).getUserNo()%></td>
+								<td><%=((BMember)list.get(i)).getUserId() %></td>
+								<td><%=((BMember)list.get(i)).getUserName() %></td>
+								<td><%=((BMember)list.get(i)).getTotalB()%></td>
+								<td><%=((BMember)list.get(i)).getTotalF() %></td>
+								<td><%=((BMember)list.get(i)).getPoint() %></td>
+								<td><%=((BMember)list.get(i)).getCreateDate() %></td>
+								<td><%=((BMember)list.get(i)).getModifyDate() %></td>
+		
+							</tr>
+							<% } %>
+				</tbody>
+			</table>
+	    <% } else { %>
+	        <p style="text-align: center; font-weight: bold; font-size:large">검색에 일치하는 결과가 없습니다.</p>
+	    <% } %>
+    </div>
 	<div>
 		<!-- 페이징처리 -->
 		<% if(pi.getCurrentPage()==1) {%>
 		<button type="button" disabled></button>
 		<% } else { %>
 		<button type="button"
-			onclick="location.href='<%=contextPath%>/main/bl?currentPage=<%=pi.getCurrentPage()-1%>';">&lt;</button>
+			onclick="location.href='<%=contextPath%>/main.ck?currentPage=<%=pi.getCurrentPage()-1%>';">&lt;</button>
 		<% } %>
 		<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
 
@@ -91,14 +114,14 @@
 		<button type="button" disabled>i</button>
 		<% } else {%>
 		<button type="button"
-			onclick="location.href='<%=contextPath%>/main/bl?currentPage=<%=i%>';"><%=i %></button>
+			onclick="location.href='<%=contextPath%>/main.ck?currentPage=<%=i%>';"><%=i %></button>
 		<% } %>
 
 		<% } %>
 
 		<% if(pi.getMaxPage()!=pi.getCurrentPage()) { %>
 		<button type="button"
-			onclick="location.href='<%=contextPath%>/main/bl?currentPage=<%=pi.getCurrentPage()+1%>';">&gt;</button>
+			onclick="location.href='<%=contextPath%>/main.ck?currentPage=<%=pi.getCurrentPage()+1%>';">&gt;</button>
 		<% } else { %>
 		<button type="button" disabled>&gt;</button>
 		<% } %>
@@ -115,7 +138,7 @@
     	
     	$("#box").on("change", function() {
 			var box = $("#box option:selected").val();
-			
+			var gson = GsonBuilder().setDateFormat("yyyy-MM-dd").create()
 			$.ajax({
 				url : "main.ck",
 				data : {
@@ -125,28 +148,32 @@
 				},
 				type : "get",
 				success : function(list) {
+					
 					var str = "";
 						for(var i=0;i<list.length; i++){
 							str +="<tr>"
 								+"<td>"+list[i].userNo+"</td>"
 								+"<td>"+list[i].userId+"</td>"
 								+"<td>"+list[i].userName+"</td>"
-								+"<td>"+list[i].block+"</td>"
-								+"<td>"+list[i].filtering+"</td>"
+								+"<td>"+list[i].totalB+"</td>"
+								+"<td>"+list[i].totalF+"</td>"
 								+"<td>"+list[i].point+"</td>"
 								+"<td>"+list[i].createDate+"</td>"
 								+"<td>"+list[i].modifyDate+"</td>"
 								+"</tr>";
 						}
-						
 					$("#tab tbody").html(str);
-						
 				},
 				error : function() {
 					console.log("통신실패");
 				}
 			});
 		});
+    	
+    		$("#tab tbody>tr").on("click",function(){ // 동적으로 생긴 tr에도 이벤트를 걸겠다!
+    			var userNo = $(this).children().eq(0).text();
+    			location.href="<%=contextPath %>/update.um?userNo="+userNo;
+    		});
    </script>
 </body>
 </html>

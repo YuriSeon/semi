@@ -161,6 +161,12 @@ body {
             showList(userLocation);
         }
     });
+    // 넘겨주기 위해 전역 변수로 지정
+    var menu = "";
+    var address = "";
+    var imgAddress = "";
+    var originName = "";
+    var changeName = "";
 
     function showList(userLocation){
         $.ajax({
@@ -171,18 +177,25 @@ body {
             },
             success : function(data){
                 var length = data.length;
-                console.log("뭔데이터야?" + data);
                 if(data[0].length == 0){
                     $("#foodSlide").html("지금 준비된 음식 이 없습니다.");
+                    $("#togeterbtn").attr("disabled", true);
                 }else{
-                    if(number > length-1){
+                	$("#locactionFood").not("*").css("color","red");
+                    if(number > data[0].length-1){
                         number = 0;
                     }else if(number < 0){
-                    	number = data.length-1;
+                    	number = data[0].length-1;
                     }
                     // 현재 0에는 board list 1에는 attachment list
                     var imgadd = "<%=contextPath %>" + data[1][number].filePath + "/" + data[1][number].changeName;
                     var foodStart = "";
+                    menu = data[0][number].foodName;
+                    address = data[0][number].abbress;
+                    originName = data[1][number].originName;
+                    console.log(originName);
+                    imgAddress = "<%=contextPath %>" + data[1][number].filePath + "/" + data[1][number].changeName;
+                    foodStart += "<h1>" + number +"</h1>"
                     foodStart += "메뉴 : " + data[0][number].foodName + "<br>주소 : " + data[0][number].abbress + "<br>추천수 : " + data[0][number].good;
                     foodStart += "<input id='justbno' just type='hidden' value='"+ data[0][number].boardNo +"'>";
                     foodStart += "<img alt='대표이미지' src='" + imgadd + "' style='width:150px; height:150px;'>";
@@ -220,6 +233,10 @@ body {
 		}else{			
 			location.href = "<%=request.getContextPath() %>/foodRankingDetail.bo?bno=" + $("#justbno").val();
 		}
+	});
+	
+	$("#togeterbtn").on("click", function(){
+		location.href="<%=request.getContextPath()%>/foodTogetherInsert.bo?menu="+menu+"&address="+address+"&img="+imgAddress+"&origin="+originName;
 	})
 	
     </script>

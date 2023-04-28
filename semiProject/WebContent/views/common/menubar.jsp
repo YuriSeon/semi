@@ -202,11 +202,17 @@
              
             </li>
             <li>
+            <%if(loginUser.getSchool_st().equals("N")){ %>
+            <a href="#" onclick="noSchool();" class="block">
+                <i class="fa-solid fa-user-secret"></i>
+                <span>대나무숲</span>
+            </a>
+            <%}else{ %>
             <a href="<%=contextPath%>/bamlist.bo?currentPage=1" class="block">
                 <i class="fa-solid fa-user-secret"></i>
                 <span>대나무숲</span>
             </a>
-            
+            <%} %>
             </li>
             <li>
             <a href="<%=contextPath%>/foodmain.bo" class="block">
@@ -309,6 +315,9 @@
 	    	$("#recipient-name").val(userNick); //메시지 입력창 닉네임 넣기
 	    	$("#block-name").val(userNick);	//차단 등록창 닉네임 넣기
 	     });
+	     function noSchool(){
+	    	 alert("대나무숲은 학교인증을 하셔야 이용 가능합니다.")
+	     };
 	     
 	    function msgBlock(){ //메시지 차단 등록
 	    	

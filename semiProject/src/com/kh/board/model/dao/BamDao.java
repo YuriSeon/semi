@@ -544,13 +544,13 @@ public class BamDao {
 			return result;
 		}
 
-		//검색 결과 게시글 수
-		public int searchListCount(Connection conn, String keyword) {
+		//제목으로 검색 결과 게시글 수
+		public int searchTitleCount(Connection conn, String keyword) {
 			int count = 0;
 			PreparedStatement pstmt = null;
 			ResultSet rset = null;
 			
-			String sql = prop.getProperty("searchListCount");
+			String sql = prop.getProperty("searchTitleCount");
 			
 			try {
 				pstmt = conn.prepareStatement(sql);
@@ -573,12 +573,85 @@ public class BamDao {
 			return count;
 		}
 		//(검색:제목)게시글 조회
-		public ArrayList<Board> searchList(Connection conn, String keyword, PageInfo pi) {
+		public ArrayList<Board> searchTitleList(Connection conn, String keyword, PageInfo pi) {
 			ArrayList<Board> list = new ArrayList<>();
 			PreparedStatement pstmt = null;
 			ResultSet rset = null;
 			
-			String sql = prop.getProperty("selectsearchList");
+			String sql = prop.getProperty("searchTitleList");
+			
+			//현재 페이지에서 가장 낮은 게시글번호
+			int startRow = (pi.getCurrentPage()-1)*pi.getBoardLimit()+1;
+			//현재 페이지에서 가장 높은 게시글 번호
+			int endRow = (startRow+pi.getBoardLimit()) - 1;
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				keyword = '%'+keyword+'%';
+				pstmt.setString(1, keyword);
+				pstmt.setInt(2, startRow);
+				pstmt.setInt(3, endRow);
+				
+				
+				rset = pstmt.executeQuery();
+				
+				while(rset.next()) {
+					list.add(new Board(rset.getInt("BOARD_NO")
+									,rset.getString("USERNO")
+									,rset.getString("BAM_CATEGORY_NO")
+									,rset.getString("BOARD_TITLE")
+									,rset.getString("BOARD_CONTENT")
+									,rset.getDate("CREATE_DATE")
+									,rset.getInt("GOOD")
+									,rset.getString("FILE_NO")
+									,rset.getInt("COUNT")));
+				}
+				
+			} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(rset);
+				JDBCTemplate.close(pstmt);
+			}
+			return list;
+		}
+		//검색(내용) 게시글 수
+		public int searchContentCount(Connection conn, String keyword) {
+			int count = 0;
+			PreparedStatement pstmt = null;
+			ResultSet rset = null;
+			
+			String sql = prop.getProperty("searchContentCount");
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				keyword = '%'+keyword+'%';
+				pstmt.setString(1, keyword);
+				
+				rset = pstmt.executeQuery();
+				
+				if(rset.next()) {
+					count = rset.getInt("COUNT");
+				}
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(rset);
+				JDBCTemplate.close(pstmt);
+			}
+			return count;
+		}
+		
+		//(검색:내용) 게시글 조회
+		public ArrayList<Board> searchContentList(Connection conn, String keyword, PageInfo pi) {
+			ArrayList<Board> list = new ArrayList<>();
+			PreparedStatement pstmt = null;
+			ResultSet rset = null;
+			
+			String sql = prop.getProperty("searchContentList");
 			
 			//현재 페이지에서 가장 낮은 게시글번호
 			int startRow = (pi.getCurrentPage()-1)*pi.getBoardLimit()+1;
@@ -862,6 +935,7 @@ public class BamDao {
 			
 			return r;
 		}
+
 
 
 		

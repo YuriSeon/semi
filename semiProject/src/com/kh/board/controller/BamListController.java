@@ -43,7 +43,19 @@ public class BamListController extends HttpServlet {
 		int startPage; //페이지 하단에 보여질 페이징바의 시작수
 		int endPage; //페이지 하단에 보여질 페이징바의 끝 수 
 		
-		listCount = new BamService().selectListCount();
+		//어떤 걸로 검색할지 (제목(title),내용(content))
+		String category = request.getParameter("searchCategory");
+		//검색 키워드
+		String keyword = request.getParameter("keyword");
+		
+		if(category ==null) {//검색이 아니면
+			listCount = new BamService().selectListCount();
+		}else if(category.equals("title")){//제목 검색어가 있다면
+			listCount = new BamService().searchTitleCount(keyword);
+		}else {//내용으로 검색
+			listCount = new BamService().searchContentCount(keyword);
+		}
+		
 		
 		currentPage = Integer.parseInt(request.getParameter("currentPage"));
 		
@@ -62,14 +74,21 @@ public class BamListController extends HttpServlet {
 		}
 		
 		PageInfo pi = new PageInfo(listCount,currentPage,startPage,endPage,boardLimit,pageLimit,maxPage);
-		
-		ArrayList<Board> list = new BamService().selectList(pi);
-		
+		//게시글 가져오기
+		ArrayList<Board> list;
+		if(category ==null) {//검색이 아니면
+			list = new BamService().selectList(pi);
+		}else if(category.equals("title")){//제목 검색어가 있다면
+			list = new BamService().searchTitleList(keyword,pi);
+		}else {//내용으로 검색
+			list = new BamService().searchContentList(keyword,pi);
+		}
 		
 		
 		if(currentPage==1) {//현재 페이지가 1이면 공지사항 가져옴
+			//공지사항 가져오기
 			ArrayList<Board> nlist = new BamService().selectNoticeList();
-			nlist.addAll(list);
+			nlist.addAll(list); //공지사항뒤에 게시글 리스트 붙이기
 			request.setAttribute("list", nlist);
 		}else {//1페이지가 아니면 공지사항 안가져옴
 			request.setAttribute("list", list);
