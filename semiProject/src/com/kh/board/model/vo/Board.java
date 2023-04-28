@@ -36,6 +36,9 @@ public class Board {
 
 	// 공지사항 관리 위해서 필드 하나 추가 
 	private int typeNo;
+	
+	// 대나무숲 사진여부를 위해서 만듬
+	private String fileNo; //파일번호지만 null값을 받아야해서 String으로함
 
 	public int getUn() {
 		return un;
@@ -61,7 +64,7 @@ public class Board {
 	
 	//페이지 만들때 게시글 
 	public Board(int boardNo, String boardWriter, String boardType, String boardTitle, String boardContent,
-			Date createDate, int good,int report, int count) {
+			Date createDate, int good,String fileNo, int count) {
 		super();
 		this.boardNo = boardNo;
 		this.boardWriter = boardWriter;
@@ -70,7 +73,7 @@ public class Board {
 		this.boardContent = boardContent;
 		this.createDate = createDate;
 		this.good = good;
-		this.report= report;
+		this.fileNo= fileNo;
 		this.count = count;
 	}
 	
@@ -285,5 +288,12 @@ public class Board {
 	public void setTypeNo(int typeNo) {
 		this.typeNo = typeNo;
 	}
+	public String getFileNo() {
+		return fileNo;
+	}
+	public void setFileNo(String fileNo) {
+		this.fileNo = fileNo;
+	}
+	
 	
 }

@@ -7,6 +7,7 @@ import com.kh.board.model.dao.BamDao;
 import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.BamCategory;
 import com.kh.board.model.vo.Board;
+import com.kh.board.model.vo.BtnCheck;
 import com.kh.board.model.vo.Reply;
 import com.kh.common.model.vo.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
@@ -197,16 +198,23 @@ public class BamService {
 	public int reportBam(int boardNo,int userNo) {
 		Connection conn = JDBCTemplate.getConnection();
 		
-		//신고 중복 방지 테이블 인서트
-		int result = new BamDao().reportInsertBam(conn,boardNo,userNo);
-	
-		int result2 = 0;
-		if(result>0) {//신고가 중복이 아니라면
-			//게시글 신고수 업데이트
-			result2 = new BamDao().reportBam(conn,boardNo);
+		//중복방지 테이블 조회
+		BtnCheck bc = new BamDao().selectBtnCheck(conn,boardNo,userNo);
+		
+		int result = 0;
+		if(bc ==null) {//중복방지 테이블에 추천,신고 아무것도 없을때
+			result = new BamDao().reportBam(conn,boardNo); //게시글 신고수 증가
+			if(result>0) {
+				result = new BamDao().reportInsertBam(conn,boardNo,userNo); //중복방지테이블에 인서트
+			}
+		}else if(!bc.getBtncheck().contains("신고")) {//중복방지 테이블에 추천만 했을때
+			result = new BamDao().reportBam(conn, boardNo); //게시글 신고수 증가
+			if(result>0) {
+				result = new BamDao().updateReportBtnCheck(conn,boardNo,userNo); //중복방지테이블에 신고업데이트
+			}
 		}
 		
-		if(result>0&&result2>0) {//신고가 중복도 아니고 게시글 신고수 업데이트 성공
+		if(result>0) {//신고가 중복도 아니고 게시글 신고수 업데이트 성공
 			JDBCTemplate.commit(conn);
 		}else {
 			JDBCTemplate.rollback(conn);
@@ -214,7 +222,7 @@ public class BamService {
 		
 		JDBCTemplate.close(conn);
 		
-		return result*result2;
+		return result;
 	}
 
 	//댓글 삭제 메소드
@@ -243,11 +251,11 @@ public class BamService {
 		
 		return nlist;
 	}
-	//검색결과 게시글 수
-	public int searchListCount( String keyword) {
+	//제목으로 검색결과 게시글 수
+	public int searchTitleCount( String keyword) {
 		Connection conn = JDBCTemplate.getConnection();
 		
-		int count = new BamDao().searchListCount(conn,keyword);
+		int count = new BamDao().searchTitleCount(conn,keyword);
 		
 		JDBCTemplate.close(conn);
 		
@@ -255,15 +263,103 @@ public class BamService {
 	}
 
 	//검색(제목) 게시글 조회
-	public ArrayList<Board> searchList(String keyword,PageInfo pi) {
+	public ArrayList<Board> searchTitleList(String keyword,PageInfo pi) {
 		Connection conn = JDBCTemplate.getConnection();
 		
-		ArrayList<Board> list = new BamDao().searchList(conn,keyword,pi);
+		ArrayList<Board> list = new BamDao().searchTitleList(conn,keyword,pi);
 		
 		JDBCTemplate.close(conn);
 		
 		return list;
 	}
+
+	//내용으로 검색 게시글 수
+	public int searchContentCount(String keyword) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int count = new BamDao().searchContentCount(conn,keyword);
+		
+		JDBCTemplate.close(conn);
+		
+		return count;
+	}
+	//검색(내용) 게시글 조회
+	public ArrayList<Board> searchContentList(String keyword,PageInfo pi) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		ArrayList<Board> list = new BamDao().searchContentList(conn,keyword,pi);
+		
+		JDBCTemplate.close(conn);
+		
+		return list;
+	}
+	
+	//중복방지 테이블 조회
+	public BtnCheck selectBtnCheck(int boardNo, int userNo) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		BtnCheck bc = new BamDao().selectBtnCheck(conn,boardNo,userNo);
+		
+		JDBCTemplate.close(conn);
+		
+		return bc;
+		
+	}
+
+	//추천 버튼 눌럿을때
+	public int goodBtn(int boardNo, int userNo) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		//중복방지 테이블 조회
+		BtnCheck bc = new BamDao().selectBtnCheck(conn,boardNo,userNo);
+		
+		int result = 0;
+		
+		if(bc ==null) {//추천,신고 둘다 없을때
+			result = new BamDao().updateBamGood(conn,boardNo); //게시글 추천수 올림
+			if(result>0) {
+				result = new BamDao().insertBamGood(conn,boardNo,userNo); //중복방지 테이블에 인서트
+			}
+			
+		}else if(bc.getBtncheck().equals("추천")) {//추천만 했었을때(추천 취소)
+			result = new BamDao().cancelBamGood(conn,boardNo); //게시글에 추천수 감소시킴
+			if(result>0) {
+				result = new BamDao().deleteBtnCheck(conn,boardNo,userNo); //중복방지 테이블에서 삭제
+			}
+		}else if(bc.getBtncheck().contains("추천")) {//이미 추천과신고 했을때
+			result = new BamDao().cancelBamGood(conn,boardNo);//게시글 추천수 감소
+			if(result>0) {
+				result = new BamDao().deleteGoodBtnCheck(conn,boardNo,userNo); //BTNTYPE에서 추천만 삭제
+			}
+		}else {//신고만 했었을때
+			result = new BamDao().updateBamGood(conn,boardNo); //게시글 추천수 올림
+			if(result>0) {
+				result = new BamDao().updateGoodBtnCheck(conn,boardNo,userNo); //BTNTYPE에 추천 추가
+			}
+		}
+		
+		if(result>0) {//추천 성공
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+		
+		return result;
+	}
+
+	//댓글 작성자번호 조회
+	public Reply selectReply(int replyNo) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		Reply r = new BamDao().selectReply(conn,replyNo);
+		
+		JDBCTemplate.close(conn);
+		
+		return r;
+	}
+
 
 
 	

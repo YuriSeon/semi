@@ -12,68 +12,155 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style >
-	.bam-area>thead th{
-		border:1px solid black;
-	}
-	.bam-area>tbody td{
-		border:1px solid black;
-	}
+		.board-list{			
+			border-top: 3px solid skyblue;
+			width: 90%;			
+			margin: auto;
+			text-align: center;
+			height: 100%;
+			
+		}
+		
+		.board-list-pre{	
+			
+			width: 45%;
+			border-bottom: 2px solid gainsboro;
+			margin: auto;
+			height: 10%;
+			display: inline-block;			
+		}
+		.board-list-pre:hover{
+			background-color:gray; 
+		}
+		
+		.title{			
+			height: 60%;						
+		}
+		.title>h3,p{
+			margin-left: 2%;
+			margin-top: 1%;
+			margin-bottom: 2%;			
+		}
+		.title>a{
+			
+			text-decoration: none;
+			color: black;
+			text-align: center;
+			font-weight: 800;
+			font-size: 20px;
+			text-overflow: ellipsis;
+			white-space : nowrap;
+			overflow : hidden;
+			
+		}
+		.title>h3{
+			font-weight: 800;
+		}
+		.content{
+			font-weight: 600;
+			text-overflow: ellipsis;
+			white-space : nowrap;
+			overflow : hidden;
+			
+		}
+		.content>a{
+			text-decoration: none;
+			color: black;
+		}		
+		.sub{			
+			height: 30%;
+			
+			width: 100%;
+			float: left;
+			
+			
+			
+		}
+		.sub>p{
+			text-align: left;
+			margin-left: 4%;
+			width: 20%;
+		}
+		.sub2{			
+			
+			display: inline-block;
+			width: 100%;						
+		}
+		.sub2>a{
+			color: black;
+			text-decoration: none;
+			margin-left: 2%
+		}
+		.sub3{			
+			
+			text-align:right;
+			
+		}
+		.sub3>a{
+			text-decoration: none;
+			color: black;
+			font-size: 120%;
+
+		}
+		.category a{
+			text-decoration: none;
+			color: black;
+			margin: 2%;
+		}
+		.name {
+			margin-left: 2%;
+			margin-top: 1%;
+			margin-bottom: 1%;
+			float: left;
+		}
 </style>
 </head>
 <body>
-	  <%@ include file ="../common/menubar.jsp"%> 
+	<%@ include file ="../common/menubar.jsp"%> 
 	  
 	<div align="center">
 		<a href="<%=contextPath%>/baminsert.bo" class="btn btn-info">글작성</a>
 	</div>
-	<div align="center">
-	<table border="1" style="border:1px solid black;" class="bam-area">
-        <thead>
-            <tr>
-                <th width="50">글번호</th>
-                <th width="50">카테고리</th>
-                <th width="50">사진여부</th>
-                <th width="100">작성자</th>
-                <th width="300">제목</th>
-                <th width="100">작성일</th>
-                <th width="50">조회수</th>
-                <th width="50">추천수</th>
-            </tr>	
-        </thead>
-        <tbody>
-		<%if(list.isEmpty()){ %>
-			<tr>
-				<td colspan="6">조회된 게시글이 없습니다.</td>
-			</tr>
-		<%}else{ %>
-			<%for(Board b : list){ %>
-				
-		            <tr>
-		                <td><%=b.getBoardNo() %></td>
-		                <td><%=b.getBoardType() %></td>
-		                <td>사진여부</td>
-		                <td>익명(사진)</td>
-		                <td><%=b.getBoardTitle() %></td>
-		                <td><%=b.getCreateDate() %></td>
-		                <td><%=b.getCount() %></td>
-		                <td><%=b.getGood() %></td>
-		            </tr>
-	            
-	         <%} %>
-         <%} %>
-        </tbody>
-    </table>
+	<br>
+	<div class="layout">
+		<div class="board-list">
+		<br>
+			<%if(list.isEmpty()){ %>
+				<h3>조회된 글이 없음</h3>
+			<%}else{ %>
+				<%for(Board b : list){ %>
+				<div class="board-list-pre">
+					<div class="title">
+					<span class="category">
+						<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><%=b.getBoardType() %></a>
+					</span>
+						<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><%=b.getBoardTitle() %></a> 
+						<p class="content">
+							<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><%=b.getBoardContent() %></a>
+						</p> 
+					</div>
+					<div class="sub">
+						<%if(b.getBoardWriter().equals("1")){ %>
+							<p class="name">관리자</p>										
+						<%}else{ %>
+							<p class="name">익명</p>
+						<%} %>					
+						<div class="sub3">
+							<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><%=b.getCreateDate() %></a>
+						</div>
+						<div class="sub2">
+							<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><i class="fa-regular fa-eye"><%=b.getCount() %></i></a>
+							<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><i class="fa-regular fa-thumbs-up"><%=b.getGood() %></i></a>
+							<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>">
+								<i class="fa-regular fa-comment">30</i>
+							</a>
+						</div>
+					</div>
+				</div>	
+			 	<%} %>
+			<%} %>			 					
+		</div>
 	</div>
-    <script >
-    	$(function(){
-    		
-	    	$(".bam-area>tbody>tr").click(function(){
-	    		var bno = $(this).children().eq(0).text();
-	    		console.log(bno);
-	            location.href="<%=contextPath%>/bamdetail.bo?bno="+bno;
-	    	});
-    	});
-    </script>
     <br>
     <div align="center" class="paging-area">
     	<%if(pi.getCurrentPage()!= 1){ %>
@@ -94,11 +181,11 @@
 	</div>
 	<br>
 	<div align="center">
-		<form action="<%=contextPath %>/search.bo">
+		<form action="<%=contextPath %>/bamlist.bo">
 			<input type="hidden" name="currentPage" value="1">
 			<select name="searchCategory">
-				<option value="BOARD_TITLE">제목</option>
-				<option value="BOARD_CONTENT">내용</option>
+				<option value="title">제목</option>
+				<option value="content">내용</option>
 			</select>
 		    <input type="search" name="keyword" placeholder="검색하실 제목">
 		    <button type="submit">검색</button>

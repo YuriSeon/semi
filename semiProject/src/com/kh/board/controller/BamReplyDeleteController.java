@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.kh.board.model.service.BamService;
+import com.kh.board.model.vo.Reply;
 
 /**
  * Servlet implementation class BamReplyDeleteController
@@ -32,19 +33,18 @@ public class BamReplyDeleteController extends HttpServlet {
 		//댓글 삭제 컨트롤
 		//댓글 번호 가져옴
 		int replyNo = Integer.parseInt(request.getParameter("replyNo"));
-		//보드 번호
-		int boardNo = Integer.parseInt(request.getParameter("bno"));
+		//로그인 되어있는 회원 번호
+		int userNo =Integer.parseInt(request.getParameter("userNo")) ;
+		//댓글 정보 가져옴
+		Reply r = new BamService().selectReply(replyNo);
 		
-		int result =new BamService().deleteReply(replyNo);
+		int result = 0;
 		
-		if(result>0) {//댓글 삭제 성공
-			request.setAttribute("alertMsg", "댓글 삭제 완료");
-			response.sendRedirect(request.getContextPath()+"/bamdetail.bo?bno="+boardNo);
-		}else {//댓글 삭제 실패
-			request.setAttribute("errorMsg", "댓글 삭제 실패");
-			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
+		if(userNo==(Integer.parseInt(r.getReplyWriter()))||userNo==1) {//댓글 작성자랑 로그인유저가 같거나 관리자인 경우
+			result =new BamService().deleteReply(replyNo);
 		}
 		
+		response.getWriter().print(result);
 		
 	}
 
