@@ -1,6 +1,7 @@
 package com.kh.admin.board.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.kh.admin.board.model.service.BoardService;
+import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.Board;
+import com.kh.board.model.vo.Reply;
 
 /**
  * Servlet implementation class BoardUpdateController
@@ -35,19 +38,24 @@ public class BoardUpdateController extends HttpServlet {
 		
 		Board b = new BoardService().selectBoard(bno);
 		
+		Attachment a = new BoardService().selectAttachment(bno); 
+		
+		ArrayList<Reply> rList = new BoardService().selectReply(bno);
+		
 		if(b!=null) {
-
 			request.setAttribute("b", b);
-			
+			if(a!=null) {
+				request.setAttribute("a", a);
+			}
+			if(!rList.isEmpty()) {
+				request.setAttribute("rList", rList);
+			}
 			request.getRequestDispatcher("admin/views/board/boardUpdate.jsp").forward(request, response);
 			
 		} else {
-			
-			request.setAttribute("errorPage", "조회 실패");
-			
 			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
 		}
-		
+			
 	}
 
 	/**
@@ -77,7 +85,7 @@ public class BoardUpdateController extends HttpServlet {
 			
 			request.getSession().setAttribute("alertMsg", "게시물 수정 성공");
 			
-			response.sendRedirect(request.getContextPath()+"/main.abo?typeNo=1&currentPage=1");
+			response.sendRedirect(request.getContextPath()+"/main.abo?currentPage=1");
 		} else {
 			
 			request.setAttribute("errorMsg", "게시물 수정 실패");

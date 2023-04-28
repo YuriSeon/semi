@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.kh.admin.userManage.model.service.UserManageService;
 import com.kh.bMember.model.vo.BMember;
 import com.kh.common.model.vo.PageInfo;
@@ -83,7 +84,6 @@ public class CheckListMainController extends HttpServlet {
 				request.getRequestDispatcher("admin/views/userManage/checkListMain.jsp").forward(request, response);
 				
 			} else {
-				
 				response.setContentType("json/application; charset=UTF8");
 				new Gson().toJson(list, response.getWriter());
 			}
