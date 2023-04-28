@@ -276,6 +276,52 @@ UPDATE ATTACHMENT
 SET STATUS = 'N'
 WHERE BOARD_NO = ?
 </entry>
+
+<entry key="updateFoodTogetherB">
+UPDATE BOARD
+SET BOARD_TITLE = ?,
+	BOARD_CONTENT = ?,
+	MODIFY_DATE = SYSDATE
+WHERE BOARD_NO = ?
+</entry>
+
+<entry key="updateFoodTogetherFT">
+UPDATE FOOD_TOGETHER
+SET MAINADDRESS = ?,
+	SUBADDRESS = ?,
+	PERSON = ?,
+	END_TIME =?
+WHERE BOARD_NO = ?
+</entry>
+
+<entry key="foodToCheckInsert">
+INSERT INTO TOCHECK VALUES (SEQ_BNO.CURRVAL, ?, ?)
+</entry>
+
+<entry key="selectwriterNo">
+SELECT USERNO
+FROM BOARD
+JOIN BMEMBER USING (USERNO)
+WHERE BOARD_NO = ?
+AND USERID = ?
+</entry>
+
+<entry key="toCheck">
+SELECT * FROM TOCHECK WHERE USERNO = ?
+</entry>
+
+<entry key="toCheckIn">
+INSERT INTO TOCHECK VALUES (?, ?, ?)
+</entry>
+
+<entry key="deletetocheck">
+DELETE FROM TOCHECK WHERE USERNO = ?
+</entry>
+<entry key="noewTogether">
+SELECT COUNT(*)
+FROM TOCHECK
+WHERE BOARD_NO = ?
+</entry>
 </properties>
 
 

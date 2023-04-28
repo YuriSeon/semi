@@ -1,9 +1,6 @@
 package com.kh.food.controller;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -38,6 +35,17 @@ public class FoodTogetherInsert extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(!request.getServletPath().equals("")) {
+			String menu = request.getParameter("menu");
+			String address = request.getParameter("address");
+			String imgAdress = request.getParameter("img");
+			String origin = request.getParameter("origin");
+			
+			request.setAttribute("menu", menu);
+			request.setAttribute("address", address);
+			request.setAttribute("img", imgAdress);
+			request.setAttribute("origin", origin);
+		}
 		request.getRequestDispatcher("views/food/foodTogetherInsert.jsp").forward(request, response);
 	}
 
@@ -57,19 +65,11 @@ public class FoodTogetherInsert extends HttpServlet {
 		String title = multiRequest.getParameter("title");
 		String content = multiRequest.getParameter("content");
 		String mainAddress = multiRequest.getParameter("mainAddress");
-		String subAddress = multiRequest.getParameter("subAddress");
+		String subAddress = multiRequest.getParameter("subAddress").trim();
 		if(subAddress == null) {
 			subAddress = "";
 		}
 		int person = Integer.parseInt(multiRequest.getParameter("person").substring(0,(multiRequest.getParameter("person").length() - 1)));
-//		Date endTime = null;
-//		String endTimeString = multiRequest.getParameter("endTime");
-//		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-//		try {
-//			endTime = sdf.parse(endTimeString);
-//		} catch (ParseException e) {
-//			e.printStackTrace();
-//		}
 		String endTime = multiRequest.getParameter("endTime");
 		
 		// 객체 저장 (Board)
@@ -77,6 +77,7 @@ public class FoodTogetherInsert extends HttpServlet {
 		b.setUn(userNo);
 		b.setBoardTitle(title);
 		b.setBoardContent(content);
+		b.setBoardWriter(String.valueOf(userNo));
 		// 객체 저장 (FoodTogether)
 		FoodTogether ft = new FoodTogether();
 		ft.setMainAdress(mainAddress);
@@ -86,13 +87,26 @@ public class FoodTogetherInsert extends HttpServlet {
 
 		// Service()로 전달
 		Attachment att = null;
-		if(multiRequest.getOriginalFileName("togetherImg") != null) {
+		if(multiRequest.getOriginalFileName("togetherImg") != null || multiRequest.getParameter("originName") != null) {
 			att = new Attachment();
-			att.setOriginName(multiRequest.getOriginalFileName("togetherImg"));
-			att.setChangeName(multiRequest.getFilesystemName("togetherImg"));
-			att.setFilePath("resources/food_files");
+			if(multiRequest.getParameter("originName") != null) {
+				String fullAddress = multiRequest.getParameter("fullImg");				
+				att.setOriginName(multiRequest.getParameter("originName"));
+				att.setChangeName(fullAddress.substring(fullAddress.lastIndexOf("/")+1));
+				att.setFilePath("resources/food_files");				
+			}else {
+				att.setOriginName(multiRequest.getOriginalFileName("togetherImg"));
+				att.setChangeName(multiRequest.getFilesystemName("togetherImg"));
+				att.setFilePath("resources/food_files");
+				
+			}
+//			if(multiRequest.getParameter("togetherImg") != null) {				
+//			}else {
+//			}
 			result = new FoodService().foodToInsert(b, ft, att);
 		}
+		
+		
 		
 		if(result > 0) {
 			response.sendRedirect(request.getContextPath() + "/foodTogether.bo");

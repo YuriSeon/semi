@@ -10,12 +10,20 @@
 	crossorigin="anonymous"></script>
 </head>
 <body>
-    <div id="1번게시글 " data-timeleft="60">1번 게시글</div>
+    <div id="1번게시글 " data-timeleft="3965">1번 게시글</div>
     <div id="2번게시글" data-timeleft="120">2반 게시글</div>
-    <div id="3번게시글" data-timeleft="190">3번 게시글</div>
+    <div id="3번게시글" data-timeleft="30000">3번 게시글</div>
 
     <button id="cre">생성</button>
+    <button id="test">disabled</button>
+    <button id="test2">check1</button>
+    <button id="test3">check2</button>
 
+    <table>
+        <th style="background-color: red;">
+            <td style="background-color: red;">sdf</td>
+        </th>
+    </table>
 <script>
 let num = 4;
 $("#cre").click(function(){
@@ -28,30 +36,62 @@ $("#cre").click(function(){
         num++;
 })
 
+$("#test").on("click", ()=>{
+    $("#cre").attr("disabled", true);
+    console.log("616" + 30);
+})
+
 // 게시물 동적으로 생성되면 자동으로 시간 계산 할꺼임... 
 function updateElements(){
         $.each($("[data-timeleft]"), function(){
             const timeLeft = parseInt($(this)[0].dataset.timeleft);
             if(timeLeft > 0){
                 $(this)[0].dataset.timeleft = timeLeft - 1;
-                $(this).text($(this).attr("id") + ":" + parseInt($(this)[0].dataset.timeleft/60) + "분" + $(this)[0].dataset.timeleft % 60 + "초") 
+                let hour = parseInt($(this)[0].dataset.timeleft/3600);
+                let min = parseInt(($(this)[0].dataset.timeleft%3600)/60);
+                let sec = parseInt($(this)[0].dataset.timeleft%3600)%60;
+                $(this).text(hour+"시" + min + "분" + sec + "처"); 
             }else{
                 $(this).text("---");
+                console.log($(this).parents());
             }
         })
 }
 
 setInterval(updateElements, 1000);
-
-
+var test = "4월 17일,2023";
+var str = "":
+for(let i = 0; i < str.length; i++){
+    try{
+        let s = parseInt(str[i]);
+        str += s;
+    }catch(err){
+        str += " "; 
+    }
+}
+str = str.split(" ");
+console.log(str[3] + "년");
+console.log(str[1] + "월");
+console.log(str[2] + "일");
 
 
 // 변수명?.객체?.key >> 지금 객체에 해당key값이 있냐
-if (Game?.position?.x) {
-  move(x);
-}
+// if (Game?.position?.x) {
+//   move(x);
+// }
 
+list = [];
+if(list??false){
+    console.log("hi");
+}
 //옵셔널 체이닝 
+$("#test2").click(function(){
+    console.log($("#cre").attr("disabled"));
+})
+
+$("#test3").click(function(){
+    $("#cre").attr("disabled", false);
+})
 
 </script>
 </body>

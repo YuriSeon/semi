@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.kh.bMember.model.vo.BMember;
 import com.kh.food.model.service.FoodService;
 
 /**
@@ -32,8 +33,11 @@ public class FoodTogetherBoardController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ArrayList<HashMap<String, String>> list = new FoodService().selectFoodTogether();
-		
+		int loginUserno = ((BMember)request.getSession().getAttribute("loginUser")).getUserNo();
+		int check = new FoodService().toCheck(loginUserno);
 		request.setAttribute("list", list);
+		request.setAttribute("check", check);
+		
 		request.getRequestDispatcher("views/food/foodTogether.jsp").forward(request, response);
 		
 	}

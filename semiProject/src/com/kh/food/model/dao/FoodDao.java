@@ -86,17 +86,6 @@ public class FoodDao {
 		String sql = prop.getProperty("selectDetail");
 		Board b = null;
 
-		// selectDetail
-//		SELECT B.BOARD_TITLE, B.BOARD_CONTENT FC.FOOD_NAME, B.GOOD, B.BAD, B.REPORT, B.CREATE_DATE, M.USERID, M.POINT, FB.ADDRESS
-//		FROM BOARD B
-//		JOIN BMEMBER M USING (USERNO)
-//		JOIN CATEGORY C ON (B.BOARD_TYPE = C.CATEGORY_NO)
-//		JOIN FOOD_BOARD FB USING (BOARD_NO)	
-//		JOIN F_CATEGORY FC ON (FC.FOOD_CATEGORY = fb.food_category)
-//		WHERE c.category_no = 3
-//		AND FB.DETAIL_TYPE = 1
-//		AND B.STATUS = 'Y'
-//		AND B.BOARD_NO = ?
 
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -498,26 +487,7 @@ public class FoodDao {
 		}
 		return result;
 	}
-//
-//	public int changeBtnCheck(Connection conn, String bno, int userno, String str) {
-//		int result = 0;
-//		PreparedStatement pstmt = null;
-//		String sql = prop.getProperty("changeBtnCheck");
-//		
-//		try {
-//			pstmt = conn.prepareStatement(sql);
-//			pstmt.setString(1, str);
-//			pstmt.setString(2, bno);
-//			pstmt.setInt(3, userno);
-//			result = pstmt.executeUpdate();
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		} finally {
-//			JDBCTemplate.close(pstmt);
-//		}
-//		return result;
-//	}
-
+	
 	public int updateBtncheck(Connection conn, String str, int userno, String bno) {
 		// TODO Auto-generated method stub
 		int result = 0;
@@ -585,34 +555,6 @@ public class FoodDao {
 		return result;
 	}
 
-//	public ArrayList<Attachment> selectAttachment(Connection conn, int bno) {
-//		ResultSet rset = null;
-//		String sql = prop.getProperty("selectAttachment");
-//		PreparedStatement pstmt = null;
-//		ArrayList<Attachment> attList = null;
-//		try {
-//			pstmt = conn.prepareStatement(sql);
-//			pstmt.setInt(1, bno);
-//			rset = pstmt.executeQuery();
-//			while(rset.next()) {
-//				attList = new ArrayList<>();
-//				Attachment att = new Attachment();
-//				att.setChangeName(rset.getString("CHANGE_NAME"));
-//				att.setFilePath("FILE_PATH");
-//				attList.add(att);
-//			}
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} finally {
-//			JDBCTemplate.close(rset);
-//			JDBCTemplate.close(pstmt);
-//			
-//		}
-//		
-//		return attList;
-//	}
-
 	public Attachment selectAttachmentDetail(Connection conn, int bno) {
 		ResultSet rset = null;
 		String sql = prop.getProperty("selectAttachmentDetail");
@@ -655,6 +597,8 @@ public class FoodDao {
 					att = new Attachment();
 					att.setChangeName(rset.getString("CHANGE_NAME"));
 					att.setFilePath(rset.getString("FILE_PATH"));
+					att.setOriginName(rset.getString("ORIGIN_NAME"));
+					att.setChangeName(rset.getString("CHANGE_NAME"));
 					list.add(att);
 				}
 			}
@@ -784,13 +728,14 @@ public class FoodDao {
 				map.put("content",    rset.getString("BOARD_CONTENT"));
 				map.put("userId",     rset.getString("USERID"));
 				map.put("userNo",     rset.getString("USERNO"));
+				map.put("originName", rset.getString("ORIGIN_NAME"));
 				map.put("changeName", rset.getString("CHANGE_NAME"));
 				map.put("filePath",   rset.getString("FILE_PATH"));
 				map.put("mainAddress",rset.getString("MAINADDRESS"));
 				map.put("subAddress", rset.getString("SUBADDRESS"));
 				map.put("person",     rset.getString("PERSON"));
 				map.put("endTime",    rset.getString("END_TIME"));
-				map.put("boardNo",    rset.getString("boardNo"));
+				map.put("boardNo",    rset.getString("BOARD_NO"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -818,7 +763,193 @@ public class FoodDao {
 				JDBCTemplate.close(pstmt);
 			}
 		}
+		return result;
+	}
+	public int updateFoodTogetherB(Connection conn, HashMap<String, String> map) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("updateFoodTogetherB");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			System.out.println(map.get("title"));
+			pstmt.setString(1, map.get("title"));
+			pstmt.setString(2, map.get("content"));
+			pstmt.setString(3, map.get("bno"));
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
 		
 		return result;
+	}
+
+	public int updateFoodTogetherFT(Connection conn, HashMap<String, String> map) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("updateFoodTogetherFT");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, map.get("mainAddress"));
+			pstmt.setString(2, map.get("subAddress"));
+			pstmt.setString(3, map.get("person"));
+			pstmt.setString(4, map.get("endTime"));
+			pstmt.setString(5, map.get("bno"));
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public int foodToCheckInsert(Connection conn, Board b) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("foodToCheckInsert");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, b.getBoardWriter());
+			pstmt.setString(2, b.getBoardWriter());
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
+	}
+
+	public int toCheck(Connection conn, int userNo) {
+		ResultSet rset = null;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("toCheck");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, userNo);
+			System.out.println("sdfsfs" + userNo);
+			rset = pstmt.executeQuery();
+			if(rset.next()) {
+				return rset.getInt("BOARD_NO");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		return 0;
+	}
+
+	public int toCheckIn(Connection conn, int userNo, int bno, int writerNo, int person, int nowpt) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("toCheckIn");
+		
+		try {
+			if(person >= nowpt) {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, bno);
+				pstmt.setInt(2, writerNo);
+				pstmt.setInt(3, userNo);
+				result = pstmt.executeUpdate();				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
+	}
+
+	public int selectwriterNo(Connection conn, String writerId, int bno) {
+		ResultSet rset = null;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("selectwriterNo");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bno);
+			pstmt.setString(2, writerId);
+			rset = pstmt.executeQuery();
+		
+			if(rset.next()) {
+				return rset.getInt("USERNO");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		return -1;
+	}
+
+	public int deletetocheck(Connection conn, int userNo) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("deletetocheck");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, userNo);
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
+	}
+
+	public int nowTogether(Connection conn, int bno) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		String sql = prop.getProperty("noewTogether");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bno);
+			rset = pstmt.executeQuery();
+			if(rset.next()) {
+				result = rset.getInt(1);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public ArrayList<HashMap<String, String>> nowTogether(Connection conn, ArrayList<HashMap<String, String>> list) {
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		String sql = prop.getProperty("noewTogether");
+		
+		try {
+			for(int i = 0; i < list.size(); i++) {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, list.get(i).get("boardNo"));
+				rset = pstmt.executeQuery();
+				if(rset.next()) {
+					list.get(i).put("nowpt", rset.getString(1));
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
 	}
 }

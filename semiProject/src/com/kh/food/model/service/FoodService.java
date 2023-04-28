@@ -203,19 +203,21 @@ public class FoodService {
 	public int foodToInsert(Board b,FoodTogether ft, Attachment att  ) {
 		Connection conn = JDBCTemplate.getConnection();
 		int result = new FoodDao().foodToInsert(conn, b, att, ft);
-		if(result < 0) {
+		int result2 = new FoodDao().foodToCheckInsert(conn, b);
+		if(result * result2 > 0) {
+			JDBCTemplate.commit(conn);
+		}else {			
 			JDBCTemplate.rollback(conn);
-			return result;
 		}
-		JDBCTemplate.commit(conn);
-		return result;
+		return result*result2;
 	}
 
 	public ArrayList<HashMap<String, String>> selectFoodTogether() {
 		Connection conn = JDBCTemplate.getConnection();
 		ArrayList<HashMap<String, String>> list = new FoodDao().selectFoodTogether(conn);
+		ArrayList<HashMap<String, String>> list2 = new FoodDao().nowTogether(conn, list);
 		JDBCTemplate.close(conn);
-		return list;
+		return list2;
 	}
 
 	public HashMap<String, String> foodTogetherDetail(int boardNo) {
@@ -228,6 +230,56 @@ public class FoodService {
 	public int deleteTogether(int bno) {
 		Connection conn = JDBCTemplate.getConnection();
 		int result = new FoodDao().deleteTogether(conn, bno);
+		if(result > 0) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		JDBCTemplate.close(conn);
+		return result;
+	}
+
+	public int updateFoodTogether(HashMap<String, String> map) {
+		Connection conn = JDBCTemplate.getConnection();
+		int result1 = new FoodDao().updateFoodTogetherB(conn, map);
+		int result2 = new FoodDao().updateFoodTogetherFT(conn, map);
+		if(result2 * result1 < 0) {
+			JDBCTemplate.rollback(conn);			
+		}else {
+			JDBCTemplate.commit(conn);
+		}
+		JDBCTemplate.close(conn);
+		
+		return result1*result2;
+	}
+
+	public int toCheck(int userNo) {
+		Connection conn = JDBCTemplate.getConnection();
+		int check = new FoodDao().toCheck(conn, userNo);
+		JDBCTemplate.close(conn);
+		return check;
+	}
+
+	public int toCheckIn(int userNo, int bno, String writerId, int person) {
+		Connection conn = JDBCTemplate.getConnection();
+		int writerNo = new FoodDao().selectwriterNo(conn, writerId, bno);
+		int result = 0;
+		if(writerNo > 0) { // 작성자 no가 제대로 나왔다면
+			int nowpt = new FoodDao().nowTogether(conn, bno);
+			result = new FoodDao().toCheckIn(conn, userNo, bno, writerNo, person, nowpt);
+		}
+		if(result > 0) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		JDBCTemplate.close(conn);
+		return result;
+	}
+
+	public int deletetocheck(int userNo) {
+		Connection conn = JDBCTemplate.getConnection();
+		int result = new FoodDao().deletetocheck(conn, userNo);
 		if(result > 0) {
 			JDBCTemplate.commit(conn);
 		}else {

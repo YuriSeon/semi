@@ -34,13 +34,9 @@ public class LocationFoodController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String location = request.getParameter("location");
-		System.out.println(location);
-		String dong = location.split(" ")[2];
-		
+		String dong = (location.split(" ")[2]).substring(0,(location.split(" ")[2]).indexOf("동"));
 		ArrayList<Board> list = new FoodService().locationFood(dong);
-		
 		ArrayList<Integer> bnoArr = new ArrayList<>();
-		
 		for(Board b : list) {
 			bnoArr.add(b.getBoardNo());
 		}
