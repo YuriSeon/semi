@@ -9,37 +9,49 @@
 <head>
 <meta charset="UTF-8">
 <title>BlackListMain</title>
+<style>
+	select, input{
+		height: 30px;
+	}
+</style>
 </head>
 <body>
 	<%@include file="../common/menubar.jsp" %>
-	<div id="search_div">
+	<div id="wrapper">
+	<br>
+	<div id="bb">
         <form action="<%=contextPath %>/main.bl" method="post">
-            <select name="search_box" >
+            <select id="selectBox" name="search_box" >
                 <option value="id">ID</option>
-                <option value="name">NAME</option>
-                <option value="status">재가입시도</option>
+                <option value="name">Name</option>
+                <option id="status" value="status">ReEnroll</option>
             </select>
+            <script>
+            		
+            	if($("#selectBox option:selected").val == 'status'){
+            		$("search").attr()
+            	}
+            </script>
             <input type="hidden" name="currentPage" value="1">
-            <input type="search" name="input">
-            <button type="submit">검색</button>
+            <input type="search" id="search" name="input" placeholder="검색어를 입력하세요">
+            <button type="submit" class="custom-btn btn-10">검색</button>
         </form>
     </div>
-    <hr>
-	<!-- 나중에 시간 되면 selectbox 선택되면 해당 선택내역으로 order by 비동기통신으로 해보기 onchange -->    
-    <table id="list_table" border="1">
+    <br>
+    <table id="tab">
         <thead>
 	            <tr>
-	                <th>회원번호</th>
-	                <th>아이디</th>
-	                <th>이름</th>
-	                <th>휴대폰</th>
-	                <th>E메일</th>
-	                <th>주민번호</th>
-	                <th>게시물신고횟수</th>
-	                <th>DM차단횟수</th>
-	                <th>허위신고횟수</th>
-	                <th>필터링당한횟수</th>
-	                <th>재가입시도여부</th>
+	                <th>NO</th>
+	                <th>ID</th>
+	                <th>Name</th>
+	                <th>Phone</th>
+	                <th>Email</th>
+	                <th>Person Num</th>
+	                <th>Board Report</th>
+	                <th>DM Block</th>
+	                <th>False Report</th>
+	                <th>Filtering Count</th>
+	                <th>ReEnroll</th>
 	            </tr>
         </thead>
          <tbody>
@@ -79,25 +91,26 @@
             
          </tbody>
     </table>
+    </div>
     <!-- 페이징처리 하기 -->
     <div id="page">
 	<% if(pi.getCurrentPage()==1) {%>
 		<button type="button" disabled></button>
 	<% } else { %>
-		<button type="button" onclick="location.href='<%=contextPath%>/main/bl?currentPage=<%=pi.getCurrentPage()-1%>';">&lt;</button>
+		<button type="button" onclick="location.href='<%=contextPath%>/main.bl?currentPage=<%=pi.getCurrentPage()-1%>';">&lt;</button>
 	<% } %>
 	<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
 		
 		<%if(i==pi.getCurrentPage()) {%>
 			<button type="button" disabled>i</button>
 		<% } else {%>
-			<button type="button" onclick="location.href='<%=contextPath%>/main/bl?currentPage=<%=i%>';"><%=i %></button>
+			<button type="button" onclick="location.href='<%=contextPath%>/main.bl?currentPage=<%=i%>';"><%=i %></button>
 		<% } %>
 		
 	<% } %>
 	
 	<% if(pi.getMaxPage()!=pi.getCurrentPage()) { %>
-			<button type="button" onclick="location.href='<%=contextPath%>/main/bl?currentPage=<%=pi.getCurrentPage()+1%>';">&gt;</button>
+			<button type="button" onclick="location.href='<%=contextPath%>/main.bl?currentPage=<%=pi.getCurrentPage()+1%>';">&gt;</button>
 	<% } else { %>
 		<button type="button" disabled>&gt;</button>
 	<% } %> 

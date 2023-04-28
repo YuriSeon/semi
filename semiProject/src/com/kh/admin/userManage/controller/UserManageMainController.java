@@ -35,9 +35,9 @@ public class UserManageMainController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String select = "recently";
+		String select = "recently"; // 메인페이지 시작시에는 최근 상태값 변한 순서로 조회해서 보여주기 위해서 고정값 넣음
 		
-		String status = request.getParameter("status");
+		String status = "Y"; // 현재 사용자에 대한 정보 조회라서 고정값
 
 		int listCount = new UserManageService().listCount(status);
 

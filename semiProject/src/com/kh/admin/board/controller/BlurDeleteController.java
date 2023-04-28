@@ -1,5 +1,6 @@
 package com.kh.admin.board.controller;
 
+import java.io.File;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -7,17 +8,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.kh.admin.board.model.service.BoardService;
+import com.kh.board.model.vo.Attachment;
+
 /**
- * Servlet implementation class MainSearchbarController
+ * Servlet implementation class BlurDeleteController
  */
-@WebServlet("/mainSearch.menu")
-public class MainSearchbarController extends HttpServlet {
+@WebServlet("/blurDelete.abo")
+public class BlurDeleteController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MainSearchbarController() {
+    public BlurDeleteController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -26,12 +30,29 @@ public class MainSearchbarController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		int bno = Integer.parseInt(request.getParameter("bno"));
 		
-		String search = request.getParameter("main-search");
+		int result = new BoardService().deleteBoard(bno);
 		
-		
-		
-		
+		if(result>0) {
+			Attachment a = new BoardService().selectAttachment(bno);
+			
+			if(a!=null) {
+				new File(a.getFilePath()+a.getChangeName()).delete();
+			}
+			
+			result = new BoardService().deleteReply(bno);
+
+			if(result>0) {
+				request.getSession().setAttribute("alertMsg", "삭제되었습니다.");
+				response.sendRedirect(request.getContextPath()+"/blurboard.abo?currentPage=1");
+			}
+		}
+		//게시글 조회 실패 or 댓글 있을때 삭제 실패시 
+		if(result==0) {
+			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
+		}
 	}
 
 	/**

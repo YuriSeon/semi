@@ -46,7 +46,7 @@ public class CheckSelectListController extends HttpServlet {
 		int select = Integer.parseInt(request.getParameter("select"));
 		
 		String search = request.getParameter("search_input");
-		
+
 		int listCount = new UserManageService().ckCount(select, search);
 		
 		int currentPage = Integer.parseInt(request.getParameter("currentPage"));

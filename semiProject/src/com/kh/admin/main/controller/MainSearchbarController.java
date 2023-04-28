@@ -1,4 +1,4 @@
-package com.kh.admin.board.controller;
+package com.kh.admin.main.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,21 +10,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.kh.admin.board.model.service.BoardService;
-import com.kh.board.model.vo.Attachment;
+import com.kh.admin.userManage.model.service.UserManageService;
+import com.kh.bMember.model.vo.BMember;
 import com.kh.board.model.vo.Board;
-import com.kh.board.model.vo.Reply;
 
 /**
- * Servlet implementation class BlurDetailController
+ * Servlet implementation class MainSearchbarController
  */
-@WebServlet("/blurDetail.abo")
-public class BlurDetailController extends HttpServlet {
+@WebServlet("/mainSearch.menu")
+public class MainSearchbarController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public BlurDetailController() {
+    public MainSearchbarController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,29 +34,20 @@ public class BlurDetailController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		int bno = Integer.parseInt(request.getParameter("bno"));
+		String search = request.getParameter("search");
 		
-		String status = "C"; // 블러처리된 게시글 상태값
+		ArrayList<BMember> mList = new UserManageService().mainSearchUser(search);
 		
-		Board b = new BoardService().detailBoard(bno, status) ;
+		ArrayList<Board> bList = new BoardService().mainSearchBoard(search);
 		
-		Attachment a = new BoardService().selectAttachment(bno); 
+		request.setAttribute("mList", mList);
 		
-		ArrayList<Reply> rList = new BoardService().selectReply(bno);
+		request.setAttribute("bList", bList);
 		
-		if(b!=null) {
-			if(a!=null) {
-				request.setAttribute("a", a);
-			}
-			if(!rList.isEmpty()) {
-				request.setAttribute("rList", rList);
-			}
-			request.setAttribute("b", b);
-			request.getRequestDispatcher("admin/views/board/blurDetail.jsp").forward(request, response);
-		} else {
-			
-			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
-		}
+		request.setAttribute("search", search);
+		
+		request.getRequestDispatcher("admin/views/common/mainSearchResult.jsp").forward(request, response);
+		
 	}
 
 	/**

@@ -2,8 +2,10 @@ package com.kh.bMember.model.vo;
 
 import java.sql.Date;
 
+import com.kh.admin.userManage.model.vo.User;
 
-public class BMember {
+
+public class BMember extends User{
 
 
 	private int userNo;//		      USERNO NUMBER PRIMARY KEY,
@@ -22,6 +24,9 @@ public class BMember {
 	private String power;//		      POWER VARCHAR2(20) DEFAULT 'N' NOT NULL,
 	private String school_st;//		      SCHOOL_ST VARCHAR2(5) DEFAULT 'N',
 	private int point;//		      POINT NUMBER NOT NULL,
+	
+	private int totalB; // 차단 총 수
+	private int totalF; // 필터링 총 수
 	
 	public BMember() {
 		super();
@@ -73,6 +78,55 @@ public class BMember {
 		this.userNick = userNick;
 		this.schoolNo = schoolNo;
 		this.power = power;
+		this.school_st = school_st;
+		this.point = point;
+	}
+	public BMember(int userNo, String userId, String userName, Date createDate, Date modifyDate, int point, int totalB,
+			int totalF) {
+		super();
+		this.userNo = userNo;
+		this.userId = userId;
+		this.userName = userName;
+		this.createDate = createDate;
+		this.modifyDate = modifyDate;
+		this.point = point;
+		this.totalB = totalB;
+		this.totalF = totalF;
+	}
+
+	public BMember(int userNo, String userId, String userName, String phone, String address, String email, String ssn,
+			String status, Date createDate, Date modifyDate, String userNick, String schoolNo, int point) {
+		super();
+		this.userNo = userNo;
+		this.userId = userId;
+		this.userName = userName;
+		this.phone = phone;
+		this.address = address;
+		this.email = email;
+		this.ssn = ssn;
+		this.status = status;
+		this.createDate = createDate;
+		this.modifyDate = modifyDate;
+		this.userNick = userNick;
+		this.schoolNo = schoolNo;
+		this.point = point;
+	}
+
+	
+
+	public BMember(int userNo, String userId, String userName, String phone, String address, String email, String ssn,
+			Date createDate, String userNick, String schoolNo, String school_st, int point) {
+		super();
+		this.userNo = userNo;
+		this.userId = userId;
+		this.userName = userName;
+		this.phone = phone;
+		this.address = address;
+		this.email = email;
+		this.ssn = ssn;
+		this.createDate = createDate;
+		this.userNick = userNick;
+		this.schoolNo = schoolNo;
 		this.school_st = school_st;
 		this.point = point;
 	}
@@ -203,6 +257,23 @@ public class BMember {
 
 	public void setPoint(int point) {
 		this.point = point;
+	}
+
+	
+	public int getTotalB() {
+		return totalB;
+	}
+
+	public void setTotalB(int totalB) {
+		this.totalB = totalB;
+	}
+
+	public int getTotalF() {
+		return totalF;
+	}
+
+	public void setTotalF(int totalF) {
+		this.totalF = totalF;
 	}
 
 	@Override

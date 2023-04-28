@@ -211,14 +211,11 @@ public class UserManageDao {
 		String sql = null;
 		
 		switch(select) {
-		case "recently" : sql = prop.getProperty("selectUserList");
-			break;
-			
-		case "foodRank" : sql = prop.getProperty("selectSortFR");
-			break;
-	
-		case "total" : sql = prop.getProperty("selectSortFR");
-			break;
+		case "recently" : sql = prop.getProperty("selectUserList"); break;
+		
+		case "foodRank" : sql = prop.getProperty("selectSortFR"); break;
+		
+		case "total" : sql = prop.getProperty("selectSortFR"); break;
 		}
 		try {
 			
@@ -246,7 +243,6 @@ public class UserManageDao {
 												, rset.getInt("REPLY_COUNT")
 												, rset.getInt("BOARD_COUNT")
 												, foodRank);
-				
 				list.add(b);
 				list.add(um);
 			}
@@ -350,7 +346,6 @@ public class UserManageDao {
 			rset = pstmt.executeQuery();
 			
 			if(rset.next()) {
-				
 				result = rset.getInt("COUNT");
 			} 
 
@@ -362,7 +357,6 @@ public class UserManageDao {
 			
 			JDBCTemplate.close(pstmt);
 		}
-		
 		return result;
 	}
 
@@ -592,16 +586,14 @@ public class UserManageDao {
 		
 		try {
 			for(int i=0; i<result.length; i++) {
-				
+				if(!(i==0 || i==5)) {
+					result [i] = yellowCount(conn, i);
+					continue;
+				}
 				switch(i) {
 				case 0 : sql = prop.getProperty("checkCount"); break;
-				case 1 : result [i] = yellowCount(conn, i); i++;
-				case 2 : result [i] = yellowCount(conn, i); i++;
-				case 3 : result [i] = yellowCount(conn, i); i++;
-				case 4 : result [i] = yellowCount(conn, i); i++;
 				case 5 : sql = prop.getProperty("importantCount");
 				}
-					
 				stmt = conn.createStatement();
 				
 				rset = stmt.executeQuery(sql);
@@ -656,6 +648,228 @@ public class UserManageDao {
 	}
 
 
+	public ArrayList<User> detailInfo(Connection conn, int userNo) {
+		
+		ArrayList<User> list = new ArrayList<>();
+		
+		ResultSet rset = null;
+		
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("detailInfo");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, userNo);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				list.add(new BMember(rset.getInt("USERNO")
+										, rset.getString("USERID")
+										, rset.getString("USERNAME")
+										, rset.getString("PHONE")
+										, rset.getString("ADDRESS")
+										, rset.getString("EMAIL")
+										, rset.getString("SSN")
+										, rset.getDate("CREATE_DATE")
+										, rset.getString("USER_NICK")
+										, rset.getString("SNAME")
+										, rset.getString("SCHOOL_ST")
+										, rset.getInt("POINT")));
+				
+				list.add(new UserManage(rset.getInt("USERNO")
+						, rset.getInt("REPLY_COUNT")
+						, rset.getInt("BOARD_COUNT")
+						, rset.getString("FOODBOARD_STATUS")));
+				
+				list.add(new UserCondition(rset.getInt("USERNO")
+											, rset.getInt("BLOCK_C")
+											, rset.getInt("DM_BLOCK_C")
+											, rset.getInt("FALSE_BLOCK_C")
+											, rset.getInt("YELLOW_CARD")
+											, rset.getInt("BOARD_FILTERING")
+											, rset.getInt("REPLY_FILTERING")));
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return list;
+	}
 
 
+	public ArrayList<BMember> mainSearchUser(Connection conn, String search) {
+		
+		ArrayList<BMember> list = new ArrayList<>();
+
+		ResultSet rset = null;
+
+		PreparedStatement pstmt = null;
+
+		String sql = prop.getProperty("mainSearchUser");
+
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			for(int i =0; i<5; i++) {
+				pstmt.setString(i+1, search);
+			}
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				BMember b = new BMember();
+				
+				b.setUserNo(rset.getInt("USERNO"));
+				b.setUserId(rset.getString("USERID"));
+				b.setUserName(rset.getString("USERNAME"));
+				b.setEmail(rset.getString("EMAIL"));
+				b.setSchoolNo(rset.getString("SNAME"));
+				b.setUserNick(rset.getString("USER_NICK"));
+				
+				list.add(b);
+			}
+			System.out.println(list);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return list;	
+	}
+
+
+	public int updateUC(Connection conn, UserCondition uc) {
+		
+		int result = 0;
+		
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("updateUC");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			 
+			pstmt.setInt(1, uc.getBlockC());
+			
+			pstmt.setInt(2, uc.getDmBlockC());
+			
+			pstmt.setInt(3, uc.getFalseBlockC());
+			
+			pstmt.setInt(4, uc.getYellowCard());
+			
+			pstmt.setInt(5, uc.getBoardFiltering());
+			
+			pstmt.setInt(6, uc.getReplyFiltering());
+			
+			pstmt.setInt(7, uc.getUserNo());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
+
+	public int updateM(Connection conn, BMember b) {
+		
+		int result = 0;
+		
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("updateM");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, b.getPoint());
+			
+			pstmt.setInt(2, b.getUserNo());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+		
+	}
+
+
+	public int updateUM(Connection conn, UserManage um) {
+		
+		int result = 0;
+		
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("updateUM");	
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, um.getFoodBStatus()); // 맛집 게시물 작성 상태값
+			
+			pstmt.setInt(2, um.getUserNo());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
+
+	public int deleteUser(Connection conn, int userNo) {
+		
+		int result = 0;
+		
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("deleteUser");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, userNo);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+	
 }

@@ -39,6 +39,8 @@ public class Reply {
 		this.createDate = createDate;
 		this.status = status;
 	}
+	
+	
 
 	public int getReplyNo() {
 		return replyNo;
