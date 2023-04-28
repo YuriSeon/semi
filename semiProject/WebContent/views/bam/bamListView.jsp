@@ -14,7 +14,7 @@
 <style >
 		.board-list{			
 			border-top: 3px solid skyblue;
-			width: 90%;			
+			width: 80%;			
 			margin: auto;
 			text-align: center;
 			height: 100%;
@@ -23,14 +23,16 @@
 		
 		.board-list-pre{	
 			
-			width: 45%;
+			width: 80%;
 			border-bottom: 2px solid gainsboro;
+			border-left:2px solid gainsboro;
+			border-right:2px solid gainsboro;
 			margin: auto;
 			height: 10%;
 			display: inline-block;			
 		}
 		.board-list-pre:hover{
-			background-color:gray; 
+			background-color:rgb(243, 241, 241); 
 		}
 		
 		.title{			
@@ -132,7 +134,11 @@
 				<div class="board-list-pre">
 					<div class="title">
 					<span class="category">
+						<%if(b.getBoardType().equals("공지")){ %>
 						<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><%=b.getBoardType() %></a>
+						<%}else{ %>
+						<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><%=b.getBoardType() %></a>
+						<%} %>
 					</span>
 						<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><%=b.getBoardTitle() %></a> 
 						<p class="content">
@@ -152,7 +158,11 @@
 							<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><i class="fa-regular fa-eye"><%=b.getCount() %></i></a>
 							<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><i class="fa-regular fa-thumbs-up"><%=b.getGood() %></i></a>
 							<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>">
-								<i class="fa-regular fa-comment">30</i>
+								<%if(b.getFileNo()!=null){ %>
+								<i class="fa-regular fa-image"></i>
+								<%}else{%>
+								<i class="fa-regular fa-comment"></i>
+								<%} %>
 							</a>
 						</div>
 					</div>

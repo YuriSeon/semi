@@ -65,6 +65,34 @@ public class BamInsertController extends HttpServlet {
 			String content = multiRequest.getParameter("content");
 			String userNo = multiRequest.getParameter("userNo");
 			
+			/*
+			//제목,내용 욕설필터링
+			//욕 목록을 데이터베이스에서 가져옴
+			ArrayList<Bad> blist = new BamService().selectBadList();
+			//Bad = 욕 vo 
+			
+			//가져온 욕 목록이 제목과 내용에 포함되어 있는지 확인
+			//b.getBad= (String)욕 단어
+			int count = 0; //필터링에 걸렸는지 확인용
+			for(Bad b : blist) {
+				if(title.contains(b.getBad)) {//제목에 욕이 있다면
+					for(int i=0; i<b.getBad.length(); i++) {//욕 첫글자 포함 다 바꿈 
+						title = title.replace(String.valueOf(b.getBad.charAt(i)), "*");
+					}
+					count++; //count가 오르면 필터링에 걸렸다는 뜻
+				}
+				if(content.contains(b.getBad)) {//내용에 욕이 있다면
+					for(int i=0; i<b.getBad.length(); i++) {
+						content = content.replace(String.valueOf(b.getBad.charAt(i)), "*");
+					}
+					count++;
+				}
+			}
+			if(count>0) {//필터링에 한번이라도 걸렸다면
+				//여기에 필터링 걸린 횟수 증가 메소드 넣으면 됨
+			}
+			*/
+			
 			Board b = new Board();
 			b.setBoardType(category); //대나무숲 카테고리 지만 보드타입에 우선 넣어둠
 			b.setBoardTitle(title); //게시글 제목
