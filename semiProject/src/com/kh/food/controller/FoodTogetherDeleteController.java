@@ -30,12 +30,9 @@ public class FoodTogetherDeleteController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		// 삭제
 		int bno = Integer.parseInt(request.getParameter("bno"));
-		String changeName = request.getParameter("");
 		int result = new FoodService().deleteTogether(bno);
-		
 		if(result > 0) {
 			File f = new File(request.getSession().getServletContext().getRealPath("/resources/food_files/") + request.getParameter("changeName"));
 			f.delete();
@@ -43,14 +40,11 @@ public class FoodTogetherDeleteController extends HttpServlet {
 		}else {
 			request.getRequestDispatcher("views/common/errorPage.jsp");
 		}
-		
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 	}
-
 }

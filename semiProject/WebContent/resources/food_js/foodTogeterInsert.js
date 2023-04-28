@@ -5,11 +5,11 @@ $(function () {
         let nowTime = Number(now.getHours()) * 60 + Number(now.getMinutes()); // 분단위로 계산
         let end = $(this).val().split(":");
         let endTime = Number(end[0]) * 60 + Number(end[1]);
-        console.log(nowTime);
-        console.log(endTime);
-        if (nowTime > endTime + 30) {
+        console.log("now" + nowTime);
+        console.log("end" + endTime);
+        if (nowTime > endTime - 30) {
             $("#timer").val("");
-            alert("30분 이내로 종료할 수 없습니다.");
+            alert("현재 시간으로 부터 30분이후로 설정이 가능합니다.");
         }
     });
 
@@ -28,7 +28,6 @@ $(function () {
 
     // 모집 인원 조건 이벤트
     $("input[name=person]").on("focusout", function() {
-    	console.log($(this))
         if ($(this).val() < 1) {
             alert("모집인원의 최소는 1명입니다.");
             $(this).val("");
