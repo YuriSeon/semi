@@ -53,10 +53,13 @@
                         <!-- 첨부파일이 없을 경우 : 첨부파일이 없습니다. -->
                     	<%if(at == null) {%>
                     		첨부파일이 없습니다.
-                        <%}else{ %>
-                                <!-- 첨부파일이 있을 경우 -->
-                                <img src="<%=contextPath+at.getFilePath()+"/"+at.getChangeName()%>" width="150" height="120">
-                    	<%} %>
+                        <%}else if(at.getOriginName().substring(at.getOriginName().lastIndexOf(".")+1).equals("jpg")){ %>
+                            <!-- 사진이 있을 경우 -->
+                            <img src="<%=contextPath+at.getFilePath()+"/"+at.getChangeName()%>" width="150" height="120">
+                    	<%}else{ %>
+                    		<!-- 첨부파일이 있을 경우 -->
+                    		<a href="<%=contextPath + at.getFilePath()+"/"+at.getChangeName()%>" download="<%=at.getChangeName()%>"><%=at.getOriginName() %></a>
+                		<%} %>
                     </td>
                     
                 </tr>
