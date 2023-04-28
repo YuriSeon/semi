@@ -7,17 +7,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.kh.bMember.model.service.BMemberService;
+import com.kh.bMember.model.vo.BMember;
+
 /**
- * Servlet implementation class MyPageController2
+ * Servlet implementation class DeleteMemberController
  */
-@WebServlet("/myPage2.me")
-public class MyPageController2 extends HttpServlet {
+@WebServlet("/deleteMem.me")
+public class DeleteMemberController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MyPageController2() {
+    public DeleteMemberController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -26,8 +29,19 @@ public class MyPageController2 extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		request.getRequestDispatcher("views/member/myPage2.jsp").forward(request, response);
+		
+		String userId = ((BMember)request.getSession().getAttribute("loginUser")).getUserId();
+		String userPwd = ((BMember)request.getSession().getAttribute("loginUser")).getUserPwd();
+		
+		int result = new BMemberService().deleteMember(userId,userPwd);
+		System.out.println(result);
+		if(result>0) {
+			request.getSession().setAttribute("alertMsg", "다음에 또 만나요!");
+			request.getSession().removeAttribute("loginUser");
+			response.sendRedirect(request.getContextPath()+"/Main.co");
+		}else {
+			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
+		}
 	}
 
 	/**
