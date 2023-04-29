@@ -149,7 +149,7 @@ public class Board {
 
 	// 관리자 페이지에 게시물조회에 사용할 생성자
 	public Board(int boardNo, String boardWriter, String boardType, String boardTitle, Date createDate, Date modifyDate,
-			int good, int count) {
+			int good, int count, int typeNo) {
 		super();
 		this.boardNo = boardNo;
 		this.boardWriter = boardWriter;
@@ -159,6 +159,7 @@ public class Board {
 		ModifyDate = modifyDate;
 		this.good = good;
 		this.count = count;
+		this.typeNo = typeNo;
 	}
 	
 	// 공지사항 insert 생성자
@@ -202,6 +203,16 @@ public class Board {
 		this.count = count;
 	}
 	
+	
+	
+	public Board(int boardNo, String boardWriter, String boardType, String boardTitle, String status) {
+		super();
+		this.boardNo = boardNo;
+		this.boardWriter = boardWriter;
+		this.boardType = boardType;
+		this.boardTitle = boardTitle;
+		this.status = status;
+	}
 	public int getBoardNo() {
 		return boardNo;
 	}

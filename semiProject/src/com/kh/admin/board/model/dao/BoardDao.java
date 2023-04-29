@@ -13,10 +13,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Properties;
 
+import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.Board;
+import com.kh.board.model.vo.Reply;
 import com.kh.common.model.vo.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
-
 public class BoardDao {
 	
 	private Properties prop = new Properties();
@@ -69,7 +70,7 @@ public class BoardDao {
 		return result;
 		
 	}
-	// board main 페이지에 들어가면 나올 게시물 타입별 전체 조회
+	
 	public ArrayList<Board> boardList(Connection conn, PageInfo pi, int typeNo) {
 		
 		ArrayList<Board> list = new ArrayList<>();
@@ -133,11 +134,10 @@ public class BoardDao {
 			
 			pstmt.setInt(1, Integer.parseInt(b.getBoardWriter()));
 			
-			switch(b.getBoardType()) {
-			case "video" : no = 1; break;
-			case "bam" : no = 2; break;
-			case "food" : no = 3; 
-			
+			if(b.getBoardType().equals("bam")) {
+				no = 2;
+			} else {
+				no = 3;
 			}
 			pstmt.setInt(2, no);
 			
@@ -160,56 +160,12 @@ public class BoardDao {
 		return result;
 		
 	}
-
-	public Board selectBoard(Connection conn, int bno) {
-		
-		Board b = null;
-		
-		int result =0;
-		
-		PreparedStatement pstmt = null;
-		
-		ResultSet rset = null;
-		
-		String sql = prop.getProperty("selectBoard");
-		
-		try {
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setInt(1, bno);
-			
-			rset = pstmt.executeQuery();
-			
-			if(rset.next()) {
-				
-				b= new Board();
-				
-				b.setBoardNo(rset.getInt("BOARD_NO"));
-				
-				b.setBoardTitle(rset.getString("BOARD_TITLE"));
-				
-				b.setBoardContent(rset.getString("BOARD_CONTENT"));
-				
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			JDBCTemplate.close(rset);
-			JDBCTemplate.close(pstmt);
-		}
-		
-		return b;
-	}
-	
 	
 	public int updateBoard(Connection conn, Board b) {
 		
 		int result = 0;
 		
 		PreparedStatement pstmt = null;
-		
-		ResultSet rset = null;
 		
 		String sql = prop.getProperty("updateBoard");
 		
@@ -241,14 +197,12 @@ public class BoardDao {
 		PreparedStatement pstmt = null;
 		
 		String sql = prop.getProperty("deleteBoard");
-		
 		try {
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setInt(1, bno);
 			
 			result = pstmt.executeUpdate();
-			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -349,12 +303,42 @@ public class BoardDao {
 		}
 		return list;
 	}
+	
+	public int blurListCount(Connection conn) {
+		
+		int result = 0;
+
+		ResultSet rset = null;
+		
+		Statement stmt = null;
+		
+		String sql = prop.getProperty("blurListCount");
+		
+		try {
+			stmt = conn.createStatement();
+			
+			rset = stmt.executeQuery(sql);
+			
+			if(rset.next()) {
+				result = rset.getInt("COUNT");
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			
+			JDBCTemplate.close(rset);
+			
+			JDBCTemplate.close(stmt);
+			
+		}
+		return result;
+	}
 
 	public Board detailBoard(Connection conn, int bno, String status) {
 		
 		Board b = null;
-		
-		int result =0;
 		
 		PreparedStatement pstmt = null;
 		
@@ -396,43 +380,10 @@ public class BoardDao {
 		return b;
 	}
 
-	public int blurListCount(Connection conn) {
-		
-		int result = 0;
-
-		ResultSet rset = null;
-		
-		Statement stmt = null;
-		
-		String sql = prop.getProperty("blurListCount");
-		
-		try {
-			stmt = conn.createStatement();
-			
-			rset = stmt.executeQuery(sql);
-			
-			if(rset.next()) {
-				result = rset.getInt("COUNT");
-			}
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			
-			JDBCTemplate.close(rset);
-			
-			JDBCTemplate.close(stmt);
-			
-		}
-		return result;
-	}
 
 	public ArrayList<Board> blurList(Connection conn, PageInfo pi) {
 		
 		ArrayList<Board> list = new ArrayList<>();
-		
-		int result =0;
 		
 		PreparedStatement pstmt = null;
 		
@@ -501,7 +452,6 @@ public class BoardDao {
 					pstmt.setInt(1, i+2);
 					
 					rset = pstmt.executeQuery();
-					
 					if(rset.next()) {
 						result[i][j]= rset.getInt("COUNT");
 					}
@@ -517,6 +467,247 @@ public class BoardDao {
 			JDBCTemplate.close(pstmt);
 		}
 		
+		return result;
+	}
+
+	public ArrayList<Board> mainSearchBoard(Connection conn, String search) {
+		
+		ArrayList<Board> list = new ArrayList<>();
+		
+		PreparedStatement pstmt = null;
+		
+		ResultSet rset = null;
+		
+		String sql = prop.getProperty("mainSearchBoard");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			for(int i=0; i<4; i++) {
+				pstmt.setString(i+1, search);
+			}
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				list.add(new Board(rset.getInt("BOARD_NO")
+									, rset.getString("USERID")
+									, rset.getString("CATEGORY_TYPE")
+									, rset.getString("BOARD_TITLE")
+									, rset.getString("STATUS")));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return list;
+	}
+
+	public Attachment selectAttachment(Connection conn, int bno) {
+		
+		Attachment a = null;
+		
+		ResultSet rset = null;
+		
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("selectAttachment");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, bno);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				a = new Attachment(rset.getInt("FILE_NO")
+									, rset.getInt("BOARD_NO")
+									, rset.getString("ORIGIN_NAME")
+									, rset.getString("CHANGE_NAME")
+									, rset.getString("FILE_PATH")
+									, rset.getDate("UPLOAD_DATE")
+									, rset.getString("STATUS"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		return a;
+	}
+
+	public ArrayList<Reply> selectReply(Connection conn, int bno) {
+		
+		ArrayList<Reply> list = new ArrayList<>();
+		
+		PreparedStatement pstmt = null;
+		
+		ResultSet rset = null;
+		
+		String sql = prop.getProperty("selectReply");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, bno);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				list.add(new Reply(rset.getInt("REPLY_NO")
+									, rset.getInt("BOARD_NO")
+									, rset.getString("USERNO")
+									, rset.getString("REPLY_CONTENT")
+									, rset.getDate("CREATE_DATE")
+									, rset.getString("STATUS")));
+			}
+					
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return list;
+	}
+
+	public int deleteReply(Connection conn, int bno) {
+		
+		int result = 0;
+		
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("deleteReply");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, bno);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
+	}
+
+	public int blurActive(Connection conn, int bno) {
+		
+		int result = 0;
+		
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("blurActive");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, bno);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
+		
+	}
+
+	public ArrayList<Board> boardTypeList(Connection conn, PageInfo pi, int bType) {
+		
+		ArrayList<Board> list = new ArrayList<>();
+		
+		ResultSet rset = null;
+		
+		PreparedStatement pstmt = null;
+		
+		int startRow = (pi.getCurrentPage() -1) *pi.getBoardLimit() +1;
+		
+		int endRow = startRow +pi.getBoardLimit() -1;
+	
+		String sql = prop.getProperty("boardTypeList");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, bType);
+			
+			pstmt.setInt(2, startRow);
+			
+			pstmt.setInt(3, endRow);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				Board b = new Board(rset.getInt("BOARD_NO")
+						, rset.getString("USERNAME")
+						, rset.getString("CATEGORY_TYPE")
+						, rset.getString("BOARD_TITLE")
+						, rset.getDate("CREATE_DATE")
+						, rset.getDate("MODIFY_DATE")
+						, rset.getInt("GOOD")
+						, rset.getInt("COUNT")
+						, rset.getInt("TYPE_NO"));
+				list.add(b);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		return list;
+	}
+
+	public int boardTypeCount(Connection conn, int bType) {
+		
+		int result = 0;
+
+		ResultSet rset = null;
+		
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("boardCount");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, bType);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				result = rset.getInt("COUNT");
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			
+			JDBCTemplate.close(rset);
+			
+			JDBCTemplate.close(pstmt);
+			
+		}
 		return result;
 	}
 

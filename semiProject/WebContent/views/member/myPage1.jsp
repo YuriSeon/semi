@@ -1,12 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="com.kh.board.model.vo.*"%>
+    pageEncoding="UTF-8" import="java.util.ArrayList,
+    com.kh.bMember.model.*,com.kh.message.model.vo.*,com.kh.common.model.vo.PageInfo"%>
+<%
+	ArrayList<Message> list = (ArrayList<Message>)request.getAttribute("list");
+	PageInfo pi = (PageInfo)request.getAttribute("pi");
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 
 <title>마이페이지_쪽지</title>
-    
 
 </head>
 <style>
@@ -19,14 +23,13 @@
     }
 
         body{
-            margin: 0px;
             color: #262626;
             box-sizing: border-box;
             font-family: 'GmarketSansMedium';
         }
 
         .wrapper{
-            position: absolute;
+            position: relative;
             left: 50%;
             width: 1000px;
             height: 900px;
@@ -73,31 +76,31 @@
         }
 
         .message_area{
-            margin-top: 30px;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            align-items: center;
-            margin-left: 10px;
-
         }
 
         .message_box{
-            display: inline-block;
-            width: calc(33.33% - 10px);
-            box-sizing: border-box;
+        	flex-basis: 32%;
+            justify-content: space-between;
             padding: 10px;
             height: 150px;
             cursor: pointer;
-            margin-right: 10px;
-            margin-bottom: 10px;
-            margin-top: 50px;
+            box-sizing: border-box;
+            margin-top: 70px;
             box-shadow: 5px 8px 20px 1px grey;
             border-radius: 10px;
+            margin-bottom: 10px;
+            margin-right: 10px;
+        }
+        
+        .message_box:hover{
+        	filter: invert(90%);
+        	transform: scale(.9);
         }
 
         .msg_from{
-            /* border: 1px solid red; */
             margin-left: 80px;
             margin-top: 15px;
             font-size: 18px;
@@ -111,7 +114,6 @@
         }
 
         .msg_content>img{
-            /* border: 1px solid green; */
             width: 70px;
             margin-top: -10px;
         }
@@ -140,6 +142,11 @@
             background-color: deepskyblue;
             color: #fefefe;
         }
+        
+        #modal-name1{
+        	font-size:20x;
+        	color:deepskyblue;
+        }
 
         #modal-time{
             margin: 5px;  
@@ -147,11 +154,16 @@
             font-size: 13px;           
         }
         #modal-content1{
+            margin-top:20px;
             font-size: 15px;
         }
 
         .paging{
+            position: absolute;
+        	bottom: 70px;
+        	left: 50%;
             text-align: center;
+            transform: translateX(-50%);
         }
 
         .paging a {
@@ -162,7 +174,7 @@
             border: 1px solid #ccc;
             color: #000;
             background-color:#fff;
-            margin-top: 100px;
+            margin-top: 400px;
         }
 
         .paging a.select{
@@ -170,19 +182,26 @@
             background-color: deepskyblue;
         }
         
-        .modal-footer1>button{
-        	background-color: deepskyblue;
-        	width:80px;
-        	height:30px;
-        	border-radius: 5px;
-            border-style: none;
-            cursor: pointer;
-        	float:right;
-        	color: #fefefe;
-        	text-align:center;
+        .nomsg{
+        	font-size : 20px;
+        	text-align: center;
+        	margin-top: 100px;
         }
+        
+        .nomsgImg{
+        	width:400px;
+        	position: absolute;
+            left: 50%;
+            height: 400px;
+            margin-left: -240px;
+        }
+        
+        .modal-footer1{
+			margin-top:70px;
+			float:right;
+			margin-right:10px;
+		}
 
-   
 </style>
 <body>
 	<%@ include file ="../common/menubar.jsp"%> 
@@ -190,88 +209,54 @@
         <div id="head">마이 페이지</div>
         <hr>
         <div id="button-area">
-            <button class="btnmenu" onclick="location.href='<%=contextPath %>/myPage1.me'" id="message">내 쪽지함</button>
+            <button class="btnmenu" onclick="location.href='<%=contextPath %>/list.me?currentPage=1'" id="message">내 쪽지함</button>
             <button class="btnmenu" onclick="location.href='<%=contextPath %>/myPage2.me'" id="myinfo">프로필 수정</button>
-            <button class="btnmenu" onclick="location.href='<%=contextPath %>/myPage3.me'" id="like">좋아요</button>
-        </div>
-
-        <div class="message_area" id="message_area">
-            <div class="message_box" id="msg1">
-                <div class="msg_from">이름</div>
-                <div class="msg_time">10:56 AM</div>
-                <div class="msg_content">
-                    <img src="resources/로고_투명배경.png" alt="">        
-                    <p>내용</p>
-                </div>
-            </div>
-
-            <div class="message_box" id="msg2">
-                <div class="msg_content">
-                    <div class="msg_from">이름</div>
-                    <div class="msg_time">10:56 AM</div>
-                    <div class="msg_content">
-                        <img src="resources/로고_투명배경.png" alt="">        
-                        <p>내용</p>
-                    </div>
-                </div>
-
-            </div>
-            <div class="message_box" id="msg3">
-                <div class="msg_content">
-                    <div class="msg_from">이름</div>
-                    <div class="msg_time">10:56 AM</div>
-                    <div class="msg_content">
-                        <img src="resources/로고_투명배경.png" alt="">        
-                        <p>내용</p>
-                    </div>
-                </div>
-
-            </div>
-            <div class="message_box" id="msg4">
-                <div class="msg_content">
-                    <div class="msg_from">이름</div>
-                    <div class="msg_time">10:56 AM</div>
-                    <div class="msg_content">
-                        <img src="resources/로고_투명배경.png" alt="">        
-                        <p>내용</p>
-                    </div>
-                </div>
-
-            </div>
-            <div class="message_box" id="msg5">
-                <div class="msg_content">
-                    <div class="msg_from">이름</div>
-                    <div class="msg_time">10:56 AM</div>
-                    <div class="msg_content">
-                        <img src="resources/로고_투명배경.png" alt="">        
-                        <p>안녕 잘지내지..? 기다릴게..</p>
-                    </div>
-                </div>
-
-            </div>
-            <div class="message_box" id="msg6">
-                <div class="msg_content">
-                    <div class="msg_from">이름</div>
-                    <div class="msg_time">10:56 AM</div>
-                    <div class="msg_content">
-                        <img src="resources/로고_투명배경.png" alt="">        
-                        <p>내용</p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="paging">
-            <a href="#">&lt;</a>
-            <a class="select" href="#">1</a>
-            <a href="#">2</a>
-            <a href="#">3</a>
-            <a href="#">4</a>
-            <a href="#">5</a>
-            <a href="#">&gt;</a>
+            <button class="btnmenu" onclick="location.href='<%=contextPath %>/myPage3.me'" id="like">포인트</button>
         </div>
         
+        
+	<%if(list==null||list.isEmpty()){ %>
+        	<p class="nomsg">도착한 메세지가 없습니다. ㅠㅠ</p>
+        	<img class="nomsgImg" src="resources/메일비었음.jpg" style="width:500px;" alt="">
+		<%}else{ %>
+		
+        	<div class="message_area" id="message_area">
+			<%for(Message m : list){ %>
+            <div class="message_box" id="msg1">
+                <div class="msg_from"><%=m.getUserWriter() %></div>
+                <div class="msg_time"><%=m.getMsgSendDate() %></div>
+                <div class="msg_content">
+                    <img src="resources/로고_투명배경.png" alt="">        
+                    <p><%=m.getMsgContent() %></p>
+                </div>
+            </div>
+
+   		<%} %>
+   		<%} %>
+        </div>
+
+
+		<div class="paging">
+
+        	<%if(pi.getMaxPage()>=1){ %>
+        	
+	        	<%if(pi.getCurrentPage()!=1){ %>
+	            	<a href="<%=contextPath%>/list.me?currentPage=<%=pi.getCurrentPage()-1%>">&lt;</a>
+	           		
+	            <%} %>
+	            <%for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++){ %>
+	            	<%if(i != pi.getCurrentPage()) {%>
+	            		<a href="<%=contextPath%>/list.me?currentPage=<%=i%>";><%=i %></a>
+	           		<%}else {%>
+	            		<a class="select"><%=i %></a>
+	           		<%} %>
+				<%} %>
+				
+				<%if(pi.getCurrentPage()!=pi.getMaxPage()) {%>
+            	<a href="<%=contextPath%>/list.me?currentPage=<%=pi.getCurrentPage()+1%>">&gt;</a>
+        	<%} %>
+        <%} %>    
+        </div>
     </div>
 
 
@@ -284,7 +269,7 @@
                 <div class="modal-body">
                     <div id="modal-name">발신자 : 이름</div>
                     <div id="modal-time">전송 시간 : 10:45 AM</div>
-                    <div id="modal-content">내용 : </div>
+                    <div id="modal-content1">내용 : </div>
                 </div>
                 <div class="modal-footer1">
                     <button type="button" data-dismiss="modal">닫기</button>                    
@@ -333,9 +318,6 @@
         
     </script>
     
-
-
-
 
 
 </body>

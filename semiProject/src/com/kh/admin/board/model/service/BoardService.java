@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.util.ArrayList;
 
 import com.kh.admin.board.model.dao.BoardDao;
+import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.Board;
+import com.kh.board.model.vo.Reply;
 import com.kh.common.model.vo.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
 
@@ -52,18 +54,6 @@ public class BoardService {
 		return result;
 	}
 
-	public Board selectBoard(int bno) {
-		
-		Connection conn = JDBCTemplate.getConnection();
-		
-		Board b = new BoardDao().selectBoard(conn, bno);
-		
-		
-		JDBCTemplate.close(conn);
-		
-		return b;
-	}
-	
 	public int updateBoard(Board b) {
 		
 		Connection conn = JDBCTemplate.getConnection();
@@ -133,7 +123,7 @@ public class BoardService {
 		
 		return b;
 	}
-
+	
 	public int blurListCount() {
 		Connection conn = JDBCTemplate.getConnection();
 		
@@ -156,6 +146,7 @@ public class BoardService {
 	}
 
 	public int[][] totalBoardCount() {
+		
 		Connection conn = JDBCTemplate.getConnection();
 		
 		int[][] result = new BoardDao().totalBoardCount(conn);
@@ -165,6 +156,102 @@ public class BoardService {
 		return result;
 	}
 
+	public ArrayList<Board> mainSearchBoard(String search) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		ArrayList<Board> list = new BoardDao().mainSearchBoard(conn, search);
+		
+		JDBCTemplate.close(conn);
+		
+		return list;
+		
+	}
+
+	public Attachment selectAttachment(int bno) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		Attachment a = new BoardDao().selectAttachment(conn, bno);
+		
+		JDBCTemplate.close(conn);
+		
+		return a;
+	}
+
+	public ArrayList<Reply> selectReply(int bno) {
+
+		Connection conn = JDBCTemplate.getConnection();
+		
+		ArrayList<Reply> list = new BoardDao().selectReply(conn, bno);
+		
+		JDBCTemplate.close(conn);
+		
+		return list;
+	}
+
+	public int deleteReply(int bno) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = 0;
+		
+		ArrayList<Reply> list = new BoardDao().selectReply(conn, bno);
+		
+		if(!list.isEmpty()) {
+			result = new BoardDao().deleteReply(conn, bno);
+			if(result>0) {
+				JDBCTemplate.commit(conn);
+			} else {
+				JDBCTemplate.rollback(conn);
+			}
+		} else {
+			result = 1; // 리스트가 비어있다면 댓글이 없다는거라서 controller에서 성공여부 판단하기 위해서 값을 1 넣어줌
+		}
+		JDBCTemplate.close(conn);
+		
+		return result;
+	}
+
+	public int blurActive(int bno) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = new BoardDao().blurActive(conn, bno);
+		
+		if(result>0) {
+			JDBCTemplate.commit(conn);
+		} else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+		
+		return result;
+	}
+
+	public ArrayList<Board> boardTypeList(PageInfo pi, int bType) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		ArrayList<Board> list = new BoardDao().boardTypeList(conn, pi, bType);
+		
+		JDBCTemplate.close(conn);
+		
+		return list;
+	}
+
+	public int boardTypeCount(int bType) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = new BoardDao().boardTypeCount(conn, bType);
+		
+		JDBCTemplate.close(conn);
+		
+		return result;
+		
+	}
 
 	
 

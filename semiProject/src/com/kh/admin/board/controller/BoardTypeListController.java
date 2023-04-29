@@ -10,21 +10,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.kh.admin.board.model.service.BoardService;
-import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.Board;
-import com.kh.board.model.vo.Reply;
+import com.kh.common.model.vo.PageInfo;
 
 /**
- * Servlet implementation class BlurDetailController
+ * Servlet implementation class BoardTypeListController
  */
-@WebServlet("/blurDetail.abo")
-public class BlurDetailController extends HttpServlet {
+@WebServlet("/typeList.abo")
+public class BoardTypeListController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public BlurDetailController() {
+    public BoardTypeListController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -33,29 +32,38 @@ public class BlurDetailController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		int bType = Integer.parseInt(request.getParameter("bType"));
 		
-		int bno = Integer.parseInt(request.getParameter("bno"));
+		int listCount = new BoardService().boardTypeCount(bType);
 		
-		String status = "C"; // 블러처리된 게시글 상태값
+		int currentPage = Integer.parseInt(request.getParameter("currentPage"));
 		
-		Board b = new BoardService().detailBoard(bno, status) ;
+		int boardLimit = 10;
 		
-		Attachment a = new BoardService().selectAttachment(bno); 
+		int pageLimit = 10;
 		
-		ArrayList<Reply> rList = new BoardService().selectReply(bno);
+		int startPage = (currentPage-1)/pageLimit *pageLimit +1;
 		
-		if(b!=null) {
-			if(a!=null) {
-				request.setAttribute("a", a);
-			}
-			if(!rList.isEmpty()) {
-				request.setAttribute("rList", rList);
-			}
-			request.setAttribute("b", b);
-			request.getRequestDispatcher("admin/views/board/blurDetail.jsp").forward(request, response);
-		} else {
+		int endPage = startPage+ pageLimit -1;
+		
+		int maxPage = (int)Math.ceil((double)listCount/boardLimit);
+		
+		if(endPage>maxPage) {
 			
+			endPage = maxPage;
+		}
+		
+		PageInfo pi = new PageInfo(listCount, currentPage, startPage, endPage, boardLimit, pageLimit, maxPage);
+		
+		ArrayList<Board> blist = new BoardService().boardTypeList(pi, bType);
+		
+		if(blist.isEmpty()) {
 			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
+		} else {
+			request.setAttribute("blist", blist);
+			request.setAttribute("pi", pi);
+			request.getRequestDispatcher("admin/views/board/boardMain.jsp").forward(request, response);
 		}
 	}
 

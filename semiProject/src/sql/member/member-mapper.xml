@@ -31,5 +31,48 @@
 		SELECT COUNT(*) "COUNT"
 		FROM BMEMBER
 		WHERE USERID = ?
-	</entry>	
+	</entry>
+	<entry key="deleteMember">
+		UPDATE BMEMBER
+		SET STATUS = 'N'
+		WHERE USERID = ?
+		AND USERPWD = ?
+		AND STATUS = 'Y'
+	</entry>
+	<entry key="updateMember">
+		UPDATE BMEMBER
+		SET USERNAME = ?
+			,PHONE = ?
+			,ADDRESS = ?
+			,EMAIL = ?
+			,SSN = ?
+			,USER_NICK = ?
+			,SCHOOL_NO = ?
+			,SCHOOL_ST = ?
+			,MODIFY_DATE = SYSDATE
+		WHERE USERID = ?
+	</entry>
+	<entry key="selectMember">
+		SELECT *
+		FROM BMEMBER
+		WHERE USERID = ?
+		AND STATUS = 'Y'
+	</entry>
+	<entry key="selectListCount">
+		SELECT COUNT(*) COUNT FROM MESSAGE
+		WHERE USERNO = ?
+	</entry>
+	<entry key="selectList">
+		SELECT *
+		FROM (SELECT ROWNUM RNUM, M.*
+            	FROM ( SELECT MSG_NO, USERNAME, MSG_CONTENT, MSG_SEND_DATE
+                        FROM MESSAGE M
+                        JOIN BMEMBER B ON M.USERNO = B.USERNO
+                        WHERE M.USERNO = ?
+                        ORDER BY MSG_NO DESC
+                         ) M ) 
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	
+	
 </properties>

@@ -36,29 +36,12 @@ public class BoardMainController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		// 공지사항 타입 꺼내기
-		int typeNo;
+		int typeNo =1;
 		
-		if(request.getParameter("typeNo")==null) { // 쿼리스트링으로 typeNo가 넘어오지 않았을때
-			
-			typeNo = (int)request.getAttribute("typeNo");
-			
-		} else {
-			
-			typeNo = Integer.parseInt(request.getParameter("typeNo"));
-		}
 		// 게시글 페이징처리
 		int listCount = new BoardService().boardCount(typeNo);
 		
-		int currentPage = 0;
-		
-		if(request.getParameter("currentPage")==null) { // 쿼리스트링으로 currentPage가 넘어오지 않았을때
-			
-			currentPage = (int)request.getAttribute("currentPage");
-			
-		} else {
-			
-			currentPage = Integer.parseInt(request.getParameter("currentPage"));
-		}
+		int currentPage = Integer.parseInt(request.getParameter("currentPage"));
 		
 		int pageLimit = 10;
 		
@@ -87,16 +70,11 @@ public class BoardMainController extends HttpServlet {
 			
 			request.setAttribute("pi", pi);
 			
-			request.setAttribute("typeNo", typeNo);
-			
 			request.getRequestDispatcher("admin/views/board/boardMain.jsp").forward(request, response);
 			
 		} else { // 반대의 경우 (count가 0이면서 list 비어있는 경우)
 			
-			
-			request.setAttribute("errorMsg", "공지사항 조회 실패");
-			
-			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response); // 오류페이지 경로 확인
+			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
 		}
 		
 	

@@ -16,6 +16,18 @@ public class Message {
 	public Message() {
 		super();
 	}
+	
+
+	//마이페이지 쪽지함 확인용
+	public Message(int msgNo, String userWriter, String msgContent, Date msgSendDate) {
+		super();
+		this.msgNo = msgNo;
+		this.userWriter = userWriter;
+		this.msgContent = msgContent;
+		this.msgSendDate = msgSendDate;
+	}
+
+
 	public Message(int msgNo, String userWriter, String msgContent, Date msgSendDate, String acceptUser) {
 		super();
 		this.msgNo = msgNo;

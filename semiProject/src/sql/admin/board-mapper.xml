@@ -2,26 +2,153 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 	
-	<entry key="boardListCount">
+	<entry key="boardCount">
+		SELECT COUNT(*)"COUNT"
+		FROM BOARD
+		WHERE TYPE_NO = ?
+		AND STATUS = 'Y'
+	</entry>
+	<entry key="bTypeBlurCount"> 
+		SELECT COUNT(*)"COUNT"
+		FROM BOARD
+		WHERE STATUS = 'C'
+		AND BOARD_TYPE = ?
+	</entry>
+	<entry key="boardTypeCount">
 		SELECT COUNT(*)"COUNT"
 		FROM BOARD
 		WHERE BOARD_TYPE = ?
+		AND STATUS = 'Y'
 	</entry>
-	<entry key="boardSelectList"> 
+	<entry key="recentBoardCount">
+		SELECT COUNT(*)"COUNT"
+		FROM BOARD
+		WHERE BOARD_TYPE= ?
+		AND STATUS = 'Y'
+		AND CREATE_DATE >= TO_CHAR(SYSDATE-14, 'RRRRMMDD')
+	</entry>
+	<entry key="reportCount">
+		SELECT COUNT(*)"COUNT"
+		FROM BOARD
+		WHERE BOARD_TYPE = ? 
+		AND STATUS = 'Y'
+		AND MODIFY_DATE >= TO_CHAR(SYSDATE-14, 'RRRRMMDD')
+		AND (GOOD + BAD + REPORT) >= 1
+	</entry><entry key="boardSelectCount">
+		SELECT COUNT(*)"COUNT"
+		FROM (SELECT *
+				FROM BOARD
+				WHERE BOARD_TITLE LIKE '%'||?||'%'							
+				OR BOARD_CONTENT LIKE '%'||?||'%') B
+		WHERE BOARD_TYPE = ?
+		AND STATUS = 'Y'
+	</entry>
+	<entry key="blurListCount">
+		SELECT COUNT(*)"COUNT"
+		FROM BOARD
+		WHERE STATUS = 'C'
+		AND TYPE_NO = 0
+	</entry>
+	<!-- 리스트 조회 -->
+	<entry key="boardList"> 
 		SELECT *
 		FROM(SELECT A.*, ROWNUM RNUM
-				FROM (SELECT BOARD_NO, CATEGORY_TYPE, USERNAME , BOARD_TITLE, B.COUNT, B.CREATE_DATE
-						FROM BOARD B
-						JOIN BMEMBER M USING(USERNO)
-						JOIN CATEGORY C ON(CATEGORY_NO=BOARD_TYPE)
-						WHERE BOARD_TYPE = ?
-						AND B.STATUS = 'Y'
-						AND USERNO = 1
-						ORDER BY REPORT DESC BAD DESC ) A )
+				FROM (SELECT *
+						FROM VW_DETAILBOARD
+						WHERE TYPE_NO = ?
+						AND STATUS = 'Y'
+						ORDER BY STATUS DESC, CATEGORY_TYPE DESC ) A )
 		WHERE RNUM BETWEEN ? AND ?
 	</entry>
-	<entry key="">
-		
+	<entry key="boardTypeList"> 
+		SELECT *
+		FROM(SELECT A.*, ROWNUM RNUM
+				FROM (SELECT *
+						FROM VW_DETAILBOARD
+						WHERE BOARD_TYPE = ?
+						AND STATUS = 'Y'
+						ORDER BY CATEGORY_TYPE DESC ) A )
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	<entry key="boardselectList"> 
+		SELECT *
+		FROM(SELECT A.*, ROWNUM "RNUM"
+				FROM (SELECT B.BOARD_NO, CATEGORY_TYPE, M.USERNAME , B.BOARD_TITLE, B.COUNT, B.CREATE_DATE, 
+                        B.MODIFY_DATE, B.GOOD, B.TYPE_NO
+						FROM (SELECT *
+								FROM BOARD
+								WHERE BOARD_TITLE LIKE '%'||?||'%'
+								OR BOARD_CONTENT LIKE '%'||?||'%') B
+						JOIN BMEMBER M ON(B.USERNO= M.USERNO)
+						JOIN CATEGORY C ON(CATEGORY_NO=B.BOARD_TYPE)
+						WHERE B.BOARD_TYPE = ?
+						AND B.STATUS = 'Y'
+						ORDER BY B.STATUS DESC, B.TYPE_NO ASC, (B.REPORT+ B.BAD) DESC ) A )
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	<entry key="blurList">
+		SELECT *
+		FROM(SELECT A.*, ROWNUM RNUM
+				FROM (SELECT*
+						FROM VW_DETAILBOARD 
+						WHERE STATUS = 'C'
+						ORDER BY (BAD + REPORT) DESC, CREATE_DATE ASC) A )
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	<entry key="detailBoard">
+		SELECT *
+		FROM VW_DETAILBOARD
+		WHERE STATUS = ?
+		AND BOARD_NO = ?
+	</entry>
+	
+	<entry key="insertNotice">
+		INSERT INTO BOARD (BOARD_NO, USERNO, BOARD_TYPE, BOARD_TITLE, BOARD_CONTENT, TYPE_NO)
+		VALUES(SEQ_BNO.NEXTVAL, ?, ?, ?, ?, ?)
+	</entry>
+	<entry key="blurActive">
+		UPDATE BOARD
+		SET STATUS = 'Y'
+			, MODIFY_DATE = SYSDATE 
+		WHERE BOARD_NO = ?
+	</entry>
+	<entry key="updateBoard">
+		UPDATE BOARD
+		SET BOARD_TITLE = ?
+			, BOARD_CONTENT = ?
+			, MODIFY_DATE = SYSDATE
+		WHERE BOARD_NO =?
+	</entry>
+	<entry key="deleteBoard">
+		UPDATE BOARD
+		SET STATUS = 'N'
+			, MODIFY_DATE = SYSDATE
+		WHERE BOARD_NO =?
+	</entry>
+	
+	<entry key="selectAttachment">
+		SELECT *
+		FROM ATTACHMENT
+		WHERE BOARD_NO = ?
+	</entry>
+	<entry key="selectReply">
+		SELECT *
+		FROM REPLY
+		WHERE BOARD_NO = ?
+	</entry>
+	<entry key="deleteReply">
+		UPDATE REPLY
+		SET STATUS = 'N'
+		WHERE BOARD_NO = ?
+	</entry>
+	
+	<entry key="mainSearchBoard">
+		SELECT BOARD_NO, USERID, CATEGORY_TYPE, BOARD_TITLE, STATUS
+		FROM VW_DETAILBOARD
+		WHERE USERID LIKE '%'||?||'%'
+		OR CATEGORY_TYPE LIKE '%'||?||'%'
+		OR BOARD_TITLE LIKE '%'||?||'%'
+		OR BOARD_CONTENT LIKE '%'||?||'%'
 	</entry>
 </properties>
 

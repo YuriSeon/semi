@@ -1,23 +1,30 @@
-package com.kh.bMember.controller;
+package com.kh.admin.main.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.kh.admin.board.model.service.BoardService;
+import com.kh.admin.userManage.model.service.UserManageService;
+import com.kh.bMember.model.vo.BMember;
+import com.kh.board.model.vo.Board;
+
 /**
- * Servlet implementation class MyPageController2
+ * Servlet implementation class MainSearchbarController
  */
-@WebServlet("/myPage2.me")
-public class MyPageController2 extends HttpServlet {
+@WebServlet("/mainSearch.menu")
+public class MainSearchbarController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MyPageController2() {
+    public MainSearchbarController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -26,8 +33,21 @@ public class MyPageController2 extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		request.getRequestDispatcher("views/member/myPage2.jsp").forward(request, response);
+		
+		String search = request.getParameter("search");
+		
+		ArrayList<BMember> mList = new UserManageService().mainSearchUser(search);
+		
+		ArrayList<Board> bList = new BoardService().mainSearchBoard(search);
+		
+		request.setAttribute("mList", mList);
+		
+		request.setAttribute("bList", bList);
+		
+		request.setAttribute("search", search);
+		
+		request.getRequestDispatcher("admin/views/common/mainSearchResult.jsp").forward(request, response);
+		
 	}
 
 	/**

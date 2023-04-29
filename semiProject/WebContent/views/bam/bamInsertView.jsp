@@ -25,16 +25,16 @@
 					<option value="4">공지</option>            		
             <%} %>
 			</select>
-            제목 : <input type="text" name="title" id="title">
+            제목 : <input type="text" name="title" id="title" maxlength="20">
         </div>
             <textarea name="content" id="content" cols="30" rows="10" style="resize:none; width: 450px; "></textarea>
             <br>
             
             <input type="file" name="upfile">
             <br>
-            <button type="submit">작성하기</button>
+            <button type="submit" onclick="badCheck();">작성하기</button>
             <button type="reset">취소</button>
             
-        </form>
+      </form>
 </body>
 </html>

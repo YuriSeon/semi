@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import com.kh.admin.userManage.model.dao.UserManageDao;
 import com.kh.admin.userManage.model.vo.BlackList;
 import com.kh.admin.userManage.model.vo.User;
+import com.kh.admin.userManage.model.vo.UserCondition;
+import com.kh.admin.userManage.model.vo.UserManage;
 import com.kh.bMember.model.vo.BMember;
 import com.kh.common.model.vo.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
@@ -150,11 +152,68 @@ public class UserManageService {
 			return result;
 		}
 
+		public ArrayList<User> detailInfo(int userNo) {
+			
+			Connection conn = JDBCTemplate.getConnection();
+			
+			ArrayList<User> list = new UserManageDao().detailInfo(conn, userNo);
+			
+			JDBCTemplate.close(conn);
+			
+			return list;
+		}
 
-		
-		
+		public ArrayList<BMember> mainSearchUser(String search) {
+			
+			Connection conn = JDBCTemplate.getConnection();
+			
+			ArrayList<BMember> list = new UserManageDao().mainSearchUser(conn, search);
+			
+			JDBCTemplate.close(conn);
+			
+			return list;
+		}
 
-	
-	
+		public ArrayList<User> userUpdate(UserCondition uc, BMember b, UserManage um) {
+			
+			Connection conn = JDBCTemplate.getConnection();
+			
+			ArrayList<User> list = new ArrayList<>();
+			
+			int result = 0;
+			result += new UserManageDao().updateUC(conn, uc);
+			result += new UserManageDao().updateM(conn, b);
+			result += new UserManageDao().updateUM(conn, um);
+			
+			if(result==3) {
+				JDBCTemplate.commit(conn);
+				
+				// 업데이트 성공시 업데이트 된 정보 가져가서 뿌려주기위해 조회
+				list = new UserManageDao().detailInfo(conn, b.getUserNo());
+			} else {
+				
+				JDBCTemplate.rollback(conn);
+			}
+			JDBCTemplate.close(conn);
+
+			return list;
+		}
+
+		public int deleteUser(int userNo) {
+			
+			Connection conn = JDBCTemplate.getConnection();
+			
+			int result = new UserManageDao().deleteUser(conn, userNo);
+			
+			if(result>0) {
+				JDBCTemplate.commit(conn);
+			} else {
+				JDBCTemplate.rollback(conn);
+			}
+			
+			JDBCTemplate.close(conn);
+			
+			return result;
+		}
 
 }

@@ -5,28 +5,202 @@
 		SELECT COUNT(*) "COUNT"
 		FROM BMEMBER
 		WHERE STATUS LIKE '%'||?||'%'
+		AND POWER='U'
 	</entry>
 	<entry key="selectAllList">
 		SELECT *
-		FROM VW_BLACKL
+		FROM VW_BL
 		WHERE RNUM BETWEEN ? AND ?
 	</entry>
-	<entry key="selectListID">
+	<entry key="selectListID"> 
 		SELECT *
-		FROM VW_BLACKL
+		FROM VW_BL
 		WHERE RNUM BETWEEN ? AND ?
 		AND USERID LIKE '%'||?||'%'
 	</entry>
 	<entry key="selectListNAME">
 		SELECT *
-		FROM VW_BLACKL
+		FROM VW_BL
 		WHERE RNUM BETWEEN ? AND ?
 		AND USERNAME LIKE '%'||?||'%'
 	</entry>
 	<entry key="selectListSTATUS">
 		SELECT *
-		FROM VW_BLACKL
+		FROM VW_BL
 		WHERE RNUM BETWEEN ? AND ?
 		AND STATUS LIKE '%'||?||'%'
+	</entry>
+	<entry key="selectUserList">
+		SELECT *
+		FROM(SELECT A.*, ROWNUM "RNUM"
+			FROM(SELECT *
+					FROM VW_UM
+			        ORDER BY MODIFY_DATE DESC) A)
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	<entry key="selectSortFR">
+		SELECT *
+		FROM(SELECT A.*, ROWNUM "RNUM"
+			FROM(SELECT *
+					FROM VW_UM
+			        ORDER BY POINT ASC) A)
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	<entry key="selectSortAct">
+		SELECT *
+		FROM(SELECT A.*, ROWNUM "RNUM"
+			FROM(SELECT *
+					FROM VW_UM
+			        ORDER BY (REPLY_COUNT+BOARD_COUNT+VIDEO_COUNT) ASC) A)
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	<entry key="checkListRecent">
+		SELECT *
+		FROM(SELECT A.*, ROWNUM "RNUM"
+			 FROM(SELECT *
+			 FROM VW_CK
+             ORDER BY MODIFY_DATE DESC) A)
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	<entry key="checkListBlock">
+		SELECT *
+		FROM(SELECT A.*, ROWNUM "RNUM"
+			 FROM(SELECT *
+			 FROM VW_CK
+             ORDER BY BLOCK DESC) A)
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	<entry key="checkListFiltering">
+		SELECT *
+		FROM(SELECT A.*, ROWNUM "RNUM"
+			 FROM(SELECT *
+			 FROM VW_CK
+             ORDER BY FILTERING DESC) A)
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	<entry key="ckCountId">
+		SELECT COUNT(*) "COUNT"
+		FROM VW_CK
+		WHERE USERID LIKE '%'||?||'%'
+	</entry>
+	<entry key="ckCountB">
+		SELECT COUNT(*) "COUNT"
+		FROM VW_CK
+		WHERE BLOCK >= ?
+	</entry>
+	 <entry key="ckCountF">
+		SELECT COUNT(*) "COUNT"
+		FROM VW_CK
+		WHERE FILTERING >= ?
+	</entry>
+	<entry key="checkSelectId">
+		SELECT *
+		FROM(SELECT A.*, ROWNUM "RNUM"
+			 FROM(SELECT *
+			 FROM VW_CK
+             ORDER BY MODIFY_DATE DESC) A)
+		WHERE RNUM BETWEEN ? AND ?
+		AND USERID LIKE '%'||?||'%'
+	</entry>
+		<entry key="checkSelectB">
+		SELECT *
+		FROM(SELECT A.*, ROWNUM "RNUM"
+			 FROM(SELECT *
+			 FROM VW_CK
+             ORDER BY MODIFY_DATE DESC) A)
+		WHERE RNUM BETWEEN ? AND ?
+		AND BLOCK >= ?
+	</entry>
+		<entry key="checkSelectF">
+		SELECT *
+		FROM(SELECT A.*, ROWNUM "RNUM"
+			 FROM(SELECT *
+			 FROM VW_CK
+             ORDER BY MODIFY_DATE DESC) A)
+		WHERE RNUM BETWEEN ? AND ?
+		AND FILTERING >= ?
+	</entry>
+	<!-- modify date view에 넣을지 확인해보기 -->
+	<entry key="importantCount">
+		SELECT COUNT(*) "COUNT"
+		FROM VW_IMP
+	</entry>
+	<entry key="importantList">
+		SELECT *
+		FROM(SELECT A.*, ROWNUM "RNUM"
+				FROM (SELECT *
+						FROM VW_IMP) A)
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	<entry key="yellowCard">
+		UPDATE USER_CONDITION
+		SET YELLOW_CARD = YELLOW_CARD+1
+		WHERE USERNO = ?
+	</entry>
+	<entry key="deleteUser">
+		UPDATE BMEMBER
+		SET STATUS = 'K'
+		WHERE USERNO = ?
+	</entry>
+	<entry key="recentUserCount">
+		SELECT COUNT(*) "COUNT"
+		FROM BMEMBER
+		WHERE STATUS LIKE '%'||?||'%'
+		AND POWER='U'
+		AND CREATE_DATE>=TO_CHAR(SYSDATE-14,'RRRRMMDD')
+	</entry>
+	<entry key="checkCount">
+		SELECT COUNT(*)"COUNT"
+		FROM USER_CONDITION 
+		WHERE MODIFY_DATE >= TO_CHAR(SYSDATE-14,'RRRRMMDD')
+	</entry>
+	<entry key="yellowCount">
+		SELECT COUNT(*)"COUNT"
+		FROM USER_CONDITION
+		WHERE YELLOW_CARD = ?
+	</entry>
+	<entry key="detailInfo">
+		SELECT A.*, RPAD(SUBSTR(SSN,1,8),14,'*')"SSN"
+		FROM(SELECT *
+				FROM BMEMBER B
+				JOIN USER_CONDITION C ON(B.USERNO=C.USERNO)
+				JOIN USER_MANAGE M ON(B.USERNO=M.USERNO)
+				JOIN SCHOOL USING(SCHOOL_NO))A
+		WHERE USERNO= ?
+	</entry>
+	<entry key="mainSearchUser">
+		SELECT B.USERNO, USERID, USERNAME, EMAIL, SNAME, USER_NICK
+		FROM BMEMBER B
+		JOIN SCHOOL USING(SCHOOL_NO)
+		WHERE USERID LIKE '%'||?||'%'
+		OR USERNAME LIKE '%'||?||'%'
+		OR EMAIL LIKE '%'||?||'%'
+		OR SNAME LIKE '%'||?||'%'
+		OR USER_NICK LIKE '%'||?||'%'
+	</entry>
+	<entry key="updateUC">
+		UPDATE USER_CONDITION
+		SET BLOCK_C =?
+			, DM_BLOCK_C = ?
+			, FALSE_BLOCK_C = ?
+			, YELLOW_CARD = ?
+			, BOARD_FILTERING = ?
+			, REPLY_FILTERING = ?
+		WHERE USERNO = ?
+	</entry>
+	<entry key="updateM">
+		UPDATE BMEMBER
+		SET POINT = ?
+		WHERE USERNO = ?
+	</entry>
+	<entry key="updateUM">
+		UPDATE USER_MANAGE
+		SET FOODBOARD_STATUS = ?
+		WHERE USERNO = ?
+	</entry>
+	<entry key="deleteUser">
+		UPDATE BMEMBER
+		SET STATUS = 'K'
+		WHERE USERNO = ?
 	</entry>
 </properties>

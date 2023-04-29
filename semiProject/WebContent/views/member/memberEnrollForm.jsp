@@ -1,209 +1,287 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%
 	String contextPath = request.getContextPath();
-	String alertMsg = (String)request.getSession().getAttribute("alertMsg");
+String alertMsg = (String) request.getSession().getAttribute("alertMsg");
+String email = request.getParameter("email");
 %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>회원가입 페이지</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
- <style>
-    @font-face {
-        font-family: 'GmarketSansMedium';
-        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
-        font-weight: normal;
-        font-style: normal;
-    }
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<style>
+@font-face {
+	font-family: 'GmarketSansMedium';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff')
+		format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
 
-        body{
-            margin: 0px;
-            color: #262626;
-            box-sizing: border-box;
-            font-family: 'GmarketSansMedium';
-        }
+body {
+	margin: 0px;
+	color: #262626;
+	box-sizing: border-box;
+	font-family: 'GmarketSansMedium';
+}
 
-        .wrapper{
-            position: absolute;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 800px;
-            height: 1000px;
-            left: 50%;
-            margin-left: -400px;
-            
-        }
-        #join_head{
-            font-size: 22px;
-            text-align: center;
-            font-weight: bold;
-            color: #262626;
-        
-        }
+.wrapper {
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 800px;
+	height: 1000px;
+	left: 50%;
+	margin-left: -400px;
+}
 
-        #p2{
-            margin-top: -5%;
-            margin-bottom: 10%;
-            font-size: 15px;
-            color: deepskyblue;
-        }
+#join_head {
+	font-size: 22px;
+	text-align: center;
+	font-weight: bold;
+	color: #262626;
+}
 
-        #join_form{
-            width: 500px;
+#p2 {
+	margin-top: -5%;
+	margin-bottom: 10%;
+	font-size: 15px;
+	color: deepskyblue;
+}
 
-        }
+#join_form {
+	width: 500px;
+}
 
-        .condition{
-            color:dimgrey;
-            font-size: 10px;
-            margin-top: -2px;
-        }
+.condition {
+	color: dimgrey;
+	font-size: 10px;
+	margin-top: -2px;
+}
 
-        .login_text{
-            float: right;
-            width: 300px;
-            margin-bottom: 10px;          
-        }
+.login_text {
+	float: right;
+	width: 300px;
+	margin-bottom: 10px;
+}
 
-        
-        #submit input{
-            width: 500px;
-            height: 30px;          
-            background-color: deepskyblue;
-            color: white;
-            border-radius: 5px;
-            border-style: none;
-            cursor: pointer;
-            font-size: 17px;
-            /* font-weight: bold; */
-            font-family: 'GmarketSansMedium';
-           
-        }
+#submit input {
+	width: 500px;
+	height: 30px;
+	background-color: deepskyblue;
+	color: white;
+	border-radius: 5px;
+	border-style: none;
+	cursor: pointer;
+	font-size: 17px;
+	font-family: 'GmarketSansMedium';
+}
 
-        .form-group button{
-            width: 80px;
-            height: 25px;
-            background-color: deepskyblue;
-            color: white;
-            border-radius: 5px;
-            border-style: none;
-            cursor: pointer;
-            font-family: 'GmarketSansMedium';
-            
-        }
+.form-group button {
+	width: 80px;
+	height: 25px;
+	background-color: deepskyblue;
+	color: white;
+	border-radius: 5px;
+	border-style: none;
+	cursor: pointer;
+	font-family: 'GmarketSansMedium';
+}
 
-        .school button{
-            
-            height: 25px;
-            background-color: deepskyblue;
-            color: white;
-            border-radius: 5px;
-            border-style: none;
-            cursor: pointer;
-            font-family: 'GmarketSansMedium';
-        }
+.school button {
+	height: 25px;
+	background-color: deepskyblue;
+	color: white;
+	border-radius: 5px;
+	border-style: none;
+	cursor: pointer;
+	font-family: 'GmarketSansMedium';
+}
+</style>
+<script
+	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
-    
-    </style>
-   
 </head>
 <body>
-    <div class="wrapper">
-        <div id="join_head">
-            <p>브레이크타임 신규 회원 가입</p>
-            <p id="p2">회원 가입 후 브레이크 타임을 편리하게 이용하세요!</p>
-        </div>
-        <form action="<%=contextPath %>/insert.me" id="join_form" method="post">
-            <div class="form-group">
-                <label for="userId">아이디 *</label><input type="text" id="userId" name="userId" class="login_text" style="width: 200px; float: none; margin-left: 135px;" required> <button onclick="idCheck();" style="width: 90px;">중복 확인</button> <br>
-                <p class="condition"  id="con1" style="margin-top: -10px;">숫자/영문자 포함 5~20자</p>
-            </div>
-            
-            <div class="form-group">
-                <label for="userPwd">비밀번호 *</label> <input type="password" id="userPwd" name="userPwd" class="login_text" required> <br>
-                <p class="condition" id="con2">숫자/영문자,특문 포함 5~20자</p>
-            </div>
-            
-            <div class="form-group">
-                <label for="chkPwd">비밀번호 확인 *</label> <input type="password" id="chkPwd" name="chkPwd" class="login_text" required> <br>
-                <p class="condition" id="con3" style="color: white;">내용</p>
-            </div>
+	<div class="wrapper">
+		<div id="join_head">
+			<p>브레이크타임 신규 회원 가입</p>
+			<p id="p2">회원 가입 후 브레이크 타임을 편리하게 이용하세요!</p>
+		</div>
+		<form action="<%=contextPath%>/insert.me" id="join_form"
+			method="post">
+			<div class="form-group">
+				<label for="userId">아이디 *</label><input type="text" id="userId"
+					name="userId" class="login_text"
+					style="width: 200px; float: none; margin-left: 135px;" required>
+				<button onclick="idCheck();" style="width: 90px;">중복 확인</button>
+				<br>
+				<p class="condition" id="con1" style="margin-top: -10px;">숫자/영문자
+					포함 5~20자</p>
+			</div>
 
-            <div class="form-group">
-                <label for="userName">이름 *</label> <input type="text" id="userName" name="userName" class="login_text" required> <br>
-                <p class="condition" id="con4" style="color: white;">내용</p>
-            </div>
-            
-            <div class="form-group">
-                <label for="phone">휴대전화 *</label> <input type="text" id="phone" name="phone" class="login_text" required> <br>
-                <p class="condition" id="con5" style="color: white;">내용</p>                
-            </div>
-            
-            <div class="form-group">
-                <label for="address">주소 *</label> <input type="address" id="address" name="address" class="login_text" style="width: 180px; float: none; margin-left: 145px;" required>
-                <button type="button" id="addressBtn" onclick="openDaumPostcode();" class="" style="width: 110px;">주소 찾기</button><br>
-                <p class="condition" id="con6" style="color: white; margin-top: -10px;">내용</p>
-            </div>
-            
-            <div class="form_group">
-                <label for="email">이메일 *</label> <input type="email" id="email" name="email" class="login_text" required> <br>
-                <p class="condition" id="con7">'@'포함하여 입력</p>
-            </div>
-           
-            <div class="form-group">
-                <label for="ssn">주민등록번호 *</label> <input type="text" id="ssn" name="ssn" class="login_text" required> <br>
-                <p class="condition" id="con8">'-'포함하여 입력</p>
-            </div>
-            
-            <div class="form-group">
-                <label for="userNick">닉네임 *</label> <input type="text" id="userNick" name="userNick" class="login_text" required> <br>
-                <p class="condition" id="con9" style="color: white;">내용</p>
-            </div>
-            
-            <br>
-            <hr>
-            <br>
-            추가 정보(선택 가능)
-            <br><br>
-            <div class="school">
-                학교 이름 
-                    <select name="schoolNo" id="sName" class="login_text" style="text-align: center; font-family: 'GmarketSansMedium';">
-                        <option value="0">선택안함</option>
-                        <option value="1">서울대학교</option>
-                        <option value="2">고려대학교</option>
-                        <option value="3">연세대학교</option>
-                        <option value="4">서강대학교</option>
-                        <option value="5">성균관대학교</option>
-                        <option value="6">한양대학교</option>
-                        <option value="7">이화여자대학교</option>
-                        <option value="8">건국대학교</option>
-                        <option value="9">중앙대학교</option>
-                        <option value="10">동국대학교</option>
-                    </select>  
-                <p class="condition" id="con10">학교 이름 선택</p>
-            </div>
-            <div class="school">
-                학교 이메일 <input type="email" id="sEmail" class="login_text" style="width: 180px; float: none; margin-left: 105px;" > <button type="button" id="verifyButton" onclick="return sval();" class="validate-btn" style="width: 110px;">학교 인증</button>  
-                <p class="condition" id="con11" style="margin-top: -10px; color: white;">내용</p>
-            </div>
+			<div class="form-group">
+				<label for="userPwd">비밀번호 *</label> <input type="password"
+					id="userPwd" name="userPwd" class="login_text" required> <br>
+				<p class="condition" id="con2">숫자/영문자,특문 포함 5~20자</p>
+			</div>
 
-            <br><br>
-            <div id="submit">
-                <input type="submit" value="회원가입" onclick="validate();">
-            </div>
-       
-        </form>
+			<div class="form-group">
+				<label for="chkPwd">비밀번호 확인 *</label> <input type="password"
+					id="chkPwd" name="chkPwd" class="login_text" required> <br>
+				<p class="condition" id="con3" style="color: white;">내용</p>
+			</div>
 
-    </div>
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <script>
+			<div class="form-group">
+				<label for="userName">이름 *</label> <input type="text" id="userName"
+					name="userName" class="login_text" required> <br>
+				<p class="condition" id="con4" style="color: white;">내용</p>
+			</div>
+
+			<div class="form-group">
+				<label for="phone">휴대전화 *</label> <input type="text" id="phone"
+					name="phone" class="login_text" required> <br>
+				<p class="condition" id="con5" style="color: white;">내용</p>
+			</div>
+
+			<div class="form-group">
+				<label for="address">주소 *</label> <input type="address" id="address"
+					name="address" class="login_text"
+					style="width: 180px; float: none; margin-left: 145px;" required>
+				<button type="button" id="addressBtn" onclick="openDaumPostcode();"
+					class="" style="width: 110px;">주소 찾기</button>
+				<br>
+				<p class="condition" id="con6"
+					style="color: white; margin-top: -10px;">내용</p>
+			</div>
+
+			<div class="form_group">
+				<label for="email">이메일 *</label> <input type="email" id="email"
+					name="email" class="login_text" required> <br>
+				<p class="condition" id="con7">'@'포함하여 입력</p>
+			</div>
+
+			<div class="form-group">
+				<label for="ssn">주민등록번호 *</label> <input type="text" id="ssn"
+					name="ssn" class="login_text" required> <br>
+				<p class="condition" id="con8">'-'포함하여 입력</p>
+			</div>
+
+			<div class="form-group">
+				<label for="userNick">닉네임 *</label> <input type="text" id="userNick"
+					name="userNick" class="login_text" required> <br>
+				<p class="condition" id="con9" style="color: white;">내용</p>
+			</div>
+
+			<br>
+			<hr>
+			<br> 추가 정보(선택 가능) <br>
+			<br>
+			<div class="school">
+				학교 이름 <select name="schoolNo" id="sName" class="login_text"
+					style="text-align: center; font-family: 'GmarketSansMedium';">
+					<option value="0">선택안함</option>
+					<option value="1">서울대학교</option>
+					<option value="2">고려대학교</option>
+					<option value="3">연세대학교</option>
+					<option value="4">서강대학교</option>
+					<option value="5">성균관대학교</option>
+					<option value="6">한양대학교</option>
+					<option value="7">이화여자대학교</option>
+					<option value="8">건국대학교</option>
+					<option value="9">중앙대학교</option>
+					<option value="10">동국대학교</option>
+				</select>
+				<p class="condition" id="con10">학교 이름 선택</p>
+			</div>
+			<div class="school">
+				학교 이메일 <input type="email" id="sEmail" class="login_text"
+					style="width: 180px; float: none; margin-left: 105px;">
+				<button type="button" id="verifyButton" class="validate-btn"
+					style="width: 110px;">학교 인증</button>
+				<p class="condition" id="con11"
+					style="margin-top: -10px; color: white;">내용</p>
+			</div>
+
+			<br>
+			<br>
+			<div id="submit">
+				<input type="submit" value="회원가입" onclick="validate();">
+			</div>
+
+		</form>
+
+	</div>
+
+	<script>
     
-    function idCheck(){
+    $("#verifyButton").on("click", function(){//학생 인증 버튼
+		var condition11 = document.getElementById("con11");
+		var flag = sval();
+		
+		if(flag){
+			sendEmail(event);
+          	condition11.innerHTML = "학교 인증 완료";
+            condition11.style.color = "deepskyblue";
+		}
+	});
+    
+    function sval(){
+	    var inputSname = document.getElementById("sName");
+	    var inputSemail = document.getElementById("sEmail");
+	    var condition10 = document.getElementById("con10");
+	    var condition11 = document.getElementById("con11");
+	    var inputSsn = document.getElementById("ssn");
+	    var validateBtn = document.querySelector(".validate-btn");
+	    var ageLimit = 35;
+	    var birthYear = '19'+inputSsn.value.substring(0,2);
+	    var currentYear = '20'+new Date().getFullYear()% 100;
+	    var age = currentYear - birthYear +1;
+
+	    inputSname.addEventListener('blur',()=>{
+	      if(inputSname.value = ''){
+	        condition10.innerHTML = "올바르지 않은 학교 이름입니다.";
+	        condition10.style.color = "red"
+	        inputSname.focus();
+	      }else{
+	        condition10.innerHTML = "✔";
+	        condition10.style.color = "deepskyblue";                    
+	      }
+	    });
+
+	    inputSemail.addEventListener('blur', () => {
+	      if (inputSemail.value != '') {
+	        var regExp10 = /@naver\.com$/;
+	        if (!regExp10.test(inputSemail.value)) {
+	          condition11.innerHTML = "올바르지 않은 메일 형식입니다.";
+	          condition11.style.color = "red"
+	          inputSemail.focus();
+	        } else {
+
+	        }
+	      }
+	    });
+
+	    if (age >= ageLimit) {
+	      alert("정말로 학생이신가요..? "+ageLimit+"세 까지만 인증 가능합니다.."+age);
+	      document.getElementById("sName").value="0";
+	      document.getElementById("sEmail").value="";
+	      return false;
+	    }
+
+	    return true;
+	  }
+    
+    
+    function idCheck(){//아디 중복확인
 		
     	var $checkId = $("#join_form input[name=userId]");
+    	var condition1 = document.getElementById("con1");
 		
 		$.ajax({
 			type : "GET",
@@ -215,15 +293,15 @@
 				if(result == "NNNNN"){
 					alert("이미 존재하거나 탈퇴한 유저의 아이디입니다.");
 	                $checkId.val("").focus();
-	                $condition1.html("사용 불가한 아이디입니다.");
-	                $condition1.css("color","red");
+	                $(condition1).html("사용 불가한 아이디입니다.");
+	                $(condition1).css("color","red");
 	                return;
 				}else{
 					if(confirm("사용 가능한 아이디입니다. 사용하시겠습니까?")){
 						$("#enroll-form button[type=submit]").removeAttr("disabled");
 						$checkId.attr("readonly", true);
-						$condition1.html("사용 가능한 아이디입니다.");
-						$condition1.css("color","deepskyblue")
+						$(condition1).html("사용 가능한 아이디입니다.");
+						$(condition1).css("color","deepskyblue")
 					}else{
 						$checkId.val("").focus();
 	
@@ -235,11 +313,9 @@
 			}
 		});
 	}
-    
-    
 
-        
-        function validate(){
+    
+        function validate(){//정규표현식
 
                var inputId = document.getElementById("userId");
                 var inputPwd = document.getElementById("userPwd");
@@ -252,10 +328,10 @@
                 var inputNick = document.getElementById("userNick");
                 
 
-                var condition1 = document.getElementById("con1")
-                var condition2 = document.getElementById("con2")
-                var condition3 = document.getElementById("con3")
-                var condition4 = document.getElementById("con4")
+                var condition1 = document.getElementById("con1");
+                var condition2 = document.getElementById("con2");
+                var condition3 = document.getElementById("con3");
+                var condition4 = document.getElementById("con4");
                 var condition5 = document.getElementById("con5");
                 var condition6 = document.getElementById("con6");
                 var condition7 = document.getElementById("con7");
@@ -398,74 +474,26 @@
                     }
 
                 });
-
-
-
-
-                
+               
             }
             validate();//전체 검사 끝
             
-            window.onload = function(){
-                var verifyButton = document.getElementById("verifyButton");
-                verifyButton.addEventListener("click",sval);
-            
+            function sendEmail(event){//메일인증 시작
+          	  event.preventDefault();
+          	  var inputSemail = document.getElementById("sEmail");
+          	  var email = inputSemail.value;
+          	  var xhttp = new XMLHttpRequest();
+          	  xhttp.onreadystatechange = function() {
+          	    if (this.readyState == 4 && this.status == 200) {
+          	      alert(this.responseText);
+          	    }
+          	  };
+          	  xhttp.open("POST", "sendEmail.me", true);
+          	  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+          	  xhttp.send("email=" + email);
+          	}//메일인증 끝
 
-            function sval(){
-                var inputSname = document.getElementById("sName");
-                var inputSemail = document.getElementById("sEmail");
-                var condition10 = document.getElementById("con10");
-                var condition11 = document.getElementById("con11");
-                var inputSsn = document.getElementById("ssn");
-                var validateBtn = document.querySelector(".validate-btn");
-                var ageLimit = 35;
-                var birthYear = '19'+inputSsn.value.substring(0,2);
-                var currentYear = '20'+new Date().getFullYear()% 100;
-                var age = currentYear - birthYear +1;
-
-                
-                inputSname.addEventListener('blur',()=>{
-                if(inputSname.value = ''){
-                        condition10.innerHTML = "올바르지 않은 학교 이름입니다.";
-                        condition10.style.color = "red"
-                        inputSname.focus();
-                    }else{
-                        condition10.innerHTML = "✔";
-                        condition10.style.color = "deepskyblue";                    
-                }
-            });
-            
-
-            inputSemail.addEventListener('blur',()=>{
-                if(inputSemail.value != ''){
-                    var regExp10 = /@ac\.kr$/;
-                    if(!regExp10.test(inputSemail.value)){
-                        condition11.innerHTML = "올바르지 않은 메일 형식입니다.";
-                        condition11.style.color = "red"
-                        inputSemail.focus();
-                        event.preventDefault();
-                    }else{
-                        condition11.innerHTML = "학교 인증 완료";
-                        condition11.style.color = "deepskyblue";
-                    }
-                }
-        
-            });
-                
-
-        if(age>=ageLimit){
-            alert("정말로 학생이신가요..? "+ageLimit+"세 까지만 인증 가능합니다..");
-            document.getElementById("sName").value="0";
-            document.getElementById("sEmail").value="";
-            return false;
-        }
-    
-        return true;
-    }
-
-    }//학생인증 함수 끝
-
-    function openDaumPostcode(){
+    function openDaumPostcode(){//주소 찾기
 
         new daum.Postcode({
             oncomplete: function(data) {
