@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+ <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" import="java.util.*, com.kh.board.model.vo.Board"%>
 <!DOCTYPE html>
 <html>
@@ -22,10 +22,27 @@
 </head>
 <%
 	ArrayList<Board> list = (ArrayList<Board>)request.getAttribute("list");
+	int maxpage = 0;
 %>
 <body>
 	<a href="<%=request.getContextPath()%>/rankInsert.bo" class="btn btn-primary">글작성</a>
 	<a href="<%=request.getContextPath()%>/foodmain.bo" class="btn btn-primary">뒤로가기</a>
+	<%if(!list.isEmpty()){ %>
+	<%
+		int totalboard = list.size();
+		maxpage = totalboard/7;
+		int maxpage2 = totalboard%7;
+		if(maxpage2 != 0){
+			maxpage = maxpage +1;
+		}
+			
+			int start = (int)request.getAttribute("cp");
+	if(start == 0){
+		start = 1;
+	}
+		
+	
+	%>
 	<table id="example" class="table table-striped table-bordered" cellspacing="0" align="center"  style="text-align: center; width:80%">
 		<thead>
 			<tr>
@@ -39,8 +56,10 @@
 			</tr>
 		</thead>
 		<tbody>
-		<%if(!list.isEmpty()){ %>
-		<%for(Board b : list){ %>
+		
+<%-- 		<%for(Board b : list){ %> --%>
+		<%for(int i = 7 *(start-1); i < 7 *(start); i++){ %>
+		<% Board b = (Board)list.get(i); %>
 			 <tr>
 			 	<td><%=b.getBoardNo() %></td>
 			 	<td><%=b.getBoardTitle() %></td>
@@ -50,13 +69,27 @@
 			 	<td><%=b.getBoardWriter() %></td>
 			 	<td><%=b.getPointName() %></td>
 			 </tr>
-		<%}} %>
+		
 		</tbody>
 	</table>
+	<%}}else{ %>
+		<h1>아무 글도 없습니다.</h1>
+	<%} %>
+	<%if(maxpage > 1) {%>
+	<%for (int b = 0; b < maxpage; b++){ %>
+		 <button class="hibtn" id=<%=b+1 %>><%=b+1 %></button>
+	<%} %>
+	<%} %>
 	<script>
 			$("#example tbody tr").click(function(){
 				location.href="<%=request.getContextPath() %>/foodRankingDetail.bo?bno="+$(this).children().eq(0).text();
 			});
+			
+			$(".hibtn").on("click",function(){
+				location.href="<%=request.getContextPath() %>/foodRanking.bo?cp="+$(this).attr("id");
+			});
+			
+			
 	</script>
 </body>
 

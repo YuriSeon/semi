@@ -5,13 +5,17 @@
 <head>
 <meta charset="EUC-KR">
 <title>Break Time[Food_TO]</title>
-
+<style>
+#example *{
+	border:1px solid black;
+}
+</style>
 </head>
 <body>
 <%
 	ArrayList<HashMap<String, String>> list = (ArrayList<HashMap<String, String>>)request.getAttribute("list");
-	// list에는 현재 밥 같이 먹기 게시판의 내용이 다 들어있다.
-	int check = (int)request.getAttribute("check");
+// 	// list에는 현재 밥 같이 먹기 게시판의 내용이 다 들어있다.
+  	int check = (int)request.getAttribute("check");
 %>
 
 <!-- 
@@ -32,8 +36,13 @@
      -->
   	<a href="<%=contextPath %>/foodmain.bo">메인으로가기</a>
   	<a href="<%=contextPath %>/foodTogetherInsert.bo">글쓰기</a>
+<%--   	<iframe name="hiddeniframe" style="display:none;" src="<%=contextPath %>/views/food/test.jsp"></iframe> --%>
   	
-  	<%if(!list.isEmpty()) {%>
+
+<!--   	<div id="testiframe"></div> -->
+  	
+  	
+  <%if(!list.isEmpty()) {%>
 	<table id="example">
 		<thead>
 			<tr>
@@ -65,7 +74,7 @@
 			 	<td style="background-color:red"><%=list.get(i).get("boardNo") %></td>
 			 	<td><%=list.get(i).get("boarTitle") %></td>
 			 	<td><%=list.get(i).get("userId") %></td>
-			 	<td><%=list.get(i).get("person") %></td>
+			 	<td><%=list.get(i).get("nowpt")%> / <%=list.get(i).get("person") %></td>
 			 	<td data-timeleft="<%=timeM - nowM%>">
 			 		<%=hour==0?"":hour + " : " %><%=min==0?"":min+" : " %><%=sec %>
 			 	</td>
@@ -86,10 +95,10 @@
 	</table>
 	<%} else { %>
 		<h1>아무 글 도 없습니다.</h1>
-	<%} %>
+	<%} %> 
 	
 	<script>
-			$("#example tbody tr").click(function(){
+			$("#example").on("click", "tbody tr", function(){
 				console.log(this);
 				location.href="<%=request.getContextPath() %>" + "/foodtogetherdetail.bo?bno=" + $(this).children().eq(0).text();
 			});
@@ -97,10 +106,9 @@
 			function updateElements(){
 		        $.each($("[data-timeleft]"), function(){
 		            const timeLeft = parseInt($(this)[0].dataset.timeleft);
-		            //movePage(navigator);
-		           <%-- // $("#example").load("<%=request.getContextPath()%>/foodTogether.bo #example"); --%>
+		         
 		            
-		            //location.reload();
+		
 		            if(timeLeft > 1){
 		                $(this)[0].dataset.timeleft = timeLeft - 1;
 		                let hour = parseInt($(this)[0].dataset.timeleft/3600);		             
@@ -128,8 +136,153 @@
 		            }
 		        })
 		} 
+			setInterval(updateElements, 1000);
 	
-		setInterval(updateElements, 1000);
+// 	function updateElements(){
+// 		$.ajax({
+// 			url : "test.bo",
+// 			type : "get",
+// 			success : function(){
+// 				console.log("ajax success");
+// 				var str = "";
+// 				str =
+<%-- 				<%if(!list.isEmpty()) {%> --%>
+// 				"<table id='example'>"+
+// 					"<thead>"+
+// 						"<tr>"+
+// 							"<th>#</th>"+
+// 							"<th>제목</th>"+
+// 							"<th>작성자</th>"+
+// 							"<th>인원</th>"+
+// 							"<th>남은시간</th>"+
+// 						"</tr>"+
+// 					"</thead>"+
+// 					"<tbody>"+
+<%-- 					<%for(int i = 0; i < list.size(); i++){%> --%>
+<%-- 					<% --%>
+// 						String[] timearr = list.get(i).get("endTime").split(":");
+// 						int timeM = Integer.parseInt(timearr[0])*3600 + Integer.parseInt(timearr[1])*60; // 종료 시간 초 단위
+// 						Date d = new Date();
+// 						SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+// 						String now = sdf.format(d);
+// 						String[] noewTime = now.split(":");
+// 						int nowM = Integer.parseInt(noewTime[0])*3600 + Integer.parseInt(noewTime[1])*60 + Integer.parseInt(noewTime[2]);
+// 						int showtime = timeM - nowM;
+// 						int hour = showtime/3600;
+// 						int min = (showtime%3600)/60;
+// 						int sec = (showtime%3600)%60;
+// 						int ggg = timeM - nowM;
+						
+// 						// 서버가 종료되면 시간이 가지 않는다.
+<%-- 						%>  --%>
+<%-- 						<%if(check == Integer.parseInt(list.get(i).get("boardNo"))){ %>  --%>
+// 						 "<tr>"+
+<%-- 						 	"<td style=\"background-color:red\"><%=list.get(i).get("boardNo") %></td>"+  --%>
+<%-- 							 	"<td><%=list.get(i).get("boarTitle") %></td>"+  --%>
+<%-- 							 	"<td><%=list.get(i).get("userId") %></td>"+  --%>
+<%-- 							 	"<td><%=list.get(i).get("nowpt")%> / <%=list.get(i).get("person") %></td>"+  --%>
+<%-- 							 	"<td data-timeleft='<%=ggg%>'><%=hour==0?"":hour + " : " %><%=min==0?"":min+" : " %><%=sec %></td>"+  --%>
+// 						 "</tr>"+
+<%-- 					 <%}else{ %>  --%>
+// 					 "<tr>"+
+<%-- 						 	"<td><%=list.get(i).get("boardNo") %></td>"+ --%>
+<%-- 						 	"<td><%=list.get(i).get("boarTitle") %></td>"+ --%>
+<%-- 						 	"<td><%=list.get(i).get("userId") %></td>"+ --%>
+<%-- 						 	"<td><%=list.get(i).get("nowpt")%> / <%=list.get(i).get("person") %></td>"+ --%>
+<%-- 						 	"<td data-timeleft='<%=ggg%>'><%=hour==0?"":hour + " : " %><%=min==0?"":min+" : " %><%=sec %></td>"+ --%>
+// 						 "</tr>"+
+<%-- 					 <%} %> --%>
+<%-- 					<%} %> --%>
+// 					"</tbody>"+
+// 				"</table>"
+<%-- 				<%} else { %>  --%>
+// 					+"<h1>아무 글 도 없습니다.</h1>"
+<%-- 				<%} %> ; --%>
+// 				$("#testiframe").html(str);
+				
+				
+// 				console.log("ajax success last");
+// 			},
+// 			error : function(){
+// 				console.log("ajax error");
+// 			}
+// 		})
+		
+// 	}
+// 		setInterval(function(){
+// 			$.ajax({
+// 				url : "foodTogether.bo",
+// 				type : "get",
+// 				success : function(){
+// 					console.log("ajax success");
+// 					var str = "";
+// 					str =
+<%-- 					<%if(!list.isEmpty()) {%> --%>
+// 					"<table id='example'>"+
+// 						"<thead>"+
+// 							"<tr>"+
+// 								"<th>#</th>"+
+// 								"<th>제목</th>"+
+// 								"<th>작성자</th>"+
+// 								"<th>인원</th>"+
+// 								"<th>남은시간</th>"+
+// 							"</tr>"+
+// 						"</thead>"+
+// 						"<tbody>"+
+<%-- 						<%for(int i = 0; i < list.size(); i++){%> --%>
+<%-- 						<% --%>
+// 							System.out.println("list" + list);
+// 							String[] timearr = list.get(i).get("endTime").split(":");
+// 							int timeM = Integer.parseInt(timearr[0])*3600 + Integer.parseInt(timearr[1])*60; // 종료 시간 초 단위
+// 							Date d = new Date();
+// 							SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+// 							String now = sdf.format(d);
+// 							String[] noewTime = now.split(":");
+// 							int nowM = Integer.parseInt(noewTime[0])*3600 + Integer.parseInt(noewTime[1])*60 + Integer.parseInt(noewTime[2]);
+// 							int showtime = timeM - nowM;
+// 							int hour = showtime/3600;
+// 							int min = (showtime%3600)/60;
+// 							int sec = (showtime%3600)%60;
+// 							int ggg = timeM - nowM;
+// 							System.out.println(ggg);
+// 							System.out.println(check);
+// 							System.out.println("hour " + hour);
+// 							System.out.println("min " + min);
+// 							System.out.println("sec " + sec);
+							
+// 							// 서버가 종료되면 시간이 가지 않는다.
+<%-- 							%>  --%>
+<%-- 							<%if(check == Integer.parseInt(list.get(i).get("boardNo"))){ System.out.println("1번째 조건");%>  --%>
+// 							 "<tr>"+
+<%-- 							 	"<td style=\"background-color:red\"><%=list.get(i).get("boardNo") %></td>"+  --%>
+<%-- 								 	"<td><%=list.get(i).get("boarTitle") %></td>"+  --%>
+<%-- 								 	"<td><%=list.get(i).get("userId") %></td>"+  --%>
+<%-- 								 	"<td><%=list.get(i).get("nowpt")%> / <%=list.get(i).get("person") %></td>"+  --%>
+<%-- <%-- 								 	"<td data-timeleft='<%=ggg%>'><%=hour==0?"":hour + " : " %><%=min==0?"":min+" : " %><%=sec %></td>"+  --%>
+<%-- 								 	"<td data-timeleft='<%=ggg%>'><%=hour %><%=min %><%=sec %></td>"+  --%>
+// 							 "</tr>"+
+<%-- 						 <%}else{ System.out.println("2번째 조건"); %>  --%>
+// 						 "<tr>"+
+<%-- 							 	"<td><%=list.get(i).get("boardNo") %></td>"+ --%>
+<%-- 							 	"<td><%=list.get(i).get("boarTitle") %></td>"+ --%>
+<%-- 							 	"<td><%=list.get(i).get("userId") %></td>"+ --%>
+<%-- 							 	"<td><%=list.get(i).get("nowpt")%> / <%=list.get(i).get("person") %></td>"+ --%>
+<%-- 							 	"<td data-timeleft='<%=ggg%>'><%=hour==0?"":hour + " : " %><%=min==0?"":min+" : " %><%=sec %></td>"+ --%>
+// 							 "</tr>"+
+<%-- 						 <%} %> --%>
+<%-- 						<%} %> --%>
+// 						"</tbody>"+
+// 					"</table>"
+<%-- 					<%} else { System.out.println("None 조건"); %>  --%>
+// 						+"<h1>아무 글 도 없습니다.</h1>"
+<%-- 					<%} %> ; --%>
+// 					$("#testiframe").html(str);
+// 				},
+// 				error : function(){
+// 					console.log("ajax error");
+// 				}
+// 			});
+// 		}, 1000);
 	</script>
   	
 

@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.kh.board.model.BamFileRenamePolicy;
 import com.kh.board.model.vo.Attachment;
-import com.kh.board.model.vo.Board;
 import com.kh.food.model.service.FoodService;
 import com.oreilly.servlet.MultipartRequest;
 

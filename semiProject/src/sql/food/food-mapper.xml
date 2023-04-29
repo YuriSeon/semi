@@ -322,6 +322,10 @@ SELECT COUNT(*)
 FROM TOCHECK
 WHERE BOARD_NO = ?
 </entry>
+
+<entry key="toWriterUser">
+SELECT * FROM TOCHECK WHERE WRITERNO = ?
+</entry>
 </properties>
 
 

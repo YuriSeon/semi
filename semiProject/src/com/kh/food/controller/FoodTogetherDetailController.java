@@ -36,6 +36,7 @@ public class FoodTogetherDetailController extends HttpServlet {
 		HashMap<String, String> map = new FoodService().foodTogetherDetail(boardNo);
 		int loginUserno = ((BMember)request.getSession().getAttribute("loginUser")).getUserNo();
 		int check = new FoodService().toCheck(loginUserno);
+		map.put("check", String.valueOf(check));
 		
 		if(map.isEmpty()) {
 			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);;

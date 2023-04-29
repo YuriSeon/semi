@@ -8,12 +8,130 @@
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.6.4.js"integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script> 
 <script type="text/javascript"src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f91f4c1499628ccd44bb5d41070cb9a1&libraries=services"></script>
+    <style>
+        #topdiv{
+            width: 850px;
+            height: 800px;
+            box-sizing: border-box;
+            margin: auto;
+        }
+        #topdiv *{
+            float: left;
+        }
+        #foodboarddiv, #foodImgdiv{
+            width: 47.5%;
+            height: 40%;
+            box-sizing: border-box;
+        }
+        #titleDiv{
+            width: 100%;
+            height: 10%;
+            box-sizing: border-box;
+        }
+        #contentDiv{
+            width: 100%;
+            height: 40%;
+            box-sizing: border-box;
+        }
+        #endTimediv{
+            width: 100%;
+            height: 22%;
+            box-sizing: border-box;
+        }
+        #persondiv{
+            width: 100%;
+            height: 22%;
+            box-sizing: border-box;
+        }
+        #nonediv1{
+            width: 100%;
+            height: 2%;
+            box-sizing: border-box;
+        }
+        #nonediv{
+            width: 5%;
+            height: 40%;
+            box-sizing: border-box;
+        }
+        #botImg{
+            width: 100%;
+            height: 35%;
+            background-color: black;
+            box-sizing: border-box;
+        }
+        #addDiv{
+            width: 100%;
+            height: 5%;
+            box-sizing: border-box;
+        } 
+        #button3{
+            width: 100%;
+            height: 7%;
+            box-sizing: border-box;
+        }
+        #etcbtns{
+            width: 100%;
+            height: 7%;
+            box-sizing: border-box;
+        }
+
+        
+    </style>
+
 </head>
 <body>
 <%@ include file="../common/menubar.jsp" %>
 	<%
 		HashMap<String, String> map = (HashMap<String, String>)request.getAttribute("map");
 	%>
+	
+	
+	
+	 <div id="topdiv">
+            <div id="foodImgdiv">
+            <img id="miriImg" src='<%=map.get("filePath")  + "/"+ map.get("changeName")%>' style="width:100%; height:100%">
+            </div>
+            <div id="nonediv"></div>
+            <div id="foodboarddiv">
+                <div id="titleDiv" style="font-weight: 1000; font-size:20px">
+                    <%=map.get("title") %>
+                </div>
+                <div id="nonediv1"></div>
+                <div id="contentDiv">
+                    내용 : <%=map.get("content") %>
+                </div>
+                <div id="nonediv1"></div>
+                <div id="endTimediv">
+                종료시간 : <%=map.get("endTime") %>
+                </div>
+                <div id="nonediv1"></div>
+                <div id="persondiv">
+                	인원제한 : <%=map.get("person") %>명
+                </div>
+            </div>
+            <div id="nonediv1"></div>
+            <div id="botImg">
+            <div id="map" style="width: 100%; height: 100%;" align="center"></div>
+            </div>
+            <div id="nonediv1"></div>
+            <div id="addDiv">
+            <%=map.get("mainAddress") %> <%=(map.get("subAddress")==null)?"":map.get("subAddress") %>
+            </div>
+            <div id="nonediv1"></div>
+            <div id="button3" style="text-align: center;">
+            <%if(map.get("userId").equals(((BMember)request.getSession().getAttribute("loginUser")).getUserId())){ %>
+        	    		<button type="submit"> 수정하기 </button>
+            			<button type="button" onclick="location.href='<%=contextPath %>/deleteTogether.bo?bno=<%=request.getParameter("bno")%>'">삭제하기</button>
+            		<%} else { %>
+            			<button type="button" id="nadu">참여하기</button>
+            		<%} %>
+            		<button type="button" onclick="history.back();">돌아가기</button>
+            </div>
+            <div id="etcbtns"></div>
+        </div>
+        
+        
+        
 	    <form action="<%=contextPath %>/foodTogetherUpdate.bo" method="get">
         <table align="center">
         	<tr>
@@ -122,6 +240,9 @@
 				},
 				type : "get",
 				success : function(data){
+					if(data == "iii"){
+						alert("글 작성자는 다른 글에 참여 할 수 없습니다.");
+					}
 					if(data == "err"){
 						this.error(data);
 					}
