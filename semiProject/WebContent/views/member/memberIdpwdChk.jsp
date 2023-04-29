@@ -95,7 +95,7 @@
             margin-top: 20px;
             font-size: 15px;
         }
-        .modal_result{
+        .modal_result1,.modal_result2{
             margin-top: 10px;
             font-size: 18px;
             color: crimson;
