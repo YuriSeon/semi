@@ -41,7 +41,7 @@ body {
 
 .searchButton {
 	width: 40px;
-	height: 36px;
+	height: 40px;
 	border: 1px solid #00B4CC;
 	background: #00B4CC;
 	color: #fff;
@@ -61,6 +61,51 @@ body {
 	height: 20%;
 	width: 100%;
 }
+
+#UserShowPage{
+	width: 50%;
+	height: 460px;
+	box-sizing: border-box;
+	margin: auto;
+}
+#topmargin{
+	height: 10%;
+	width: 100%;
+	box-sizing: border-box;
+}
+#left{
+	width: 100%;
+	height: 30%;
+	box-sizing: border-box;
+}
+#left * {
+	float: left;
+}
+#foodrankbtn, #foodtogetherbtn{
+	width: 45%;
+	height: 100%;
+	border: 1px solid red;
+	box-sizing: border-box;
+}
+#nonediv{
+	width: 10%;
+	height: 100%;
+	box-sizing: border-box;
+}
+#bottomshow{
+	width: 100%;
+	height: 60%;
+	box-sizing: border-box;
+}
+.noneb1{
+	width: 100%;
+	height: 5%;
+}
+#whatfood, #ads{
+	width: 100%;
+	height: 70%;
+	box-sizing: border-box;
+}
 </style>
 </head>
 <%@include file="../common/menubar.jsp" %>
@@ -68,7 +113,7 @@ body {
 	<div class="wrap">
 		<div class="search">
 			<button type="submit" class="searchButton" id="locationFoodBtn">
-				O
+				밥
 			</button>
 			<input id="userCurrLo" type="text" class="searchTerm" name="userCurrLo" readOnly>
 		</div>
@@ -84,10 +129,26 @@ body {
 		<input type='hidden' name='locationbno'>
 	</div>
 	<div id="UserShowPage">
-		현재 위치 :
-		<a href="<%=request.getContextPath()%>/foodRanking.bo">맛집 순위</a>
-		<a href="<%=request.getContextPath()%>/foodTogether.bo">같이 먹을 사람</a>
-		<a href="<%=request.getContextPath()%>">뭐 먹지?</a>
+		<div id ="topmargin"></div>
+		<div id="left">
+			<div id="foodrankbtn">
+				<a href="<%=request.getContextPath()%>/foodRanking.bo">맛집 순위</a>
+			</div>
+			<div id="nonediv"></div>
+			<div id="foodtogetherbtn" style="background-image: url(https://t1.daumcdn.net/cfile/tistory/997400445ED1FE5D18); background-size: 100%, 100%;">
+				<a href="<%=request.getContextPath()%>/foodTogether.bo">같이 먹을 사람</a>
+			</div>
+		</div>
+		<div id="bottomshow">
+			<div class="noneb1"></div>
+			<div id="ads" style="background-image: url(https://img.woowahan.com/www/common/baemin.jpg); background-size:100% 100%;" onclick="location.href='https://www.baemin.com/'">
+			</div>
+			<div class="noneb1"></div>
+			<div id="whatfood">
+				<a href="<%=request.getContextPath()%>">뭐 먹지?</a>
+				<!-- 지금 맛집에 있는 것들 -->
+			</div>
+		</div>
 	</div>
 	<script>
 	$(function(){

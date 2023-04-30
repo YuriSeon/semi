@@ -9,6 +9,7 @@
 	integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
 	crossorigin="anonymous"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f91f4c1499628ccd44bb5d41070cb9a1&libraries=services"></script>
+
 </head>
 <body>
  <%
@@ -19,6 +20,13 @@
  %>
  	<%@include file="../common/menubar.jsp" %>
  	<h1>상세보기</h1>
+ 	
+ 	    
+ 	
+ 	
+ 	
+ 	
+ 	
  	<form action="<%=request.getContextPath() %>/foodRankUpdate.bo?bno=<%=request.getParameter("bno")%>" method="get">
  	<input type="hidden" name="helloworld"value="<%=request.getParameter("bno") %>">
  	<input type="hidden" name="imgname"value="<%=att.getChangeName() %>">
