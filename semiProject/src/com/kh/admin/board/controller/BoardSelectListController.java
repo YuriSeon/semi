@@ -41,9 +41,9 @@ public class BoardSelectListController extends HttpServlet {
 		
 		int currentPage = Integer.parseInt(request.getParameter("currentPage"));
 		
-		int pageLimit = 10;
+		int pageLimit = 7;
 		
-		int boardLimit = 10;
+		int boardLimit = 7;
 		
 		int maxPage = (int)Math.ceil((double)listCount/boardLimit);
 		

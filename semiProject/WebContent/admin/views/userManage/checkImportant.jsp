@@ -36,7 +36,7 @@
 	<br>
     <div id="wrapper">
     	<div id="bb">
-			<% if(list.isEmpty()) { %>
+			<% if(list!=null && list.isEmpty()) { %>
 				<p style="text-align: center; font-weight: bold; font-size:X-large; line-height:450px">
 					관리가 필요한 회원이 없습니다.
 				</p>
@@ -96,30 +96,32 @@
 		</div>
     </div>
     <div>
-		<!-- 페이징처리 -->
-		<% if(pi.getCurrentPage()==1) {%>
-		<button type="button" disabled></button>
-		<% } else { %>
-		<button type="button"
-			onclick="location.href='<%=contextPath%>/important.ck?currentPage=<%=pi.getCurrentPage()-1%>';">&lt;</button>
-		<% } %>
-		<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
-
-		<%if(i==pi.getCurrentPage()) {%>
-		<button type="button" disabled>i</button>
-		<% } else {%>
-		<button type="button"
-			onclick="location.href='<%=contextPath%>/important.ck?currentPage=<%=i%>';"><%=i %></button>
-		<% } %>
-
-		<% } %>
-
-		<% if(pi.getMaxPage()!=pi.getCurrentPage()) { %>
-		<button type="button"
-			onclick="location.href='<%=contextPath%>/important.ck?currentPage=<%=pi.getCurrentPage()+1%>';">&gt;</button>
-		<% } else { %>
-		<button type="button" disabled>&gt;</button>
-		<% } %>
+    	<% if(pi.getMaxPage() > 0) { %>
+			<!-- 페이징처리 -->
+			<% if(pi.getCurrentPage()==1) {%>
+			<button type="button" disabled></button>
+			<% } else { %>
+			<button type="button"
+				onclick="location.href='<%=contextPath%>/important.ck?currentPage=<%=pi.getCurrentPage()-1%>';">&lt;</button>
+			<% } %>
+			<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
+	
+			<%if(i==pi.getCurrentPage()) {%>
+			<button type="button" disabled>i</button>
+			<% } else {%>
+			<button type="button"
+				onclick="location.href='<%=contextPath%>/important.ck?currentPage=<%=i%>';"><%=i %></button>
+			<% } %>
+	
+			<% } %>
+	
+			<% if(pi.getMaxPage()!=pi.getCurrentPage()) { %>
+			<button type="button"
+				onclick="location.href='<%=contextPath%>/important.ck?currentPage=<%=pi.getCurrentPage()+1%>';">&gt;</button>
+			<% } else { %>
+			<button type="button" disabled>&gt;</button>
+			<% } %>
+			
 	</div>
     <script>
     	$(".btn-14").on("click", function(){
@@ -192,8 +194,8 @@
         $(".btn-14").click(function(e){
         	e.stopImmediatePropagation(); 
         });
-         
         
+
     </script>
 </body>
 </html>

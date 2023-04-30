@@ -58,9 +58,9 @@
 	                    <td> 
 	                        <div>
 	                       		<input type="hidden" name="bno" value="<%=b.getBoardNo()%>">
-	                            <input type="radio" name="board_type" id="bam" value="대나무숲">대나무숲
-	                            <input type="radio" name="board_type" id="food" value="맛집">맛집
-	                            <input type="radio" name="board_type" id="food" value="공지사항">공지사항
+	                            <input type="radio" name="board_type" id="bam" value="대나무숲" disabled>대나무숲
+	                            <input type="radio" name="board_type" id="food" value="맛집" disabled>맛집
+	                            <input type="radio" name="board_type" id="food" value="공지사항" disabled>공지사항
 	                        </div>
 	                    </td>
 	                </tr>
@@ -79,7 +79,7 @@
 	                <tr id="tr4">
 	                    <th>첨부파일</th>
 	                    <% if(a!=null) { %>
-	                        <td>파일명 : </td>
+	                        <td>파일명 : <%=a.getFilePath()+a.getChangeName() %> </td>
 	                    <% } else { %> 
 	                        <td style="background-color:white;"> 첨부된 파일이 없습니다.</td>
 	                    <% } %>   
@@ -91,8 +91,8 @@
 	                <% if(rList!=null && !(rList.isEmpty())) {%>
 	                    <% for(int i=0; i<rList.size(); i++) {%>
 	                        <td colspan="2">
-	                                <td>작성자 ID</td>
-	                                <td><input type="text" name="replyCount" id="replyCount"></td>
+	                                <td><%=rList.get(i).getReplyWriter() %></td>
+	                                <td><input type="text" name="replyCount" id="replyCount" value="<%=rList.get(i).getReplyContent() %>"></td>
 	                        </td>
 		                <% } %>
 	                <% } else { %>
@@ -115,6 +115,8 @@
 	    	$("input[name=board_type]").each(function() {
 	    		  if($(this).val() == '<%=b.getBoardType()%>') {
 	    		    $(this).attr('checked', true);
+	    		  } else {
+	    			 $(this).attr("disabled", true);
 	    		  }
 	    	});
 	    });
@@ -126,7 +128,7 @@
 	    		alert("취소하셨습니다.");
 	    	}
 	    });
-	 
+	    
     </script>
 </body>
 </html>
