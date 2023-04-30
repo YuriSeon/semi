@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%
 	String contextPath = request.getContextPath();
+	String alertMsg = (String)request.getSession().getAttribute("alertMsg");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -848,14 +849,14 @@ background: linear-gradient(0deg, rgba(0,172,238,1) 0%, rgba(2,126,251,1) 100%);
 	</label>
 	<div class="sidebar">
 		<header>안보이지메롱 언제다하냐</header>
-		<a class="active"> <!-- 매핑주소 확인하고 메인으로 넘어가는것도 넣기  -->
+		<a class="active"> 
 			<i class=""></i><span style="font-size: 28px; text-align: center; font-weight: 800;">&nbsp;&nbsp;&nbsp;Menu</span></a>
 	<a href="<%=contextPath %>/main.abo?currentPage=1"> <i class="fas fa-list"></i> <span>Board</span>
 	</a> <a href="<%=contextPath %>/main.um?currentPage=1"> <i class="fas fa-user"></i><span>User_Manage</span>
 	</a> <a href="<%=contextPath %>/main.ck?option=1&currentPage=1"> <i class="fas fa-star"></i> <span>CheckList</span>
 	</a> <a href="<%=contextPath %>/main.bl?currentPage=1&status=K"> <i class="fas fa-poo"></i> <span>BlackList</span>
-	</a> <a href="<%=contextPath %>/main.admin"> <i class="fas fa-heart"></i> <span>Go community</span>
-	</a><a href="<%=contextPath %>/logout.me"> <i class="fas fa-rocket"></i> <span>Go Home</span> <!-- 매핑주소 확인 -->
+	</a> <a href="<%=contextPath %>/Main.co"> <i class="fas fa-heart"></i> <span>Go community</span>
+	</a><a href="<%=contextPath %>/logout.me"> <i class="fas fa-rocket"></i> <span>Go Home</span>
 		</a>
 	</div>
 	<div id="head">
@@ -876,7 +877,16 @@ background: linear-gradient(0deg, rgba(0,172,238,1) 0%, rgba(2,126,251,1) 100%);
 			</div>
 		</form>
 	</div>
-	
+	<script>
+		var msg = "<%=alertMsg%>";
+		
+		if(msg != "null") {
+			// 알람메세지가 있을 때 한 번만 나올 수 있도록 세션에서 삭제하기. 
+			// 메뉴바 항상 include해서 사용할거라 여기만 작성하면 됨.
+			alert(msg);
+			<%session.removeAttribute("alertMsg");%>
+		}
+	</script>
 </body>
 
 </html>

@@ -65,25 +65,28 @@
 	    </div>
     </div>
     <div>
-		<!-- 페이징처리 -->
-		<% if(pi.getCurrentPage()==1) {%>
-			<button type="button" disabled></button>
-		<% } else { %>
-			<button type="button" onclick="location.href='<%=contextPath%>/blurboard.abo?currentPage=<%=pi.getCurrentPage()-1%>';">&lt;</button>
-		<% } %>
-		
-		<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
-			<%if(i==pi.getCurrentPage()) {%>
-				<button type="button" disabled>i</button>
-			<% } else {%>
-				<button type="button" onclick="location.href='<%=contextPath%>/blurboard.abo?currentPage=<%=i%>';"><%=i %></button>
+    	<% if(pi.getMaxPage()> 0) { %>
+			<!-- 페이징처리 -->
+			<% if(pi.getCurrentPage()==1) {%>
+				<button type="button" disabled></button>
+			<% } else { %>
+				<button type="button" onclick="location.href='<%=contextPath%>/blurboard.abo?currentPage=<%=pi.getCurrentPage()-1%>';">&lt;</button>
 			<% } %>
-		<% } %>
-		<% if(pi.getMaxPage()!=pi.getCurrentPage()) { %>
-			<button type="button" onclick="location.href='<%=contextPath%>/blurboard.abo?currentPage=<%=pi.getCurrentPage()+1%>';">&gt;</button>
-		<% } else { %>
-			<button type="button" disabled>&gt;</button>
-		<% } %>		
+			
+			<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
+			
+				<%if(i==pi.getCurrentPage()) {%>
+					<button type="button" disabled>i</button>
+				<% } else {%>
+					<button type="button" onclick="location.href='<%=contextPath%>/blurboard.abo?currentPage=<%=i%>';"><%=i %></button>
+				<% } %>
+			<% } %>
+			<% if(pi.getMaxPage()!=pi.getCurrentPage()) { %>
+				<button type="button" onclick="location.href='<%=contextPath%>/blurboard.abo?currentPage=<%=pi.getCurrentPage()+1%>';">&gt;</button>
+			<% } else { %>
+				<button type="button" disabled>&gt;</button>
+			<% } %>	
+		<% }  %>	
 	</div>
 </body>
 <script>
