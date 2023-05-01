@@ -36,8 +36,19 @@ public class FoodTogetherBoardController extends HttpServlet {
 		ArrayList<HashMap<String, String>> list = new FoodService().selectFoodTogether();
 		int loginUserno = ((BMember)request.getSession().getAttribute("loginUser")).getUserNo();
 		int check = new FoodService().toCheck(loginUserno);
+		
+		int cp = 0;
+		try {			
+			cp = Integer.parseInt(request.getParameter("cp"));
+		}catch(Exception e) {
+			cp = 0;
+		}
+		
+		
+		request.setAttribute("cp", cp);
 		request.setAttribute("list", list);
 		request.setAttribute("check", check);
+		
 		
 		
 		

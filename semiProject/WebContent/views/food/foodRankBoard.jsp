@@ -25,8 +25,11 @@
 	int maxpage = 0;
 %>
 <body>
-	<a href="<%=request.getContextPath()%>/rankInsert.bo" class="btn btn-primary">글작성</a>
-	<a href="<%=request.getContextPath()%>/foodmain.bo" class="btn btn-primary">뒤로가기</a>
+	<div style="text-align:center;">	
+		<a href="<%=request.getContextPath()%>/rankInsert.bo" class="btn btn-primary">글작성</a>
+		<a href="<%=request.getContextPath()%>/foodmain.bo" class="btn btn-warning">홈으로 이동</a>
+	</div>
+	<br><br>
 	<%if(!list.isEmpty()){ %>
 	<%
 		int totalboard = list.size();
@@ -35,13 +38,10 @@
 		if(maxpage2 != 0){
 			maxpage = maxpage +1;
 		}
-			
-			int start = (int)request.getAttribute("cp");
-	if(start == 0){
-		start = 1;
-	}
-		
-	
+		int start = (int)request.getAttribute("cp");
+		if(start == 0){
+			start = 1;
+		}
 	%>
 	<table id="example" class="table table-striped table-bordered" cellspacing="0" align="center"  style="text-align: center; width:80%">
 		<thead>
@@ -56,30 +56,42 @@
 			</tr>
 		</thead>
 		<tbody>
-		
-<%-- 		<%for(Board b : list){ %> --%>
+		<%try{ %>
 		<%for(int i = 7 *(start-1); i < 7 *(start); i++){ %>
-		<% Board b = (Board)list.get(i); %>
+		<%if(i < list.size()){ %>
 			 <tr>
-			 	<td><%=b.getBoardNo() %></td>
-			 	<td><%=b.getBoardTitle() %></td>
-			 	<td><%=b.getBoardContent() %></td>
-			 	<td><%=b.getGood() %></td>
-			 	<td><%=b.getCreateDate() %></td>
-			 	<td><%=b.getBoardWriter() %></td>
-			 	<td><%=b.getPointName() %></td>
+			 	<td><%=((Board)list.get(i)).getBoardNo() %></td>
+			 	<td><%=((Board)list.get(i)).getBoardTitle() %></td>
+			 	<td><%=((Board)list.get(i)).getBoardContent() %></td>
+			 	<td><%=((Board)list.get(i)).getGood() %></td>
+			 	<td><%=((Board)list.get(i)).getCreateDate() %></td>
+			 	<td><%=((Board)list.get(i)).getBoardWriter() %></td>
+			 	<td><%=((Board)list.get(i)).getPointName() %></td>
 			 </tr>
-		
+		<%} else{ throw new Exception();}%>
+		<%} %>
+		<%}catch(Exception e){ }%>
 		</tbody>
 	</table>
-	<%}}else{ %>
+		<% }else{ %>
 		<h1>아무 글도 없습니다.</h1>
 	<%} %>
+	
+	<div id="bbb" style="text-align:center;">
 	<%if(maxpage > 1) {%>
 	<%for (int b = 0; b < maxpage; b++){ %>
-		 <button class="hibtn" id=<%=b+1 %>><%=b+1 %></button>
+		<%if((int)request.getAttribute("cp") == 0 && b+1 == 1){ %>
+				 <button class="hibtn btn btn-danger" id=<%=b+1 %>><%=b+1 %></button>
+		<%} else{ %>
+		<%if((int)request.getAttribute("cp") == b+1){ %>
+		 	<button class="hibtn btn btn-danger" id=<%=b+1 %>><%=b+1 %></button>
+		 <%} else { %>
+				 <button class="hibtn btn" id=<%=b+1 %>><%=b+1 %></button>
+		 <%} %>
+		 <%} %>
 	<%} %>
 	<%} %>
+	</div>
 	<script>
 			$("#example tbody tr").click(function(){
 				location.href="<%=request.getContextPath() %>/foodRankingDetail.bo?bno="+$(this).children().eq(0).text();
