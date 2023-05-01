@@ -149,18 +149,15 @@
     	
     	.exit{
             margin-left: 1200px;
-            margin-top: -90px;
         }
         .exit a{
             text-decoration: none;
-            font-weight:bold;
-            font-size:15px;
             color: darkgrey;
         }
-        .exit:hover{
-        	filter: invert(100%);
-        }
-
+		
+		#userNick{
+			text-decoration: none;
+		}
     </style>
 </head>
 <body>
@@ -178,7 +175,7 @@
     
         <div class="exit">
         <a href="<%=contextPath%>/logout.me">로그아웃</a>
-        <img src="resources/로그아웃_투명.png" style="width: 30px; cursor:pointer" alt="">
+        <img src="resources/로그아웃_투명.png" style="width: 30px;" alt="">
     </div>
     
     </header>
