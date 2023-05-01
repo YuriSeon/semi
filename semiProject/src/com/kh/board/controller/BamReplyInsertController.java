@@ -38,7 +38,6 @@ public class BamReplyInsertController extends HttpServlet {
 		//불러올 게시글 번호
 		int bno = Integer.parseInt(request.getParameter("bno"));
 		
-		
 		ArrayList<Reply> rlist = new BamService().selectReplyList(bno);
 		
 		response.setContentType("json/aplication; charset=UTF-8");
@@ -55,11 +54,13 @@ public class BamReplyInsertController extends HttpServlet {
 	
 		//댓글 내용
 		String replyContent = request.getParameter("con");
+		
 		//댓글 작성된 게시글 번호
 		int bno = Integer.parseInt(request.getParameter("bno"));
 		
 		//댓글 작성자 번호 
 		String userNo = Integer.toString(((BMember)request.getSession().getAttribute("loginUser")).getUserNo());
+		
 		
 		Reply r = new Reply();
 		r.setBoardNo(bno);

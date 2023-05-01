@@ -173,6 +173,10 @@ public class BamService {
 		
 		int result = new BamDao().insertReply(conn,r);
 		
+		if(result>0) {//댓글이 작성되었다면 게시글 댓글수 증가
+			result = new BamDao().increaseReplyCount(conn, r.getBoardNo());
+		}
+		
 		if(result>0) {
 			JDBCTemplate.commit(conn);
 		}else {
@@ -226,10 +230,14 @@ public class BamService {
 	}
 
 	//댓글 삭제 메소드
-	public int deleteReply(int replyNo) {
+	public int deleteReply(int replyNo,int boardNo) {
 		Connection conn = JDBCTemplate.getConnection();
 		
 		int result = new BamDao().deleteReply(conn,replyNo);
+		
+		if(result>0) {
+			result = new BamDao().decreaseReplyCount(conn,boardNo);
+		}
 		
 		if(result>0) {
 			JDBCTemplate.commit(conn);

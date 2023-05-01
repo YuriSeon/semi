@@ -11,101 +11,221 @@
 <meta charset="UTF-8">
 <title>게시판 디테일</title>
 <style>
-	#detail-area>thead th,td{
-		border:1px solid black;
-	}
-	#detail-area>tbody th{
-		border:1px solid black;
-	}
-	#reply-area td{
-		border:1px solid black;
-	}
-</style>
+	.menu-bar__menu-1 ul > li > a{
+		font-family: 'LotteMartDream';
+        font-style: normal;
+        font-weight: 700;
+        src: url('//cdn.jsdelivr.net/korean-webfonts/1/corps/lottemart/LotteMartDream/LotteMartDreamBold.woff2') format('woff2'), url('//cdn.jsdelivr.net/korean-webfonts/1/corps/lottemart/LotteMartDream/LotteMartDreamBold.woff') format('woff');
+        font-size:1.5rem;
+        text-align:center;
+        padding:20px 0;
+        border-radius:10px 10px 0 0;
+        color:white;
+        }
+	@font-face {
+            font-family: 'GmarketSansMedium';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        div{
+            box-sizing:border-box;
+            font-family: 'GmarketSansMedium';
+            color: #262626;
+            font-family: 'GmarketSansMedium';
+        }
+        .layout{
+            position: absolute;
+            left: 50%;
+            width: 1000px;
+            height: 1000px;
+            margin-left: -500px;
+            margin-top: -40px;
+        }
+
+        .bam_head{
+            text-align: center;
+            font-size: 25px;
+            font-weight: bold;
+            margin-top: 100px;
+            margin-bottom: 20px;
+        }
+
+        .detail{
+            margin-top: 50px;
+            display: flex;
+            margin-left: 10px;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .title{           
+            display: flex;
+            justify-content: space-between;
+            background-color:lightgray;
+            width: 800px;
+            height: 100%;
+            text-align: center;
+        }
+        .img{
+            width: 40px;
+        }
+
+        .info{
+            margin-left: 20px;
+            font-size: 10px;
+            text-align: center;
+            display: flex;
+            align-items:center;
+        }
+
+        .btitle{
+            width: 60%;
+            margin-top: 20px;
+        }
+
+        .bcount{
+            font-size: 12px;
+            margin-top: 25px;
+            width: 15%;
+            margin-right: 10px;
+            
+        }
+
+        .content{
+            width: 800px;
+            font-size: 14px;
+        }
+
+        .goodbtn{
+            width:70px;
+            height: 50px;          
+            background-color: deepskyblue;
+            color: white;
+            border-radius: 5px;
+            border-style: none;
+            cursor: pointer;
+            font-size: 17px;
+            font-family: 'GmarketSansMedium';
+            text-align: center;          
+        }
+
+        #writerbtn{            
+            width: 800px;
+            text-align: right;    
+        }
+
+        .inputTable{
+            height: 90%;
+        }
+
+        #recon{
+            vertical-align: middle;
+        }
+
+
+        .repleBtn{
+            width: 60px;
+            border-style: none;
+            border-radius: 5px;
+            background-color: deepskyblue;
+            color: aliceblue;
+            height: 90%;
+        }
+
+        .p1{
+            font-size: 13px;
+            
+        }
+        .p2{
+            margin-left: -25px;
+            margin-top: 30px;
+            
+        }
+        .btn{
+            width: 90px;
+            height: 36px;
+            font-size: 16px;
+            color: aliceblue;
+        }
+        .btn-danger{
+            background-color: rgb(237, 87, 87);
+        }
+       
+
+    </style>
 </head>
 <body>	
 	<%@ include file ="../common/menubar.jsp"%> 
-          <table id="detail-area" align="center" border="1">
-            <thead>
-                <tr>
-                
-	                <td width="20"><%=b.getBoardType() %></td>
-                    <td>익명(사진)</td>
-                    
-                    <th width="350"><%=b.getBoardTitle() %></th>
-                    
-                    <td><%=b.getCount() %></td>
-                    <td id="goodCount"><%=b.getGood() %></td>
-                    <td><%=b.getCreateDate() %></td>
-                </tr>
-            </thead>
-            
-            <tbody>
+          <div class="bam_head" align="center">대나무 숲</div>
+    <hr>
+    <div class="layout">
+        <div class="detail">
+            <div class="title">
+            	<%if(b.getTypeNo()!=1){//일반게시글이라면 %>
+                <div class="info">
+                      <img src="resources/css/img/baby-girl.png" class="img" alt="">
+                      <p class="p1">익명</p>
+                      <p class="p2"><%=b.getCreateDate() %></p>                    
+                </div>                    
+             	<div class="btitle">
+                      (<%=b.getBoardType() %>)<%=b.getBoardTitle() %>
+                 </div>
+				<%}else{//공지사항이라면 %> 
+				<div class="info">
+                      <img src="resources/css/img/baby-girl.png" class="img" alt="">
+                      <p class="p1">관리자</p>
+                      <p class="p2"><%=b.getCreateDate() %></p>                    
+                </div>                    
+             	<div class="btitle">
+                      <img style="width:25px" src="resources/bam_files/메가폰.png"><%=b.getBoardTitle() %>
+                 </div>
+				<%} %>
+                <div class="bcount">
+                    	조회수:<%=b.getCount() %> 추천수:<%=b.getGood() %>
+                </div>
+            </div>
+            <%if(loginUser != null && loginUser.getUserNo()==Integer.parseInt(b.getBoardWriter())||loginUser.getUserNo()==1){ %>
+            <br>
+            <div id="writerbtn">
+                <button type="button" onclick="location.href='<%=contextPath%>/bamupdate.bo?bno=<%=b.getBoardNo()%>'" class="btn btn-secondary">수정하기</button>
+                <button type="button"  onclick="location.href='<%=contextPath%>/bamdelete.bo?bno=<%=b.getBoardNo()%>'" class="btn btn-danger">삭제하기</button>
+            </div>
+            <%} %>
+            <hr>
 
-                <tr>
-                    <th>내용</th>
-                    <td colspan="3">
-                        <p style="height:200px;"><%=b.getBoardContent() %></p>
-                    </td>
-                </tr>
-                <tr>
-                    <th>첨부파일</th>
-                    <td colspan="3">
-                        <!-- 첨부파일이 없을 경우 : 첨부파일이 없습니다. -->
-                    	<%if(at == null) {%>
-                    		첨부파일이 없습니다.
-                        <%}else if(at.getOriginName().substring(at.getOriginName().lastIndexOf(".")+1).equals("jpg")){ %>
-                            <!-- 사진이 있을 경우 -->
-                            <img src="<%=contextPath+at.getFilePath()+"/"+at.getChangeName()%>" width="150" height="120">
-                    	<%}else{ %>
-                    		<!-- 첨부파일이 있을 경우 -->
-                    		<a href="<%=contextPath + at.getFilePath()+"/"+at.getChangeName()%>" download="<%=at.getChangeName()%>"><%=at.getOriginName() %></a>
-                		<%} %>
-                    </td>
-                    
-                </tr>
-            </tbody>
-               
-         </table>
-         <br>
-        <br>
-        	<div align="center">
-	        	<button id="good" onclick="boardGood();">추천</button>
-        	</div>
-        <%if(loginUser != null && loginUser.getUserNo()==Integer.parseInt(b.getBoardWriter())||loginUser.getUserNo()==1){ %>
-	        <div align="center">
-	        	<button onclick="location.href='<%=contextPath%>/bamupdate.bo?bno=<%=b.getBoardNo()%>'" class="btn">수정하기</button>
-	        	<button onclick="location.href='<%=contextPath%>/bamdelete.bo?bno=<%=b.getBoardNo()%>'" class="btn">삭제하기</button>
-	        </div>
-        <%} %> 
-      	<div align="center">
-            <button onclick="location.href='<%=contextPath%>/bamlist.bo?currentPage=1'" class="btn">글목록으로</button>
-            <button onclick="location.href='<%=contextPath%>/bamreport.bo?bno=<%=b.getBoardNo()%>&userNo=<%=loginUser.getUserNo()%>'" class="btn">신고하기</button>
-      	</div>
-      	
-      	
-      	<table border="1" style="width: 600px;" align="center">
+            <div class="content">
+                <p class="con">
+					<%=b.getBoardContent() %>
+                </p>
+            </div>
+            <br>
+            <div class="good">
+                <button class="goodbtn" onclick="boardGood();">추천</button>
+            </div>
+            <br><br>
+        </div>
+
+
+
+
+        <div class="reply-area">
+            <table class="inputTable" style="width: 600px;" align="center">
                 <thead>
                     <tr>
                         <td><textarea id="recon" cols="60" rows="3" style="resize: none;"></textarea></td>
-                        <td><button onclick="replyInsert();">댓글 작성</button></td>
-                        <td><button type="reset">취소</button></td>
+                        <td><button onclick="replyInsert();" class="repleBtn">댓글 작성</button></td>
                     </tr>
                 </thead>
             </table>
-            <table id="reply-area" border="1" align="center" style="width: 600px;">
-                	
-                	<!--  댓글 예시
-                    <tr>
-                        <td style="text-align: center;">익명</td>
-                        <td colspan="2" rowspan="2" width="400" height="">강아지가 귀엽네요</td>
-                        <td rowspan="2"><button onclick="deleteReply();">삭제</button></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center;">2023-04-20 10:30</td>
-                    </tr>
-                	 -->
-                	
-            </table>
+            <br><br>
+            <p>댓글 (5)</p>
+            <hr>
+
+
+​
+        </div>
+    </div>
             <br><br><br>
             
             <script>
@@ -145,14 +265,10 @@
                 			var boardWriter = <%=b.getBoardWriter()%>; //게시글 작성자 판별하기 위한 게시글 작성자번호
                 			var result = ""; 	//댓글 출력위해 빈문자열
                 			var replyWriter;	//댓글 작성자 '익명' 담기위한 변수
-                			var count = 1;		//익명뒤에 붙일 숫자 (아마 지울예정)
                 			for(var i=0; i<rlist.length; i++){ //댓글 작성자 익명 붙이기
                 				replyWriter = "익명";
                 				if(rlist[i].replyWriter==boardWriter){ //댓글작성자 = 게시글 작성자
                 					replyWriter +="(작성자)";
-                				}else{ //게시글 작성자가 아닌 댓글 작성자한테 번호 붙이기
-                					replyWriter +=count;
-                					count++;
                 				}
                 				
                 				result+="<tr>"
