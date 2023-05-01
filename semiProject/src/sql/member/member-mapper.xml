@@ -58,7 +58,7 @@
 	</entry>
 	<entry key="selectListCount">
 		SELECT COUNT(*) COUNT FROM MESSAGE
-		WHERE USERNO = ?
+		WHERE ACCEPT_USER_NO = ?
 	</entry>
 	<entry key="selectList">
 		SELECT *
@@ -70,6 +70,12 @@
                         ORDER BY MSG_NO DESC
                          ) M ) 
 		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	<entry key="friendArr">
+		SELECT USER_NICK
+		FROM BMEMBER
+		WHERE STATUS='Y'
+		ORDER BY USER_NICK
 	</entry>
 	
 	
