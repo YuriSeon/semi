@@ -42,7 +42,7 @@
 				</p>
 				<button class='custom-btn btn-8' onclick="location.href='<%=contextPath%>/main.admin';">메인으로</button>
 			<% } else { %>
-			<br>
+			<br><br><br>
 			<table id="tab">
 				<thead>
 					<tr>
@@ -96,32 +96,27 @@
 		</div>
     </div>
     <div>
-    	<% if(pi.getMaxPage() > 0) { %>
+    	<% if(pi.getMaxPage() > 1) { %>
 			<!-- 페이징처리 -->
 			<% if(pi.getCurrentPage()==1) {%>
-			<button type="button" disabled></button>
+			
+				<button type="button" disabled>&lt;</button>
 			<% } else { %>
-			<button type="button"
-				onclick="location.href='<%=contextPath%>/important.ck?currentPage=<%=pi.getCurrentPage()-1%>';">&lt;</button>
+				<button type="button" onclick="location.href='<%=contextPath%>/important.ck?currentPage=<%=pi.getCurrentPage()-1%>';">&lt;</button>
 			<% } %>
 			<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
-	
-			<%if(i==pi.getCurrentPage()) {%>
-			<button type="button" disabled>i</button>
-			<% } else {%>
-			<button type="button"
-				onclick="location.href='<%=contextPath%>/important.ck?currentPage=<%=i%>';"><%=i %></button>
+				<%if(i==pi.getCurrentPage()) {%>
+					<button type="button" disabled><%=pi.getCurrentPage()%></button>
+				<% } else {%>
+					<button type="button" onclick="location.href='<%=contextPath%>/important.ck?currentPage=<%=i%>';"><%=i %></button>
+				<% } %>
 			<% } %>
-	
-			<% } %>
-	
 			<% if(pi.getMaxPage()!=pi.getCurrentPage()) { %>
-			<button type="button"
-				onclick="location.href='<%=contextPath%>/important.ck?currentPage=<%=pi.getCurrentPage()+1%>';">&gt;</button>
+				<button type="button" onclick="location.href='<%=contextPath%>/important.ck?currentPage=<%=pi.getCurrentPage()+1%>';">&gt;</button>
 			<% } else { %>
-			<button type="button" disabled>&gt;</button>
+				<button type="button" disabled>&gt;</button>
 			<% } %>
-			
+		<% } %>	
 	</div>
     <script>
     	$(".btn-14").on("click", function(){
@@ -148,21 +143,23 @@
 							str+= "<td>"+list[i].blockC+"</td>"
 								+"<td>"+list[i].dmBlockC+"</td>"
 								+"<td>"+list[i].falseBlockC+"</td>"
-								"<td>"+list[i].totalB+"</td>"
+								+"<td>"+list[i].totalB+"</td>"
 								+"<td>"+list[i].boardFiltering+"</td>"
 								+"<td>"+list[i].replyFiltering+"</td>"
 								+"<td>"+list[i].totalF+"</td>"
 								+"<td>"+list[i].yellowCard + " / "+
 		                        "<button type='button' class='custom-btn btn-14' name='list[i].yellowCard'>경고</button></td>";
 		                        if(list[i].yellowCard>=4) {
-                        			+"<td>button class='custom-btn btn-11' style='width: 85px; height: 30px;' name="+list[i].userNo+">강제탈퇴</button></td>";
+                        			str+="<td><button class='custom-btn btn-11' style='width: 85px; height: 30px;' name="+list[i].userNo+">강제탈퇴</button></td>";
                         		} else {
-                        			+"<td>button class='custom-btn btn-16' style='width: 85px; height: 30px;' name="+list[i].userNo+">강제탈퇴</button></td>";
+                        			str+="<td><button class='custom-btn btn-16' style='width: 85px; height: 30px;' name="+list[i].userNo+">강제탈퇴</button></td>";
                         		}
                         	}
 								+"</tr>";
 								
 								$("#tab>tbody").html(str);
+								
+								location.reload(); // 이벤트가 삭제되어서 리로드 실행시킴.
 						} else {
 							str = "<p style='text-align: center; font-weight: bold; font-size:X-large; line-height:450px'>관리가 필요한 회원이 없습니다.</p>"
 								+"<td><button class='custom-btn btn-8' onclick='location.href=<%=contextPath%>/main.admin'>메인으로</button></td>";
@@ -184,7 +181,7 @@
         $(".btn-11").click(function(e){
         	var userNo = $(this).attr("name");
             if(confirm($(this).attr('name') + "번 회원과 작별인사 하시겠습니까?")){
-                location.href="<%=contextPath %>/delete.um?userNo=" + userNo;
+                location.href="<%=contextPath%>/delete.um?userNo=" + userNo;
             } else {
                 alert("탈퇴시키기를 취소하셨습니다.");
             }

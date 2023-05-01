@@ -5,6 +5,8 @@
 <% 
 	ArrayList<User> list = (ArrayList<User>)request.getAttribute("list");
 	PageInfo pi = (PageInfo)request.getAttribute("pi");
+	String sort = (String)request.getAttribute("sort");
+	String select = (String)request.getAttribute("select");
 %>
 <!DOCTYPE html>
 <html>
@@ -25,6 +27,7 @@
 </head>
 <body>
 	<%@include file="../common/menubar.jsp" %>
+	
 	<h2>회원 정보</h2>
 	<br>
 	<div id="wrapper">
@@ -32,8 +35,8 @@
 			<div id="bb">
 				<div>
 					<select name="select-sort" class="orderBy" id="orderByS">
-						<option value="desc">내림차순</option>
 						<option value="asc">오름차순</option>
+						<option value="desc">내림차순</option>
 					</select>
 					<select name="select-order" class="orderBy" id="orderByC">
 						<option value="recently">recent update</option>
@@ -43,72 +46,91 @@
 				</div>
 			</div>
 		<br>
-		<table id="tab">
-			<thead>
-				<tr>
-					<th>NO</th>
-					<th>ID</th>
-					<th>Name</th>
-					<th>Phone</th>
-					<th>Email</th>
-					<th>University</th>
-					<th>Upload Board</th>
-					<th>Upload Reply</th>
-					<th>Food Rank</th>
-				</tr>
-			</thead>
-			<tbody>
-		
-				<%if(list!=null && !list.isEmpty()) { %>
-					<%for(int i=0; i<list.size(); i++) {%>
-						<tr>
-							<%if(list.get(i) instanceof BMember) {%>
-							
-							<td><%=((BMember)list.get(i)).getUserNo()%></td>
-							<td><%=((BMember)list.get(i)).getUserId() %></td>
-							<td><%=((BMember)list.get(i)).getUserName() %></td>
-							<td><%=((BMember)list.get(i)).getPhone() %></td>
-							<td><%=((BMember)list.get(i)).getEmail() %></td>
-							<td><%=((BMember)list.get(i)).getSchoolNo() %></td>
-							<% } %>
-							<% i++; %>
-							<%if(list.get(i) instanceof UserManage) {%>
-							<td><%=((UserManage)list.get(i)).getBoardCount() %></td>
-							<td><%=((UserManage)list.get(i)).getReplyCount() %></td>
-							<td><%=((UserManage)list.get(i)).getFoodBStatus() %></td>
-						</tr>
+		<%if(list!=null && !list.isEmpty()) { %>
+			<table id="tab">
+				<thead>
+					<tr>
+						<th>NO</th>
+						<th>ID</th>
+						<th>Name</th>
+						<th>Phone</th>
+						<th>Email</th>
+						<th>University</th>
+						<th>Upload Board</th>
+						<th>Upload Reply</th>
+						<th>Food Rank</th>
+					</tr>
+				</thead>
+				<tbody>
+					<%if(sort.equals("asc")) {%>
+						<%for(int i=0; i<list.size(); i++) {%>
+							<tr>
+								<%if(list.get(i) instanceof BMember) {%>
+								
+								<td><%=((BMember)list.get(i)).getUserNo()%></td>
+								<td><%=((BMember)list.get(i)).getUserId() %></td>
+								<td><%=((BMember)list.get(i)).getUserName() %></td>
+								<td><%=((BMember)list.get(i)).getPhone() %></td>
+								<td><%=((BMember)list.get(i)).getEmail() %></td>
+								<td><%=((BMember)list.get(i)).getSchoolNo() %></td>
+								<% } %>
+								<% i++; %>
+								
+								<%if(list.get(i) instanceof UserManage) {%>
+								<td><%=((UserManage)list.get(i)).getBoardCount() %></td>
+								<td><%=((UserManage)list.get(i)).getReplyCount() %></td>
+								<td><%=((UserManage)list.get(i)).getFoodBStatus() %></td>
+							</tr>
+								<% } %>
+						<% } %>
+					<% } else { %>
+						<%for(int i=1; i<list.size(); i+=3) {%>
+							<tr>
+								<%if(list.get(i) instanceof BMember) {%>
+								
+								<td><%=((BMember)list.get(i)).getUserNo()%></td>
+								<td><%=((BMember)list.get(i)).getUserId() %></td>
+								<td><%=((BMember)list.get(i)).getUserName() %></td>
+								<td><%=((BMember)list.get(i)).getPhone() %></td>
+								<td><%=((BMember)list.get(i)).getEmail() %></td>
+								<td><%=((BMember)list.get(i)).getSchoolNo() %></td>
+								<% } %>
+								<% i--; %>
+								
+								<%if(list.get(i) instanceof UserManage) {%>
+									<td><%=((UserManage)list.get(i)).getBoardCount() %></td>
+									<td><%=((UserManage)list.get(i)).getReplyCount() %></td>
+									<td><%=((UserManage)list.get(i)).getFoodBStatus() %></td>
+									<% } %>
+								</tr>
 							<% } %>
 						<% } %>
-				<% } else if (list==null) { %>
-				
+						</tbody>
+					</table>
 				<% } else { %>
-					<tr>
-						<td colspan="10">조회내역이 없습니다.</td>
-					</tr>
+						<p>조회내역이 없습니다.</p>
 				<% } %>
-			</tbody>
-		</table>
-	</div>
+			</div>
 		<div>
 			<!-- 페이징처리 -->
-			<% if(pi.getMaxPage() > 0) { %>
+			<% if(pi.getMaxPage() > 1) { %>
 				<% if(pi.getCurrentPage()==1) {%>
-					<button type="button" disabled></button>
+					<button type="button" disabled>&lt;</button>
 				<% } else { %>
-					<button type="button" onclick="location.href='<%=contextPath%>/main.um?currentPage=<%=pi.getCurrentPage()-1%>';">&lt;</button>
+					<button type="button" onclick="beforePage();">&lt;</button>
 				<% } %>
 				<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
 					
 					<%if(i==pi.getCurrentPage()) {%>
-						<button type="button" disabled>i</button>
+						<button type="button" disabled><%=pi.getCurrentPage()%></button>
 					<% } else {%>
-						<button type="button" onclick="location.href='<%=contextPath%>/main.um?currentPage=<%=i%>';"><%=i %></button>
+						<button type="button" class="btnNum" name="<%=i %>" onclick="pageNum();"><%=i %></button>
 					<% } %>
 					
 				<% } %>
 				
 				<% if(pi.getMaxPage()!=pi.getCurrentPage()) { %>
-						<button type="button" onclick="location.href='<%=contextPath%>/main.um?currentPage=<%=pi.getCurrentPage()+1%>';">&gt;</button>
+						<button type="button" onclick="nextPage();return false;">&gt;</button>
 				<% } else { %>
 					<button type="button" disabled>&gt;</button>
 				<% } %> 
@@ -116,58 +138,85 @@
 		</div>
 
 		<script>
+		$(function(){
+			$("#orderByS").children().each(function(){
+				if($(this).val()=="<%=request.getParameter("sort")%>"){
+					$(this).attr("selected", true);
+				} 
+			});
+			$("#orderByC").children().each(function(){
+				if($(this).val()=="<%=select%>"){
+					$(this).attr("selected", true);
+				} 
+			});
+		});
 			
-			
+		var sort = $("#orderByS option:selected").val();
+		var select = $("#orderByC option:selected").val();
+		
+		function beforePage(){
+			location.href="<%=contextPath%>/main.um?currentPage=<%=pi.getCurrentPage()-1%>&sort=<%=sort%>&select=<%=select%>";
+		}
+		function nextPage(){
+			location.href="<%=contextPath%>/main.um?currentPage=<%=pi.getCurrentPage()+1%>&sort=" + sort + "&select="+ select;
+		}
+		function pageNum(){
+			location.href="<%=contextPath%>/main.um?currentPage=" + $('.btnNum').attr('name') + "&sort=" + sort + "&select=" +select;
+		}
+		
+		
+		
 			$(".orderBy").on("change", function() {
-				var sort = $("#orderByS option:selected").val();
-				var select = $("#orderByC option:selected").val();
-				console.log(sort);
-				console.log(select);
 				$.ajax({
 					url : "main.um",
 					data : {
+						status : "Y",
 						sort : sort,
 						select : select,
 						currentPage : "1"
 					},
 					type : "post",
 					success : function(list) {
+						var ascStr = "";
+									for(var i=0;i<list.length; i++){
+									ascStr +="<tr>"
+											+"<td>"+list[i].userNo+"</td>"
+											+"<td>"+list[i].userId+"</td>"
+											+"<td>"+list[i].userName+"</td>"
+											+"<td>"+list[i].phone+"</td>"
+											+"<td>"+list[i].email+"</td>"
+											+"<td>"+list[i].schoolNo+"</td>"
+											i++;
+											ascStr+=
+											"<td>"+list[i].boardCount+"</td>"
+											+"<td>"+list[i].replyCount+"</td>"
+											+"<td>"+list[i].foodBStatus+"</td>"
+											+"</tr>";
+									}
 						
-						var str = "";
-						if(sort == "asc"){
-							for(var i=0;i<list.length; i++){
-								str +="<tr>"
-									+"<td>"+list[i].userNo+"</td>"
-									+"<td>"+list[i].userId+"</td>"
-									+"<td>"+list[i].userName+"</td>"
-									+"<td>"+list[i].phone+"</td>"
-									+"<td>"+list[i].email+"</td>"
-									+"<td>"+list[i].schoolNo+"</td>"
-									i++;
-									str+=
-									"<td>"+list[i].boardCount+"</td>"
-									+"<td>"+list[i].replyCount+"</td>"
-									+"<td>"+list[i].foodBStatus+"</td>"
-									+"</tr>";
-							}
-						} else {
-							for(var i=1;i<list.length; i+=3){
-								str +="<tr>"
-									+"<td>"+list[i].userNo+"</td>"
-									+"<td>"+list[i].userId+"</td>"
-									+"<td>"+list[i].userName+"</td>"
-									+"<td>"+list[i].phone+"</td>"
-									+"<td>"+list[i].email+"</td>"
-									+"<td>"+list[i].schoolNo+"</td>"
-									i--;
-									str+=
-									"<td>"+list[i].boardCount+"</td>"
-									+"<td>"+list[i].replyCount+"</td>"
-									+"<td>"+list[i].foodBStatus+"</td>"
-									+"</tr>";
-							}
-						}
-						$("#tab tbody").html(str);
+						var descStr=""; 
+									for(var i=1;i<list.length; i+=3){
+									descStr+="<tr>"
+											+"<td>"+list[i].userNo+"</td>"
+											+"<td>"+list[i].userId+"</td>"
+											+"<td>"+list[i].userName+"</td>"
+											+"<td>"+list[i].phone+"</td>"
+											+"<td>"+list[i].email+"</td>"
+											+"<td>"+list[i].schoolNo+"</td>"
+											i--;
+											descStr+=
+											"<td>"+list[i].boardCount+"</td>"
+											+"<td>"+list[i].replyCount+"</td>"
+											+"<td>"+list[i].foodBStatus+"</td>"
+											+"</tr>";
+									}
+										
+						if(list!=null && sort=="asc"){
+							$("#tab tbody").html(ascStr);
+						} else  {
+							$("#tab tbody").html(descStr);	
+						} 
+							
 					},
 					error : function() {
 						console.log("통신실패");

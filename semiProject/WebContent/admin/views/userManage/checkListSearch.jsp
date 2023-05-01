@@ -70,10 +70,10 @@
     <% } %>
     </div>
 	<div>
-		<% if(pi.getMaxPage()> 0) { %>
+		<% if(pi.getMaxPage()> 1) { %>
 			<!-- 페이징처리 -->
 			<% if(pi.getCurrentPage()==1) {%>
-			<button type="button" disabled></button>
+			<button type="button" disabled>&lt;</button>
 			<% } else { %>
 			<button type="button"
 				onclick="location.href='<%=contextPath%>/select.ck?currentPage=<%=pi.getCurrentPage()-1%>';">&lt;</button>
@@ -81,7 +81,7 @@
 			<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
 	
 			<%if(i==pi.getCurrentPage()) {%>
-			<button type="button" disabled>i</button>
+			<button type="button" disabled><%=pi.getCurrentPage()%></button>
 			<% } else {%>
 			<button type="button"
 				onclick="location.href='<%=contextPath%>/select.ck?currentPage=<%=i%>';"><%=i %></button>
