@@ -60,7 +60,7 @@ public class MemberInsertController extends HttpServlet {
 		int result = new BMemberService().insertMemer(m);
 		if(result>0) {
 			request.getSession().setAttribute("alertMsg", "환영합니다!");
-			response.sendRedirect(request.getContextPath()+"/Main.co");
+			response.sendRedirect(request.getContextPath());
 		}else {
 			request.setAttribute("errorMsg", "가입 실패");
 			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
