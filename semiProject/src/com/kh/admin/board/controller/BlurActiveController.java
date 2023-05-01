@@ -36,6 +36,7 @@ public class BlurActiveController extends HttpServlet {
 		
 		if(result>0) {
 			request.getSession().setAttribute("alertMsg", "게시글 활성화 완료");
+			
 			response.sendRedirect(request.getContextPath()+"/blurboard.abo?currentPage=1");
 		} else {
 			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);

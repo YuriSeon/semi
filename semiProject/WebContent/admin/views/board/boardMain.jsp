@@ -130,7 +130,7 @@
 			// 상세페이지 detail view로 넘어가는 이벤트
 			$("tbody>tr").click(function(e){
 				var bno = $(this).children().eq(0).text();
-				location.href="<%=contextPath%>/detail.abo?status=Y&bno="+bno;
+				location.href="<%=contextPath%>/detail.abo?&bno="+bno;
 				e.stopImmediatePropagation(); //다음 요소들로 전달을 막는 메서드
 			});
 			

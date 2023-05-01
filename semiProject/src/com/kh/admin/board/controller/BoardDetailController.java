@@ -36,7 +36,7 @@ public class BoardDetailController extends HttpServlet {
 		
 		int bno = Integer.parseInt(request.getParameter("bno"));
 		
-		String status = request.getParameter("status");
+		String status = "Y";
 		
 		// 이렇게 세번 조회를 해오는게 나은지 아니면 board에 다형성이용해서 첨부파일까지 한번에 조회해오는게 좋은지. 그리고 댓글은 이미 객체 배열이라 안되..지?
 		
@@ -54,6 +54,7 @@ public class BoardDetailController extends HttpServlet {
 			if(!rList.isEmpty()) {
 				request.setAttribute("rList", rList);
 			}
+			System.out.println(b);
 			request.getRequestDispatcher("admin/views/board/boardDetail.jsp").forward(request, response);
 			
 		} else {
