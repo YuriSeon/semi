@@ -10,6 +10,8 @@
 	crossorigin="anonymous"></script>
 <script
 	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script type="text/javascript"
+			src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f91f4c1499628ccd44bb5d41070cb9a1&libraries=services"></script>
 <style>
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
 
@@ -106,10 +108,46 @@ body {
 	height: 70%;
 	box-sizing: border-box;
 }
+
+        #allFood{
+            width: 800px;
+            height: 400px;
+        }
+        #nonepo{
+            width: 100%;
+            height: 5%;
+        }
+        #allFoodExit{
+            width: 100%;
+            height: 5%;
+            box-sizing: border-box;
+        }
+        #ssx{
+            width: 100%;
+            height: 90%;
+            box-sizing: border-box;
+            
+        }
+        #allFoodLeft, #allFoodRight{
+            width: 10%;
+            height: 100%;
+            box-sizing: border-box;
+            float: left;
+            line-height: 8;
+            font-size:50px;
+            font-weight: 10000;
+        }
+        #allFoodPackage{
+            width: 80%;
+            height: 100%;
+            box-sizing: border-box;
+            float: left;
+        } 
 </style>
 </head>
 <%@include file="../common/menubar.jsp" %>
-<body>
+
+<body style="text-align:center;">
 	<div class="wrap">
 		<div class="search">
 			<button type="submit" class="searchButton" id="locationFoodBtn">
@@ -118,7 +156,8 @@ body {
 			<input id="userCurrLo" type="text" class="searchTerm" name="userCurrLo" readOnly>
 		</div>
 	</div>
-	<div id="locactionFood" style="display:none">
+	<div id="locactionFood" style="display:none; text-align:center;">
+	<br><br>
 		<button type="button" id="returnMain">종료하기</button>
 		<button id="prebtn"> &lt </button>
 		<div id="foodSlide">
@@ -128,6 +167,19 @@ body {
 		<button id="togeterbtn">같이 먹을 사람 찾으러 가기</button>
 		<input type='hidden' name='locationbno'>
 	</div>
+	
+	<div id="allFood" style="display:none; text-align:center;  margin:auto;">
+        <div id="nonepo"></div>
+        <div id="allFoodExit"><button id="allfoodEbtn" class="btn btn-primary">종료하기</button></div>
+        <div id="ssx">
+            <div id="allFoodLeft">&lt</div>
+            <div id="allFoodPackage" style="margin-top:30px;"></div>
+            <div id="allFoodRight">&gt</div>
+        </div>
+    </div>
+
+		
+				
 	<div id="UserShowPage">
 		<div id ="topmargin"></div>
 		<div id="left">
@@ -145,13 +197,16 @@ body {
 			</div>
 			<div class="noneb1"></div>
 			<div id="whatfood">
-				<a href="<%=request.getContextPath()%>">뭐 먹지?</a>
+<%-- 				<a href="<%=request.getContextPath()%>/chfood.bo">뭐 먹지?</a> --%>
+뭐먹지
 				<!-- 지금 맛집에 있는 것들 -->
 			</div>
 		</div>
 	</div>
 	<script>
 	$(function(){
+
+		
 		try{			
 			function success(pos) {
 				var crd = pos.coords;
@@ -210,6 +265,67 @@ body {
 	
      var number = 0; // 전역으로 사용할 내용
 
+     var foodImgc = 0;
+     var Imglistt;
+
+    $("#whatfood").on("click", function(){
+    	$.ajax({
+    		url : "chfood.bo",
+    		type : "get",
+    		success : function(Imglist){
+    			Imglistt = Imglist;
+    			$("#locationFoodBtn").attr("disabled", true);
+    			$("#UserShowPage").css("display", "none");
+    			$("#allFood").css("display", "block");
+    			if(Imglist?.length){
+    				let str = "<img id='" + Imglist[0].originName + "'src=" + Imglist[0].filePath + "/" + Imglist[0].changeName + ">";
+    				$("#allFoodPackage").html(str);
+    			}else{
+    				$("#allFoodPackage").html("<h1>아무 음식이 준비되지 않았습니다.</h1>");    				    				
+    			}
+    		},
+    		error : function(){
+    			console.log("ajax error");
+    		}
+    	})
+
+    });
+    
+    $("#allFoodRight").on("click", function(){
+    	foodImgc = foodImgc + 1;
+    	try{    		
+    		var str = "<img id='" + Imglistt[foodImgc].originName + "' src=" + Imglistt[foodImgc].filePath + "/" + Imglistt[foodImgc].changeName + ">";
+    	}catch(err){
+    		foodImgc = 0;
+    		var str = "<img id='" + Imglistt[0].originName + "' src=" + Imglistt[0].filePath + "/" + Imglistt[0].changeName + ">";    		
+    	}
+		$("#allFoodPackage").html(str);
+    });
+    $("#allFoodLeft").on("click", function(){
+    	foodImgc = foodImgc - 1;
+    	try{    		
+    		var str = "<img id='" + Imglistt[foodImgc].originName +  "'src=" + Imglistt[foodImgc].filePath + "/" + Imglistt[foodImgc].changeName + ">";
+    	}catch(err){
+    		foodImgc = Object.keys(Imglistt).length-1;
+    		var str = "<img id='" + Imglistt[Object.keys(Imglistt).length-1].originName + "'src=" + Imglistt[Object.keys(Imglistt).length-1].filePath + "/" + Imglistt[Object.keys(Imglistt).length-1].changeName + ">";    		
+    	}
+		$("#allFoodPackage").html(str);
+    });
+    
+    $("#allfoodEbtn").on("click", function(){
+    	$("#locationFoodBtn").attr("disabled", false);
+    	$("#UserShowPage").css("display", "block");
+		$("#allFood").css("display", "none");
+		$("#allFoodMap").css("display", "none");
+		$("#allFoodPackage").css("display", "block");
+    });
+    
+    $("#allFoodPackage").on("click", function(){
+    	location.href")
+    })     
+     
+     
+     
     $("#locationFoodBtn").on("click", function(){
         if($("#userCurrLo").val() == ""){
             alert("아직 위치 추적중입니다.");

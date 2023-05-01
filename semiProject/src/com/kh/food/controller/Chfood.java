@@ -2,7 +2,6 @@ package com.kh.food.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,20 +10,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
-import com.kh.bMember.model.vo.BMember;
+import com.kh.board.model.vo.Attachment;
 import com.kh.food.model.service.FoodService;
 
 /**
- * Servlet implementation class FoodTogetherBoardController
+ * Servlet implementation class Chfood
  */
-@WebServlet("/foodTogether.bo")
-public class FoodTogetherBoardController extends HttpServlet {
+@WebServlet("/chfood.bo")
+public class Chfood extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public FoodTogetherBoardController() {
+    public Chfood() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -33,27 +32,14 @@ public class FoodTogetherBoardController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ArrayList<HashMap<String, String>> list = new FoodService().selectFoodTogether();
-		int loginUserno = ((BMember)request.getSession().getAttribute("loginUser")).getUserNo();
-		int check = new FoodService().toCheck(loginUserno);
+		// 그림이랑 메뉴 보여주고 땡긴다고 하면 네이버에서 가게 이름, 주소 
+		ArrayList<Attachment> list = new FoodService().selectAllImg();
 		
-		int cp = 0;
-		try {			
-			cp = Integer.parseInt(request.getParameter("cp"));
-		}catch(Exception e) {
-			cp = 0;
-		}
+		request.setAttribute("Imglist", list);
+		Gson gson = new Gson();
 		
-		
-		request.setAttribute("cp", cp);
-		request.setAttribute("list", list);
-		request.setAttribute("check", check);
-		
-		
-		
-		
-		request.getRequestDispatcher("views/food/foodTogether.jsp").forward(request, response);
-		
+		response.setContentType("json/application; charset=UTF-8"); 
+		gson.toJson(list, response.getWriter());
 	}
 
 	/**
