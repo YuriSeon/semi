@@ -36,7 +36,14 @@ public class AdminMainController extends HttpServlet {
 		
 		HttpSession session = request.getSession();
 		
-		String power = ((BMember)session.getAttribute("loginUser")).getPower();
+		String power = null;
+		
+		if((BMember)session.getAttribute("loginUser")!=null) {
+			power = ((BMember)session.getAttribute("loginUser")).getPower();
+		}else {
+			power = request.getParameter("power");
+		}
+		
 		
 		// 로그인 페이지에서 관리자여부 확인 후 관리자 페이지로 넘어왔지만 메인페이지 시작 전 2중체크
 		if(power.equals("A")) {

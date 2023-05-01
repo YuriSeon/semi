@@ -92,7 +92,7 @@ public class UserManageDao {
 		
 		ResultSet rset = null;
 		
-		int startRow = (pi.getCurrentPage() -1) *pi.getBoardLimit() +1;
+		int startRow = (pi.getCurrentPage()-1) *pi.getBoardLimit() +1;
 		
 		int endRow = startRow + pi.getBoardLimit() -1;
 		
@@ -129,9 +129,7 @@ public class UserManageDao {
 			JDBCTemplate.close(rset);
 			JDBCTemplate.close(pstmt);
 		}
-		
 		return list;
-		
 	}
 
 	public ArrayList<BlackList> selectList(Connection conn, PageInfo pi, String input, String option) {
@@ -142,7 +140,7 @@ public class UserManageDao {
 		
 		PreparedStatement pstmt = null;
 		
-		int startRow = (pi.getCurrentPage()-1)/pi.getBoardLimit() *pi.getBoardLimit() +1;
+		int startRow = (pi.getCurrentPage()-1) *pi.getBoardLimit() +1;
 		
 		int endRow = startRow + pi.getBoardLimit() -1;
 		
@@ -204,7 +202,7 @@ public class UserManageDao {
 		
 		PreparedStatement pstmt = null;
 		
-		int startRow = (pi.getCurrentPage()-1)/pi.getBoardLimit() *pi.getBoardLimit() +1;
+		int startRow = (pi.getCurrentPage()-1)*pi.getBoardLimit() +1;
 		
 		int endRow = startRow +pi.getBoardLimit() +1;
 		
@@ -217,6 +215,7 @@ public class UserManageDao {
 		
 		case "total" : sql = prop.getProperty("selectSortFR"); break;
 		}
+		
 		try {
 			
 			pstmt = conn.prepareStatement(sql);
@@ -267,12 +266,11 @@ public class UserManageDao {
 		
 		PreparedStatement pstmt = null;
 		
-		int startRow = (pi.getCurrentPage()-1)/pi.getBoardLimit() *pi.getBoardLimit() +1;
+		int startRow = (pi.getCurrentPage()-1)*pi.getBoardLimit() +1;
 		
 		int endRow = startRow + pi.getBoardLimit() -1;
 		
 		String sql = null;
-		
 		switch(option) {
 		
 		case 1 : sql = prop.getProperty("checkListRecent"); break;
@@ -282,7 +280,6 @@ public class UserManageDao {
 		case 3 : sql = prop.getProperty("checkListFiltering"); 
 		
 		}
-		
 		try {
 			pstmt= conn.prepareStatement(sql);
 			
@@ -368,7 +365,7 @@ public class UserManageDao {
 		
 		PreparedStatement pstmt = null;
 		
-		int startRow = (pi.getCurrentPage()-1)/pi.getBoardLimit() *pi.getBoardLimit() +1;
+		int startRow = (pi.getCurrentPage()-1) *pi.getBoardLimit() +1;
 		
 		int endRow = startRow +pi.getBoardLimit() +1;
 		
@@ -457,7 +454,7 @@ public class UserManageDao {
 		
 		PreparedStatement pstmt = null;
 		
-		int startRow = (pi.getCurrentPage()-1)/pi.getBoardLimit() *pi.getBoardLimit() +1;
+		int startRow = (pi.getCurrentPage()-1) *pi.getBoardLimit() +1;
 		
 		int endRow = startRow +pi.getBoardLimit() +1;
 		

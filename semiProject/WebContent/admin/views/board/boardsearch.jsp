@@ -10,6 +10,12 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+p{
+	font-size : 20px;
+	font-weight: bold;
+}
+</style>
 </head>
 <body>
 	<%@include file="../common/menubar.jsp"%>
@@ -35,46 +41,44 @@
 			</div>
 			<br>
 			<div id="con2">
-				<table id="tab">
-					<thead>
-						<tr>
-							<th>No</th>
-							<th>Board Type</th>
-							<th>Category</th>
-							<th>Writer</th>
-							<th>Title</th>
-							<th>Count</th>
-							<th>Create Date</th>
-							<th>Modify Date</th>
-							<th>Delete</th>
-						</tr>
-					</thead>
-					<tbody>
-						<% if(list!=null && list.isEmpty()) {%>
-						<tr>
-							<td>검색어와 일치하는 게시물이 없습니다.</td>
-						</tr>
-						<% } else {%>
+				<% if(list!=null && list.isEmpty()) {%>
+					<p>검색어와 일치하는 게시물이 없습니다.</p>
+				<% } else {%>
+					<table id="tab">
+						<thead>
+							<tr>
+								<th>No</th>
+								<th>Board Type</th>
+								<th>Category</th>
+								<th>Writer</th>
+								<th>Title</th>
+								<th>Count</th>
+								<th>Create Date</th>
+								<th>Modify Date</th>
+								<th>Delete</th>
+							</tr>
+						</thead>
+						<tbody>
 						<% for(Board b : list) {%>
-						<tr>
-							<td><%=b.getBoardNo() %></td>
-							<% if(b.getTypeNo()==1) {%>
-							<td>공지사항</td>
-							<% } else { %>
-							<td>게시판</td>
-							<% } %>
-							<td><%=b.getBoardType()%></td>
-							<td><%=b.getBoardWriter()%></td>
-							<td><%=b.getBoardTitle()%></td>
-							<td><%=b.getCount()%></td>
-							<td><%=b.getCreateDate()%></td>
-							<td><%=b.getModifyDate()%></td>
-							<td>
-								<button name="<%=b.getBoardNo() %>" class="custom-btn btn-5">삭제</button>
-							</td>
-						</tr>
+							<tr>
+								<td><%=b.getBoardNo() %></td>
+								<% if(b.getTypeNo()==1) {%>
+									<td>공지사항</td>
+								<% } else { %>
+									<td>게시판</td>
+								<% } %>
+								<td><%=b.getBoardType()%></td>
+								<td><%=b.getBoardWriter()%></td>
+								<td><%=b.getBoardTitle()%></td>
+								<td><%=b.getCount()%></td>
+								<td><%=b.getCreateDate()%></td>
+								<td><%=b.getModifyDate()%></td>
+								<td>
+									<button name="<%=b.getBoardNo() %>" class="custom-btn btn-5">삭제</button>
+								</td>
+							</tr>
 						<% } %>
-						<% } %>
+					<% } %>
 					</tbody>
 				</table>
 			</div>
@@ -82,17 +86,17 @@
 	</div>
 
 	<div>
-	<% if(pi.getMaxPage() > 0) { %>
+	<% if(pi.getMaxPage() > 1) { %>
 		<!-- 페이징처리 -->
 		<% if(pi.getCurrentPage()==1) {%>
-			<button type="button" disabled></button>
+			<button type="button" disabled>&lt;</button>
 		<% } else { %>
 			<button type="button"onclick="location.href='<%=contextPath%>/selectList.abo?currentPage=<%=pi.getCurrentPage()-1%>';">&lt;</button>
 		<% } %>
 		
 		<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
 			<%if(i==pi.getCurrentPage()) {%>
-				<button type="button" disabled>i</button>
+				<button type="button" disabled><%=pi.getCurrentPage()%></button>
 			<% } else {%>
 				<button type="button"onclick="location.href='<%=contextPath%>/selectList.abo?currentPage=<%=i%>';"><%=i %></button>
 			<% } %>

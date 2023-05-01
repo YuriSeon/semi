@@ -174,7 +174,10 @@ label #cancel {
   --accent-color: #4ad7f7;
   --gradient-color: #a2e1fb;
 }
-
+.sidebar a.active,.sidebar > a:hover:nth-last-child() {
+  --accent-color: #f891ff;
+  --gradient-color: hsl(302, 92%, 81%);
+}
 #head * {
   outline: none;
 }
@@ -328,6 +331,9 @@ label #cancel {
 		box-shadow: 6px 8px 8px 0px #e7e8ea;
 		border-radius: 1%;
 	}
+	#bb{
+		margin-left: 2%;
+	}
 	table{
 		width: 95%;
 		margin: auto;
@@ -348,9 +354,6 @@ label #cancel {
 		border-radius: 1%;
 	}
 	
-	#bb{
-		margin-left: 5%;
-	}
 	#bb form *{
 		float: left;
 		margin: 5px;
@@ -362,13 +365,13 @@ label #cancel {
 		margin-right: 5%;
 	}
 	#tab>thead th{
-		height: 45px;
+		height: 48px;
 		font-size: 14px;
 		font-weight: 900;
 	}
 	#tab>tbody td{
-		height: 30px;
-		font-size: 12px;
+		height: 38px;
+		font-size: 13px;
 	}
 	.custom-btn {
   width: 105px;
@@ -833,7 +836,9 @@ background: linear-gradient(0deg, rgba(0,172,238,1) 0%, rgba(2,126,251,1) 100%);
 .btn-16:active {
   top: 2px;
 }
-
+#ho{
+	color : rgb(255, 124, 144);
+}
 </style>
 
 <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
@@ -851,12 +856,13 @@ background: linear-gradient(0deg, rgba(0,172,238,1) 0%, rgba(2,126,251,1) 100%);
 		<header>안보이지메롱 언제다하냐</header>
 		<a class="active"> 
 			<i class=""></i><span style="font-size: 28px; text-align: center; font-weight: 800;">&nbsp;&nbsp;&nbsp;Menu</span></a>
-	<a href="<%=contextPath %>/main.abo?currentPage=1"> <i class="fas fa-list"></i> <span>Board</span>
+	<a href="<%=contextPath %>/main.admin?power=A"> <i class="fas fa-rocket"></i> <span>Main</span>
+	</a><a href="<%=contextPath %>/main.abo?currentPage=1"> <i class="fas fa-list"></i> <span>Board</span>
 	</a> <a href="<%=contextPath %>/main.um?currentPage=1"> <i class="fas fa-user"></i><span>User_Manage</span>
 	</a> <a href="<%=contextPath %>/main.ck?option=1&currentPage=1"> <i class="fas fa-star"></i> <span>CheckList</span>
-	</a> <a href="<%=contextPath %>/main.bl?currentPage=1&status=K"> <i class="fas fa-poo"></i> <span>BlackList</span>
+	</a> <a href="<%=contextPath %>/main.bl?currentPage=1"> <i class="fas fa-poo"></i> <span>BlackList</span>
 	</a> <a href="<%=contextPath %>/Main.co"> <i class="fas fa-heart"></i> <span>Go community</span>
-	</a><a href="<%=contextPath %>/logout.me"> <i class="fas fa-rocket"></i> <span>Go Home</span>
+	</a> <a href="<%=contextPath %>/logout.me"> <i class="fas fa-home" style="color: rgb(255, 164, 178);"></i> <span id="ho">♥퇴근합시다♥</span>
 		</a>
 	</div>
 	<div id="head">
