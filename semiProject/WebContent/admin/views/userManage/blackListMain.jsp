@@ -55,7 +55,7 @@
 	            </tr>
         </thead>
          <tbody>
-        	<%if(list.isEmpty()){ %>
+        	<%if(list!= null && list.isEmpty()){ %>
         	
 	            <tr>
 	                <th colspan="11" style="text-align: center; font-size: 30px;">강제 탈퇴 회원 목록이 없습니다</th>
@@ -94,26 +94,28 @@
     </div>
     <!-- 페이징처리 하기 -->
     <div id="page">
-	<% if(pi.getCurrentPage()==1) {%>
-		<button type="button" disabled></button>
-	<% } else { %>
-		<button type="button" onclick="location.href='<%=contextPath%>/main.bl?currentPage=<%=pi.getCurrentPage()-1%>';">&lt;</button>
-	<% } %>
-	<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
-		
-		<%if(i==pi.getCurrentPage()) {%>
-			<button type="button" disabled>i</button>
-		<% } else {%>
-			<button type="button" onclick="location.href='<%=contextPath%>/main.bl?currentPage=<%=i%>';"><%=i %></button>
+    <% if(pi.getMaxPage() > 0) { %>
+		<% if(pi.getCurrentPage()==1) {%>
+			<button type="button" disabled></button>
+		<% } else { %>
+			<button type="button" onclick="location.href='<%=contextPath%>/main.bl?currentPage=<%=pi.getCurrentPage()-1%>';">&lt;</button>
+		<% } %>
+		<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
+			
+			<%if(i==pi.getCurrentPage()) {%>
+				<button type="button" disabled>i</button>
+			<% } else {%>
+				<button type="button" onclick="location.href='<%=contextPath%>/main.bl?currentPage=<%=i%>';"><%=i %></button>
+			<% } %>
+			
 		<% } %>
 		
+		<% if(pi.getMaxPage()!=pi.getCurrentPage()) { %>
+				<button type="button" onclick="location.href='<%=contextPath%>/main.bl?currentPage=<%=pi.getCurrentPage()+1%>';">&gt;</button>
+		<% } else { %>
+			<button type="button" disabled>&gt;</button>
+		<% } %> 
 	<% } %>
-	
-	<% if(pi.getMaxPage()!=pi.getCurrentPage()) { %>
-			<button type="button" onclick="location.href='<%=contextPath%>/main.bl?currentPage=<%=pi.getCurrentPage()+1%>';">&gt;</button>
-	<% } else { %>
-		<button type="button" disabled>&gt;</button>
-	<% } %> 
 	</div>
 
 </body>

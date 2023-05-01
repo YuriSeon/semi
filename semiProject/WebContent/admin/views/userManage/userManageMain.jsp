@@ -59,7 +59,7 @@
 			</thead>
 			<tbody>
 		
-				<%if(!list.isEmpty()) { %>
+				<%if(list!=null && !list.isEmpty()) { %>
 					<%for(int i=0; i<list.size(); i++) {%>
 						<tr>
 							<%if(list.get(i) instanceof BMember) {%>
@@ -90,27 +90,29 @@
 		</table>
 	</div>
 		<div>
-		<!-- 페이징처리 -->
-			<% if(pi.getCurrentPage()==1) {%>
-				<button type="button" disabled></button>
-			<% } else { %>
-				<button type="button" onclick="location.href='<%=contextPath%>/main.um?currentPage=<%=pi.getCurrentPage()-1%>';">&lt;</button>
-			<% } %>
-			<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
-				
-				<%if(i==pi.getCurrentPage()) {%>
-					<button type="button" disabled>i</button>
-				<% } else {%>
-					<button type="button" onclick="location.href='<%=contextPath%>/main.um?currentPage=<%=i%>';"><%=i %></button>
+			<!-- 페이징처리 -->
+			<% if(pi.getMaxPage() > 0) { %>
+				<% if(pi.getCurrentPage()==1) {%>
+					<button type="button" disabled></button>
+				<% } else { %>
+					<button type="button" onclick="location.href='<%=contextPath%>/main.um?currentPage=<%=pi.getCurrentPage()-1%>';">&lt;</button>
+				<% } %>
+				<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
+					
+					<%if(i==pi.getCurrentPage()) {%>
+						<button type="button" disabled>i</button>
+					<% } else {%>
+						<button type="button" onclick="location.href='<%=contextPath%>/main.um?currentPage=<%=i%>';"><%=i %></button>
+					<% } %>
+					
 				<% } %>
 				
+				<% if(pi.getMaxPage()!=pi.getCurrentPage()) { %>
+						<button type="button" onclick="location.href='<%=contextPath%>/main.um?currentPage=<%=pi.getCurrentPage()+1%>';">&gt;</button>
+				<% } else { %>
+					<button type="button" disabled>&gt;</button>
+				<% } %> 
 			<% } %>
-			
-			<% if(pi.getMaxPage()!=pi.getCurrentPage()) { %>
-					<button type="button" onclick="location.href='<%=contextPath%>/main.um?currentPage=<%=pi.getCurrentPage()+1%>';">&gt;</button>
-			<% } else { %>
-				<button type="button" disabled>&gt;</button>
-			<% } %> 
 		</div>
 
 		<script>

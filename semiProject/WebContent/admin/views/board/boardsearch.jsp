@@ -50,9 +50,9 @@
 						</tr>
 					</thead>
 					<tbody>
-						<% if(list.isEmpty()) {%>
+						<% if(list!=null && list.isEmpty()) {%>
 						<tr>
-							<td>작성된 게시물이 없습니다.</td>
+							<td>검색어와 일치하는 게시물이 없습니다.</td>
 						</tr>
 						<% } else {%>
 						<% for(Board b : list) {%>
@@ -82,6 +82,7 @@
 	</div>
 
 	<div>
+	<% if(pi.getMaxPage() > 0) { %>
 		<!-- 페이징처리 -->
 		<% if(pi.getCurrentPage()==1) {%>
 			<button type="button" disabled></button>
@@ -102,6 +103,7 @@
 		<% } else { %>
 			<button type="button" disabled>&gt;</button>
 		<% } %>
+	<% } %>
 	</div>
 	
 	<script>

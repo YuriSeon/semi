@@ -2,6 +2,7 @@
     pageEncoding="UTF-8" import="com.kh.admin.userManage.model.vo.User"%>
 <% 
 	String contextPath = request.getContextPath(); 
+	String alertMsg = (String)request.getSession().getAttribute("alertMsg");
 	int[][] boardArr = (int[][])request.getAttribute("boardArr");
 	User u = (User)request.getAttribute("u");
 	int[] checkArr = (int[])request.getAttribute("checkArr");
@@ -143,7 +144,7 @@ padding:2px;
 <section class="hero-section">
 <div class="card-grid">
   <a class="card" href="<%=contextPath %>/typeList.abo?bType=2&currentPage=1">
-    <div class="card__background" ></div>
+    <div class="card__background" style="background-image: url()"></div>
     <div class="card__content">
    	<br><br>
       <h3 class="card__heading">대나무숲 게시판</h3>
@@ -169,7 +170,7 @@ padding:2px;
     </div>
   </a>
   <a class="card" href="<%=contextPath %>/typeList.abo?bType=3&currentPage=1">
-    <div class="card__background" ></div>
+    <div class="card__background"  style="background-image: url()"></div>
     <div class="card__content">
       <br><br>
       <h3 class="card__heading">맛집 게시판</h3>
@@ -195,7 +196,7 @@ padding:2px;
     </div>
   </a>
   <a class="card" href="<%=contextPath %>/main.um?currentPage=1&status=Y" >
-    <div class="card__background" style="background-image: <%=contextPath%>/resources/스크린샷 2023-04-27 오후 4.43.44.png"></div>
+    <div class="card__background" style="background-image: url(<%=contextPath %>/resources/admin/사람들.png)"></div>
     <div class="card__content">
       <br><br>
       <h3 class="card__heading">회원 정보</h3>
@@ -221,7 +222,7 @@ padding:2px;
     </div>
   </li>
   <a class="card" href="<%=contextPath %>/main.ck?option=1&currentPage=1">
-    <div class="card__background"></div>
+    <div class="card__background"  style="background-image: url()"></div>
     <div class="card__content">
       <br><br>
       <h3 class="card__heading">체크 리스트</h3>
@@ -257,5 +258,13 @@ padding:2px;
   </a>
 <div>
 </section>
+<script>
+		var msg = "<%=alertMsg%>";
+		
+		if(msg != "null") {
+			alert(msg);
+			<%session.removeAttribute("alertMsg");%>
+		}
+	</script>
 </body>
 </html>

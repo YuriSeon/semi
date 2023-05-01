@@ -38,9 +38,9 @@ public class ImportantListController extends HttpServlet {
 
 		int currentPage = Integer.parseInt(request.getParameter("currentPage"));
 
-		int boardLimit = 10;
+		int boardLimit = 7;
 		
-		int pageLimit = 10;
+		int pageLimit = 7;
 		
 		int startPage = (currentPage-1)/pageLimit *pageLimit +1;
 		
@@ -82,9 +82,9 @@ public class ImportantListController extends HttpServlet {
 
 			int currentPage = Integer.parseInt(request.getParameter("currentPage"));
 
-			int boardLimit = 10;
+			int boardLimit = 7;
 			
-			int pageLimit = 10;
+			int pageLimit = 7;
 			
 			int startPage = (currentPage-1)/pageLimit *pageLimit +1;
 			

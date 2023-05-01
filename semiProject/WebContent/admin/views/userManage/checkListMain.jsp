@@ -66,7 +66,7 @@
 				</select>
 			</div>
 		</div>
-		<%if(!list.isEmpty()) { %>
+		<%if(list!=null && !list.isEmpty()) { %>
 		    <table id="tab">
 				<thead>
 					<tr>
@@ -97,33 +97,35 @@
 				</tbody>
 			</table>
 	    <% } else { %>
-	        <p style="text-align: center; font-weight: bold; font-size:large">검색에 일치하는 결과가 없습니다.</p>
+	        <p style="text-align: center; font-weight: bold; font-size:large">확인이 필요한 회원이 없습니다.</p>
 	    <% } %>
     </div>
 	<div>
-		<!-- 페이징처리 -->
-		<% if(pi.getCurrentPage()==1) {%>
-		<button type="button" disabled></button>
-		<% } else { %>
-		<button type="button"
-			onclick="location.href='<%=contextPath%>/main.ck?currentPage=<%=pi.getCurrentPage()-1%>';">&lt;</button>
-		<% } %>
-		<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
-
-		<%if(i==pi.getCurrentPage()) {%>
-		<button type="button" disabled>i</button>
-		<% } else {%>
-		<button type="button"
-			onclick="location.href='<%=contextPath%>/main.ck?currentPage=<%=i%>';"><%=i %></button>
-		<% } %>
-
-		<% } %>
-
-		<% if(pi.getMaxPage()!=pi.getCurrentPage()) { %>
-		<button type="button"
-			onclick="location.href='<%=contextPath%>/main.ck?currentPage=<%=pi.getCurrentPage()+1%>';">&gt;</button>
-		<% } else { %>
-		<button type="button" disabled>&gt;</button>
+		<% if(pi.getMaxPage()>0) { %>
+			<!-- 페이징처리 -->
+			<% if(pi.getCurrentPage()==1) {%>
+			<button type="button" disabled></button>
+			<% } else { %>
+			<button type="button"
+				onclick="location.href='<%=contextPath%>/main.ck?currentPage=<%=pi.getCurrentPage()-1%>';">&lt;</button>
+			<% } %>
+			<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
+	
+			<%if(i==pi.getCurrentPage()) {%>
+			<button type="button" disabled>i</button>
+			<% } else {%>
+			<button type="button"
+				onclick="location.href='<%=contextPath%>/main.ck?currentPage=<%=i%>';"><%=i %></button>
+			<% } %>
+	
+			<% } %>
+	
+			<% if(pi.getMaxPage()!=pi.getCurrentPage()) { %>
+			<button type="button"
+				onclick="location.href='<%=contextPath%>/main.ck?currentPage=<%=pi.getCurrentPage()+1%>';">&gt;</button>
+			<% } else { %>
+			<button type="button" disabled>&gt;</button>
+			<% } %>
 		<% } %>
 	</div>
 

@@ -16,6 +16,10 @@ public class JDBCTemplate {
 	public static Connection getConnection(){
 		
 		Properties prop = new Properties();
+<<<<<<< HEAD
+=======
+		
+>>>>>>> b77a16e5a81784651d2e165c21fd130c4b786170
 		String filePath = JDBCTemplate.class.getResource("/sql/driver/driver.properties").getPath();
 		
 		Connection conn = null;
