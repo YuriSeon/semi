@@ -252,7 +252,7 @@ public class BMemberDao {
 			
 			while(rset.next()) {
 				list.add(new Message(rset.getInt("MSG_NO")
-									,rset.getString("USERNAME")
+									,rset.getString("USER_NICK")
 									,rset.getString("MSG_CONTENT")
 									,rset.getDate("MSG_SEND_DATE")));
 			}

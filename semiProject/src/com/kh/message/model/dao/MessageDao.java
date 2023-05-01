@@ -35,7 +35,7 @@ public class MessageDao {
 		ResultSet rset = null;
 		
 		String sql = prop.getProperty("selectUserNo");
-		
+		System.out.println("try");
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, acceptNick);
@@ -45,7 +45,7 @@ public class MessageDao {
 			if(rset.next()) {
 				acceptUserNo = rset.getInt("USERNO");
 			}
-			
+			System.out.println("dao:"+acceptUserNo);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -63,7 +63,7 @@ public class MessageDao {
 		PreparedStatement pstmt = null;
 		
 		String sql = prop.getProperty("insertMessage");
-		
+		System.out.println("2번째tri");
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, Integer.parseInt(msg.getUserWriter()));
@@ -71,7 +71,7 @@ public class MessageDao {
 			pstmt.setString(3, msg.getAcceptUser());
 			
 			result= pstmt.executeUpdate();
-			
+			System.out.println("dao"+result);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -88,7 +88,7 @@ public class MessageDao {
 		PreparedStatement pstmt = null;
 		
 		String sql = prop.getProperty("insertBlock");
-		
+		System.out.println("3번쨰tri");
 		try {
 			pstmt=conn.prepareStatement(sql);
 			pstmt.setString(1, mb.getUserNo());
