@@ -37,7 +37,6 @@ public class FoodRankBtnClickController extends HttpServlet {
 		String str = request.getServletPath();
 		String bno = request.getParameter("bno");
 		int userno = Integer.parseInt(request.getParameter("gestNo"));
-		
 		int num = new FoodService().UpdateBtn(str, bno, userno);
 		if(num > 0) {
 			// 조회해오기

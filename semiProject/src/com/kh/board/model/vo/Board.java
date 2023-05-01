@@ -39,6 +39,7 @@ public class Board {
 	
 	// 대나무숲 사진여부를 위해서 만듬
 	private String fileNo; //파일번호지만 null값을 받아야해서 String으로함
+	private int replyCount;
 
 	public int getUn() {
 		return un;
@@ -62,9 +63,24 @@ public class Board {
 		super();
 	}
 	
-	//페이지 만들때 게시글 
+	//대나무숲 공지사항 가져오기
+	public Board(int boardNo, String boardWriter, String boardTitle, String boardContent, Date createDate, int good,
+			String fileNo,int count,int typeNo ) {
+		super();
+		this.boardNo = boardNo;
+		this.boardWriter = boardWriter;
+		this.boardTitle = boardTitle;
+		this.boardContent = boardContent;
+		this.createDate = createDate;
+		this.good = good;
+		this.fileNo = fileNo;
+		this.count = count;
+		this.typeNo=typeNo;
+	}
+	
+	//대나무숲 페이지 만들때 게시글 
 	public Board(int boardNo, String boardWriter, String boardType, String boardTitle, String boardContent,
-			Date createDate, int good,String fileNo, int count) {
+			Date createDate, int good,String fileNo, int count,int replyCount) {
 		super();
 		this.boardNo = boardNo;
 		this.boardWriter = boardWriter;
@@ -75,11 +91,24 @@ public class Board {
 		this.good = good;
 		this.fileNo= fileNo;
 		this.count = count;
+		this.replyCount=replyCount;
 	}
 	
+	
+	public Board(int boardNo, String boardWriter, String boardTitle, String boardContent, Date createDate, int good,
+			int count) {
+		super();
+		this.boardNo = boardNo;
+		this.boardWriter = boardWriter;
+		this.boardTitle = boardTitle;
+		this.boardContent = boardContent;
+		this.createDate = createDate;
+		this.good = good;
+		this.count = count;
+	}
 	//대나무숲 게시글 디테일
 	public Board(int boardNo, String boardWriter, String boardType, String boardTitle, String boardContent,
-			Date createDate, Date modifyDate, int good, int count) {
+			Date createDate, Date modifyDate, int good, int count,int typeNo) {
 		super();
 		this.boardNo = boardNo;
 		this.boardWriter = boardWriter;
@@ -90,6 +119,7 @@ public class Board {
 		ModifyDate = modifyDate;
 		this.good = good;
 		this.count = count;
+		this.typeNo=typeNo;
 	}
 	public Board(int boardNo, String boardWriter, String boardType, String boardTitle, String boardContent,
 			Date createDate, Date modifyDate, int good, int bad, int report, String status, int count) {
@@ -305,6 +335,13 @@ public class Board {
 	public void setFileNo(String fileNo) {
 		this.fileNo = fileNo;
 	}
+	public int getReplyCount() {
+		return replyCount;
+	}
+	public void setReplyCount(int replyCount) {
+		this.replyCount = replyCount;
+	}
+	
 	
 	
 }

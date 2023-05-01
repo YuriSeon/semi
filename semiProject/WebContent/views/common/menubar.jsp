@@ -146,48 +146,11 @@
         #myModal{
         width: 200px;
     	}
-    	
-    	.exit{
-            margin-left: 1170px;
-            margin-top: -45px;
-        }
+    
         .exit a{
             text-decoration: none;
-            font-weight:bold;
-            font-size:15px;
             color: darkgrey;
         }
-        .exit:hover{
-        	filter: invert(100%);
-        }
-        .nameArea{
-        margin-left:1050px;
-        margin-top : -80px;
-        margin-bottom: 10px;
-        font-size:20px;
-        margin-right:20px;
-        font-weight:bold;
-        color:deepskyblue;
-        }
-        .friendList{
-       		background-color:#F0F8FF;
-       		border-radius:10px;
-        	position:absolute;
-        	width:150px;
-        	height:600px;
-        	text-align:center;
-        	font-family: 'LotteMartDream';
-        	margin-left:30px;
-        	overflow:auto;
-        }
-        .friendList a{
-        	text-decoration:none;
-        	color:deepskyblue;
-        	font-weight:bold;
-        	font-size:18px;
-        	
-        }
-
 
     </style>
 </head>
@@ -209,7 +172,7 @@
     
         <div class="exit">
         <a href="<%=contextPath%>/logout.me">로그아웃</a>
-        <img src="resources/로그아웃_투명.png" style="width: 30px; cursor:pointer" alt="">
+        <img src="resources/로그아웃_투명.png" style="width: 30px;" alt="">
     </div>
     
     </header>

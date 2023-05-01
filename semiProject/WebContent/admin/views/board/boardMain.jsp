@@ -51,63 +51,68 @@
 			</div>
 		</div>
 		<br>
-			<div id="con2">
-				<table id="tab">
-					<thead>
-						<tr>
-							<th>NO</th>
-							<th>BoardType</th>
-							<th>Category</th>
-							<th>Writer</th>
-							<th>Title</th>
-							<th>Count</th>
-							<th>CreateDate</th>
-							<th>ModifyDate</th>
-							<th>Delete</th>
-						</tr>
-					</thead>
-					<tbody>
-						<% if(blist.isEmpty()) {%>
-							<tr>
-								<td>작성된 공지사항이 없습니다.</td>
-							</tr>
-						<% } else {%>
-							<% for(Board b : blist) {%>
-								<tr>
-									<td><%=b.getBoardNo() %></td>
-									<% if(b.getTypeNo()==1) {%>
-										<td>공지사항</td>
-									<% } else { %>
-										<td>게시판</td>
-									<% } %>
-									<td><%=b.getBoardType() %></td>
-									<td><%=b.getBoardWriter() %></td>
-									<td><%=b.getBoardTitle() %></td>
-									<td><%=b.getCount() %></td>
-									<td><%=b.getCreateDate() %></td>
-									<td><%=b.getModifyDate() %></td>
-									<td>
-										<button name="<%=b.getBoardNo() %>" class="custom-btn btn-5" >삭제</button>
-									</td>
-								</tr>
-							<% } %>
+		<div id="con2">
+			<%
+			if (blist != null && blist.isEmpty()) {
+			%>
+				<p>작성된 공지사항이 없습니다.</p>
+			<%
+			} else {
+			%>
+			<table id="tab">
+				<thead>
+					<tr>
+						<th>NO</th>
+						<th>BoardType</th>
+						<th>Category</th>
+						<th>Writer</th>
+						<th>Title</th>
+						<th>Count</th>
+						<th>CreateDate</th>
+						<th>ModifyDate</th>
+						<th>Delete</th>
+					</tr>
+				</thead>
+				<tbody>
+					<%
+					for (Board b : blist) {
+					%>
+					<tr>
+						<td><%=b.getBoardNo() %></td>
+						<% if(b.getTypeNo()==1) {%>
+						<td>공지사항</td>
+						<% } else { %>
+						<td>게시판</td>
 						<% } %>
-					</tbody>
-					<!-- selectbox attr checked로 바뀌게해서 설정값이랑 맞추기  -->
-				</table>
-			</div>
+						<td><%=b.getBoardType() %></td>
+						<td><%=b.getBoardWriter() %></td>
+						<td><%=b.getBoardTitle() %></td>
+						<td><%=b.getCount() %></td>
+						<td><%=b.getCreateDate() %></td>
+						<td><%=b.getModifyDate() %></td>
+						<td>
+							<button name="<%=b.getBoardNo() %>" class="custom-btn btn-5">삭제</button>
+						</td>
+					</tr>
+					<% } %>
+					<% } %>
+				</tbody>
+				<!-- selectbox attr checked로 바뀌게해서 설정값이랑 맞추기  -->
+			</table>
 		</div>
+	</div>
 		<div>
 		<!-- 페이징처리 -->
+		<% if(pi.getMaxPage() > 1) { %>
 			<% if(pi.getCurrentPage()==1) {%>
-				<button type="button" disabled></button>
+				<button type="button" disabled>&lt;</button>
 			<% } else { %>
 				<button type="button" onclick="location.href='<%=contextPath%>/main.abo?currentPage=<%=pi.getCurrentPage()-1%>';">&lt;</button>
 			<% } %>
 			
 			<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
 				<%if(i==pi.getCurrentPage()) {%>
-					<button type="button" disabled>i</button>
+					<button type="button" disabled><%=pi.getCurrentPage()%></button>
 				<% } else {%>
 					<button type="button" onclick="location.href='<%=contextPath%>/main.abo?currentPage=<%=i%>';"><%=i %></button>
 				<% } %>
@@ -118,6 +123,7 @@
 			<% } else { %>
 				<button type="button" disabled>&gt;</button>
 			<% } %> 
+		<% } %>
 		</div>
 			
 		<script>

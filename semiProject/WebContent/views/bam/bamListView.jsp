@@ -14,7 +14,7 @@
 <style >
 		.board-list{			
 			border-top: 3px solid skyblue;
-			width: 80%;			
+			width: 75%;			
 			margin: auto;
 			text-align: center;
 			height: 100%;
@@ -23,7 +23,7 @@
 		
 		.board-list-pre{	
 			
-			width: 80%;
+			width: 75%;
 			border-bottom: 2px solid gainsboro;
 			border-left:2px solid gainsboro;
 			border-right:2px solid gainsboro;
@@ -58,17 +58,16 @@
 		.title>h3{
 			font-weight: 800;
 		}
-		.content{
+		
+		#content{
 			font-weight: 600;
-			text-overflow: ellipsis;
-			white-space : nowrap;
-			overflow : hidden;
-			
+			font-size : 20;
+	        text-overflow: ellipsis;
+			overflow: hidden;
+	        display: -webkit-box;
+	        -webkit-line-clamp: 1;
+	        -webkit-box-orient: vertical;	
 		}
-		.content>a{
-			text-decoration: none;
-			color: black;
-		}		
 		.sub{			
 			height: 30%;
 			
@@ -134,19 +133,23 @@
 				<div class="board-list-pre">
 					<div class="title">
 					<span class="category">
-						<%if(b.getBoardType().equals("공지")){ %>
-						<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><%=b.getBoardType() %></a>
+						<%if(b.getBoardType()==null){ %>
+							<!-- 공지사항 이라면 -->
+							<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><img style="width:25px" src="resources/bam_files/메가폰.png">공지</a>
 						<%}else{ %>
-						<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><%=b.getBoardType() %></a>
+							<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><%=b.getBoardType() %></a>
 						<%} %>
 					</span>
-						<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><%=b.getBoardTitle() %></a> 
-						<p class="content">
-							<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><%=b.getBoardContent() %></a>
-						</p> 
+						<%if(b.getTypeNo()==1||b.getReplyCount()==0){ %>
+							<!-- 공지사항 이거나 댓글이 없다면 -->
+							<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><%=b.getBoardTitle() %></a> 
+						<%}else{ %>
+							<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><%=b.getBoardTitle() %>(<%=b.getReplyCount() %>)</a>
+						<%} %>
+						<a id="content" href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><%=b.getBoardContent() %></a>
 					</div>
 					<div class="sub">
-						<%if(b.getBoardWriter().equals("1")){ %>
+						<%if(b.getTypeNo()==1&&b.getBoardWriter().equals("1")){ %>
 							<p class="name">관리자</p>										
 						<%}else{ %>
 							<p class="name">익명</p>

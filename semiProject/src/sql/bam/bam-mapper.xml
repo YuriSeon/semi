@@ -6,6 +6,7 @@
 		SELECT COUNT(*) "COUNT"
 		FROM BOARD
 		WHERE BOARD_TYPE=2
+		AND TYPE_NO = 0
 		AND STATUS = 'Y'
 	</entry>
 	<entry key="searchTitleCount">
@@ -14,6 +15,7 @@
 		FROM BOARD
 		WHERE BOARD_TYPE=2
 		AND STATUS = 'Y'
+		AND TYPE_NO = 0
 		AND BOARD_TITLE LIKE ?
 	</entry>
 	<entry key="searchContentCount">
@@ -32,7 +34,7 @@
 		 			,DECODE(BAM_CATEGORY_NO, '1', '일반', '2', '질문', '3', '연애','4','공지') "BAM_CATEGORY_NO",BOARD_TITLE
 		 			,BOARD_CONTENT,CREATE_DATE
 		 			,GOOD,COUNT
-		 			,FILE_NO
+		 			,FILE_NO,BAM_REPLY_COUNT
                 FROM BOARD B
                 LEFT JOIN ATTACHMENT USING(BOARD_NO)
                 JOIN CATEGORY_BAM USING (BOARD_NO)
@@ -43,10 +45,9 @@
 	WHERE RNUM BETWEEN ? AND ?	  
 	</entry>
 	<entry key="selectNoticeList">
-	<!-- 공지사항 조회 -->
-	SELECT BOARD_NO,DECODE(BAM_CATEGORY_NO, '1', '일반', '2', '질문', '3', '연애','4','공지') "BAM_CATEGORY_NO",USERNO,BOARD_TITLE,BOARD_CONTENT,CREATE_DATE,GOOD,FILE_NO,COUNT
+	<!-- 공지사항 리스트 조회 -->
+	SELECT BOARD_NO,USERNO,BOARD_TITLE,BOARD_CONTENT,CREATE_DATE,GOOD,FILE_NO,COUNT,TYPE_NO
 	FROM BOARD B
-	JOIN CATEGORY_BAM USING (BOARD_NO)
 	LEFT JOIN ATTACHMENT USING (BOARD_NO)
 	WHERE BOARD_TYPE =2
 	AND B.STATUS = 'Y'
@@ -60,7 +61,7 @@
 		 FROM(SELECT BOARD_NO,USERNO
 		 			,DECODE(BAM_CATEGORY_NO, '1', '일반', '2', '질문', '3', '연애','4','공지') "BAM_CATEGORY_NO",BOARD_TITLE
 		 			,BOARD_CONTENT,CREATE_DATE
-		 			,GOOD,FILE_NO
+		 			,GOOD,FILE_NO,BAM_REPLY_COUNT
 		 			,COUNT
                 FROM BOARD B
                 JOIN CATEGORY_BAM USING (BOARD_NO)
@@ -79,7 +80,7 @@
 		 FROM(SELECT BOARD_NO,USERNO
 		 			,DECODE(BAM_CATEGORY_NO, '1', '일반', '2', '질문', '3', '연애','4','공지') "BAM_CATEGORY_NO",BOARD_TITLE
 		 			,BOARD_CONTENT,CREATE_DATE
-		 			,GOOD,FILE_NO
+		 			,GOOD,FILE_NO,BAM_REPLY_COUNT
 		 			,COUNT
                 FROM BOARD B
                 JOIN CATEGORY_BAM USING (BOARD_NO)
@@ -119,9 +120,9 @@
 	</entry>
 	<entry key="selectBam">
 	<!-- 대나무숲 게시글 조회 -->
-	SELECT BOARD_NO,USERNO,DECODE(BAM_CATEGORY_NO, '1', '일반', '2', '질문', '3', '연애', '4','공지') "BAM_CATEGORY_NO",BOARD_TITLE,BOARD_CONTENT,CREATE_DATE,MODIFY_DATE,GOOD,COUNT
+	SELECT BOARD_NO,USERNO,DECODE(BAM_CATEGORY_NO, '1', '일반', '2', '질문', '3', '연애', '4','공지') "BAM_CATEGORY_NO",BOARD_TITLE,BOARD_CONTENT,CREATE_DATE,MODIFY_DATE,GOOD,COUNT,TYPE_NO
 	FROM BOARD
-    JOIN CATEGORY_BAM USING (BOARD_NO)
+    LEFT JOIN CATEGORY_BAM USING (BOARD_NO)
 	WHERE BOARD_NO = ?
 	AND STATUS = 'Y'
 	</entry>
@@ -174,6 +175,12 @@
 	INSERT INTO REPLY(REPLY_NO,BOARD_NO,REPLY_CONTENT,USERNO)
 	VALUES (SEQ_RNO.NEXTVAL,?,?,?)
 	</entry>
+	<entry key="increaseReplyCount">
+	<!-- 대나무숲 각 게시글 댓글수 증가-->
+	UPDATE CATEGORY_BAM
+	SET BAM_REPLY_COUNT = BAM_REPLY_COUNT+1
+	WHERE BOARD_NO = ?
+	</entry>
 	<entry key="selectReplyList">
 	<!-- 한 게시글 댓글들 조회 -->
 	SELECT REPLY_NO,BOARD_NO,USERNO,REPLY_CONTENT,CREATE_DATE
@@ -194,6 +201,11 @@
 	SET STATUS = 'N'
 	WHERE STATUS = 'Y'
 	AND REPLY_NO = ?
+	</entry>
+	<entry key="decreaseReplyCount">
+	UPDATE CATEGORY_BAM
+	SET BAM_REPLY_COUNT = BAM_REPLY_COUNT-1
+	WHERE BOARD_NO = ?
 	</entry>
 	<entry key="reportBam">
 	<!-- 게시글 신고 카운트 -->

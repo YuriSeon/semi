@@ -5,6 +5,7 @@
  <%
  	PageInfo pi = (PageInfo)request.getAttribute("pi");
  	ArrayList<BMember> list = (ArrayList<BMember>)request.getAttribute("list");
+ 	int option = Integer.parseInt(request.getParameter("option"));
  %>
 <!DOCTYPE html>
 <html>
@@ -12,7 +13,7 @@
 <meta charset="UTF-8">
 <title>USER CHECKLIST</title>
 <style>
-	#select, input{
+	#search_select, input{
 		height: 30px;
 		margin: 0;
 		padding: 0;
@@ -40,7 +41,7 @@
 			<form action="<%=contextPath %>/select.ck" method="post">
 				<div id="search_div">
 					<input type="hidden" name="currentPage" value="1">
-					<select id="select" name="select" id="search_select" onchange="selectboxP();">
+					<select name="select" id="search_select" onchange="selectboxP();">
 						<option value="1" selected>ID</option>
 						<option value="2">차단 합계</option>
 						<option value="3">게시물 필터링 수</option>
@@ -59,14 +60,14 @@
 			</div>
 			<br>
 			<div><br>
-				<select id="box" name="box" id="search_select" onchange="selectboxP();">
+				<select id="box" name="box" onchange="selectboxP();">
 					<option value="1" selected>최근 업데이트순 </option>
 					<option value="2">차단 합계</option>
 					<option value="3">게시물 필터링 수</option>
 				</select>
 			</div>
 		</div>
-		<%if(!list.isEmpty()) { %>
+		<%if(list!=null && !list.isEmpty()) { %>
 		    <table id="tab">
 				<thead>
 					<tr>
@@ -97,48 +98,73 @@
 				</tbody>
 			</table>
 	    <% } else { %>
-	        <p style="text-align: center; font-weight: bold; font-size:large">검색에 일치하는 결과가 없습니다.</p>
+	        <p style="text-align: center; font-weight: bold; font-size:large">확인이 필요한 회원이 없습니다.</p>
 	    <% } %>
     </div>
 	<div>
-		<!-- 페이징처리 -->
-		<% if(pi.getCurrentPage()==1) {%>
-		<button type="button" disabled></button>
-		<% } else { %>
-		<button type="button"
-			onclick="location.href='<%=contextPath%>/main.ck?currentPage=<%=pi.getCurrentPage()-1%>';">&lt;</button>
-		<% } %>
-		<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
-
-		<%if(i==pi.getCurrentPage()) {%>
-		<button type="button" disabled>i</button>
-		<% } else {%>
-		<button type="button"
-			onclick="location.href='<%=contextPath%>/main.ck?currentPage=<%=i%>';"><%=i %></button>
-		<% } %>
-
-		<% } %>
-
-		<% if(pi.getMaxPage()!=pi.getCurrentPage()) { %>
-		<button type="button"
-			onclick="location.href='<%=contextPath%>/main.ck?currentPage=<%=pi.getCurrentPage()+1%>';">&gt;</button>
-		<% } else { %>
-		<button type="button" disabled>&gt;</button>
+	<!-- option값 체크된거 넘어가도록 처리 -->
+		<% if(pi.getMaxPage()>1) { %>
+			<!-- 페이징처리 -->
+			<% if(pi.getCurrentPage()==1) {%>
+			<button type="button" disabled>&lt;</button>
+			<% } else { %>
+			<button type="button"
+				onclick="beforePage();">&lt;</button>
+			<% } %>
+			<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
+	
+			<%if(i==pi.getCurrentPage()) {%>
+			<button type="button" disabled><%=pi.getCurrentPage()%></button>
+			<% } else {%>
+			<button type="button" class="btnNum" name="<%=i %>" onclick="pageNum();"><%=i %></button>
+			<% } %>
+	
+			<% } %>
+	
+			<% if(pi.getMaxPage()!=pi.getCurrentPage()) { %>
+			<button type="button"
+				onclick="afterPage();">&gt;</button>
+			<% } else { %>
+			<button type="button" disabled>&gt;</button>
+			<% } %>
 		<% } %>
 	</div>
 
 	<script>
-    	function selectboxP(){
-            if($("#search_select option:selected").val()=="1"){
+		function selectboxP(){
+	        if($("#search_select option:selected").val()=="1"){
 		        $("#search_input").attr("placeholder","검색할 ID를 입력하세요.");
 		    } else {
 		        $("#search_input").attr("placeholder","기준치를 입력하세요.");
 		    }
-       }
+	   }	
+	
+	
+		$(function(){
+			$("#box").children().each(function(){
+				if($(this).val()=="<%=option%>"){
+					$(this).attr("selected", true);
+				} 
+			});
+		});
+	
+		function beforePage(){
+			location.href='<%=contextPath%>/main.ck?currentPage=<%=pi.getCurrentPage()-1%>&option='+$("#box option:selected").val();
+		}
+		
+		function afterPage(){
+			location.href='<%=contextPath%>/main.ck?currentPage=<%=pi.getCurrentPage()+1%>&option='+$("#box option:selected").val();
+		}
+		
+		function pageNum(){
+			location.href='<%=contextPath%>/main.ck?currentPage='+$(".btnNum").attr("name")+'&option='+$("#box option:selected").val();
+		}
+	
+    	
     	
     	$("#box").on("change", function() {
 			var box = $("#box option:selected").val();
-			var gson = GsonBuilder().setDateFormat("yyyy-MM-dd").create()
+			/* var gson = GsonBuilder().setDateFormat("yyyy-MM-dd").create() */
 			$.ajax({
 				url : "main.ck",
 				data : {

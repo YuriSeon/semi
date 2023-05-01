@@ -75,7 +75,7 @@ button{
 								<th>Email</th>
 								<td><%=((BMember)list.get(i)).getEmail() %></td>
 								<th>주민번호</th>
-								<td><%=((BMember)list.get(i)).getSsn() %></td>
+								<td><%=((BMember)list.get(i)).getSsn().substring(0,8)+"******"%></td>
 							</tr>
 							<tr>
 								<th>학교인증 / 학교명</th>
@@ -110,7 +110,7 @@ button{
 						<th>허위 신고 내역</th>
 						<td><input type="text" id="falseBlock" name="falseBlock" value="<%=((UserCondition)list.get(i)).getFalseBlockC() %>"></td>
 						<th>신고 및 차단 합계</th>
-						<td><%=((UserCondition)list.get(i)).getBlockC()+((UserCondition)list.get(i)).getDmBlockC()+((UserCondition)list.get(i)).getFalseBlockC() %></td>
+						<td id="totalB"><%=((UserCondition)list.get(i)).getBlockC()+((UserCondition)list.get(i)).getDmBlockC()+((UserCondition)list.get(i)).getFalseBlockC() %></td>
 					</tr>
 					<tr>
 						<th>게시글 필터링</th>
@@ -118,7 +118,7 @@ button{
 						<th>댓글 필터링</th>
 						<td><input type="text" id="replyF" name="replyF" value="<%=((UserCondition)list.get(i)).getReplyFiltering()%>"></td>
 						<th>총 필터링 합계</th>
-						<td><%=((UserCondition)list.get(i)).getBoardFiltering() + ((UserCondition)list.get(i)).getReplyFiltering()%></td>
+						<td id="totalF"><%=((UserCondition)list.get(i)).getBoardFiltering() + ((UserCondition)list.get(i)).getReplyFiltering()%></td>
 						<th>받은 경고장 </th>
 						<td><input type="text" id="yellow" name="yellow" value="<%=((UserCondition)list.get(i)).getYellowCard()%>"></td>
 					</tr>
@@ -155,7 +155,29 @@ button{
 	 				success:function(list){
 	 					if(<%=!list.isEmpty()%>){
 	 						alert("회원정보 업데이트 성공")
-		 						location.href="<%=contextPath%>/admin/views/UserManage/userDetail.jsp?";
+		 						<%
+		 						for(int i=0;i<list.size();i++) {
+		 							if(list.get(i) instanceof BMember){ %>
+		 								$("#point").attr("value", "<%=((BMember)list.get(i)).getPoint()%>");
+		 						<%		i++;
+		 							}
+		 							if(list.get(i) instanceof UserManage){%>
+		 								$("#foodBoard").attr("value", "<%=((UserManage)list.get(i)).getFoodBStatus()%>");
+		 						<%		i++;
+		 							}
+		 							if(list.get(i) instanceof UserCondition){ %>
+		 								$("#block").attr("value", "<%=((UserCondition)list.get(i)).getBlockC()%>");
+		 								$("#dmBlock").attr("value", "<%=((UserCondition)list.get(i)).getDmBlockC()%>");
+		 								$("#falseBlock").attr("value", "<%=((UserCondition)list.get(i)).getFalseBlockC()%>");
+		 								$("#yellow").attr("value", "<%=((UserCondition)list.get(i)).getYellowCard()%>");
+		 								$("#boardF").attr("value", "<%=((UserCondition)list.get(i)).getBoardFiltering()%>");
+		 								$("#replyF").attr("value", "<%=((UserCondition)list.get(i)).getReplyFiltering()%>");
+		 						<%	}
+		 						}
+		 						%>
+		 						$("#totalB").text(parseInt($("#block").val())+parseInt($("#dmBlock").val())+parseInt($("#falseBlock").val()));
+		 						console.log(parseInt($("#boardF").val())+parseInt($("#replyF").val()));
+		 						$("#totalF").text(parseInt($("#boardF").val())+parseInt($("#replyF").val()));
 	 					} else {
 	 						alert("회원정보 업데이트 실패로 회원관리 메인페이지로 돌아갑니다");
 	 						location.href="<%=contextPath%>/main.um?currentPage=1";
