@@ -49,6 +49,7 @@ public class MessageInsertController extends HttpServlet {
 		//받는 유저닉네임
 		String acceptNick = request.getParameter("acceptNick");
 		//닉네임으로 받는 유저 번호 조회
+		System.out.println(acceptNick);
 		String acceptUserNo= Integer.toString(new MessageService().selectUserNo(acceptNick));
 		
 		Message msg = new Message();
@@ -58,11 +59,12 @@ public class MessageInsertController extends HttpServlet {
 		
 		//차단당했는지 확인하기
 		String block = new MessageService().checkBlock(msg);
-		
+		System.out.println(1);
 		int result = 0; 
 		
 		if(block ==null) {//차단 안당했을 경우 인서트
 			result = new MessageService().insertMessage(msg);
+			System.out.println(2);
 		}
 			response.getWriter().print(result);
 		

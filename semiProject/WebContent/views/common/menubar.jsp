@@ -185,7 +185,7 @@
         <nav class="menu-bar__menu-1">
         <ul class="float-gird">
             <li>
-            <a href="#" class="block">
+            <a href="<%=contextPath%>/list.me?currentPage=1" class="block">
                 <i class="fas fa-user"></i>
                 <span>마이페이지</span>
             </a>

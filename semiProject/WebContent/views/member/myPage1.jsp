@@ -142,13 +142,16 @@
             background-color: deepskyblue;
             color: #fefefe;
         }
+        .modal-title{
+        	font-size:15px;
+        }
         
         #modal-name1{
         	font-size:20x;
         	color:deepskyblue;
         }
 
-        #modal-time{
+        #modal-time1{
             margin: 5px;  
             float: right;
             font-size: 13px;           
@@ -200,6 +203,18 @@
 			margin-top:70px;
 			float:right;
 			margin-right:10px;
+		}
+		
+		.msgbtn{
+			 width: 100px;
+            height: 40px;
+            background-color: deepskyblue;
+            color: white;
+            border-radius: 5px;
+            border-style: none;
+            cursor: pointer;
+            font-size: 17px;
+            float:right; 
 		}
 
 </style>
@@ -267,12 +282,12 @@
                     <h4 class="modal-title" id="myModalLabel">브레이크타임_메세지</h4>
                 </div>
                 <div class="modal-body">
-                    <div id="modal-name">발신자 : 이름</div>
-                    <div id="modal-time">전송 시간 : 10:45 AM</div>
+                    <div id="modal-name1">발신자 : 이름</div>
+                    <div id="modal-time1">전송 시간 : 10:45 AM</div>
                     <div id="modal-content1">내용 : </div>
                 </div>
                 <div class="modal-footer1">
-                    <button type="button" data-dismiss="modal">닫기</button>                    
+                    <button type="button" class="msgbtn" data-dismiss="modal">닫기</button>                    
                 </div>
             </div>
         </div>
@@ -289,18 +304,17 @@
                 var name = $(this).find('.msg_from').text();
                 var time = $(this).find('.msg_time').text();
                 var content = $(this).find('.msg_content p').html();
-                console.log(content);
 
-                $('#modal-name').text(name);
-                $('#modal-time').text(time);
+                $('#modal-name1').text(name);
+                $('#modal-time1').text(time);
                 $('#modal-content1').html(content);
 
                 $('#myModal1').modal('show');
         
 
                 $('#myModal1').on('hidden.bs.modal', function (e) {
-                    $(this).find('#modal-name').text('');
-                    $(this).find('#modal-time').text('');
+                    $(this).find('#modal-name1').text('');
+                    $(this).find('#modal-time1').text('');
                     $(this).find('#modal-content1').html('');
                     $(this).modal('hide');
         });
