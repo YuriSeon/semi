@@ -985,7 +985,7 @@ public class FoodDao {
 				att = new Attachment();
 				att.setFilePath(rset.getString("FILE_PATH"));
 				att.setChangeName(rset.getString("CHANGE_NAME"));
-				att.setOriginName("FOOD_NAME");
+				att.setOriginName(rset.getString("FOOD_NAME"));
 				list.add(att);
 			}
 		} catch (SQLException e) {
