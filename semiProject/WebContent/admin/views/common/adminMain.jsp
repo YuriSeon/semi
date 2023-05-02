@@ -133,6 +133,7 @@ word-spacing: 100vw;
 }
 td{
 padding:2px;
+color : white;
 
 }
 

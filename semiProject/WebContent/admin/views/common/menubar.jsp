@@ -866,20 +866,18 @@ background: linear-gradient(0deg, rgba(0,172,238,1) 0%, rgba(2,126,251,1) 100%);
 		</a>
 	</div>
 	<div id="head">
-		<form action="<%=contextPath %>/mainSearch.menu" method="get">
+		<form action="<%=contextPath %>/mainSearch.menu?currentPage=1" method="get">
 			<div id="cover">
-				<form method="get" action="<%=contextPath %>/mainSearch.menu">
-					<div class="tb">
-						<div class="td"><input type="text" name="search" placeholder="검색어를 입력하세요." required></div>
-						<div class="td" id="s-cover">
-							<button type="submit">
-								<div id="s-circle"></div>
-				<!-- <div id="logo">
-			<a hr -->				<span></span>
-							</button>
-						</div>
+				<div class="tb">
+					<input type="hidden" name="currentPage" value="1">
+					<div class="td"><input type="text" name="search" placeholder="검색어를 입력하세요." required></div>
+					<div class="td" id="s-cover">
+						<button type="submit">
+						<div id="s-circle"></div>
+						<span></span>
+						</button>
 					</div>
-				</form>
+				</div>
 			</div>
 		</form>
 	</div>

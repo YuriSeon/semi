@@ -34,17 +34,21 @@ public class MainSearchbarController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		int currentPage = Integer.parseInt(request.getParameter("currentPage"));
+		
 		String search = request.getParameter("search");
 		
 		ArrayList<BMember> mList = new UserManageService().mainSearchUser(search);
 		
 		ArrayList<Board> bList = new BoardService().mainSearchBoard(search);
-		
+		System.out.println(mList);
 		request.setAttribute("mList", mList);
 		
 		request.setAttribute("bList", bList);
 		
 		request.setAttribute("search", search);
+		
+		request.setAttribute("currentPage", currentPage);
 		
 		request.getRequestDispatcher("admin/views/common/mainSearchResult.jsp").forward(request, response);
 		
