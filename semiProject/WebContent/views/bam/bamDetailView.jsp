@@ -151,7 +151,12 @@
         .btn-danger{
             background-color: rgb(237, 87, 87);
         }
-       
+        .retop{
+            border-top: 1px solid rgb(180, 175, 175); 
+        }
+        .check{
+        	width:25px;
+        }
 
     </style>
 </head>
@@ -182,7 +187,7 @@
                  </div>
 				<%} %>
                 <div class="bcount">
-                    	조회수:<%=b.getCount() %> 추천수:<%=b.getGood() %>
+                    	조회수:<%=b.getCount() %>  <span id="goodCount">추천수:<%=b.getGood() %></span>
                 </div>
             </div>
             <%if(loginUser != null && loginUser.getUserNo()==Integer.parseInt(b.getBoardWriter())||loginUser.getUserNo()==1){ %>
@@ -198,6 +203,9 @@
                 <p class="con">
 					<%=b.getBoardContent() %>
                 </p>
+                <%if(at!=null){ %>
+                <img src="<%=contextPath+at.getFilePath()+"/"+at.getChangeName()%>">
+                <%} %>
             </div>
             <br>
             <div class="good">
@@ -206,10 +214,12 @@
             <br><br>
         </div>
 
+		
 
-
-
+		<button onclick="location.href='<%=contextPath%>/bamreport.bo?bno=<%=b.getBoardNo()%>&userNo=<%=loginUser.getUserNo()%>'" class="btn" style="float: right; width:130px">작성자신고</button>
         <div class="reply-area">
+            <p>댓글</p>
+            <hr>
             <table class="inputTable" style="width: 600px;" align="center">
                 <thead>
                     <tr>
@@ -219,9 +229,10 @@
                 </thead>
             </table>
             <br><br>
-            <p>댓글 (5)</p>
-            <hr>
-
+			<table align="center" id="reply-con">
+                <tbody >
+    			</tbody>
+        	</table>
 
 ​
         </div>
@@ -229,22 +240,25 @@
             <br><br><br>
             
             <script>
-            	$(function(){ //페이지 열자마자 댓글 불러오기
-            		btncheck();
-            		selectReply();
+            	$(function(){ //페이지 열자마자 실행
+            		btncheck(); //추천했는지 판별
+            		selectReply(); //댓글 불러오기
             	});
             
                 function replyInsert(){//댓글 작성
+                	console.log($("#recon").val());
+                	console.log(<%=b.getBoardNo()%>);
                     $.ajax({
                         url : "bamreply.bo",
                         type:"post",
                         data:{
                             con:$("#recon").val(), //댓글 내용
-                            bno:<%=b.getBoardNo()%> //게시글 번호
+                            bno:<%=b.getBoardNo()%>, //게시글 번호
+                            btype:<%=b.getTypeNo()%> //공지사항인지
                         },
                         success :function(result){
                             if(result>0){ //작성 성공
-                            	
+                            	console.log("성공")
                             	selectReply();
                             	$("#recon").val("");
                             }else{ //작성 실패
@@ -271,15 +285,15 @@
                 					replyWriter +="(작성자)";
                 				}
                 				
-                				result+="<tr>"
-                                		+"<td style="+"text-align: center;"+">"+rlist[i].createDate+"</td>"
-                                		+"<td style="+"text-align: center;"+">"+replyWriter+"</td>"
-                                		+"<td colspan="+1+" rowspan="+1+" width="+400+">"+rlist[i].replyContent+"</td>"
-                                		+"<td rowspan="+1+"><button onclick='"+"deleteReply(this);'"+"value='"+rlist[i].replyNo+"'id='deleteRe'>삭제</button></td>"
-                            			+"</tr>";
+                				result+="<tr class=retop>"
+                                +'<td rowspan="1"><img src="CSS/resources/img/강아지.jpg" class="img"></td>'
+                                +'<td style="text-align: center;" class="p1">'+replyWriter+'<br>'+rlist[i].createDate+'</td>'
+                                +'<td colspan="2" rowspan="1" width="500">'+rlist[i].replyContent+'</td>'
+                                +'<td rowspan="1"><button onclick="deleteReply(this);"value="'+rlist[i].replyNo+'"class="btn btn-danger">삭제</button></td>'
+                            	+'</tr>';
                 			}
                 			
-                			$("#reply-area ").html(result);
+                			$("#reply-con tbody").html(result);
                 		},
                 		error : function(){
                 			alert("실패")
@@ -321,7 +335,6 @@
                 			if(result>0){//추천 or 추천취소 성공
                 				btncheck();
                 			}else{//추천 실패?
-                				alert("알수없는 오류");
                 				console.log("설마");
                 			}
                 		},
@@ -338,11 +351,11 @@
                 			userNo:<%=loginUser.getUserNo()%>
                 		},
                 		success : function(arr){
-                			$("#goodCount").html(arr[1]);
+                			$("#goodCount").html("추천수:"+arr[1]);
                 			if(arr[0]>0){
-                				$("#good").css("border-color","red");
+                				$(".goodbtn").html("<img class='check' src='resources/bam_files/체크표시.png'>");
                 			}else{
-                				$("#good").css("border-color","black");
+                				$(".goodbtn").html("추천");
                 			}
                 		},
                 		error : function (){

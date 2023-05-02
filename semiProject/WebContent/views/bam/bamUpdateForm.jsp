@@ -83,15 +83,15 @@
             </div>
       </form>
 	</div>
+	<br><br><br>
       <script>
-	    // 메인화면 페이지 로드 함수
-	   $(document).ready(function() {
+	   $(document).ready(function() {//서머노트 사용 
 			  jb('#summernote').summernote({
 			  height:300,
 			  minHeight:null,
 			  maxheight:null,
-			  lang: "ko-KR",//한글 안되면 UTF-8로 해봄
-			  placeholder:"사진의 크기는 ?mb까지 최대 3개까지 넣으실 수 있습니다.",
+			  lang: "ko-KR",
+			  placeholder:"내용 입력",
 			  toolbar: [
 					    // 글꼴 설정
 					    ['fontname', ['fontname']],
@@ -104,43 +104,16 @@
 					    // 글머리 기호, 번호매기기, 문단정렬
 					    ['para', ['ul', 'ol', 'paragraph']],
 					    // 줄간격
-					    ['height', ['height']],
+					    ['height', ['height']]
 					    // 그림첨부
-					    //['insert',['picture']],
-					    // 코드보기, 확대해서보기, 도움말
-					    ['view', ['codeview','fullscreen', 'help']]
+					    //['insert',['picture']]
 					  ],
 			  // 추가한 글꼴
 			  fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋음체','바탕체'],
 			  // 추가한 폰트사이즈
 			  fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50'],
-			  callbacks : {
-				  onImageUpload : function(files){
-					  for(var i = files.length-1; i>=0; i--){//다중 이미지 업로드 위해서
-					  		console.log(files[i]);
-						  sendImage(files[i],this);
-					  }
-				  }
-			  }
 		  });
 		});
-	    function sendImage(file,el){
-	    	data = new FormData();
-	    	data.append('file',file);
-	    	console.log("1"+file)
-	    	console.log(data);
-	    	$.ajax({
-	    		url: "bamUploadFile.bo",
-	    		type : "post",
-	    		contentType: false,
-	    		data : data,
-	    		processData: false,
-	    		enctype: "multipart/form-data",
-	    		sucess: function(form_data){
-	    			jb(el).summernote("editor.insertImage",form_data.url);
-	    		}
-	    	});
-	    }
 </script>
 
 </body>

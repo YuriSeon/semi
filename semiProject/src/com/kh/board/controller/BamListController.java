@@ -83,14 +83,6 @@ public class BamListController extends HttpServlet {
 		}else {//내용으로 검색
 			list = new BamService().searchContentList(keyword,pi);
 		}
-		/* 댓글수?
-		for(int i=0; i<list.size(); i++) {
-			for(Board r  : rlist)
-			if(list[i].getBoardNo()=r.getBoardNo()) {
-				list[i].add(r.getReplyCount);
-			}
-		}
-		*/
 		
 		if(currentPage==1) {//현재 페이지가 1이면 공지사항 가져옴
 			//공지사항 가져오기
