@@ -24,13 +24,13 @@
 	                    FROM DM_BLOCK
 	                    WHERE USERNO=? AND BLOCK_USER=?)
 	 -->
-	INSERT INTO DM_BLOCK (USERNO,BLOCK_USER,BLOCK_CONTENT)
+	INSERT INTO MSG_BLOCK (USERNO,BLOCK_USER,BLOCK_CONTENT)
 	VALUES (?,?,?)
 </entry>
 <entry key="checkBlock">
 <!-- 메시지 차단 확인 -->
 	SELECT USERNO
-	FROM DM_BLOCK
+	FROM MSG_BLOCK
 	WHERE USERNO = ?
 	AND BLOCK_USER = ?
 </entry>

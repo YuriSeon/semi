@@ -971,4 +971,31 @@ public class FoodDao {
 		}
 		return 0;
 	}
+
+	public ArrayList<Attachment> selectAllImg(Connection conn) {
+		ResultSet rset = null;
+		Statement stmt = null;
+		String sql = prop.getProperty("selectAllImg");
+		ArrayList<Attachment> list = new ArrayList<>();
+		Attachment att = null;
+		try {
+			stmt = conn.createStatement();
+			rset = stmt.executeQuery(sql);
+			while(rset.next()) {
+				att = new Attachment();
+				att.setFilePath(rset.getString("FILE_PATH"));
+				att.setChangeName(rset.getString("CHANGE_NAME"));
+				att.setOriginName(rset.getString("FOOD_NAME"));
+				list.add(att);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(stmt);
+		}
+		return list;
+
+	}
 }

@@ -96,7 +96,7 @@ public class MessageDao {
 			pstmt.setString(3, mb.getBlockContent());
 			
 			result = pstmt.executeUpdate();
-			System.out.println(result);
+			
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

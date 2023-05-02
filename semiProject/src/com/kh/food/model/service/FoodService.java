@@ -297,4 +297,12 @@ public class FoodService {
 		JDBCTemplate.close(conn);
 		return result;
 	}
+
+	public ArrayList<Attachment> selectAllImg() {
+		// TODO Auto-generated method stub
+		Connection conn = JDBCTemplate.getConnection();
+		ArrayList<Attachment> list = new FoodDao().selectAllImg(conn);
+		JDBCTemplate.close(conn);
+		return list;
+	}
 }

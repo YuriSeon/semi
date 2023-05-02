@@ -146,19 +146,10 @@
         #myModal{
         width: 200px;
     	}
-    	
-    	.exit{
-            margin-left: 1200px;
-            margin-top: -90px;
-        }
+    
         .exit a{
             text-decoration: none;
-            font-weight:bold;
-            font-size:15px;
             color: darkgrey;
-        }
-        .exit:hover{
-        	filter: invert(100%);
         }
 
     </style>
@@ -175,10 +166,13 @@
         
         </a>
     </div>
+    <div class="nameArea">
+    	<p><%=loginUser.getUserNick() %> 님</p>
+    </div>
     
         <div class="exit">
         <a href="<%=contextPath%>/logout.me">로그아웃</a>
-        <img src="resources/로그아웃_투명.png" style="width: 30px; cursor:pointer" alt="">
+        <img src="resources/로그아웃_투명.png" style="width: 30px;" alt="">
     </div>
     
     </header>
@@ -188,7 +182,7 @@
         <nav class="menu-bar__menu-1">
         <ul class="float-gird">
             <li>
-            <a href="#" class="block">
+            <a href="<%=contextPath%>/list.me?currentPage=1" class="block">
                 <i class="fas fa-user"></i>
                 <span>마이페이지</span>
             </a>
@@ -224,9 +218,9 @@
         </nav>
     </div>
     </header>
-    <table id="table">
+    <!--  <table id="table">
         <tbody>
-            <tr>
+          <tr>
             	<!-- 자기 자신은 클릭 못하게 
             			닉네임 적힌곳들에 유저 닉네임 넣으시면 됩니다. -->
 			    <%if(loginUser.getUserNick().equals("닉네임")){ %>
@@ -234,9 +228,23 @@
 			    <%}else{ %>
                 	<td><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#myModal" id="userNick">닉네임</a></td>
 			    <%} %>
+			    
             </tr>
         </tbody>
     </table>
+    
+    <div class="friendList">
+    	<table id="frdTb">
+    		<thead style="font-size:19px;">친구 목록
+    			<input type="text" name="searchNick" id="searchf">
+    			<button onclick="friendSearch();">검색</button>
+    		</thead>
+    		<tbody>
+    		</tbody>
+    		
+    	</table>
+    	
+    </div>
     	
     <div class="modal fade" id="myModal" tabindex="-1" >
         <div class="modal-dialog">
@@ -310,11 +318,58 @@
     </div>
     
      <script >
-	     $("#userNick").click(function(){
-	    	userNick = $(this).html(); //전역 변수 선언(닉네임 클릭했을때 닉네임 가져옴)
-	    	$("#recipient-name").val(userNick); //메시지 입력창 닉네임 넣기
+	     $("#frdTb tbody").on("click", "tr" , function(){
+// 	    	userNick = $(this).html(); //전역 변수 선언(닉네임 클릭했을때 닉네임 가져옴)
+// 	console.log($(this));
+console.log();
+	    	$("#recipient-name").val($(this).text()); //메시지 입력창 닉네임 넣기
 	    	$("#block-name").val(userNick);	//차단 등록창 닉네임 넣기
 	     });
+	     
+	     
+	     $(function(){
+// 	    	 console.log("ajax");
+	    	 $.ajax({
+	    		 url: "friendList.me",
+	    		 success:function(list){
+	    			 var result = "";
+// 	    			 console.log(list);
+	    			 for(var i=0; i<list.length; i++){
+	    				 result += "<tr>"
+	    				 		+"<td><a href='javascript:void(0)' data-bs-toggle=modal data-bs-target=#myModal class='userNick'>"+list[i]+"</a></td>"
+	    				 		+"</tr>"
+	    			 }
+	    			 $("#frdTb tbody").html(result);
+	    		 },
+	    		 error:function(){
+	    			 alert("목록 불러오기 실패");
+	    		 }
+	    	 });
+	     })
+	     function friendSearch(){
+	    	 $.ajax({
+	    		 url: "friendList.me",
+	    		 type: "post",
+	    		 data:{
+	    			 userNick:$("#searchf").val()
+	    		 },
+	    		 success: function(arr){
+	    			 var result = "";
+	    			 for(var i=0; i<list.length; i++){
+	    				 result = "<tr>"
+	    					 +"<td><a href='javascript:void(0)' data-bs-toggle=modal data-bs-target=#myModal id="+list[i]+">"+list[i]+"</a></td>"
+	    				 		+"</tr>"
+	    			 }
+	    			 $("frdTb").html(result);
+	    			 $("#searchf").val("");
+	    		 },
+	    		 error: function(){
+	    			 alert("목록 불러오기 실패");
+	    		 }
+	    	 })
+	     }
+	     
+	     
 	     function noSchool(){
 	    	 alert("대나무숲은 학교인증을 하셔야 이용 가능합니다.")
 	     };
@@ -340,7 +395,9 @@
      			type:"post",
      			success:function(result){
      				if(result>0){//인서트(작성) 성공
-     					alert("메시지를 보냈습니다.")
+     					alert("메시지를 보냈습니다.");
+     					$("#recipient-name").val("");
+     					$("#message-text").val("");
      					
      				}else{//인서트 실패or차단 당함
      					alert("차단 당하셨습니다.")
