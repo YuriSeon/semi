@@ -33,6 +33,7 @@ public class FoodTogetherDeleteController extends HttpServlet {
 		// 삭제
 		int bno = Integer.parseInt(request.getParameter("bno"));
 		int result = new FoodService().deleteTogether(bno);
+		
 		if(result > 0) {
 			File f = new File(request.getSession().getServletContext().getRealPath("/resources/food_files/") + request.getParameter("changeName"));
 			f.delete();

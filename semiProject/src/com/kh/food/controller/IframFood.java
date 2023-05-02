@@ -16,14 +16,14 @@ import org.jsoup.select.Elements;
 /**
  * Servlet implementation class naverFood
  */
-@WebServlet("/naverFood.bo")
-public class NaverFood extends HttpServlet {
+@WebServlet("/IframFood.bo")
+public class IframFood extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public NaverFood() {
+    public IframFood() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,12 +32,10 @@ public class NaverFood extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String url = "https://www.diningcode.com/";
-		Document doc = Jsoup.connect(url).get();
-		Elements elem = doc.getElementsByClass("place_bluelink TYaxT");
-		System.out.println(doc.text());
-		/* Element d = elem.get(0); */
-		System.out.println("t" + elem);
+		String foodName = request.getParameter("name");
+		
+		request.setAttribute("foodName", foodName);
+		request.getRequestDispatcher("views/food/iframFood.jsp").forward(request, response);
 		
 	}
 

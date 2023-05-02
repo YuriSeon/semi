@@ -55,7 +55,9 @@
 						<td><input type="text" name="addressDetail" id="iiii"></td>
 					</tr>
 					<tr>
+					<td>
 						<div id="map" style="width: 500px; height: 350px;" tabindex="0" align="center"></div>
+					</td>
 					</tr>
 				</table>
 				

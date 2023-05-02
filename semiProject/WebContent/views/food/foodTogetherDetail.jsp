@@ -254,7 +254,8 @@
 				success : function(data){
 					if(data == "iii"){
 						alert("글 작성자는 다른 글에 참여 할 수 없습니다.");
-					}
+					}else{
+						
 					if(data == "err"){
 						this.error(data);
 					}
@@ -264,6 +265,7 @@
 					}else{
 						alert("이전 참여 이력이 사라집니다.");
 						$("#nadu").css("color", "black");
+					}
 					}
 				},
 				error : function(data){
