@@ -44,23 +44,26 @@ public class FoodTogetherCheck extends HttpServlet {
 		response.setContentType("json/application; charset=UTF-8");
 		// tocheck 테이블에 정보가 있는 지 확인 있다면 체크 못하게 해야됨.
 		int writerUserCheck = new FoodService().toWriterUser(userNo); // 1은 작성한 글이 있다. 0은 없다.
+		System.out.println("writerUserCheck : " + writerUserCheck);
 		if(writerUserCheck == 1) {
 			gson.toJson("iii",response.getWriter());
-		}
-		int check = new FoodService().toCheck(userNo);
-		if(check > 0) { // 이미 참여 이력이 있다면  1이 반환
-			int deletetocheck = new FoodService().deletetocheck(userNo); // 삭제 되면 색은 검은색이여야 한다
-			if(deletetocheck > 0){				
-					gson.toJson("0",response.getWriter());
-			}else {
-				gson.toJson("err",response.getWriter());
-			}
 		}else {
-			int incheck = new FoodService().toCheckIn(userNo, bno, writerId, person); // 제대로 입력 됬다면 1이상
-			if(incheck > 0) {
-				gson.toJson("1",response.getWriter());
+			
+			int check = new FoodService().toCheck(userNo);
+			if(check > 0) { // 이미 참여 이력이 있다면  1이 반환
+				int deletetocheck = new FoodService().deletetocheck(userNo); // 삭제 되면 색은 검은색이여야 한다
+				if(deletetocheck > 0){				
+					gson.toJson("0",response.getWriter());
+				}else {
+					gson.toJson("err",response.getWriter());
+				}
 			}else {
-				gson.toJson("0",response.getWriter());
+				int incheck = new FoodService().toCheckIn(userNo, bno, writerId, person); // 제대로 입력 됬다면 1이상
+				if(incheck > 0) {
+					gson.toJson("1",response.getWriter());
+				}else {
+					gson.toJson("0",response.getWriter());
+				}
 			}
 		}
 	}

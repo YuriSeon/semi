@@ -152,6 +152,7 @@
             color: darkgrey;
         }
 
+
         .exit:hover{
         	filter: invert(100%);
         }
@@ -203,7 +204,6 @@
         	font-weight:bold;
         	margin-top:10px;
         }
-        
 
     </style>
 </head>
@@ -272,6 +272,7 @@
     </div>
     </header>
 
+
     <!--  <table id="table">
         <tbody>
           <tr>
@@ -306,17 +307,24 @@
     			</td>
     		</tr>	
 
+
     
     <div class="friendList">
     	<table id="frdTb">
     		<thead style="font-size:19px;">
     			<tr><td>친구 목록</td></tr>
     			<tr><td><input type="text" name="searchNick" id="searchf"><td></tr>
-    			<tr><td><button onclick="friendSearch();">검색</button></td></tr>
 
     		</thead>
     		<tbody>
     		</tbody>
+    		
+
+
+    		</thead>
+    		<tbody>
+    		</tbody>
+
 
     	</table>
     	
@@ -402,6 +410,10 @@
 	     });
 	     
 	     
+
+	     $(function(){
+// 	    	 console.log("ajax");
+
 	     $(document).ready(function(){
 	    	 friendList(); // 초기화면에 친구목록 보여주기
 	    	    $("#searchf").focus(function(){ //커서올리면 보여주기
@@ -410,10 +422,15 @@
 	    	});
 	     
 	     function friendList(){//친구 목록 불러오기
+
 	    	 $.ajax({
 	    		 url: "friendList.me",
 	    		 success:function(list){
 	    			 var result = "";
+
+// 	    			 console.log(list);
+
+
 	    			 for(var i=0; i<list.length; i++){
 	    				 result += "<tr>"
 	    				 		+"<td><a href='javascript:void(0)' data-bs-toggle=modal data-bs-target=#myModal class='userNick'>"+list[i]+"</a></td>"
@@ -425,6 +442,11 @@
 	    			 alert("목록 불러오기 실패");
 	    		 }
 	    	 });
+
+	     })
+	     function friendSearch(){
+	    	 $.ajax({
+
 	     }
 	     
 	     
@@ -438,11 +460,23 @@
 	     
     
 	    	 $.ajax({//친구 이름 찾기
+
 	    		 url: "friendList.me",
 	    		 type: "post",
 	    		 data:{
 	    			 userNick:$("#searchf").val()
 	    		 },
+
+	    		 success: function(arr){
+	    			 var result = "";
+	    			 for(var i=0; i<list.length; i++){
+	    				 result = "<tr>"
+	    					 +"<td><a href='javascript:void(0)' data-bs-toggle=modal data-bs-target=#myModal id="+list[i]+">"+list[i]+"</a></td>"
+	    				 		+"</tr>"
+	    			 }
+	    			 $("frdTb").html(result);
+	    			 $("#searchf").val("");
+
 	    		 success : function(response){
 	    			 if(response == ""){
 	    				 alert("조회하신 회원이 없습니다.");
@@ -455,12 +489,19 @@
 	    			 +"</tr>"
 	    			 $("#frdTb tbody").html(result);
 	    			 $("#searchf").val(""); // 검색 창 비우기
+
 	    		 },
 	    		 error: function(){
 	    			 alert("목록 불러오기 실패");
 	    		 }
+
+	    	 })
+	     }
+	     
+
 	    	 });
 	     }
+
 
 	     
 	     function noSchool(){

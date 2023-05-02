@@ -111,7 +111,7 @@ body {
 
         #allFood{
             width: 800px;
-            height: 400px;
+            height: 510px;
         }
         #nonepo{
             width: 100%;
@@ -143,6 +143,63 @@ body {
             box-sizing: border-box;
             float: left;
         } 
+        
+        		#locactionFood{
+			width: 800px;
+			height: 600px;
+			box-sizing: border-box;
+		}
+		#ol, #or{
+			width: 20%;
+			height: 100%;
+			box-sizing: border-box;
+			float: left;
+			line-height: 40;
+		}
+		#om{
+			width: 60%;
+			height: 100%;
+			box-sizing: border-box;
+			float: left;
+		}
+		#oo1{
+			width: 100%;
+			height: 5%;
+			box-sizing: border-box;
+		}
+		#foodSlide{
+			width: 100%;
+			height: 65%;
+			box-sizing: border-box;
+		}
+		#oo3{
+			width: 100%;
+			height: 10%;
+			box-sizing: border-box;
+		}
+		#fra{
+			width: 100%;
+			height: 10%;
+			box-sizing: border-box;
+			line-height: 4;
+			font-size: 15px;
+		}
+		#oo5{
+			width: 100%;
+			height: 10%;
+			box-sizing: border-box;
+			line-height: 5;
+		}
+		#frm, #frg{
+			width: 50%;
+			height: 100%;
+			box-sizing: border-box;
+			float: left;
+			line-height: 3;
+			font-size: 18px;
+			font-weight: 1000;
+		}
+		
 </style>
 </head>
 <%@include file="../common/menubar.jsp" %>
@@ -156,16 +213,32 @@ body {
 			<input id="userCurrLo" type="text" class="searchTerm" name="userCurrLo" readOnly>
 		</div>
 	</div>
-	<div id="locactionFood" style="display:none; text-align:center;">
 	<br><br>
-		<button type="button" id="returnMain">종료하기</button>
-		<button id="prebtn"> &lt </button>
-		<div id="foodSlide">
+	<div id="locactionFood" style="display:none; text-align:center; margin:auto;">
+
+	<div id="ol">
+	<button id="prebtn"  class="btn btn-danger"> &lt </button>
+	</div>
+		<div id="om">
+			<div id="oo1">
+			<button type="button" id="returnMain" >종료하기</button>
+			</div>
+			<div id="foodSlide">
 			
+			</div>
+			<div id="oo3">
+				<div id="frm"></div>
+				<div id="frg"></div>
+			</div>
+			<div id="fra"></div>
+			<div id="oo5">
+			<button id="togeterbtn" class="btn btn-warning">같이 먹을 사람 찾으러 가기</button>
+			<input type='hidden' name='locationbno'>
+			</div>
 		</div>
-		<button id="nextbtn"> &gt </button>
-		<button id="togeterbtn">같이 먹을 사람 찾으러 가기</button>
-		<input type='hidden' name='locationbno'>
+		<div id="or">
+		<button id="nextbtn"  class="btn btn-danger"> &gt </button>
+		</div>
 	</div>
 	
 	<div id="allFood" style="display:none; text-align:center;  margin:auto;">
@@ -173,11 +246,13 @@ body {
         <div id="allFoodExit"><button id="allfoodEbtn" class="btn btn-primary">종료하기</button></div>
         <div id="ssx">
             <div id="allFoodLeft">&lt</div>
-            <div id="allFoodPackage" style="margin-top:30px;"></div>
+            <div id="allFoodPackage" style="margin-top:30px;">
+            	    <div id="imgarea"></div>
+            	    <div id="iframarea"></div>
+            </div>
             <div id="allFoodRight">&gt</div>
         </div>
     </div>
-
 		
 				
 	<div id="UserShowPage">
@@ -196,9 +271,8 @@ body {
 			<div id="ads" style="background-image: url(https://img.woowahan.com/www/common/baemin.jpg); background-size:100% 100%;" onclick="location.href='https://www.baemin.com/'">
 			</div>
 			<div class="noneb1"></div>
-			<div id="whatfood">
-<%-- 				<a href="<%=request.getContextPath()%>/chfood.bo">뭐 먹지?</a> --%>
-뭐먹지
+			<div id="whatfood" style="background-image: url(https://yt3.googleusercontent.com/ytc/AGIKgqPNJ64rrMhG_Wl00qzE8ugDRZFO3UnX6eTaMZQAGg=s900-c-k-c0x00ffffff-no-rj); background-size:100% 100%;">
+				뭐먹지
 				<!-- 지금 맛집에 있는 것들 -->
 			</div>
 		</div>
@@ -269,6 +343,8 @@ body {
      var Imglistt;
 
     $("#whatfood").on("click", function(){
+    	$("#iframarea").css("display", "none");
+    	$("#imgarea").css("display", "block");
     	$.ajax({
     		url : "chfood.bo",
     		type : "get",
@@ -278,10 +354,11 @@ body {
     			$("#UserShowPage").css("display", "none");
     			$("#allFood").css("display", "block");
     			if(Imglist?.length){
-    				let str = "<img id='" + Imglist[0].originName + "'src=" + Imglist[0].filePath + "/" + Imglist[0].changeName + ">";
-    				$("#allFoodPackage").html(str);
+    				let str = "<img style='width:100%; height:100%;' id='" + Imglist[0].originName + "'src=" + "<%=request.getContextPath() %>" + Imglist[0].filePath + "/" + Imglist[0].changeName + ">";
+    				$("#imgarea").html(str);
     			}else{
-    				$("#allFoodPackage").html("<h1>아무 음식이 준비되지 않았습니다.</h1>");    				    				
+    				$("#imgarea").html("<img style='width:100%; height:100%;'" + "src=" + "'https://m.jejedeco.com/web/product/big/202110/a5f04036c5ca1501d1f459e4a7e3023e.jpg'>");   
+    				
     			}
     		},
     		error : function(){
@@ -294,23 +371,39 @@ body {
     $("#allFoodRight").on("click", function(){
     	foodImgc = foodImgc + 1;
     	try{    		
-    		var str = "<img id='" + Imglistt[foodImgc].originName + "' src=" + Imglistt[foodImgc].filePath + "/" + Imglistt[foodImgc].changeName + ">";
+    		var str = "<img style='width:100%; height:100%;' id='" + Imglistt[foodImgc].originName + "' src=" + "<%=request.getContextPath() %>" + Imglistt[foodImgc].filePath + "/" + Imglistt[foodImgc].changeName + ">";
     	}catch(err){
     		foodImgc = 0;
-    		var str = "<img id='" + Imglistt[0].originName + "' src=" + Imglistt[0].filePath + "/" + Imglistt[0].changeName + ">";    		
+    		var str = "<img style='width:100%; height:100%;' id='" + Imglistt[0].originName + "' src=" + "<%=request.getContextPath() %>" + Imglistt[0].filePath + "/" + Imglistt[0].changeName + ">";    		
     	}
-		$("#allFoodPackage").html(str);
+    	if($("#iframarea").css("display") == "block"){
+    		$("#allFoodPackage #iframarea").css("display","none");
+    		$("#allFoodPackage #imgarea").css("display", "block");
+    	}
+		$("#imgarea").html(str);
     });
+    
+    
+    
     $("#allFoodLeft").on("click", function(){
     	foodImgc = foodImgc - 1;
+    	
+    	
+    	
     	try{    		
-    		var str = "<img id='" + Imglistt[foodImgc].originName +  "'src=" + Imglistt[foodImgc].filePath + "/" + Imglistt[foodImgc].changeName + ">";
+    		var str = "<img style='width:100%; height:100%;' id='" + Imglistt[foodImgc].originName +  "'src=" + "<%=request.getContextPath() %>" + Imglistt[foodImgc].filePath + "/" + Imglistt[foodImgc].changeName + ">";
     	}catch(err){
     		foodImgc = Object.keys(Imglistt).length-1;
-    		var str = "<img id='" + Imglistt[Object.keys(Imglistt).length-1].originName + "'src=" + Imglistt[Object.keys(Imglistt).length-1].filePath + "/" + Imglistt[Object.keys(Imglistt).length-1].changeName + ">";    		
+    		var str = "<img style='width:100%; height:100%;' id='" + Imglistt[Object.keys(Imglistt).length-1].originName + "'src=" + "<%=request.getContextPath() %>" + Imglistt[Object.keys(Imglistt).length-1].filePath + "/" + Imglistt[Object.keys(Imglistt).length-1].changeName + ">";    		
     	}
-		$("#allFoodPackage").html(str);
+    	if($("#iframarea").css("display") == "block"){
+    		$("#allFoodPackage #iframarea").css("display","none");
+    		$("#allFoodPackage #imgarea").css("display", "block");
+    	}
+		$("#imgarea").html(str);
     });
+    
+    
     
     $("#allfoodEbtn").on("click", function(){
     	$("#locationFoodBtn").attr("disabled", false);
@@ -321,12 +414,24 @@ body {
     });
     
     $("#allFoodPackage").on("click", function(){
-    	location.href")
-    })     
+    	if($("#imgarea").css("display") == "block"){
+	    	$("#imgarea").css("display", "none");
+	    	$("#iframarea").css("display", "block");  
+	    	let str = "<iframe id='inlineFrameExample' style='width:640px; height:520px;' src='<%=request.getContextPath() %>/views/food/iframFood.jsp'></ifram>";
+	  		$("#iframarea").html(str);    	
+    	}else{
+	    	$("#imgarea").css("display", "block");
+	    	let str = "<iframe id='inlineFrameExample' style='width:640px; height:520px;' src='<%=request.getContextPath() %>/views/food/iframFood.jsp'></ifram>";
+	  		$("#iframarea").css("display", "none");    		    		
+    	}
+    });     
+
+    	
+    	
+
+
      
-     
-     
-    $("#locationFoodBtn").on("click", function(){
+   $("#locationFoodBtn").on("click", function(){
         if($("#userCurrLo").val() == ""){
             alert("아직 위치 추적중입니다.");
             
@@ -338,6 +443,7 @@ body {
             showList(userLocation);
         }
     });
+   
     // 넘겨주기 위해 전역 변수로 지정
     var menu = "";
     var address = "";
@@ -355,7 +461,7 @@ body {
             success : function(data){
                 var length = data.length;
                 if(data[0].length == 0){
-                    $("#foodSlide").html("지금 준비된 음식 이 없습니다.");
+                    $("#foodSlide").html("<img style='width:100%; height:100%;'" + "src=" + "'https://m.jejedeco.com/web/product/big/202110/a5f04036c5ca1501d1f459e4a7e3023e.jpg'>");
                     $("#togeterbtn").attr("disabled", true);
                 }else{
                 	$("#locactionFood").not("*").css("color","red");
@@ -370,12 +476,16 @@ body {
                     menu = data[0][number].foodName;
                     address = data[0][number].abbress;
                     originName = data[1][number].originName;
-                    console.log(originName);
+
                     imgAddress = "<%=contextPath %>" + data[1][number].filePath + "/" + data[1][number].changeName;
-                    foodStart += "<h1>" + number +"</h1>"
-                    foodStart += "메뉴 : " + data[0][number].foodName + "<br>주소 : " + data[0][number].abbress + "<br>추천수 : " + data[0][number].good;
+
+                    $("#frm").text(menu);
+                    $("#fra").html(data[0][number].abbress);
+                    $("#frg").html("추천수 : " + data[0][number].good);
+//                     var img = "<img alt='대표이미지' src='" + imgadd + "' style='width:100%; height:100%'>";
+//                     foodStart += "메뉴 : " + data[0][number].foodName + "<br>주소 : " + ata[0][number].abbress + "<br>추천수 : " + data[0][number].good;
                     foodStart += "<input id='justbno' just type='hidden' value='"+ data[0][number].boardNo +"'>";
-                    foodStart += "<img alt='대표이미지' src='" + imgadd + "' style='width:150px; height:150px;'>";
+                    foodStart += "<img alt='대표이미지' src='" + imgAddress + "' style='width:100%; height:100%;'>";
                     $("#foodSlide").html(foodStart);
                 }
             },
