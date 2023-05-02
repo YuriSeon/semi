@@ -152,6 +152,59 @@
             color: darkgrey;
         }
 
+
+        .exit:hover{
+        	filter: invert(100%);
+        }
+        .nameArea{
+	        margin-left:1050px;
+	        margin-top : -80px;
+	        margin-bottom: 10px;
+	        font-size:20px;
+	        margin-right:20px;
+	        font-weight:bold;
+	        color:deepskyblue;
+        }
+        .friendList{
+       		background-color:#F0F8FF;
+       		border-radius:10px;
+        	position:absolute;
+        	width:150px;
+        	height:600px;
+        	text-align:center;
+        	font-family: 'LotteMartDream';
+        	margin-left:30px;
+        	overflow:auto;
+        	margin-top:10px;
+        }
+        .friendList a{
+        	text-decoration:none;
+        	color:deepskyblue;
+        	font-weight:bold;
+        	font-size:18px;
+        	
+        }
+        #frdTb{
+        	margin-top:20px;
+        }
+        #searchf{
+        	margin-bottom:10px;
+        	width:100%;
+        }
+        .frdBtn{
+        	width:60px;
+        	border-style:none;
+        	background-color:deepskyblue;
+        	text-align:center;
+        	color:white;
+        	border-radius:5px;
+        }
+        .frdHd{
+        	font-size:18px;
+        	font-weight:bold;
+        	margin-top:10px;
+        }
+
     </style>
 </head>
 <body>
@@ -218,17 +271,61 @@
         </nav>
     </div>
     </header>
+
+
+    <!--  <table id="table">
+        <tbody>
+          <tr>
+            	<!-- 자기 자신은 클릭 못하게 
+            			닉네임 적힌곳들에 유저 닉네임 넣으시면 됩니다. -->
+			    <!-- <%if(loginUser.getUserNick().equals("닉네임")){ %>
+        			<td>닉네임</td>    	
+			    <%}else{ %>
+                	<td><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#myModal" id="userNick">닉네임</a></td>
+			    <%} %>
+			    
+            </tr>
+        </tbody>
+    </table> -->
+    
+    <div class="friendList">
+    	<table id="frdTb">
+    		<thead>
+    		<tr>
+    			<td>
+    			<p class="frdHd">친구 목록</p>
+    			</td>
+    		</tr>  		
+    		<tr>
+    			<td>
+    			<input type="text" name="searchNick" id="searchf">
+    			</td>
+    		</tr>
+    		<tr>
+    			<td>
+    			<button class="frdBtn" onclick="friendSearch();">검색</button>
+    			</td>
+    		</tr>	
+
+
     
     <div class="friendList">
     	<table id="frdTb">
     		<thead style="font-size:19px;">
     			<tr><td>친구 목록</td></tr>
     			<tr><td><input type="text" name="searchNick" id="searchf"><td></tr>
-    			<tr><td><button onclick="friendSearch();">검색</button></td></tr>
+
     		</thead>
     		<tbody>
     		</tbody>
     		
+
+
+    		</thead>
+    		<tbody>
+    		</tbody>
+
+
     	</table>
     	
     </div>
@@ -313,13 +410,27 @@
 	     });
 	     
 	     
+
 	     $(function(){
 // 	    	 console.log("ajax");
+
+	     $(document).ready(function(){
+	    	 friendList(); // 초기화면에 친구목록 보여주기
+	    	    $("#searchf").focus(function(){ //커서올리면 보여주기
+	    	        friendSearch();
+	    	    });
+	    	});
+	     
+	     function friendList(){//친구 목록 불러오기
+
 	    	 $.ajax({
 	    		 url: "friendList.me",
 	    		 success:function(list){
 	    			 var result = "";
+
 // 	    			 console.log(list);
+
+
 	    			 for(var i=0; i<list.length; i++){
 	    				 result += "<tr>"
 	    				 		+"<td><a href='javascript:void(0)' data-bs-toggle=modal data-bs-target=#myModal class='userNick'>"+list[i]+"</a></td>"
@@ -331,14 +442,31 @@
 	    			 alert("목록 불러오기 실패");
 	    		 }
 	    	 });
+
 	     })
 	     function friendSearch(){
 	    	 $.ajax({
+
+	     }
+	     
+	     
+	     
+	     function friendSearch(){
+	    	    var searchValue = $("#searchf").val();
+	    	    if(searchValue === ''){
+	    	        friendList();
+	    	        return;
+	    	    }
+	     
+    
+	    	 $.ajax({//친구 이름 찾기
+
 	    		 url: "friendList.me",
 	    		 type: "post",
 	    		 data:{
 	    			 userNick:$("#searchf").val()
 	    		 },
+
 	    		 success: function(arr){
 	    			 var result = "";
 	    			 for(var i=0; i<list.length; i++){
@@ -348,13 +476,33 @@
 	    			 }
 	    			 $("frdTb").html(result);
 	    			 $("#searchf").val("");
+
+	    		 success : function(response){
+	    			 if(response == ""){
+	    				 alert("조회하신 회원이 없습니다.");
+	    				 return;
+	    			 }
+	    			 var userNick = response;
+	    			 var result = "";
+	    			 result += "<tr>"
+	    			 +"<td><a href='javascript:void(0)' data-bs-toggle=modal data-bs-target=#myModal class='userNick'>"+userNick+"</a></td>"
+	    			 +"</tr>"
+	    			 $("#frdTb tbody").html(result);
+	    			 $("#searchf").val(""); // 검색 창 비우기
+
 	    		 },
 	    		 error: function(){
 	    			 alert("목록 불러오기 실패");
 	    		 }
+
 	    	 })
 	     }
 	     
+
+	    	 });
+	     }
+
+
 	     
 	     function noSchool(){
 	    	 alert("대나무숲은 학교인증을 하셔야 이용 가능합니다.")

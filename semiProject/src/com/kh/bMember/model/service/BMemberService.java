@@ -128,6 +128,10 @@ public class BMemberService {
 		return updateMem;
 	}
 
+
+
+	//친구 목록 메소드
+
 	public List<String> friendArr() {
 		Connection conn = JDBCTemplate.getConnection();
 		
@@ -136,6 +140,17 @@ public class BMemberService {
 		JDBCTemplate.close(conn);
 		
 		return list;
+	}
+
+
+	public String searchNick(String userNick) {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		String searchNick = new BMemberDao().searchNick(conn,userNick);
+		
+		JDBCTemplate.close(conn);
+		
+		return searchNick;
 	}
 
 }

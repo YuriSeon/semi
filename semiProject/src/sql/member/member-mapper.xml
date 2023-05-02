@@ -77,6 +77,13 @@
 		WHERE STATUS='Y'
 		ORDER BY USER_NICK
 	</entry>
+
+	<entry key="searchNick">
+		SELECT USER_NICK
+		FROM BMEMBER
+		WHERE USER_NICK = ?
+	</entry>
+
 	
 	
 </properties>
