@@ -4,6 +4,7 @@
 	String contextPath = request.getContextPath();
 String alertMsg = (String) request.getSession().getAttribute("alertMsg");
 String email = request.getParameter("email");
+String code = (String) request.getAttribute("code");
 %>
 <!DOCTYPE html>
 <html>
@@ -201,11 +202,16 @@ body {
 			</div>
 			<div class="school">
 				학교 이메일 <input type="email" id="sEmail" class="login_text"
-					style="width: 180px; float: none; margin-left: 105px;">
+					style="width: 180px; float: none; margin-left: 110px;">
 				<button type="button" id="verifyButton" class="validate-btn"
-					style="width: 110px;">학교 인증</button>
+					style="width: 105px;">학교 인증</button>
+					
 				<p class="condition" id="con11"
 					style="margin-top: -10px; color: white;">내용</p>
+				<input type="text" id="chkS" class="login_text"
+					style="width: 180px; float: none; margin-left: 200px;">
+				<button type="button" id="chkSchool" class="chkSchool-btn"
+					style="width: 105px;">인증 번호</button>	
 			</div>
 
 			<br>
@@ -226,10 +232,26 @@ body {
 		
 		if(flag){
 			sendEmail(event);
-          	condition11.innerHTML = "학교 인증 완료";
-            condition11.style.color = "deepskyblue";
+          	//condition11.innerHTML = "학교 인증 완료";
+            //condition11.style.color = "deepskyblue";
 		}
 	});
+    
+    var checkCode;
+    
+    $("#chkSchool").on("click",function(){
+    	var condition11 = document.getElementById("con11");
+    	var chkS = document.getElementById("chkS").value.trim();
+    	var code = checkCode.trim();
+    	
+    	if(code == chkS){
+    		condition11.innerHTML = "학교 인증 완료";
+            condition11.style.color = "deepskyblue";
+    	}else{
+    		condition11.innerHTML = "인증번호가 일치하지 않습니다.";
+            condition11.style.color = "red";
+    	}
+    });
     
     function sval(){
 	    var inputSname = document.getElementById("sName");
@@ -268,7 +290,7 @@ body {
 	    });
 
 	    if (age >= ageLimit) {
-	      alert("정말로 학생이신가요..? "+ageLimit+"세 까지만 인증 가능합니다.."+age);
+	      alert("정말로 학생이신가요..? "+ageLimit+"세 까지만 인증 가능합니다..");
 	      document.getElementById("sName").value="0";
 	      document.getElementById("sEmail").value="";
 	      return false;
@@ -485,7 +507,9 @@ body {
           	  var xhttp = new XMLHttpRequest();
           	  xhttp.onreadystatechange = function() {
           	    if (this.readyState == 4 && this.status == 200) {
-          	      alert(this.responseText);
+          	    alert("이메일 전송이 완료되었습니다.");
+          	      var code = this.responseText;
+          	      checkCode = code;
           	    }
           	  };
           	  xhttp.open("POST", "sendEmail.me", true);

@@ -394,6 +394,33 @@ public class BMemberDao {
 		
 		return list;
 	}
+
+	public String searchNick(Connection conn, String userNick) {
+		String searchNick = null;
+		ResultSet rset = null;
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("searchNick");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, userNick);
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				searchNick = rset.getString("USER_NICK");
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return searchNick;
+	}
 	
 	
 
