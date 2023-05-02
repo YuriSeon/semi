@@ -51,7 +51,6 @@ public class BamInsertController extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		//게시글 작성한거 인서트하는데 첨부파일도 포함될수 있어서 멀티로 보냄
 		if(ServletFileUpload.isMultipartContent(request)) {
-			
 			//최대 크기 지정
 			int maxSize = 10 * 1024 * 1024;
 			//전송할 파일 저장 위치
@@ -119,7 +118,6 @@ public class BamInsertController extends HttpServlet {
 			}
 			
 			if(result>0) {
-				
 				request.getSession().setAttribute("alertMsg", "게시글 작성 완료");
 				response.sendRedirect(request.getContextPath()+"/bamlist.bo?currentPage=1");
 			}else {

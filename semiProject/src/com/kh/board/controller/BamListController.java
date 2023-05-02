@@ -84,7 +84,6 @@ public class BamListController extends HttpServlet {
 			list = new BamService().searchContentList(keyword,pi);
 		}
 		
-		
 		if(currentPage==1) {//현재 페이지가 1이면 공지사항 가져옴
 			//공지사항 가져오기
 			ArrayList<Board> nlist = new BamService().selectNoticeList();

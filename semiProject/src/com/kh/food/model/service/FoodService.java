@@ -203,7 +203,9 @@ public class FoodService {
 	public int foodToInsert(Board b,FoodTogether ft, Attachment att  ) {
 		Connection conn = JDBCTemplate.getConnection();
 		int result = new FoodDao().foodToInsert(conn, b, att, ft);
+		System.out.println("result = " + result);
 		int result2 = new FoodDao().foodToCheckInsert(conn, b);
+		System.out.println("result2 = " + result2);
 		if(result * result2 > 0) {
 			JDBCTemplate.commit(conn);
 		}else {			
@@ -287,5 +289,20 @@ public class FoodService {
 		}
 		JDBCTemplate.close(conn);
 		return result;
+	}
+
+	public int toWriterUser(int userNo) {
+		Connection conn = JDBCTemplate.getConnection();
+		int result = new FoodDao().toWriterUser(conn, userNo);
+		JDBCTemplate.close(conn);
+		return result;
+	}
+
+	public ArrayList<Attachment> selectAllImg() {
+		// TODO Auto-generated method stub
+		Connection conn = JDBCTemplate.getConnection();
+		ArrayList<Attachment> list = new FoodDao().selectAllImg(conn);
+		JDBCTemplate.close(conn);
+		return list;
 	}
 }

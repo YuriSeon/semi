@@ -146,17 +146,12 @@
         #myModal{
         width: 200px;
     	}
-    	
-    	.exit{
-            margin-left: 1170px;
-            margin-top: -45px;
-        }
+    
         .exit a{
             text-decoration: none;
-            font-weight:bold;
-            font-size:15px;
             color: darkgrey;
         }
+
         .exit:hover{
         	filter: invert(100%);
         }
@@ -210,7 +205,6 @@
         }
         
 
-
     </style>
 </head>
 <body>
@@ -231,7 +225,7 @@
     
         <div class="exit">
         <a href="<%=contextPath%>/logout.me">로그아웃</a>
-        <img src="resources/로그아웃_투명.png" style="width: 30px; cursor:pointer" alt="">
+        <img src="resources/로그아웃_투명.png" style="width: 30px;" alt="">
     </div>
     
     </header>
@@ -277,6 +271,7 @@
         </nav>
     </div>
     </header>
+
     <!--  <table id="table">
         <tbody>
           <tr>
@@ -310,6 +305,15 @@
     			<button class="frdBtn" onclick="friendSearch();">검색</button>
     			</td>
     		</tr>	
+
+    
+    <div class="friendList">
+    	<table id="frdTb">
+    		<thead style="font-size:19px;">
+    			<tr><td>친구 목록</td></tr>
+    			<tr><td><input type="text" name="searchNick" id="searchf"><td></tr>
+    			<tr><td><button onclick="friendSearch();">검색</button></td></tr>
+
     		</thead>
     		<tbody>
     		</tbody>
@@ -392,10 +396,9 @@
      <script >
 	     $("#frdTb tbody").on("click", "tr" , function(){
 // 	    	userNick = $(this).html(); //전역 변수 선언(닉네임 클릭했을때 닉네임 가져옴)
-// 	console.log($(this));
-console.log();
+
 	    	$("#recipient-name").val($(this).text()); //메시지 입력창 닉네임 넣기
-	    	$("#block-name").val(userNick);	//차단 등록창 닉네임 넣기
+	    	$("#block-name").val($(this).text());	//차단 등록창 닉네임 넣기
 	     });
 	     
 	     
@@ -468,7 +471,7 @@ console.log();
 	    	
 	    	var blockContent = $("#block-text").val(); //차단 메모
 	    	//정보 보내기
-			location.href="<%=contextPath%>/msgblock.dm?userNick="+userNick+"&blockContent="+blockContent;	    	
+			location.href="<%=contextPath%>/msgblock.dm?userNick="+$('#block-name').val()+"&blockContent="+blockContent;	    	
 	    }
 	    
 	     

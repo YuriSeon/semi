@@ -45,15 +45,15 @@ public class CheckSelectListController extends HttpServlet {
 		
 		int select = Integer.parseInt(request.getParameter("select"));
 		
-		String search = request.getParameter("search_input");
+		String search = request.getParameter("search");
 
 		int listCount = new UserManageService().ckCount(select, search);
 		
 		int currentPage = Integer.parseInt(request.getParameter("currentPage"));
 		
-		int boardLimit = 10;
+		int boardLimit = 7;
 		
-		int pageLimit = 10;
+		int pageLimit = 7;
 		
 		int startPage = (currentPage-1)/pageLimit *pageLimit +1;
 		
@@ -72,8 +72,6 @@ public class CheckSelectListController extends HttpServlet {
 		
 		if(listCount!=0 && list.isEmpty()) { // 리스트의 수가 0이 아닌데 list가 비어있을 땐 조회실패
 
-			request.setAttribute("errorMsg", "조회에 실패하였습니다");
-			
 			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
 		
 		} else { // 조회 성공
@@ -81,6 +79,10 @@ public class CheckSelectListController extends HttpServlet {
 			request.setAttribute("list", list);
 			
 			request.setAttribute("pi", pi);
+			
+			request.setAttribute("select", select);
+			
+			request.setAttribute("search", search);
 			
 			request.getRequestDispatcher("/admin/views/userManage/checkListSearch.jsp").forward(request, response);
 			

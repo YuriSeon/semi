@@ -218,7 +218,7 @@ public class BoardService {
 		Connection conn = JDBCTemplate.getConnection();
 		
 		int result = new BoardDao().blurActive(conn, bno);
-		
+
 		if(result>0) {
 			JDBCTemplate.commit(conn);
 		} else {

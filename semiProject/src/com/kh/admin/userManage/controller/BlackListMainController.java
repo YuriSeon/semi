@@ -35,15 +35,15 @@ public class BlackListMainController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String status = request.getParameter("status");
+		String status = "K"; // 강제탈퇴된 회원만 검색해서 고정값 넣음
 		
 		int listCount = new UserManageService().listCount(status);
 		
 		int currentPage = Integer.parseInt(request.getParameter("currentPage"));
 		
-		int boardLimit = 10;
+		int boardLimit = 7;
 		
-		int pageLimit = 10;
+		int pageLimit = 7;
 		
 		int startPage = (currentPage-1)/pageLimit *pageLimit +1;
 		
@@ -80,15 +80,15 @@ public class BlackListMainController extends HttpServlet {
 		
 		String option = request.getParameter("search_box");
 		
-		String status = "KA";
+		String status = "K";
 
 		int listCount = new UserManageService().listCount(status);
 		
 		int currentPage = Integer.parseInt(request.getParameter("currentPage"));
 		
-		int pageLimit = 10;
+		int pageLimit = 7;
 				
-		int boardLimit = 10;
+		int boardLimit = 7;
 				
 		int startPage = (currentPage-1)/pageLimit *pageLimit +1;
 				

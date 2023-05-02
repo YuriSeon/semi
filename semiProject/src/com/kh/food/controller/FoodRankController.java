@@ -34,6 +34,13 @@ public class FoodRankController extends HttpServlet {
 		
 		ArrayList<Board> list = new FoodService().selectFoodRanking();
 		request.setAttribute("list", list);
+		int cp = 0;
+		try {			
+			cp = Integer.parseInt(request.getParameter("cp"));
+		}catch(Exception e) {
+			cp = 0;
+		}
+		request.setAttribute("cp", cp);
 		request.getRequestDispatcher("views/food/foodRankBoard.jsp").forward(request, response);
 	}
 

@@ -93,12 +93,11 @@ public class FoodTogetherInsert extends HttpServlet {
 				String fullAddress = multiRequest.getParameter("fullImg");				
 				att.setOriginName(multiRequest.getParameter("originName"));
 				att.setChangeName(fullAddress.substring(fullAddress.lastIndexOf("/")+1));
-				att.setFilePath("resources/food_files");				
+				att.setFilePath("resources/food_files");	
 			}else {
 				att.setOriginName(multiRequest.getOriginalFileName("togetherImg"));
 				att.setChangeName(multiRequest.getFilesystemName("togetherImg"));
 				att.setFilePath("resources/food_files");
-				
 			}
 //			if(multiRequest.getParameter("togetherImg") != null) {				
 //			}else {

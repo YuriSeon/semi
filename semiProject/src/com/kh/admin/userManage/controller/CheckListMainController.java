@@ -37,24 +37,15 @@ public class CheckListMainController extends HttpServlet {
 		
 		String status = "Y"; // 가입자 중 활동중인 사람 전체를 조회할거라서 고정값으로 넣음
 		
-		int option;
-		
-		if(request.getParameter("option")==null) { // 쿼리스트링으로 옵션값이 넘어오지 않는다면 
-			
-			option = (int)request.getAttribute("option");
-			
-		} else {// 쿼리스트링으로 넘어온다
-			
-			option = Integer.parseInt(request.getParameter("option"));
-		}
+		int option = Integer.parseInt(request.getParameter("option"));
 		
 		int listCount = new UserManageService().listCount(status);
 		
 		int currentPage = Integer.parseInt(request.getParameter("currentPage"));
 
-		int boardLimit = 10;
+		int boardLimit = 7;
 		
-		int pageLimit = 10;
+		int pageLimit = 7;
 		
 		int startPage = (currentPage-1)/pageLimit *pageLimit +1;
 		
@@ -70,7 +61,7 @@ public class CheckListMainController extends HttpServlet {
 		PageInfo pi = new PageInfo(listCount, currentPage, startPage, endPage, boardLimit, pageLimit, maxPage);
 		
 		ArrayList<BMember> list = new UserManageService().checkListRecent(pi, option);
-		
+
 		if(list.isEmpty()) {
 			request.setAttribute("errorMsg", "회원 조회 실패");
 			request.getRequestDispatcher("views/common/error.jsp").forward(request, response);

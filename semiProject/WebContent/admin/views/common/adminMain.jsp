@@ -2,6 +2,7 @@
     pageEncoding="UTF-8" import="com.kh.admin.userManage.model.vo.User"%>
 <% 
 	String contextPath = request.getContextPath(); 
+	String alertMsg = (String)request.getSession().getAttribute("alertMsg");
 	int[][] boardArr = (int[][])request.getAttribute("boardArr");
 	User u = (User)request.getAttribute("u");
 	int[] checkArr = (int[])request.getAttribute("checkArr");
@@ -43,7 +44,7 @@ font-family: 'GmarketSansMedium';
 html{
 height: 100%;
 font-family: 'Montserrat', sans-serif;
-font-size: 14px;
+font-size: 16px;
 }
 
 body{
@@ -143,7 +144,7 @@ padding:2px;
 <section class="hero-section">
 <div class="card-grid">
   <a class="card" href="<%=contextPath %>/typeList.abo?bType=2&currentPage=1">
-    <div class="card__background" ></div>
+    <div class="card__background" style="background-image: url(https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMTA1MTRfMzIg%2FMDAxNjIxMDAyMTEwOTYy.QccMoIlqpILGInGz1uz8snREe3s0nZMFJvbO5WaaRbQg.L7-YzTeEEoCJyGqaxkH5BgZQCc8uwZWcZ7Y9vWA7IOog.JPEG.kyomiss754%2F%25B1%25F2%25B2%25FB%25C7%25D1%25B2%25C98.jpg&type=sc960_832)"></div>
     <div class="card__content">
    	<br><br>
       <h3 class="card__heading">대나무숲 게시판</h3>
@@ -169,7 +170,7 @@ padding:2px;
     </div>
   </a>
   <a class="card" href="<%=contextPath %>/typeList.abo?bType=3&currentPage=1">
-    <div class="card__background" ></div>
+    <div class="card__background"  style="background-image: url(https://search.pstatic.net/common/?src=http%3A%2F%2Fcafefiles.naver.net%2FMjAxODA5MjdfNTYg%2FMDAxNTM4MDE0MDIwMjYz.9C4HNueH_c5GSYK-4JBZVf6hsX_zY8YZQq-0DyL_et0g.CFTbXlack1Sh3FOBmtT9eF5QVt6N6zlrb3HmjMcLegkg.JPEG.viewbox2800%2F005.jpg&type=a340)"></div>
     <div class="card__content">
       <br><br>
       <h3 class="card__heading">맛집 게시판</h3>
@@ -195,7 +196,7 @@ padding:2px;
     </div>
   </a>
   <a class="card" href="<%=contextPath %>/main.um?currentPage=1&status=Y" >
-    <div class="card__background" style="background-image: <%=contextPath%>/resources/스크린샷 2023-04-27 오후 4.43.44.png"></div>
+    <div class="card__background" style="background-image: url(https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2F20160208_228%2Ffacelessjay_1454931156502sd1P7_JPEG%2FIMG_5684.jpg&type=sc960_832)"></div>
     <div class="card__content">
       <br><br>
       <h3 class="card__heading">회원 정보</h3>
@@ -221,7 +222,7 @@ padding:2px;
     </div>
   </li>
   <a class="card" href="<%=contextPath %>/main.ck?option=1&currentPage=1">
-    <div class="card__background"></div>
+    <div class="card__background"  style="background-image: url(https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMDA5MDlfMTQ2%2FMDAxNTk5NjYwNTA4NjM1.4GMprjPN0zYr-ToL_iv9vrNah0EBCFYY1xnKitTBgD0g.KGC6VtZNixzr4WFjfl2usp4BtWmCsujiBDD77ANU7eMg.JPEG.syl9725%2F%25C3%25BC%25C5%25A9.jpg&type=a340)"></div>
     <div class="card__content">
       <br><br>
       <h3 class="card__heading">체크 리스트</h3>
@@ -257,5 +258,13 @@ padding:2px;
   </a>
 <div>
 </section>
+<script>
+		var msg = "<%=alertMsg%>";
+		
+		if(msg != "null") {
+			alert(msg);
+			<%session.removeAttribute("alertMsg");%>
+		}
+	</script>
 </body>
 </html>

@@ -91,7 +91,8 @@ public class BamDao {
 								,rset.getDate("CREATE_DATE")
 								,rset.getInt("GOOD")
 								,rset.getString("FILE_NO")
-								,rset.getInt("COUNT")));
+								,rset.getInt("COUNT")
+								,rset.getInt("BAM_REPLY_COUNT")));
 			}
 			
 			
@@ -124,13 +125,13 @@ public class BamDao {
 			while(rset.next()) {
 				nlist.add(new Board(rset.getInt("BOARD_NO")
 									,rset.getString("USERNO")
-									,rset.getString("BAM_CATEGORY_NO")
 									,rset.getString("BOARD_TITLE")
 									,rset.getString("BOARD_CONTENT")
 									,rset.getDate("CREATE_DATE")
 									,rset.getInt("GOOD")
 									,rset.getString("FILE_NO")
-									,rset.getInt("COUNT")));
+									,rset.getInt("COUNT")
+									,rset.getInt("TYPE_NO")));
 			}
 			
 			
@@ -151,7 +152,7 @@ public class BamDao {
 		PreparedStatement pstmt = null;
 		
 		String sql = prop.getProperty("insertBam");
-		
+	
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, b.getBoardWriter());
@@ -214,6 +215,8 @@ public class BamDao {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
 		}
 		
 		
@@ -235,6 +238,8 @@ public class BamDao {
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(pstmt);
 			}
 			
 			return result;
@@ -263,7 +268,8 @@ public class BamDao {
 								,rset.getDate("CREATE_DATE")
 								,rset.getDate("MODIFY_DATE")
 								,rset.getInt("GOOD")
-								,rset.getInt("COUNT"));
+								,rset.getInt("COUNT")
+								,rset.getInt("TYPE_NO"));
 				}
 				
 				
@@ -307,6 +313,9 @@ public class BamDao {
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(rset);
+				JDBCTemplate.close(pstmt);
 			}
 			
 			return at;
@@ -604,7 +613,8 @@ public class BamDao {
 									,rset.getDate("CREATE_DATE")
 									,rset.getInt("GOOD")
 									,rset.getString("FILE_NO")
-									,rset.getInt("COUNT")));
+									,rset.getInt("COUNT")
+									,rset.getInt("BAM_REPLY_COUNT")));
 				}
 				
 			} catch (SQLException e) {
@@ -677,7 +687,8 @@ public class BamDao {
 									,rset.getDate("CREATE_DATE")
 									,rset.getInt("GOOD")
 									,rset.getString("FILE_NO")
-									,rset.getInt("COUNT")));
+									,rset.getInt("COUNT")
+									,rset.getInt("BAM_REPLY_COUNT")));
 				}
 				
 			} catch (SQLException e) {
@@ -934,6 +945,50 @@ public class BamDao {
 			
 			
 			return r;
+		}
+
+		//각 게시글 댓글수 증가
+		public int increaseReplyCount(Connection conn, int boardNo) {
+			int result = 0;
+			PreparedStatement pstmt = null;
+			
+			String sql = prop.getProperty("increaseReplyCount");
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, boardNo);
+				
+				result = pstmt.executeUpdate();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(pstmt);
+			}
+			
+			
+			return result;
+		}
+
+		//댓글 삭제시 게시글 댓글수 감소
+		public int decreaseReplyCount(Connection conn, int boardNo) {
+			int result =0;
+			PreparedStatement pstmt = null;
+			
+			String sql = prop.getProperty("decreaseReplyCount");
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, boardNo);
+				
+				result = pstmt.executeUpdate();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(pstmt);
+			}
+			return result;
 		}
 
 

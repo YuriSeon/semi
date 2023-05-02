@@ -36,13 +36,13 @@
 	<br>
     <div id="wrapper">
     	<div id="bb">
-			<% if(list.isEmpty()) { %>
+			<% if(list!=null && list.isEmpty()) { %>
 				<p style="text-align: center; font-weight: bold; font-size:X-large; line-height:450px">
 					관리가 필요한 회원이 없습니다.
 				</p>
 				<button class='custom-btn btn-8' onclick="location.href='<%=contextPath%>/main.admin';">메인으로</button>
 			<% } else { %>
-			<br>
+			<br><br><br>
 			<table id="tab">
 				<thead>
 					<tr>
@@ -96,30 +96,27 @@
 		</div>
     </div>
     <div>
-		<!-- 페이징처리 -->
-		<% if(pi.getCurrentPage()==1) {%>
-		<button type="button" disabled></button>
-		<% } else { %>
-		<button type="button"
-			onclick="location.href='<%=contextPath%>/important.ck?currentPage=<%=pi.getCurrentPage()-1%>';">&lt;</button>
-		<% } %>
-		<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
-
-		<%if(i==pi.getCurrentPage()) {%>
-		<button type="button" disabled>i</button>
-		<% } else {%>
-		<button type="button"
-			onclick="location.href='<%=contextPath%>/important.ck?currentPage=<%=i%>';"><%=i %></button>
-		<% } %>
-
-		<% } %>
-
-		<% if(pi.getMaxPage()!=pi.getCurrentPage()) { %>
-		<button type="button"
-			onclick="location.href='<%=contextPath%>/important.ck?currentPage=<%=pi.getCurrentPage()+1%>';">&gt;</button>
-		<% } else { %>
-		<button type="button" disabled>&gt;</button>
-		<% } %>
+    	<% if(pi.getMaxPage() > 1) { %>
+			<!-- 페이징처리 -->
+			<% if(pi.getCurrentPage()==1) {%>
+			
+				<button type="button" disabled>&lt;</button>
+			<% } else { %>
+				<button type="button" onclick="location.href='<%=contextPath%>/important.ck?currentPage=<%=pi.getCurrentPage()-1%>';">&lt;</button>
+			<% } %>
+			<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
+				<%if(i==pi.getCurrentPage()) {%>
+					<button type="button" disabled><%=pi.getCurrentPage()%></button>
+				<% } else {%>
+					<button type="button" onclick="location.href='<%=contextPath%>/important.ck?currentPage=<%=i%>';"><%=i %></button>
+				<% } %>
+			<% } %>
+			<% if(pi.getMaxPage()!=pi.getCurrentPage()) { %>
+				<button type="button" onclick="location.href='<%=contextPath%>/important.ck?currentPage=<%=pi.getCurrentPage()+1%>';">&gt;</button>
+			<% } else { %>
+				<button type="button" disabled>&gt;</button>
+			<% } %>
+		<% } %>	
 	</div>
     <script>
     	$(".btn-14").on("click", function(){
@@ -134,9 +131,15 @@
     				alert("경고장 전송 완료");
     				var str = "";
 					if(list?.length){ 
-						// js는 list.isEmpty or list.size로 비어있는지 확인 불가능
-						// list.? 체이닝 연산자 이용 
-						// list.? 
+						/*
+							js는 list.isEmpty or list.size로 비어있는지 확인 불가능
+							list?. = 옵셔널체이닝 
+							자바스크립트에서 존재하지 않는 요소에 접근하려 할 때 에러가 발생가능함.
+							옵셔널 체이닝은 nullish한 (null or undefined) 값을 할당하고 있는 경우에 에러를 반환하지 않고 undefined를 반환
+							왜냐하면 옵셔널 체인징(?.)은 바로 앞에있는 평가 대상에만 적용되고 확장하지 않아서 평가대상이 nullish한 경우 즉시 평가를 멈춘다.
+							이를 옵셔널 체이닝의 단축평가라고 하고 이러한 이유 때문에 프러퍼티까지 평가하지 않고 중간에 평가를 멈춘 후 undefined를 반환하여 에러가 생기지 않는 것!
+						
+						*/
 						for(var i=0;i<list.length; i++){
 							str +="<tr>"
 								+"<td>"+list[i].userNo+"</td>"
@@ -146,21 +149,23 @@
 							str+= "<td>"+list[i].blockC+"</td>"
 								+"<td>"+list[i].dmBlockC+"</td>"
 								+"<td>"+list[i].falseBlockC+"</td>"
-								"<td>"+list[i].totalB+"</td>"
+								+"<td>"+list[i].totalB+"</td>"
 								+"<td>"+list[i].boardFiltering+"</td>"
 								+"<td>"+list[i].replyFiltering+"</td>"
 								+"<td>"+list[i].totalF+"</td>"
 								+"<td>"+list[i].yellowCard + " / "+
 		                        "<button type='button' class='custom-btn btn-14' name='list[i].yellowCard'>경고</button></td>";
 		                        if(list[i].yellowCard>=4) {
-                        			+"<td>button class='custom-btn btn-11' style='width: 85px; height: 30px;' name="+list[i].userNo+">강제탈퇴</button></td>";
+                        			str+="<td><button class='custom-btn btn-11' style='width: 85px; height: 30px;' name="+list[i].userNo+">강제탈퇴</button></td>";
                         		} else {
-                        			+"<td>button class='custom-btn btn-16' style='width: 85px; height: 30px;' name="+list[i].userNo+">강제탈퇴</button></td>";
+                        			str+="<td><button class='custom-btn btn-16' style='width: 85px; height: 30px;' name="+list[i].userNo+">강제탈퇴</button></td>";
                         		}
                         	}
 								+"</tr>";
 								
 								$("#tab>tbody").html(str);
+								
+								location.reload(); // 이벤트가 삭제되어서 리로드 실행시킴.
 						} else {
 							str = "<p style='text-align: center; font-weight: bold; font-size:X-large; line-height:450px'>관리가 필요한 회원이 없습니다.</p>"
 								+"<td><button class='custom-btn btn-8' onclick='location.href=<%=contextPath%>/main.admin'>메인으로</button></td>";
@@ -182,7 +187,7 @@
         $(".btn-11").click(function(e){
         	var userNo = $(this).attr("name");
             if(confirm($(this).attr('name') + "번 회원과 작별인사 하시겠습니까?")){
-                location.href="<%=contextPath %>/delete.um?userNo=" + userNo;
+                location.href="<%=contextPath%>/delete.um?userNo=" + userNo;
             } else {
                 alert("탈퇴시키기를 취소하셨습니다.");
             }
@@ -192,8 +197,8 @@
         $(".btn-14").click(function(e){
         	e.stopImmediatePropagation(); 
         });
-         
         
+
     </script>
 </body>
 </html>

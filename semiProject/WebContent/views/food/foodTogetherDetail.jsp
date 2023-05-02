@@ -8,66 +8,196 @@
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.6.4.js"integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script> 
 <script type="text/javascript"src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f91f4c1499628ccd44bb5d41070cb9a1&libraries=services"></script>
+    <style>
+        #topdiv{
+            width: 850px;
+            height: 800px;
+            box-sizing: border-box;
+            margin: auto;
+        }
+        #topdiv *{
+            float: left;
+        }
+        #foodboarddiv, #foodImgdiv{
+            width: 47.5%;
+            height: 40%;
+            box-sizing: border-box;
+        }
+        #titleDiv{
+            width: 100%;
+            height: 10%;
+            box-sizing: border-box;
+        }
+        #contentDiv{
+            width: 100%;
+            height: 40%;
+            box-sizing: border-box;
+        }
+        #endTimediv{
+            width: 100%;
+            height: 22%;
+            box-sizing: border-box;
+        }
+        #persondiv{
+            width: 100%;
+            height: 22%;
+            box-sizing: border-box;
+        }
+        #nonediv1{
+            width: 100%;
+            height: 2%;
+            box-sizing: border-box;
+        }
+        #nonediv{
+            width: 5%;
+            height: 40%;
+            box-sizing: border-box;
+        }
+        #botImg{
+            width: 100%;
+            height: 35%;
+            background-color: black;
+            box-sizing: border-box;
+        }
+        #addDiv{
+            width: 100%;
+            height: 5%;
+            box-sizing: border-box;
+        } 
+        #button3{
+            width: 100%;
+            height: 7%;
+            box-sizing: border-box;
+        }
+        #etcbtns{
+            width: 100%;
+            height: 7%;
+            box-sizing: border-box;
+        }
+
+        
+    </style>
+
 </head>
 <body>
 <%@ include file="../common/menubar.jsp" %>
 	<%
 		HashMap<String, String> map = (HashMap<String, String>)request.getAttribute("map");
 	%>
-	    <form action="<%=contextPath %>/foodTogetherUpdate.bo" method="get">
-        <table align="center">
-        	<tr>
-        		<th>작성자</th>
-        		<td><%=map.get("userId") %></td>
-        	</tr>
-            <tr>
-                <th style="width:200px;">제목</th>
-                <td><input type="text" name="title" value="<%=map.get("title") %>" readOnly></td>
-            </tr>
-            <tr>
-                <th>내용</th>
-                <td><textarea name="content" cols="30" rows="10" style="resize: none;" readOnly><%=map.get("content") %></textarea></td>
-            </tr>
-            <tr>
-            	<td></td>
-            	<td align="center"><img id="miriImg" src='<%=map.get("filePath")  + "/"+ map.get("changeName")%>' style="width:150px; height:150px"></td>
-            </tr>
-            <tr>
-                <th>주소</th>
-                <td><input type="text" name="mainAddress" id="mainAddress" value="<%=map.get("mainAddress") %>" readOnly>
-                <input type="text" name="subAddress" id="subAddress" value="<%=(map.get("subAddress")==null)?"":map.get("subAddress") %>" style="width: 50px;" readOnly></td>
-            </tr>
-            <tr id="maptr" align="center" >
-            	<td >
-                    <div id="map" style="width: 200px; height: 200px;" align="center"></div>
-                </td>
-            </tr>
-            <tr>
-                <th>모집 인원</th>
-                <td><input type="text" name="person" value="<%=map.get("person") %>명" readOnly></td>
-            </tr>
-            <tr>
-            	<th>종료시간</th>
-            	<td><input type="time" id="timer" name="endTime" value="<%=map.get("endTime") %>" readOnly></td>
-            	<td><input type="hidden" id="bno" name="boardNo" value="<%=map.get("boardNo") %>" readOnly></td>
-            	<td><input type="hidden" name="changeName" value="<%=map.get("changeName") %>"></td>
-            	<td><input type="hidden" name="filePath" value="<%=map.get("filePath") %>"></td>
-            	<td><input type="hidden" name="bno" value="<%=map.get("boardNo") %>"></td>
-            	<td><input type="hidden" name="originName" value="<%=map.get("originName") %>"></td>            	
-            </tr>
-            <tr>
-	            <td>
-    	        	<%if(map.get("userId").equals(((BMember)request.getSession().getAttribute("loginUser")).getUserId())){ %>
+	
+	
+	<form action="<%=contextPath %>/foodTogetherUpdate.bo" method="get">
+	 <div id="topdiv">
+            <div id="foodImgdiv">
+            <img id="miriImg" src='<%=map.get("filePath")  + "/"+ map.get("changeName")%>' style="width:100%; height:100%">
+            </div>
+            <div id="nonediv"></div>
+            <div id="foodboarddiv">
+                <div id="titleDiv" style="font-weight: 1000; font-size:20px">
+                    <%=map.get("title") %>
+                    <input type="hidden" name="title" value="<%=map.get("title") %>" readOnly>
+                </div>
+                <div id="nonediv1"></div>
+                <div id="contentDiv">
+                    <%=map.get("content") %>
+                    <textarea  name="content" cols="30" rows="10" style="display:none;" readOnly><%=map.get("content") %></textarea>
+                </div>
+                <div id="nonediv1"></div>
+                <div id="endTimediv">
+                종료시간 : <%=map.get("endTime") %>
+                <input type="hidden" id="timer" name="endTime" value="<%=map.get("endTime") %>" readOnly>
+                <input type="hidden" id="bno" name="boardNo" value="<%=map.get("boardNo") %>" readOnly>
+                <input type="hidden" name="changeName" value="<%=map.get("changeName") %>">
+                <input type="hidden" name="filePath" value="<%=map.get("filePath") %>">
+                <input type="hidden" name="bno" value="<%=map.get("boardNo") %>">
+                <input type="hidden" name="originName" value="<%=map.get("originName") %>">
+                </div>
+                <div id="nonediv1"></div>
+                <div id="persondiv">
+                	인원제한 : <%=map.get("person") %>명
+                	<input type="hidden" name="person" value="<%=map.get("person") %>명" readOnly>
+                </div>
+            </div>
+            <div id="nonediv1"></div>
+            <div id="botImg">
+            <div id="map" style="width: 100%; height: 100%;" align="center"></div>
+            </div>
+            <div id="nonediv1"></div>
+            <div id="addDiv">
+            <%=map.get("mainAddress") %> <%=(map.get("subAddress")==null)?"":map.get("subAddress") %>
+            <input type="hidden" name="mainAddress" id="mainAddress" value="<%=map.get("mainAddress") %>" readOnly>
+            <input type="hidden" name="subAddress" id="subAddress" value="<%=(map.get("subAddress")==null)?"":map.get("subAddress") %>" style="width: 50px;" readOnly>
+            </div>
+            <div id="nonediv1"></div>
+            <div id="button3" style="text-align: center;">
+            <%if(map.get("userId").equals(((BMember)request.getSession().getAttribute("loginUser")).getUserId())){ %>
         	    		<button type="submit"> 수정하기 </button>
             			<button type="button" onclick="location.href='<%=contextPath %>/deleteTogether.bo?bno=<%=request.getParameter("bno")%>'">삭제하기</button>
             		<%} else { %>
             			<button type="button" id="nadu">참여하기</button>
             		<%} %>
             		<button type="button" onclick="history.back();">돌아가기</button>
-            	</td>
-            </tr>
-        </table>
-    </form>
+            </div>
+            <div id="etcbtns"></div>
+        </div>
+        </form>
+        
+        
+        
+<%-- 	    <form action="<%=contextPath %>/foodTogetherUpdate.bo" method="get"> --%>
+<!--         <table align="center"> -->
+<!--         	<tr> -->
+<!--         		<th>작성자</th> -->
+<%--         		<td><%=map.get("userId") %></td> --%>
+<!--         	</tr> -->
+<!--             <tr> -->
+<!--                 <th style="width:200px;">제목</th> -->
+<%--                 <td><input type="text" name="title" value="<%=map.get("title") %>" readOnly></td> --%>
+<!--             </tr> -->
+<!--             <tr> -->
+<!--                 <th>내용</th> -->
+<%--                 <td><textarea name="content" cols="30" rows="10" style="resize: none;" readOnly><%=map.get("content") %></textarea></td> --%>
+<!--             </tr> -->
+<!--             <tr> -->
+<!--             	<td></td> -->
+<%--             	<td align="center"><img id="miriImg" src='<%=map.get("filePath")  + "/"+ map.get("changeName")%>' style="width:150px; height:150px"></td> --%>
+<!--             </tr> -->
+<!--             <tr> -->
+<!--                 <th>주소</th> -->
+<%--                 <td><input type="text" name="mainAddress" id="mainAddress" value="<%=map.get("mainAddress") %>" readOnly> --%>
+<%--                 <input type="text" name="subAddress" id="subAddress" value="<%=(map.get("subAddress")==null)?"":map.get("subAddress") %>" style="width: 50px;" readOnly></td> --%>
+<!--             </tr> -->
+<!--             <tr id="maptr" align="center" > -->
+<!--             	<td > -->
+<!--                     <div id="map" style="width: 200px; height: 200px;" align="center"></div> -->
+<!--                 </td> -->
+<!--             </tr> -->
+<!--             <tr> -->
+<!--                 <th>모집 인원</th> -->
+<%--                 <td><input type="text" name="person" value="<%=map.get("person") %>명" readOnly></td> --%>
+<!--             </tr> -->
+<!--             <tr> -->
+<!--             	<th>종료시간</th> -->
+<%--             	<td><input type="time" id="timer" name="endTime" value="<%=map.get("endTime") %>" readOnly></td> --%>
+<%--             	<td><input type="hidden" id="bno" name="boardNo" value="<%=map.get("boardNo") %>" readOnly></td> --%>
+<%--             	<td><input type="hidden" name="changeName" value="<%=map.get("changeName") %>"></td> --%>
+<%--             	<td><input type="hidden" name="filePath" value="<%=map.get("filePath") %>"></td> --%>
+<%--             	<td><input type="hidden" name="bno" value="<%=map.get("boardNo") %>"></td> --%>
+<%--             	<td><input type="hidden" name="originName" value="<%=map.get("originName") %>"></td>            	 --%>
+<!--             </tr> -->
+<!--             <tr> -->
+<!-- 	            <td> -->
+<%--     	        	<%if(map.get("userId").equals(((BMember)request.getSession().getAttribute("loginUser")).getUserId())){ %> --%>
+<!--         	    		<button type="submit"> 수정하기 </button> -->
+<%--             			<button type="button" onclick="location.href='<%=contextPath %>/deleteTogether.bo?bno=<%=request.getParameter("bno")%>'">삭제하기</button> --%>
+<%--             		<%} else { %> --%>
+<!--             			<button type="button" id="nadu">참여하기</button> -->
+<%--             		<%} %> --%>
+<!--             		<button type="button" onclick="history.back();">돌아가기</button> -->
+<!--             	</td> -->
+<!--             </tr> -->
+<!--         </table> -->
+<!--     </form> -->
     
     <script>
     
@@ -122,6 +252,9 @@
 				},
 				type : "get",
 				success : function(data){
+					if(data == "iii"){
+						alert("글 작성자는 다른 글에 참여 할 수 없습니다.");
+					}
 					if(data == "err"){
 						this.error(data);
 					}

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
 import com.kh.bMember.model.vo.BMember;
 import com.kh.food.model.service.FoodService;
 
@@ -35,8 +36,21 @@ public class FoodTogetherBoardController extends HttpServlet {
 		ArrayList<HashMap<String, String>> list = new FoodService().selectFoodTogether();
 		int loginUserno = ((BMember)request.getSession().getAttribute("loginUser")).getUserNo();
 		int check = new FoodService().toCheck(loginUserno);
+		
+		int cp = 0;
+		try {			
+			cp = Integer.parseInt(request.getParameter("cp"));
+		}catch(Exception e) {
+			cp = 0;
+		}
+		
+		
+		request.setAttribute("cp", cp);
 		request.setAttribute("list", list);
 		request.setAttribute("check", check);
+		
+		
+		
 		
 		request.getRequestDispatcher("views/food/foodTogether.jsp").forward(request, response);
 		
