@@ -24,7 +24,7 @@
             position: relative;
             left: 50%;
             width: 1000px;
-            height: 600px;
+            height: 700px;
             margin-left: -500px;
             padding-bottom: 50px;
             font-family: 'GmarketSansMedium';

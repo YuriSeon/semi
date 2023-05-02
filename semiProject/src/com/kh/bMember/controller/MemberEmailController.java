@@ -39,14 +39,17 @@ public class MemberEmailController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String recipient = request.getParameter("email");
-		 String subject = "학교 인증용 메일입니다.";
-		 String content = "인증을 해주세요";
-		 MailTest mailTest = new MailTest();
+		MailTest mailTest = new MailTest();
+		String code = mailTest.getCode();
+		String subject = "학교 인증용 메일입니다.";
+		String content = "브레이크타임 인증 메일입니다.";
+
 
 		 try {
-			mailTest.sendMail(recipient, subject, content);
+			mailTest.sendMail(recipient, subject, content,code);
 			response.setContentType("text/html;charset=UTF-8");
-			response.getWriter().println("이메일 전송 완료");
+			response.getWriter().println(code);
+			
 		} catch (javax.mail.MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
