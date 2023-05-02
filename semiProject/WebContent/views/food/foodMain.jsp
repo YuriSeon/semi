@@ -271,7 +271,7 @@ body {
 			<div id="ads" style="background-image: url(https://img.woowahan.com/www/common/baemin.jpg); background-size:100% 100%;" onclick="location.href='https://www.baemin.com/'">
 			</div>
 			<div class="noneb1"></div>
-			<div id="whatfood" style="background-image: url(); background-size:100% 100%;">
+			<div id="whatfood" style="background-image: url(https://yt3.googleusercontent.com/ytc/AGIKgqPNJ64rrMhG_Wl00qzE8ugDRZFO3UnX6eTaMZQAGg=s900-c-k-c0x00ffffff-no-rj); background-size:100% 100%;">
 				뭐먹지
 				<!-- 지금 맛집에 있는 것들 -->
 			</div>
@@ -357,7 +357,8 @@ body {
     				let str = "<img style='width:100%; height:100%;' id='" + Imglist[0].originName + "'src=" + "<%=request.getContextPath() %>" + Imglist[0].filePath + "/" + Imglist[0].changeName + ">";
     				$("#imgarea").html(str);
     			}else{
-    				$("#imgarea").html("<h1>아무 음식이 준비되지 않았습니다.</h1>");    				    				
+    				$("#imgarea").html("<img style='width:100%; height:100%;'" + "src=" + "'https://m.jejedeco.com/web/product/big/202110/a5f04036c5ca1501d1f459e4a7e3023e.jpg'>");   
+    				
     			}
     		},
     		error : function(){
@@ -460,7 +461,7 @@ body {
             success : function(data){
                 var length = data.length;
                 if(data[0].length == 0){
-                    $("#foodSlide").html("지금 준비된 음식 이 없습니다.");
+                    $("#foodSlide").html("<img style='width:100%; height:100%;'" + "src=" + "'https://m.jejedeco.com/web/product/big/202110/a5f04036c5ca1501d1f459e4a7e3023e.jpg'>");
                     $("#togeterbtn").attr("disabled", true);
                 }else{
                 	$("#locactionFood").not("*").css("color","red");

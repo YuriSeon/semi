@@ -367,7 +367,7 @@ public class BoardDao {
 						, rset.getInt("BAD")
 						, rset.getInt("REPORT")
 						, rset.getInt("COUNT"));
-				
+				System.out.println(b);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -404,7 +404,7 @@ public class BoardDao {
 			
 			rset = pstmt.executeQuery();
 			
-			if(rset.next()) {
+			while(rset.next()) {
 				
 				list.add(new Board(rset.getInt("BOARD_NO")
 									, rset.getString("USERID")
@@ -618,7 +618,7 @@ public class BoardDao {
 			pstmt.setInt(1, bno);
 			
 			result = pstmt.executeUpdate();
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

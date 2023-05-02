@@ -60,21 +60,19 @@
 				</table>
 	        <% } else { %>
 	        	<h1 style="line-height: 500px; text-align: center;">확인 필요한 게시물이 없습니다</h1>
-	        	<button class='custom-btn btn-8' onclick="location.href='<%=contextPath%>/main.admin';">메인으로</button>
+	        	<button class='custom-btn btn-8' onclick="location.href='<%=contextPath%>/';">메인으로</button>
 	        <% } %>
 	    </div>
     </div>
     <div>
+		<!-- 페이징처리 -->
     	<% if(pi.getMaxPage()> 1) { %>
-			<!-- 페이징처리 -->
 			<% if(pi.getCurrentPage()==1) {%>
 				<button type="button" disabled>&lt;</button>
 			<% } else { %>
 				<button type="button" onclick="location.href='<%=contextPath%>/blurboard.abo?currentPage=<%=pi.getCurrentPage()-1%>';">&lt;</button>
 			<% } %>
-			
 			<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
-			
 				<%if(i==pi.getCurrentPage()) {%>
 					<button type="button" disabled><%=pi.getCurrentPage()%></button>
 				<% } else {%>

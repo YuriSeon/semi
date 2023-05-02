@@ -146,18 +146,12 @@
         #myModal{
         width: 200px;
     	}
-    	
-    	.exit{
-            margin-left: 1200px;
-        }
+    
         .exit a{
             text-decoration: none;
             color: darkgrey;
         }
-		
-		#userNick{
-			text-decoration: none;
-		}
+
     </style>
 </head>
 <body>
@@ -171,6 +165,9 @@
         <img src="resources/로고_투명배경.png" style="width: 200px;">
         
         </a>
+    </div>
+    <div class="nameArea">
+    	<p><%=loginUser.getUserNick() %> 님</p>
     </div>
     
         <div class="exit">
@@ -221,19 +218,20 @@
         </nav>
     </div>
     </header>
-    <table id="table">
-        <tbody>
-            <tr>
-            	<!-- 자기 자신은 클릭 못하게 
-            			닉네임 적힌곳들에 유저 닉네임 넣으시면 됩니다. -->
-			    <%if(loginUser.getUserNick().equals("닉네임")){ %>
-        			<td>닉네임</td>    	
-			    <%}else{ %>
-                	<td><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#myModal" id="userNick">닉네임</a></td>
-			    <%} %>
-            </tr>
-        </tbody>
-    </table>
+    
+    <div class="friendList">
+    	<table id="frdTb">
+    		<thead style="font-size:19px;">
+    			<tr><td>친구 목록</td></tr>
+    			<tr><td><input type="text" name="searchNick" id="searchf"><td></tr>
+    			<tr><td><button onclick="friendSearch();">검색</button></td></tr>
+    		</thead>
+    		<tbody>
+    		</tbody>
+    		
+    	</table>
+    	
+    </div>
     	
     <div class="modal fade" id="myModal" tabindex="-1" >
         <div class="modal-dialog">
@@ -307,11 +305,57 @@
     </div>
     
      <script >
-	     $("#userNick").click(function(){
-	    	userNick = $(this).html(); //전역 변수 선언(닉네임 클릭했을때 닉네임 가져옴)
-	    	$("#recipient-name").val(userNick); //메시지 입력창 닉네임 넣기
-	    	$("#block-name").val(userNick);	//차단 등록창 닉네임 넣기
+	     $("#frdTb tbody").on("click", "tr" , function(){
+// 	    	userNick = $(this).html(); //전역 변수 선언(닉네임 클릭했을때 닉네임 가져옴)
+
+	    	$("#recipient-name").val($(this).text()); //메시지 입력창 닉네임 넣기
+	    	$("#block-name").val($(this).text());	//차단 등록창 닉네임 넣기
 	     });
+	     
+	     
+	     $(function(){
+// 	    	 console.log("ajax");
+	    	 $.ajax({
+	    		 url: "friendList.me",
+	    		 success:function(list){
+	    			 var result = "";
+// 	    			 console.log(list);
+	    			 for(var i=0; i<list.length; i++){
+	    				 result += "<tr>"
+	    				 		+"<td><a href='javascript:void(0)' data-bs-toggle=modal data-bs-target=#myModal class='userNick'>"+list[i]+"</a></td>"
+	    				 		+"</tr>"
+	    			 }
+	    			 $("#frdTb tbody").html(result);
+	    		 },
+	    		 error:function(){
+	    			 alert("목록 불러오기 실패");
+	    		 }
+	    	 });
+	     })
+	     function friendSearch(){
+	    	 $.ajax({
+	    		 url: "friendList.me",
+	    		 type: "post",
+	    		 data:{
+	    			 userNick:$("#searchf").val()
+	    		 },
+	    		 success: function(arr){
+	    			 var result = "";
+	    			 for(var i=0; i<list.length; i++){
+	    				 result = "<tr>"
+	    					 +"<td><a href='javascript:void(0)' data-bs-toggle=modal data-bs-target=#myModal id="+list[i]+">"+list[i]+"</a></td>"
+	    				 		+"</tr>"
+	    			 }
+	    			 $("frdTb").html(result);
+	    			 $("#searchf").val("");
+	    		 },
+	    		 error: function(){
+	    			 alert("목록 불러오기 실패");
+	    		 }
+	    	 })
+	     }
+	     
+	     
 	     function noSchool(){
 	    	 alert("대나무숲은 학교인증을 하셔야 이용 가능합니다.")
 	     };
@@ -320,7 +364,7 @@
 	    	
 	    	var blockContent = $("#block-text").val(); //차단 메모
 	    	//정보 보내기
-			location.href="<%=contextPath%>/msgblock.dm?userNick="+userNick+"&blockContent="+blockContent;	    	
+			location.href="<%=contextPath%>/msgblock.dm?userNick="+$('#block-name').val()+"&blockContent="+blockContent;	    	
 	    }
 	    
 	     
@@ -337,7 +381,9 @@
      			type:"post",
      			success:function(result){
      				if(result>0){//인서트(작성) 성공
-     					alert("메시지를 보냈습니다.")
+     					alert("메시지를 보냈습니다.");
+     					$("#recipient-name").val("");
+     					$("#message-text").val("");
      					
      				}else{//인서트 실패or차단 당함
      					alert("차단 당하셨습니다.")

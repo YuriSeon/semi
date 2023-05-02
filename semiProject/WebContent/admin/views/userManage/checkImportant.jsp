@@ -131,9 +131,15 @@
     				alert("경고장 전송 완료");
     				var str = "";
 					if(list?.length){ 
-						// js는 list.isEmpty or list.size로 비어있는지 확인 불가능
-						// list.? 체이닝 연산자 이용 
-						// list.? 
+						/*
+							js는 list.isEmpty or list.size로 비어있는지 확인 불가능
+							list?. = 옵셔널체이닝 
+							자바스크립트에서 존재하지 않는 요소에 접근하려 할 때 에러가 발생가능함.
+							옵셔널 체이닝은 nullish한 (null or undefined) 값을 할당하고 있는 경우에 에러를 반환하지 않고 undefined를 반환
+							왜냐하면 옵셔널 체인징(?.)은 바로 앞에있는 평가 대상에만 적용되고 확장하지 않아서 평가대상이 nullish한 경우 즉시 평가를 멈춘다.
+							이를 옵셔널 체이닝의 단축평가라고 하고 이러한 이유 때문에 프러퍼티까지 평가하지 않고 중간에 평가를 멈춘 후 undefined를 반환하여 에러가 생기지 않는 것!
+						
+						*/
 						for(var i=0;i<list.length; i++){
 							str +="<tr>"
 								+"<td>"+list[i].userNo+"</td>"

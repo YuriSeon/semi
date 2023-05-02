@@ -12,8 +12,15 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style >
+		.bam_head{
+            text-align: center;
+            font-size: 25px;
+            font-weight: bold;
+            margin-top: 100px;
+            margin-bottom: 20px;
+        }
 		.board-list{			
-			border-top: 3px solid skyblue;
+			border-top: 3px solid rgb(186, 229, 244);
 			width: 75%;			
 			margin: auto;
 			text-align: center;
@@ -23,7 +30,7 @@
 		
 		.board-list-pre{	
 			
-			width: 75%;
+			width: 65%;
 			border-bottom: 2px solid gainsboro;
 			border-left:2px solid gainsboro;
 			border-right:2px solid gainsboro;
@@ -60,8 +67,10 @@
 		}
 		
 		#content{
-			font-weight: 600;
-			font-size : 20;
+			font-weight: 500;
+			font-size : 15;
+			width:70%;
+			color:black;
 	        text-overflow: ellipsis;
 			overflow: hidden;
 	        display: -webkit-box;
@@ -114,14 +123,15 @@
 			margin-bottom: 1%;
 			float: left;
 		}
+		.writebtn{
+			width:50%
+		}
 </style>
 </head>
 <body>
 	<%@ include file ="../common/menubar.jsp"%> 
 	  
-	<div align="center">
-		<a href="<%=contextPath%>/baminsert.bo" class="btn btn-info">글작성</a>
-	</div>
+	<div class="bam_head" align="center">대나무 숲</div>
 	<br>
 	<div class="layout">
 		<div class="board-list">
@@ -131,33 +141,35 @@
 			<%}else{ %>
 				<%for(Board b : list){ %>
 				<div class="board-list-pre">
-					<div class="title">
-					<span class="category">
-						<%if(b.getBoardType()==null){ %>
-							<!-- 공지사항 이라면 -->
-							<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><img style="width:25px" src="resources/bam_files/메가폰.png">공지</a>
-						<%}else{ %>
-							<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><%=b.getBoardType() %></a>
-						<%} %>
-					</span>
-						<%if(b.getTypeNo()==1||b.getReplyCount()==0){ %>
-							<!-- 공지사항 이거나 댓글이 없다면 -->
-							<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><%=b.getBoardTitle() %></a> 
-						<%}else{ %>
-							<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><%=b.getBoardTitle() %>(<%=b.getReplyCount() %>)</a>
-						<%} %>
-						<a id="content" href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><%=b.getBoardContent() %></a>
+					<div class="title" align="center">
+						<span class="category">
+							<%if(b.getBoardType()==null){ %> <!-- 카테고리 -->
+								<!-- 공지사항 이라면 -->
+								<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><img style="width:25px" src="resources/bam_files/메가폰.png">공지</a>
+							<%}else{ %>
+								<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><%=b.getBoardType() %></a>
+							<%} %>
+						</span>
+							<%if(b.getTypeNo()==1||b.getReplyCount()==0){ %> <!-- 제목+댓글수 -->
+								<!-- 공지사항 이거나 댓글이 없다면 -->
+								<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><%=b.getBoardTitle() %></a> 
+							<%}else{ %>
+								<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><%=b.getBoardTitle() %>(<%=b.getReplyCount() %>)</a>
+							<%} %>
+							<a id="content" href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><%=b.getBoardContent() %></a>
 					</div>
 					<div class="sub">
-						<%if(b.getTypeNo()==1&&b.getBoardWriter().equals("1")){ %>
+						<%if(b.getTypeNo()==1&&b.getBoardWriter().equals("1")){ %> <!-- 작성자 -->
 							<p class="name">관리자</p>										
 						<%}else{ %>
 							<p class="name">익명</p>
 						<%} %>					
 						<div class="sub3">
+							<!-- 작성일 -->
 							<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><%=b.getCreateDate() %></a>
 						</div>
 						<div class="sub2">
+							<!-- 조회수, 추천수, 사진있는 글인지 -->
 							<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><i class="fa-regular fa-eye"><%=b.getCount() %></i></a>
 							<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>"><i class="fa-regular fa-thumbs-up"><%=b.getGood() %></i></a>
 							<a href="<%=contextPath%>/bamdetail.bo?bno=<%=b.getBoardNo()%>">
@@ -191,6 +203,9 @@
 			<%if(pi.getCurrentPage() != pi.getMaxPage()){ %>
 				<button onclick="location.href='<%=contextPath%>/bamlist.bo?currentPage=<%=pi.getCurrentPage()+1%>'">&gt;</button>
 			<%} %>
+			<div class="writebtn" align="right">
+				<a href="<%=contextPath%>/baminsert.bo" class="btn btn-info">글작성</a>
+			</div>
 	</div>
 	<br>
 	<div align="center">
@@ -200,8 +215,8 @@
 				<option value="title">제목</option>
 				<option value="content">내용</option>
 			</select>
-		    <input type="search" name="keyword" placeholder="검색하실 제목">
-		    <button type="submit">검색</button>
+		    <input type="search" name="keyword" size=45 placeholder="검색하실 제목">
+		    <button type="submit" class="btn btn-info">검색</button>
 		</form>
 	</div>
 	<br><br><br>

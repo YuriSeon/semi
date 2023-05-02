@@ -7,8 +7,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.InvalidPropertiesFormatException;
+import java.util.List;
 import java.util.Properties;
 
 import com.kh.bMember.model.vo.BMember;
@@ -363,6 +365,34 @@ public class BMemberDao {
 			JDBCTemplate.close(pstmt);
 		}
 		return m;
+	}
+
+	public List<String> friendArr(Connection conn) {
+		
+		Statement stmt = null;
+		ResultSet rset = null;
+		String sql = prop.getProperty("friendArr");
+		List<String> list = new ArrayList<>();
+		
+		try {
+			stmt = conn.createStatement();
+			rset = stmt.executeQuery(sql);
+			
+			while(rset.next()) {
+				String userNick = rset.getString("USER_NICK");
+				list.add(userNick);
+			
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(stmt);
+		}
+		
+		return list;
 	}
 	
 	

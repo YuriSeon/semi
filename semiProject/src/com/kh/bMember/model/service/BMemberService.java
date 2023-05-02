@@ -2,6 +2,7 @@ package com.kh.bMember.model.service;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.kh.bMember.model.dao.BMemberDao;
 import com.kh.bMember.model.vo.BMember;
@@ -125,6 +126,16 @@ public class BMemberService {
 		JDBCTemplate.close(conn);
 		
 		return updateMem;
+	}
+
+	public List<String> friendArr() {
+		Connection conn = JDBCTemplate.getConnection();
+		
+		List<String> list = new BMemberDao().friendArr(conn);
+		
+		JDBCTemplate.close(conn);
+		
+		return list;
 	}
 
 }

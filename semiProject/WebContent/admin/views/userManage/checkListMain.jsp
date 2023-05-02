@@ -48,13 +48,12 @@
 					</select>
 				</div>
 				<div>
-					<input type="search" name="search_input" id="search_input" placeholder="검색할 ID를 입력하세요.">
+					<input type="search" name="search" id="search_input" placeholder="검색할 ID를 입력하세요.">
 				</div>
 				<div>
 					<button type="submit" class="custom-btn btn-10">검색</button>
 				</div>
 			</form>
-				<!-- 만약 리스트가 비어있다면 비활성화 하기 조건문  -->
 				<button type="button" id="checkL" class="custom-btn btn-11" onclick="location.href='<%=contextPath%>/important.ck?currentPage=1'">★ Check</button>
 			<div>
 			</div>
@@ -82,19 +81,18 @@
 					</tr>
 				</thead>
 				<tbody>
-						<%for(int i=0; i<list.size(); i++) {%>
-							<tr>
-								<td><%=((BMember)list.get(i)).getUserNo()%></td>
-								<td><%=((BMember)list.get(i)).getUserId() %></td>
-								<td><%=((BMember)list.get(i)).getUserName() %></td>
-								<td><%=((BMember)list.get(i)).getTotalB()%></td>
-								<td><%=((BMember)list.get(i)).getTotalF() %></td>
-								<td><%=((BMember)list.get(i)).getPoint() %></td>
-								<td><%=((BMember)list.get(i)).getCreateDate() %></td>
-								<td><%=((BMember)list.get(i)).getModifyDate() %></td>
-		
-							</tr>
-							<% } %>
+					<%for(int i=0; i<list.size(); i++) {%>
+						<tr>
+							<td><%=((BMember)list.get(i)).getUserNo()%></td>
+							<td><%=((BMember)list.get(i)).getUserId() %></td>
+							<td><%=((BMember)list.get(i)).getUserName() %></td>
+							<td><%=((BMember)list.get(i)).getTotalB()%></td>
+							<td><%=((BMember)list.get(i)).getTotalF() %></td>
+							<td><%=((BMember)list.get(i)).getPoint() %></td>
+							<td><%=((BMember)list.get(i)).getCreateDate() %></td>
+							<td><%=((BMember)list.get(i)).getModifyDate() %></td>
+						</tr>
+					<% } %>
 				</tbody>
 			</table>
 	    <% } else { %>
@@ -102,35 +100,30 @@
 	    <% } %>
     </div>
 	<div>
-	<!-- option값 체크된거 넘어가도록 처리 -->
+	<!-- 페이징처리 -->
 		<% if(pi.getMaxPage()>1) { %>
-			<!-- 페이징처리 -->
 			<% if(pi.getCurrentPage()==1) {%>
-			<button type="button" disabled>&lt;</button>
+				<button type="button" disabled>&lt;</button>
 			<% } else { %>
-			<button type="button"
-				onclick="beforePage();">&lt;</button>
+				<button type="button" onclick="beforePage();">&lt;</button>
 			<% } %>
 			<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
-	
-			<%if(i==pi.getCurrentPage()) {%>
-			<button type="button" disabled><%=pi.getCurrentPage()%></button>
-			<% } else {%>
-			<button type="button" class="btnNum" name="<%=i %>" onclick="pageNum();"><%=i %></button>
+				<%if(i==pi.getCurrentPage()) {%>
+					<button type="button" disabled><%=pi.getCurrentPage()%></button>
+				<% } else {%>
+					<button type="button" class="btnNum" name="<%=i %>" onclick="pageNum();"><%=i %></button>
+				<% } %>
 			<% } %>
-	
-			<% } %>
-	
 			<% if(pi.getMaxPage()!=pi.getCurrentPage()) { %>
-			<button type="button"
-				onclick="afterPage();">&gt;</button>
+				<button type="button" onclick="afterPage();">&gt;</button>
 			<% } else { %>
-			<button type="button" disabled>&gt;</button>
+				<button type="button" disabled>&gt;</button>
 			<% } %>
 		<% } %>
 	</div>
 
 	<script>
+	
 		function selectboxP(){
 	        if($("#search_select option:selected").val()=="1"){
 		        $("#search_input").attr("placeholder","검색할 ID를 입력하세요.");
@@ -168,7 +161,7 @@
 			$.ajax({
 				url : "main.ck",
 				data : {
-					check : "na",
+					check : "na", //ajax로 보낸건지 확인하기위해 데이터 전송
 					option : box,
 					currentPage : "1"
 				},
@@ -196,10 +189,10 @@
 			});
 		});
     	
-    		$("#tab tbody>tr").on("click",function(){ // 동적으로 생긴 tr에도 이벤트를 걸겠다!
-    			var userNo = $(this).children().eq(0).text();
-    			location.href="<%=contextPath %>/update.um?userNo="+userNo;
-    		});
+    	$("#tab tbody>tr").on("click",function(){ // 동적으로 생긴 tr에도 이벤트를 걸겠다!
+    		var userNo = $(this).children().eq(0).text();
+    		location.href="<%=contextPath %>/update.um?userNo="+userNo;
+    	});
    </script>
 </body>
 </html>
