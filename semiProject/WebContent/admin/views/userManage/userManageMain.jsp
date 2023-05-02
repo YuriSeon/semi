@@ -7,6 +7,7 @@
 	PageInfo pi = (PageInfo)request.getAttribute("pi");
 	String sort = (String)request.getAttribute("sort");
 	String select = (String)request.getAttribute("select");
+	
 %>
 <!DOCTYPE html>
 <html>
@@ -120,15 +121,12 @@
 					<button type="button" onclick="beforePage();">&lt;</button>
 				<% } %>
 				<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
-					
 					<%if(i==pi.getCurrentPage()) {%>
 						<button type="button" disabled><%=pi.getCurrentPage()%></button>
 					<% } else {%>
 						<button type="button" class="btnNum" name="<%=i %>" onclick="pageNum();"><%=i %></button>
 					<% } %>
-					
 				<% } %>
-				
 				<% if(pi.getMaxPage()!=pi.getCurrentPage()) { %>
 						<button type="button" onclick="nextPage();return false;">&gt;</button>
 				<% } else { %>
@@ -138,9 +136,13 @@
 		</div>
 
 		<script>
+		// 공통으로 사용되기에 변수에 먼저 담아줌
+		var sort = $("#orderByS option:selected").val();
+		var select = $("#orderByC option:selected").val();
+
 		$(function(){
 			$("#orderByS").children().each(function(){
-				if($(this).val()=="<%=request.getParameter("sort")%>"){
+				if($(this).val()=="<%=sort%>"){
 					$(this).attr("selected", true);
 				} 
 			});
@@ -151,11 +153,9 @@
 			});
 		});
 			
-		var sort = $("#orderByS option:selected").val();
-		var select = $("#orderByC option:selected").val();
 		
 		function beforePage(){
-			location.href="<%=contextPath%>/main.um?currentPage=<%=pi.getCurrentPage()-1%>&sort=<%=sort%>&select=<%=select%>";
+			location.href="<%=contextPath%>/main.um?currentPage=<%=pi.getCurrentPage()-1%>&sort="+sort+"&select="+select;
 		}
 		function nextPage(){
 			location.href="<%=contextPath%>/main.um?currentPage=<%=pi.getCurrentPage()+1%>&sort=" + sort + "&select="+ select;
@@ -166,68 +166,69 @@
 		
 		
 		
-			$(".orderBy").on("change", function() {
-				$.ajax({
-					url : "main.um",
-					data : {
-						status : "Y",
-						sort : sort,
-						select : select,
-						currentPage : "1"
-					},
-					type : "post",
-					success : function(list) {
-						var ascStr = "";
-									for(var i=0;i<list.length; i++){
-									ascStr +="<tr>"
-											+"<td>"+list[i].userNo+"</td>"
-											+"<td>"+list[i].userId+"</td>"
-											+"<td>"+list[i].userName+"</td>"
-											+"<td>"+list[i].phone+"</td>"
-											+"<td>"+list[i].email+"</td>"
-											+"<td>"+list[i].schoolNo+"</td>"
-											i++;
-											ascStr+=
-											"<td>"+list[i].boardCount+"</td>"
-											+"<td>"+list[i].replyCount+"</td>"
-											+"<td>"+list[i].foodBStatus+"</td>"
-											+"</tr>";
-									}
-						
-						var descStr=""; 
-									for(var i=1;i<list.length; i+=3){
-									descStr+="<tr>"
-											+"<td>"+list[i].userNo+"</td>"
-											+"<td>"+list[i].userId+"</td>"
-											+"<td>"+list[i].userName+"</td>"
-											+"<td>"+list[i].phone+"</td>"
-											+"<td>"+list[i].email+"</td>"
-											+"<td>"+list[i].schoolNo+"</td>"
-											i--;
-											descStr+=
-											"<td>"+list[i].boardCount+"</td>"
-											+"<td>"+list[i].replyCount+"</td>"
-											+"<td>"+list[i].foodBStatus+"</td>"
-											+"</tr>";
-									}
-										
-						if(list!=null && sort=="asc"){
-							$("#tab tbody").html(ascStr);
-						} else  {
-							$("#tab tbody").html(descStr);	
-						} 
-							
-					},
-					error : function() {
-						console.log("통신실패");
-					}
-				});
-			});
+		$(".orderBy").on("change", function() {
+			$.ajax({
+				url : "main.um",
+				data : {
+					status : "Y",
+					sort : sort,
+					select : select,
+					currentPage : <%=request.getParameter("currentPage")%>
+				},
+				type : "post",
+				success : function(list) {
+					var ascStr = "";
+								for(var i=0;i<list.length; i++){
+								ascStr +="<tr>"
+										+"<td>"+list[i].userNo+"</td>"
+										+"<td>"+list[i].userId+"</td>"
+										+"<td>"+list[i].userName+"</td>"
+										+"<td>"+list[i].phone+"</td>"
+										+"<td>"+list[i].email+"</td>"
+										+"<td>"+list[i].schoolNo+"</td>"
+									i++;
+								ascStr+="<td>"+list[i].boardCount+"</td>"
+										+"<td>"+list[i].replyCount+"</td>"
+										+"<td>"+list[i].foodBStatus+"</td>"
+										+"</tr>";
+								}
+			
+					var descStr = "";
+								for (var i = 1; i < list.length; i += 3) {
+									descStr +="<tr>"
+										+"<td>"+list[i].userNo+"</td>"
+										+"<td>"+list[i].userId+"</td>"
+										+"<td>"+list[i].userName+"</td>"
+										+"<td>"+list[i].phone+"</td>"
+										+"<td>"+list[i].email+"</td>"
+										+"<td>"+list[i].schoolNo+"</td>"
+									i--;
+								descStr+="<td>"+list[i].boardCount+"</td>"
+										+"<td>"+list[i].replyCount+"</td>"
+										+"<td>"+list[i].foodBStatus+"</td>"
+										+"</tr>";
+								}
+								
+								if (list != null && sort == "asc") {
+									$("#tab tbody").html(ascStr);
+								} else {
+									$("#tab tbody").html(descStr);
+								}
 
-			$("#tab tbody>tr").click(function(){
+							},
+							error : function() {
+								console.log("통신실패");
+							},
+							complete : function() {
+								console.log("통신만 됨");
+							}
+						});
+					});
+
+			$("#tab tbody>tr").click(function() {
 				// console.log($(this).children().eq(0).text());
 				var userNo = $(this).children().eq(0).text();
-				location.href="<%= contextPath%>/update.um?userNo="+userNo;
+				location.href = "<%=contextPath%>/update.um?userNo="+userNo;
 			});
 			
 		</script>

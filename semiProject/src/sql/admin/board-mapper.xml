@@ -110,6 +110,7 @@
 		UPDATE BOARD
 		SET STATUS = 'Y'
 			, MODIFY_DATE = SYSDATE 
+			, REPORT = 0
 		WHERE BOARD_NO = ?
 	</entry>
 	<entry key="updateBoard">

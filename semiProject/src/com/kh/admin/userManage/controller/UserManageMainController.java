@@ -144,6 +144,7 @@ public class UserManageMainController extends HttpServlet {
 
 		
 		new Gson().toJson(list, response.getWriter());
+		
 
 	}
 

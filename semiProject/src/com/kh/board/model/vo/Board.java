@@ -335,6 +335,7 @@ public class Board {
 	public void setFileNo(String fileNo) {
 		this.fileNo = fileNo;
 	}
+
 	public int getReplyCount() {
 		return replyCount;
 	}
@@ -342,6 +343,7 @@ public class Board {
 		this.replyCount = replyCount;
 	}
 	
+
 	
 	
 }
