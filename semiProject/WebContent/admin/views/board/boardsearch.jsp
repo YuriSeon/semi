@@ -11,10 +11,23 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
-p{
-	font-size : 20px;
-	font-weight: bold;
-}
+	p{
+		font-size : 27px;
+		font-weight: bold;
+		margin-top: 200px;
+	}
+	
+	select, input{
+		height: 30px;
+		margin: 0;
+		padding: 0;
+	}
+	#con2{
+		text-align : center;
+	}
+	.btn-8{
+		margin-top: 15%;
+	}
 </style>
 </head>
 <body>
@@ -30,7 +43,7 @@ p{
 						<option name="b-type" value="3">맛집</option>
 					</select>
 					<div>
-						<input type="search" name="search-content" id="">
+						<input type="search" name="search-content" id="input">
 					</div>
 					<div>
 						<button type="submit" class="custom-btn btn-10">검색</button>
@@ -43,6 +56,7 @@ p{
 			<div id="con2">
 				<% if(list!=null && list.isEmpty()) {%>
 					<p>검색어와 일치하는 게시물이 없습니다.</p>
+					<button class='custom-btn btn-8' onclick="location.href='<%=contextPath%>/main.';">이전으로</button>
 				<% } else {%>
 					<table id="tab">
 						<thead>

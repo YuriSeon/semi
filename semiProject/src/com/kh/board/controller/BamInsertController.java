@@ -62,7 +62,6 @@ public class BamInsertController extends HttpServlet {
 			String category = multiRequest.getParameter("category");
 			String title = multiRequest.getParameter("title");
 			String content = multiRequest.getParameter("content");
-			System.out.println(content);
 			String userNo = multiRequest.getParameter("userNo");
 			
 			/*

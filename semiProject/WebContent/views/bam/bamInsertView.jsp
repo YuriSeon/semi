@@ -7,7 +7,7 @@
 %>
 <!DOCTYPE html>
 <html>
-  	<!-- include libraries(jQuery, bootstrap) -->
+  	<!-- 서머노트 쓰기위한 CDN(jQuery, 서머노트cdn) -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <!-- 메뉴바에 있는 jquery와 충돌이 나기 때문에 필요한 js는 $대신 변수를 지정해서 써준다. -->
 	<script > var jb = jQuery.noConflict(); </script>
@@ -55,10 +55,8 @@
             제목 : <input type="text" name="title" id="title" maxlength="20" placeholder="최대길이20" size=45>
         </div>
 		 <br>
-            <!-- <textarea name="content" id="content" class="summernote" cols="30" rows="10" style="resize:none; width: 450px; "></textarea> -->
-			
 			  <textarea id="summernote" name="content"></textarea>
-			
+			  
             <br>
             
             <input type="file" name="upfile">
@@ -70,6 +68,7 @@
             </div>
       </form>
 	</div>
+	<br><br><br>
       <script>
 	    // 메인화면 페이지 로드 함수
 	   $(document).ready(function() {
@@ -91,43 +90,16 @@
 					    // 글머리 기호, 번호매기기, 문단정렬
 					    ['para', ['ul', 'ol', 'paragraph']],
 					    // 줄간격
-					    ['height', ['height']],
+					    ['height', ['height']]
 					    // 그림첨부
-					    ['insert',['picture']],
-					    // 코드보기, 확대해서보기, 도움말
-					    ['view', ['codeview','fullscreen', 'help']]
+					    //['insert',['picture']],
 					  ],
 			  // 추가한 글꼴
 			  fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋음체','바탕체'],
 			  // 추가한 폰트사이즈
 			  fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50'],
-			  callbacks : {
-				  onImageUpload : function(files, editor, welEditable){
-					  for(var i = files.length-1; i>=0; i--){//다중 이미지 업로드 위해서
-					  		console.log(files[i]);
-						  sendImage(files[i],this);
-					  }
-				  }
-			  }
 		  });
 		});
-	    function sendImage(file,el){
-	    	data = new FormData();
-	    	data.append("file",file);
-	    	console.log("1"+file)
-	    	console.log(data);
-	    	$.ajax({
-	    		url: "bamUploadFile.bo",
-	    		type : "post",
-	    		contentType: false,
-	    		data : data,
-	    		processData: false,
-	    		enctype: "multipart/form-data",
-	    		sucess: function(data){
-	    			jb(el).summernote("editor.insertImage",data.url);
-	    		}
-	    	});
-	    }
 </script>
 
 </body>
