@@ -34,6 +34,7 @@ public class BamReportController extends HttpServlet {
 		//신고하는 유저
 		int userNo = Integer.parseInt(request.getParameter("userNo"));
 		
+		//신고 적용
 		int result = new BamService().reportBam(boardNo,userNo);
 		
 		

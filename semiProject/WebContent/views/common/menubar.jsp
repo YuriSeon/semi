@@ -218,26 +218,13 @@
         </nav>
     </div>
     </header>
-    <!--  <table id="table">
-        <tbody>
-          <tr>
-            	<!-- 자기 자신은 클릭 못하게 
-            			닉네임 적힌곳들에 유저 닉네임 넣으시면 됩니다. -->
-			    <%if(loginUser.getUserNick().equals("닉네임")){ %>
-        			<td>닉네임</td>    	
-			    <%}else{ %>
-                	<td><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#myModal" id="userNick">닉네임</a></td>
-			    <%} %>
-			    
-            </tr>
-        </tbody>
-    </table>
     
     <div class="friendList">
     	<table id="frdTb">
-    		<thead style="font-size:19px;">친구 목록
-    			<input type="text" name="searchNick" id="searchf">
-    			<button onclick="friendSearch();">검색</button>
+    		<thead style="font-size:19px;">
+    			<tr><td>친구 목록</td></tr>
+    			<tr><td><input type="text" name="searchNick" id="searchf"><td></tr>
+    			<tr><td><button onclick="friendSearch();">검색</button></td></tr>
     		</thead>
     		<tbody>
     		</tbody>
@@ -320,10 +307,9 @@
      <script >
 	     $("#frdTb tbody").on("click", "tr" , function(){
 // 	    	userNick = $(this).html(); //전역 변수 선언(닉네임 클릭했을때 닉네임 가져옴)
-// 	console.log($(this));
-console.log();
+
 	    	$("#recipient-name").val($(this).text()); //메시지 입력창 닉네임 넣기
-	    	$("#block-name").val(userNick);	//차단 등록창 닉네임 넣기
+	    	$("#block-name").val($(this).text());	//차단 등록창 닉네임 넣기
 	     });
 	     
 	     
@@ -378,7 +364,7 @@ console.log();
 	    	
 	    	var blockContent = $("#block-text").val(); //차단 메모
 	    	//정보 보내기
-			location.href="<%=contextPath%>/msgblock.dm?userNick="+userNick+"&blockContent="+blockContent;	    	
+			location.href="<%=contextPath%>/msgblock.dm?userNick="+$('#block-name').val()+"&blockContent="+blockContent;	    	
 	    }
 	    
 	     

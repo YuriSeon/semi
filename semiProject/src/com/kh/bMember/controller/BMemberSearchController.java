@@ -32,11 +32,7 @@ public class BMemberSearchController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<String> list = new BMemberService().friendArr();
-		System.out.println("들어왔다");
-		for(String s : list) {
-			System.out.println(s.toString());
-		}
-		System.out.println("나갔다");
+		
 		response.setContentType("json/aplication; charset=UTF-8");
 		new Gson().toJson(list,response.getWriter());
 	}
