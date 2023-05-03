@@ -99,6 +99,16 @@
 	INTO CATEGORY_BAM (BOARD_NO,BAM_CATEGORY_NO) VALUES (SEQ_BNO.CURRVAL,?)
 	SELECT * FROM DUAL
 	</entry>
+	<entry key="updateBadBoard">
+	UPDATE USER_CONDITION
+	SET BOARD_FILTERING =BOARD_FILTERING+1
+	WHERE USERNO = ? 
+	</entry>
+	<entry key="updateBadReply">
+	UPDATE USER_CONDITION
+	SET REPLY_FILTERING =REPLY_FILTERING+1
+	WHERE USERNO = ? 
+	</entry>
 	<entry key="insertNoticeBam">
 	<!-- 공지사항 작성 -->
 	INSERT ALL
@@ -211,9 +221,9 @@
 	<!-- 게시글 신고 카운트 -->
 	UPDATE BOARD
 	SET REPORT = REPORT+1
-	,   STATUS = CASE WHEN (REPORT=10) THEN 'N'
+	<!-- ,   STATUS = CASE WHEN (REPORT=10) THEN 'N'
                   ELSE 'Y'
-                  END
+                  END -->
 	WHERE BOARD_NO = ?
 	AND STATUS = 'Y' 
 	</entry>

@@ -2,7 +2,6 @@ package com.kh.board.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,13 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
+import com.kh.board.model.BadWord;
 import com.kh.board.model.BamFileRenamePolicy;
 import com.kh.board.model.service.BamService;
 import com.kh.board.model.vo.Attachment;
-import com.kh.board.model.vo.BamCategory;
 import com.kh.board.model.vo.Board;
 import com.oreilly.servlet.MultipartRequest;
-import com.sun.xml.internal.messaging.saaj.packaging.mime.MultipartDataSource;
 
 /**
  * Servlet implementation class BamInsertController
@@ -87,10 +85,14 @@ public class BamInsertController extends HttpServlet {
 					count++;
 				}
 			}
-			if(count>0) {//필터링에 한번이라도 걸렸다면
-				//여기에 필터링 걸린 횟수 증가 메소드 넣으면 됨
-			}
-			*/
+			 */
+			//욕설 필터링(필터링횟수 업데이트를 위해서 유저번호가 있어야함 !!)
+			//제목과 내용에 욕이 있는지 검사하고옴
+			String arr[] = new BadWord().badWord(title, content);
+			title=arr[0];	//필터링 한 제목
+			content = arr[1]; //필터링 한 내용
+			
+			int count = Integer.parseInt(arr[2]); //욕설이 필터링 되었는지 0이면 욕없음
 			
 			Board b = new Board();
 			b.setBoardType(category); //대나무숲 카테고리 지만 보드타입에 우선 넣어둠
@@ -112,9 +114,9 @@ public class BamInsertController extends HttpServlet {
 			int result;
 			
 			if(!category.equals("4")) {//공지사항이 아니라면
-				result =new BamService().insertBam(b,at);
+				result =new BamService().insertBam(b,at,count);
 			}else {//공지사항이 맞다면
-				result = new BamService().insertNoticeBam(b,at);
+				result = new BamService().insertNoticeBam(b,at,count);
 			}
 			
 			if(result>0) {

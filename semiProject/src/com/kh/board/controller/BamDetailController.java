@@ -43,10 +43,13 @@ public class BamDetailController extends HttpServlet {
 			Board b = new BamService().selectBam(boardNo);
 			//3.첨부파일 조회
 			Attachment at = new BamService().selectAttachment(boardNo);
-			
+			//4.이미지인지 판별하기 위한 확장자명 배열
+			String[] arr = {"JPG","PNG","JPEG","TIFF","AI","EPS"};
+
 			//가져왔으면 보내기
 			request.setAttribute("b", b);
 			request.setAttribute("at", at);
+			request.setAttribute("arr", arr);
 			request.getRequestDispatcher("views/bam/bamDetailView.jsp").forward(request, response);
 		}else {//조회수증가 실패
 			request.setAttribute("errorMsg", "게시글 조회 실패");

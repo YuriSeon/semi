@@ -53,9 +53,9 @@ public class MessageInsertController extends HttpServlet {
 		String acceptUserNo= Integer.toString(new MessageService().selectUserNo(acceptNick));
 		
 		Message msg = new Message();
-		msg.setUserWriter(userNo);
-		msg.setAcceptUser(acceptUserNo);
-		msg.setMsgContent(msgContent);
+		msg.setUserWriter(userNo); //쪽지 보내는 유저 번호
+		msg.setAcceptUser(acceptUserNo);//쪽지 받는 유저 번호
+		msg.setMsgContent(msgContent); //쪽지 내용
 		
 		//차단당했는지 확인하기
 		String block = new MessageService().checkBlock(msg);
