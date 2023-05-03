@@ -749,7 +749,7 @@ public class FoodDao {
 	public int deleteTogether(Connection conn, int bno) {
 		int result = 0;
 		PreparedStatement pstmt = null;
-		String[] str = {"board", "att"}; // 2개다 상태 값 바꿔주자..
+		String[] str = {"board", "att", "tocheck"}; // 2개다 상태 값 바꿔주자..
 		for(int i = 0; i < str.length; i++) {			
 			String sql = prop.getProperty("deleteTogether" + str[i]);
 			try {

@@ -110,7 +110,7 @@ public class FoodTogetherInsert extends HttpServlet {
 		if(result > 0) {
 			response.sendRedirect(request.getContextPath() + "/foodTogether.bo");
 		}else {
-			request.getRequestDispatcher("views/common/error.jap").forward(request, response);
+			request.getRequestDispatcher("views/common/foodTogetherError.jsp").forward(request, response);
 		}
 		
 	}

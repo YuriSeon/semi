@@ -421,6 +421,7 @@ public class BMemberDao {
 		
 		return searchNick;
 	}
+
 	
 	
 

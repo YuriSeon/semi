@@ -56,7 +56,7 @@
   	
   	
   <%if(!list.isEmpty()) {%>
-	<table id="example" class="table table-striped table-bordered" cellspacing="0" align="center"  style="text-align: center; width:80%">
+	<table id="example" class="table table-striped table-bordered" cellspacing="0" align="center"  style="text-align: center; width:80%; border-collapse: collapse;" >
 		<thead>
 			<tr>
 				<th>#</th>
@@ -102,8 +102,8 @@
 		int sec = (showtime%3600)%60;	
 		%>
 		<%if(check == Integer.parseInt(list.get(i).get("boardNo"))){ %>
-			 <tr>
-			 	<td style="background-color:red"><%=list.get(i).get("boardNo") %></td>
+			 <tr style="background-color:pink">
+			 	<td><%=list.get(i).get("boardNo") %></td>
 			 	<td><%=list.get(i).get("boarTitle") %></td>
 			 	<td><%=list.get(i).get("userId") %></td>
 			 	<td><%=list.get(i).get("nowpt")%> / <%=list.get(i).get("person") %></td>

@@ -1,7 +1,9 @@
 package com.kh.bMember.controller;
 
 import java.io.IOException;
+
 import java.io.PrintWriter;
+
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -34,6 +36,7 @@ public class BMemberSearchController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<String> list = new BMemberService().friendArr();
+
 		response.setContentType("json/aplication; charset=UTF-8");
 		new Gson().toJson(list,response.getWriter());
 	}
@@ -42,6 +45,7 @@ public class BMemberSearchController extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 
 	
 		String userNick = request.getParameter("userNick");
@@ -52,5 +56,6 @@ public class BMemberSearchController extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		out.print(searchNick);
 		out.flush();
+
 	}
 }
