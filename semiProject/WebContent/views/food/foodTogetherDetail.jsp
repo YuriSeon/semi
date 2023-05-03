@@ -141,63 +141,7 @@
             <div id="etcbtns"></div>
         </div>
         </form>
-        
-        
-        
-<%-- 	    <form action="<%=contextPath %>/foodTogetherUpdate.bo" method="get"> --%>
-<!--         <table align="center"> -->
-<!--         	<tr> -->
-<!--         		<th>작성자</th> -->
-<%--         		<td><%=map.get("userId") %></td> --%>
-<!--         	</tr> -->
-<!--             <tr> -->
-<!--                 <th style="width:200px;">제목</th> -->
-<%--                 <td><input type="text" name="title" value="<%=map.get("title") %>" readOnly></td> --%>
-<!--             </tr> -->
-<!--             <tr> -->
-<!--                 <th>내용</th> -->
-<%--                 <td><textarea name="content" cols="30" rows="10" style="resize: none;" readOnly><%=map.get("content") %></textarea></td> --%>
-<!--             </tr> -->
-<!--             <tr> -->
-<!--             	<td></td> -->
-<%--             	<td align="center"><img id="miriImg" src='<%=map.get("filePath")  + "/"+ map.get("changeName")%>' style="width:150px; height:150px"></td> --%>
-<!--             </tr> -->
-<!--             <tr> -->
-<!--                 <th>주소</th> -->
-<%--                 <td><input type="text" name="mainAddress" id="mainAddress" value="<%=map.get("mainAddress") %>" readOnly> --%>
-<%--                 <input type="text" name="subAddress" id="subAddress" value="<%=(map.get("subAddress")==null)?"":map.get("subAddress") %>" style="width: 50px;" readOnly></td> --%>
-<!--             </tr> -->
-<!--             <tr id="maptr" align="center" > -->
-<!--             	<td > -->
-<!--                     <div id="map" style="width: 200px; height: 200px;" align="center"></div> -->
-<!--                 </td> -->
-<!--             </tr> -->
-<!--             <tr> -->
-<!--                 <th>모집 인원</th> -->
-<%--                 <td><input type="text" name="person" value="<%=map.get("person") %>명" readOnly></td> --%>
-<!--             </tr> -->
-<!--             <tr> -->
-<!--             	<th>종료시간</th> -->
-<%--             	<td><input type="time" id="timer" name="endTime" value="<%=map.get("endTime") %>" readOnly></td> --%>
-<%--             	<td><input type="hidden" id="bno" name="boardNo" value="<%=map.get("boardNo") %>" readOnly></td> --%>
-<%--             	<td><input type="hidden" name="changeName" value="<%=map.get("changeName") %>"></td> --%>
-<%--             	<td><input type="hidden" name="filePath" value="<%=map.get("filePath") %>"></td> --%>
-<%--             	<td><input type="hidden" name="bno" value="<%=map.get("boardNo") %>"></td> --%>
-<%--             	<td><input type="hidden" name="originName" value="<%=map.get("originName") %>"></td>            	 --%>
-<!--             </tr> -->
-<!--             <tr> -->
-<!-- 	            <td> -->
-<%--     	        	<%if(map.get("userId").equals(((BMember)request.getSession().getAttribute("loginUser")).getUserId())){ %> --%>
-<!--         	    		<button type="submit"> 수정하기 </button> -->
-<%--             			<button type="button" onclick="location.href='<%=contextPath %>/deleteTogether.bo?bno=<%=request.getParameter("bno")%>'">삭제하기</button> --%>
-<%--             		<%} else { %> --%>
-<!--             			<button type="button" id="nadu">참여하기</button> -->
-<%--             		<%} %> --%>
-<!--             		<button type="button" onclick="history.back();">돌아가기</button> -->
-<!--             	</td> -->
-<!--             </tr> -->
-<!--         </table> -->
-<!--     </form> -->
+
     
     <script>
     
@@ -260,8 +204,11 @@
 						this.error(data);
 					}
 					if(data == 1){
-						console.log("참여 이력이 없고 참여 되었다.");
-						$("#nadu").css("color", "red");
+						if(confirm("시간 완료시 닉네임과 전화번호가 공유됩니다.")){
+							$("#nadu").css("color", "red");							
+						}else{
+							alert("참여가 취소 되었습니다.");
+						}
 					}else{
 						alert("이전 참여 이력이 사라집니다.");
 						$("#nadu").css("color", "black");

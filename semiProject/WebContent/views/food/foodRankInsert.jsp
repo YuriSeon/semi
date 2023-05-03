@@ -8,20 +8,90 @@
 		<script src="https://code.jquery.com/jquery-3.6.4.js"integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script> 
 		<script type="text/javascript"src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f91f4c1499628ccd44bb5d41070cb9a1&libraries=services"></script>
 		<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+		<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 	</head>
+	
+	<style>
+	 #fio{
+            width: 800px;
+            height: 700px;
+            box-sizing: border-box;
+        }
+        #fit1,#fit2,#fit5{
+            width: 100%;
+            height: 10%;
+            box-sizing: border-box;
+        }
+        #fit4{
+            width: 100%;
+            height: 15%;
+            box-sizing: border-box;
+        }
+        #fit3{
+            width: 100%;
+            height: 25%;
+            box-sizing: border-box;
+        }
+        #fit6{
+            width: 100%;
+            height: 25%;
+            box-sizing: border-box;
+        }
+        #fit1l, #fit2l, #fit3l, #fit4l, #fit5l{
+            width: 30%;
+            height: 100%;
+            box-sizing: border-box;
+            float: left;
+        }
+        #fit1r, #fit2r, #fit3r, #fit4r, #fit5r{
+            width: 70%;
+            height: 100%;
+            box-sizing: border-box;
+            float: left;
+        }
+        #fit41, #fit42{
+            width: 100%;
+            height: 50%;
+            box-sizing: border-box;
+        }
+        #fit6l, #map{
+            width: 50%;
+            height: 100%;
+            box-sizing: border-box;
+            float: left;
+            border: 1px solid rgb(192, 192, 192);
+        }
+        #fibtn{
+        	width:100%;
+        	height:5%;
+        	box-sizing: border-box;
+        }
+	</style>
 	<body>
 
 		<body>
-			<form action="<%=request.getContextPath()%>/rankInsert.bo" method="post" enctype="multipart/form-data">
-				<table>
-					<tr>
-						<th>*제목</th>
-						<td><input type="text" name="Btitle" required></td>
-					</tr>
-					<tr>
-						<th>*음식 카테고리</th>
-						<td>
-							<select name="foodselect" id="foodselect" onchange="hiddenselect()">
+		<br><br><br><br><br>
+		
+<form action="<%=request.getContextPath()%>/rankInsert.bo" method="post" enctype="multipart/form-data" >
+	<div id="fio" style="margin:auto">
+        <div id="fit1">
+            <div id="fit1l">제목</div>
+            <div id="fit1r"><input type="text" name="Btitle" style="width:100%; height:80%" required></div>
+        </div>
+        <div id="fit2">
+            <div id="fit2l">음식 카테고리</div>
+            <div id="fit2r">
+            	<select name="foodselect" id="foodselect" onchange="hiddenselect()" style="width:98%; height:40%">
 								<!-- 나중에 생각하기.... -->
 								<option value="1">떡볶이</option>
 								<option value="2">김밥</option>
@@ -29,40 +99,40 @@
 								<option value="4">피자</option>
 								<option value="5">파스타</option>
 								<option value="0">기타</option>
-							</select>
-							<input type="text" id="hiddeninput" name="newfood" style="display:none;">
-						</td>
-					</tr>
-					<tr>
-						<th>*내용</th>
-						<td><textarea rows="10" cols="30" name="content" style="resize: none" required></textarea></td>
-					</tr>
-					<tr>
-						<th>*대표 이미지</th>
-						<td>
-							<input type="file" id="insertImg" name="firstImg">
-							<img id="miri" style="display:none;">
-						</td>
-					</tr>
-					<tr>
-						<th>*주소</th>
-						<td><input type="text" id="mainAddress" name="address" required>
-							<input type="hidden" name="saveAddress" id="saveAddress">
-						</td>
-					</tr>
-					<tr>
-						<th>상세 주소</th>
-						<td><input type="text" name="addressDetail" id="iiii"></td>
-					</tr>
-					<tr>
-					<td>
-						<div id="map" style="width: 500px; height: 350px;" tabindex="0" align="center"></div>
-					</td>
-					</tr>
-				</table>
-				
-				<button type="submit">등록하기</button>
-			</form>
+				</select>
+				<input type="text" id="hiddeninput" name="newfood" style="display:none; width:100%; height:40%; margin-top:5px;"placeholder="음식 이름을 입력해주세요.">
+            </div>
+        </div>
+        <div id="fit3">
+            <div id="fit3l">내용</div>
+            <div id="fit3r">
+            <textarea rows="10" cols="30" name="content" style="resize: none; width:100%; height:90%" required></textarea>
+            </div>
+        </div>
+        <div id="fit4">
+            <div id="fit4l">주소</div>
+            <div id="fit4r">
+                <div id="fit41"><input type="text" style="width:100%; height:80%" id="mainAddress" name="address" placeholder="주소를 입력해주세요." required></div>
+                <div id="fit42"><input type="text" style="width:100%; height:80%" name="addressDetail" id="iiii"></div>
+                <input type="hidden" name="saveAddress" id="saveAddress">
+            </div>
+        </div>
+        <div id="fit5">
+            <div id="fit5l">음식사진</div>
+            <div id="fit5r"><input type="file" id="insertImg" name="firstImg" style="width:100%; height:100%;" required ></div>
+        </div>
+        <div id="fit6">
+            <div id="fit6l"><img id="miri" style="display:none; width:100%; height:100%;"></div>
+            <div id="map" tabindex="0" align="center"></div>
+        </div>
+        <div id="fibtn" style="text-align: center; line-height: 3;">
+		    <button type="submit" class="btn btn-success">등록하기</button>
+		    <button type="button" class="btn btn-warning" onclick="location.href='<%=request.getContextPath()%>/foodRanking.bo'">뒤로가기</button>
+        </div>
+    </div>
+</form>
+		
+		
 		</body>
 		<script>
 		
@@ -74,7 +144,7 @@
 			reader.onload = e =>{
 				$("#miri").css("display", "block");
 				$("#miri").attr("src", e.target.result);
-				$("#miri").css("width", "150px").css("height", "150px");
+				$("#miri").css("width", "100%").css("height", "100%");
 			}
 			try{				
 				reader.readAsDataURL(input.files[0])

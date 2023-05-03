@@ -276,7 +276,9 @@ UPDATE ATTACHMENT
 SET STATUS = 'N'
 WHERE BOARD_NO = ?
 </entry>
-
+<entry key="deleteTogethertocheck">
+DELETE FROM TOCHECK WHERE BOARD_NO = ?
+</entry>
 <entry key="updateFoodTogetherB">
 UPDATE BOARD
 SET BOARD_TITLE = ?,

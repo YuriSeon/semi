@@ -305,4 +305,9 @@ public class FoodService {
 		JDBCTemplate.close(conn);
 		return list;
 	}
+
+	public ArrayList<FoodTogether> selectEndTime() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

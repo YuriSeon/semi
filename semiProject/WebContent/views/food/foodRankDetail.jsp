@@ -19,13 +19,6 @@
  	Attachment att = (Attachment)request.getAttribute("att");
  %>
  	<%@include file="../common/menubar.jsp" %>
- 	<h1>상세보기</h1>
- 	
- 	    
- 	
- 	
- 	
- 	
  	
  	<form action="<%=request.getContextPath() %>/foodRankUpdate.bo?bno=<%=request.getParameter("bno")%>" method="get">
  	<input type="hidden" name="helloworld"value="<%=request.getParameter("bno") %>">

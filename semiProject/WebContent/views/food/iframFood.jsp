@@ -58,8 +58,7 @@
         <div class="option">
             <div>
                 <form onsubmit="searchPlaces(); return false;">
-                    키워드 : <input type="text" value="이태원 맛집" id="keyword" size="15" readOnly> 
-<!--                     <button type="submit">검색하기</button>  -->
+                    키워드 : <input type="text" value="" id="keyword" size="15" readOnly> 
                 </form>
             </div>
         </div>
@@ -180,7 +179,7 @@ function displayPlaces(places) {
         (function(marker, title) {
         	kakao.maps.event.addListener(marker, 'click', function() {
         		var ot = "https://map.naver.com/v5/search/" + title
-        		window.open(ot);
+        		window.open(ot,"BreakTime[뭐먹지_naver_map]","width:500, height:500, toolbar=no, menubar=no");
         	});
         	
             kakao.maps.event.addListener(marker, 'mouseover', function() {
@@ -313,7 +312,7 @@ function removeAllChildNods(el) {
 $("#placesList").on("click", "li", function(){
 	var str = $(this)[0].children[1].children[0].innerText; // 목록에서 가져오기
 	var ot = "https://map.naver.com/v5/search/" + str
-	window.open(ot);
+	window.open(ot,"BreakTime[뭐먹지_naver_map]","width:500, height:500, toolbar=no, menubar=no");
 })
 </script>
 </body>
