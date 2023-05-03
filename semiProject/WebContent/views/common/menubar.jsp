@@ -102,10 +102,15 @@
         /* logo 시작 */
         .logo {
         font-size:3rem;
+        width:200px;
+        height:175px;
         display:inline-block;
-        padding:20px;
+        
         
 
+        }
+        .com{
+        box-sizing: border-box;
         }
 
         /* logo 끝 */
@@ -113,7 +118,7 @@
         .logo-bar {
         background-color:white;
         color:black;
-        height: 200px;
+        height: 175px;
         }
 
         /* logo bar 끝 */
@@ -147,12 +152,13 @@
         width: 200px;
     	}
     	.exit{
-    		margin-left:1150px;
-    		margin-top:-45px;
+    		
+    		text-decoration: none;
+            color: darkgrey;
     	}
         .exit a{
-            text-decoration: none;
-            color: darkgrey;
+            margin-left:1150px;
+    		margin-top:-45px;
         }
 
 
@@ -161,12 +167,13 @@
         }
         .nameArea{
 	        margin-left:1050px;
-	        margin-top : -80px;
+	        margin-top : -60px;
 	        margin-bottom: 10px;
 	        font-size:20px;
 	        margin-right:20px;
 	        font-weight:bold;
 	        color:deepskyblue;
+	        text-align:center;
         }
         .friendList{
        		background-color:#F0F8FF;
@@ -218,17 +225,15 @@
     <header class="logo-bar con-min-width">
     <div class="com text-align-center">
         <a href="./" class="logo">
-        <img src="resources/로고_투명배경.png" style="width: 200px;">
+        <img src="resources/밑에자른 로고.png" style="width: 200px; margin-top:0;">
         
         </a>
     </div>
     <div class="nameArea">
-    	<p><%=loginUser.getUserNick() %> 님</p>
-    </div>
-    
-    <div class="exit">
-        <a href="<%=contextPath%>/logout.me">로그아웃</a>
-        <img src="resources/로그아웃_투명.png" style="width: 30px;" alt="">
+    	<span><%=loginUser.getUserNick() %> 님</span>
+    	&nbsp&nbsp&nbsp
+        <a href="<%=contextPath%>/logout.me" class="exit">로그아웃</a>
+        <img src="resources/로그아웃_투명.png" style="width: 30px;" class="exit">
     </div>
     
     </header>
@@ -245,15 +250,15 @@
             </li>
             <li>
             
-            <a href="<--%=contextPath%>/list.vd?currentPage=1" class="block">
-                <i class="fa-brands fa-instagram"></i>
-                <span>릴스</span>
+            <a href="javascript:void(0);" class="block">
+                <i class="fa-solid fa-ban"></i>
+                <span>공사중</span>
             </a>
              
             </li>
             <li>
             <%if(loginUser.getSchool_st().equals("N")){ %>
-            <a href="#" onclick="noSchool();" class="block">
+            <a href="javascript:void(0);" onclick="noSchool();" class="block">
                 <i class="fa-solid fa-user-secret"></i>
                 <span>대나무숲</span>
             </a>

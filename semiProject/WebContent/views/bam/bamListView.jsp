@@ -6,7 +6,6 @@
 	
 %>
 <!DOCTYPE html>
-<script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -16,7 +15,7 @@
             text-align: center;
             font-size: 25px;
             font-weight: bold;
-            margin-top: 100px;
+            margin-top: 50px;
             margin-bottom: 20px;
         }
 		.board-list{			
@@ -132,7 +131,6 @@
 	<%@ include file ="../common/menubar.jsp"%> 
 	  
 	<div class="bam_head" align="center">대나무 숲</div>
-	<br>
 	<div class="layout">
 		<div class="board-list">
 		<br>
@@ -160,9 +158,10 @@
 					</div>
 					<div class="sub">
 						<%if(b.getTypeNo()==1&&b.getBoardWriter().equals("1")){ %> <!-- 작성자 -->
-							<p class="name">관리자</p>										
+							<p class="name"><i class="fa-solid fa-user-secret"></i>관리자</p>										
 						<%}else{ %>
-							<p class="name">익명</p>
+							
+							<p class="name"><img src="resources/bam_files/팬더.png" style="width:40px;">팬더</p>
 						<%} %>					
 						<div class="sub3">
 							<!-- 작성일 -->

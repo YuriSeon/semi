@@ -720,6 +720,7 @@ public class BamDao {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}finally {
+				JDBCTemplate.close(rset);
 				JDBCTemplate.close(pstmt);
 			}
 			return result;
@@ -987,6 +988,49 @@ public class BamDao {
 				e.printStackTrace();
 			}finally {
 				JDBCTemplate.close(pstmt);
+			}
+			return result;
+		}
+
+		//게시판 욕설 필터링 횟수 증가
+		public int updateBadBoard(Connection conn,String userNo) {
+			int result = 0;
+			PreparedStatement pstmt = null;
+			
+			String sql =prop.getProperty("updateBadBoard");
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, Integer.parseInt(userNo));
+				
+				result = pstmt.executeUpdate();
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(pstmt);
+			}
+			return result;
+		}
+
+		public int updateBadReply(Connection conn, String replyWriter) {
+			int result = 0;
+			PreparedStatement pstmt = null;
+			
+			String sql =prop.getProperty("updateBadReply");
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, Integer.parseInt(replyWriter));
+				
+				result = pstmt.executeUpdate();
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(conn);
 			}
 			return result;
 		}
