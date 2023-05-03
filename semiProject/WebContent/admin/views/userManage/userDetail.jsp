@@ -133,6 +133,15 @@ button{
 	</div>
 	    
 		 <script>
+		 
+			// 뒤로가기 버튼 제어하기 -------------------------------------------------------------
+				window.onpopstate = function(event) {
+				    history.pushState(null, null, '<%=request.getHeader("Referer")%>');
+				    location.reload();
+				}
+				history.pushState(null, null, null);
+				// ----------------------------------------------------------------------------
+				
 	 		$("#userUpdate").click(function(){
 	 			$.ajax({
 	 				url:"update.um",

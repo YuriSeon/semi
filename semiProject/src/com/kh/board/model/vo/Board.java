@@ -343,7 +343,14 @@ public class Board {
 		this.replyCount = replyCount;
 	}
 	
-
 	
-	
+	@Override
+	public String toString() {
+		return "Board [boardNo=" + boardNo + ", boardWriter=" + boardWriter + ", boardType=" + boardType
+				+ ", boardTitle=" + boardTitle + ", boardContent=" + boardContent + ", createDate=" + createDate
+				+ ", ModifyDate=" + ModifyDate + ", good=" + good + ", bad=" + bad + ", report=" + report + ", status="
+				+ status + ", count=" + count + ", pointName=" + pointName + ", foodName=" + foodName + ", abbress="
+				+ abbress + ", un=" + un + ", typeNo=" + typeNo + ", fileNo=" + fileNo + ", replyCount=" + replyCount
+				+ "]";
+	}
 }

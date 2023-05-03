@@ -63,12 +63,16 @@ public class BoardMainController extends HttpServlet {
 		// board main 페이지에 들어가면 가장 먼저 나올 공지사항 전체 조회
 		ArrayList<Board> blist = new BoardService().boardList(pi, typeNo);
 		
+		int count = new BoardService().blurListCount(); // 관리가 필요한 게시글이 있는지 확인해 버튼 활성화 여부 위해서 조회
+		
 		if(listCount==0 || !blist.isEmpty()) { // 게시글리스트 총 수가 0이거나 list가 비어있지 않으면 조회 성공 
 			
 			
 			request.setAttribute("blist", blist);
 			
 			request.setAttribute("pi", pi);
+			
+			request.setAttribute("count", count);
 			
 			request.getRequestDispatcher("admin/views/board/boardMain.jsp").forward(request, response);
 			

@@ -241,7 +241,11 @@
     <div class="nameArea">
     	<span><%=loginUser.getUserNick() %> 님</span>
     	&nbsp&nbsp&nbsp
-        <a href="<%=contextPath%>/logout.me" class="exit">로그아웃</a>
+    	<% if(!(loginUser.getPower().equals("A"))) { %>
+        	<a href="<%=contextPath%>/logout.me" class="exit">로그아웃</a>
+        <% } else { %>
+        	<a href="<%=contextPath%>/main.admin" class="exit">관리자 페이지로</a>
+        <% } %>
         <img src="resources/로그아웃_투명.png" style="width: 30px;" class="exit">
     </div>
     
@@ -459,17 +463,10 @@
 	    	 });
 	     }
     
-
-
-	     
 	     function noSchool(){
 	    	 alert("대나무숲은 학교인증을 하셔야 이용 가능합니다.")
 	     };
-	     $("#mymodal").click(function(){
-	    	 var x = event.pageX;
-	    	 var y = event.pageY;
-	    	 console.log("x좌표:"+x+"y좌표:"+y);
-	     });
+	    
 	    function msgBlock(){ //메시지 차단 등록
 	    	
 	    	var blockContent = $("#block-text").val(); //차단 메모

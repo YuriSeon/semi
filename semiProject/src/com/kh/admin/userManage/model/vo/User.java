@@ -1,5 +1,6 @@
 package com.kh.admin.userManage.model.vo;
 
+
 public class User {
 	
 	private int totalUser; // 현재 총 회원 수
@@ -10,6 +11,7 @@ public class User {
 	
 	public User() {
 		super();
+
 	}
 
 	public User(int totalUser, int recentEnroll, int withdraw, int kickOut) {

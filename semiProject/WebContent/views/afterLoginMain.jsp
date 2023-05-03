@@ -155,7 +155,7 @@ body{
       </div>
     </a>
     <a class="card" href="#">
-      <div class="card__background" style="background-image: url(https://images.unsplash.com/photo-1557187666-4fd70cf76254?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60)"></div>
+      <div class="card__background" style="background-image: url(https://m.zerosafety.co.kr/web/product/big/201712/203_shop1_452500.jpg)"></div>
       <div class="card__content">
         <p class="card__category">영상게시판</p>
         <h3 class="card__heading">릴스 영상</h3>
