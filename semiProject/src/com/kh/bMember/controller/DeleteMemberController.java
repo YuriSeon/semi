@@ -38,7 +38,7 @@ public class DeleteMemberController extends HttpServlet {
 		if(result>0) {
 			request.getSession().setAttribute("alertMsg", "다음에 또 만나요!");
 			request.getSession().removeAttribute("loginUser");
-			response.sendRedirect(request.getContextPath()+"/Main.co");
+			response.sendRedirect(request.getContextPath()+"/login.me");
 		}else {
 			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
 		}
