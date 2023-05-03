@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.kh.bMember.model.vo.BMember;
+import com.kh.board.model.BadWord;
 import com.kh.board.model.service.BamService;
 import com.kh.board.model.vo.Reply;
 
@@ -61,14 +62,18 @@ public class BamReplyInsertController extends HttpServlet {
 		//댓글 작성자 번호 
 		String userNo = Integer.toString(((BMember)request.getSession().getAttribute("loginUser")).getUserNo());
 		
-		
+		//욕설 필터링(필터링횟수 업데이트를 위해서 (String)유저번호(Board b 에 담아서)가 있어야함 !!)
+		//제목과 내용에 욕이 있는지 검사하고옴
+		String arr[] = new BadWord().badWord(replyContent);
+		replyContent = arr[0]; //필터링 한 내용
+		int count = Integer.parseInt(arr[1]);
 		
 		Reply r = new Reply();
 		r.setBoardNo(bno);
 		r.setReplyContent(replyContent);
 		r.setReplyWriter(userNo);
 		
-		int result = new BamService().insertReply(r,tno);
+		int result = new BamService().insertReply(r,tno,count);
 		
 		
 		response.getWriter().print(result);

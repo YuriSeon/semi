@@ -36,10 +36,13 @@ public class BamService {
 	}
 
 	//대나무숲 게시글 인서트(작성)
-	public int insertBam(Board b, Attachment at) {
+	public int insertBam(Board b, Attachment at,int count) {
 		Connection conn = JDBCTemplate.getConnection();
 		
 		int result = new BamDao().insertBam(conn,b);
+		if(result>0&&count>0) {//게시글 인서트가 되었고 욕설 필터링이 되었다면
+			result = new BamDao().updateBadBoard(conn, b.getBoardWriter());
+		}
 		int result2=1;
 		if(at!= null) {
 			result2 = new BamDao().insertAttachment(conn,at);
@@ -56,10 +59,13 @@ public class BamService {
 	}
 	
 	//공지사항 작성(인서트)
-	public int insertNoticeBam(Board b, Attachment at) {
+	public int insertNoticeBam(Board b, Attachment at,int count) {
 		Connection conn = JDBCTemplate.getConnection();
 		
 		int result = new BamDao().insertNoticeBam(conn,b);
+		if(result>0&&count>0) {//게시글 인서트가 되었고 욕설 필터링이 되었다면
+			result = new BamDao().updateBadBoard(conn, b.getBoardWriter());
+		}
 		int result2=1;
 		if(at!= null) {
 			result2 = new BamDao().insertAttachment(conn,at);
@@ -133,11 +139,14 @@ public class BamService {
 	}
 
 	//대나무숲 게시글 수정
-	public int updateBam(Board b, Attachment at) {
+	public int updateBam(Board b, Attachment at,int count) {
 		Connection conn = JDBCTemplate.getConnection();
 		//게시글 수정
 		int result = new BamDao().updateBam(conn,b);
 		
+		if(result>0&&count>0) {//게시글 수정이 되었고 욕설 필터링이 되었다면
+			result = new BamDao().updateBadBoard(conn, b.getBoardWriter());
+		}
 		//대나무숲 카테고리 수정
 		int result2 = new BamDao().updateCategory(conn,b);
 		
@@ -153,12 +162,11 @@ public class BamService {
 			}
 		}
 		
+		
 		if(result>0&&result2>0&&result3>0) {
 			JDBCTemplate.commit(conn);
-		
 		}else {
 			JDBCTemplate.rollback(conn);
-			System.out.println("롤백함 ㅠㅠ");
 		}
 		
 		JDBCTemplate.close(conn);
@@ -168,12 +176,15 @@ public class BamService {
 	}
 
 	//댓글 작성(인서트)
-	public int insertReply(Reply r,int tno) {
+	public int insertReply(Reply r,int tno,int count) {
 		Connection conn = JDBCTemplate.getConnection();
 		int result = new BamDao().insertReply(conn,r);
 		
 		if(result>0&&tno!=1) {//댓글이 작성되었고 공지사항이 아니라면 게시글 댓글수 증가
 			result = new BamDao().increaseReplyCount(conn, r.getBoardNo());
+		}
+		if(result>0&&count>0) {//댓글수가 증가 되었고 욕설 필터링이 되었다면
+			result = new BamDao().updateBadReply(conn, r.getReplyWriter());
 		}
 		
 		if(result>0) {
@@ -366,6 +377,8 @@ public class BamService {
 		
 		return r;
 	}
+
+	
 
 
 

@@ -11,8 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
+import com.kh.bMember.model.vo.BMember;
+import com.kh.board.model.BadWord;
 import com.kh.board.model.BamFileRenamePolicy;
-import com.kh.board.model.dao.BamDao;
 import com.kh.board.model.service.BamService;
 import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.Board;
@@ -72,6 +73,18 @@ public class BamUpadteController extends HttpServlet {
 			String content = multiRequest.getParameter("content");
 			String category =multiRequest.getParameter("category");
 			int boardNo = Integer.parseInt(multiRequest.getParameter("boardNo"));
+			BMember loginUser = (BMember)request.getSession().getAttribute("loginUser");
+			String userNo = Integer.toString(loginUser.getUserNo());
+			
+			//욕설 필터링(필터링횟수 업데이트를 위해서 (String)유저번호(Board b 에 담아서)가 있어야함 !!)
+			//제목과 내용에 욕이 있는지 검사하고옴
+			String arr[] = new BadWord().badWord(title, content);
+			title=arr[0];	//필터링 한 제목
+			content = arr[1]; //필터링 한 내용
+			int count = Integer.parseInt(arr[2]); //욕설이 필터링 되었는지 count 0이면 욕없거나 필터에 없는 욕
+			
+			
+			
 			
 			Board b = new Board();
 			
@@ -79,6 +92,7 @@ public class BamUpadteController extends HttpServlet {
 			b.setBoardTitle(title);
 			b.setBoardContent(content);
 			b.setBoardType(category);
+			b.setBoardWriter(userNo);
 			
 			Attachment at = null;
 			
@@ -100,11 +114,10 @@ public class BamUpadteController extends HttpServlet {
 					at.setBoardNo(boardNo);
 				}
 			}
-			int result = new BamService().updateBam(b,at);
-			
+			int result = new BamService().updateBam(b,at,count);
+		
 			if(result>0) {
 				request.setAttribute("alertMsg", "수정완료");
-				
 				response.sendRedirect(request.getContextPath()+"/bamdetail.bo?bno="+boardNo);
 			}else {
 				request.setAttribute("errorMsg", "게시글 수정 실패");

@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="com.kh.board.model.vo.*"%>
+    pageEncoding="UTF-8" import="com.kh.board.model.vo.*,java.util.Arrays"%>
 <%
 	Board b = (Board)request.getAttribute("b");
 	Attachment at = (Attachment)request.getAttribute("at");
-	
+	String[] arr = (String[])request.getAttribute("arr");
 %>
 <!DOCTYPE html>
 <html>
@@ -47,12 +47,12 @@
             text-align: center;
             font-size: 25px;
             font-weight: bold;
-            margin-top: 100px;
+            margin-top: 50px;
             margin-bottom: 20px;
         }
 
         .detail{
-            margin-top: 50px;
+            //margin-top: 50px;
             display: flex;
             margin-left: 10px;
             flex-direction: column;
@@ -138,7 +138,7 @@
             
         }
         .p2{
-            margin-left: -25px;
+            margin-left: -35px;
             margin-top: 30px;
             
         }
@@ -157,20 +157,24 @@
         .check{
         	width:25px;
         }
+        hr{
+        	width:100%;
+        	text-align: center;
+        }
 
     </style>
 </head>
 <body>	
 	<%@ include file ="../common/menubar.jsp"%> 
-          <div class="bam_head" align="center">대나무 숲</div>
-    <hr>
+    <div class="bam_head" align="center">대나무 숲</div>
     <div class="layout">
+    <hr>
         <div class="detail">
             <div class="title">
             	<%if(b.getTypeNo()!=1){//일반게시글이라면 %>
                 <div class="info">
-                      <img src="resources/css/img/baby-girl.png" class="img" alt="">
-                      <p class="p1">익명</p>
+                      <img src="resources/bam_files/팬더.png" class="img" alt="">
+                      <p class="p1">팬더</p>
                       <p class="p2"><%=b.getCreateDate() %></p>                    
                 </div>                    
              	<div class="btitle">
@@ -203,9 +207,19 @@
                 <p class="con">
 					<%=b.getBoardContent() %>
                 </p>
-                <%if(at!=null){ %>
-                <img src="<%=contextPath+at.getFilePath()+"/"+at.getChangeName()%>">
+                <%if(at==null){//첨부파일이 없다면 %>
+                	<br>
+                <%}else if(Arrays.asList(arr).contains(at.getOriginName().substring(at.getOriginName().lastIndexOf(".")+1).toUpperCase())){ %>
+                <!-- 첨부파일에서 확장자명을 뽑아 이미지인지 확인해서 이미지라면 true -->
+                	<img src="<%=contextPath+at.getFilePath()+"/"+at.getChangeName()%>">
+                <%}else{ %>
+                <!-- 이미지가 아니라면 다운로드 할 수 있게 -->
+	                <br>
+	                <p>다운로드</p>
+	                <a href="<%=contextPath + at.getFilePath()+"/"+at.getChangeName()%>" download="<%=at.getChangeName()%>"><%=at.getOriginName() %></a>
                 <%} %>
+                
+                
             </div>
             <br>
             <div class="good">
@@ -280,13 +294,13 @@
                 			var result = ""; 	//댓글 출력위해 빈문자열
                 			var replyWriter;	//댓글 작성자 '익명' 담기위한 변수
                 			for(var i=0; i<rlist.length; i++){ //댓글 작성자 익명 붙이기
-                				replyWriter = "익명";
+                				replyWriter = "팬더";
                 				if(rlist[i].replyWriter==boardWriter){ //댓글작성자 = 게시글 작성자
                 					replyWriter +="(작성자)";
                 				}
                 				
                 				result+="<tr class=retop>"
-                                +'<td rowspan="1"><img src="CSS/resources/img/강아지.jpg" class="img"></td>'
+                                +'<td rowspan="1"><img src="resources/bam_files/팬더.png" class="img"></td>'
                                 +'<td style="text-align: center;" class="p1">'+replyWriter+'<br>'+rlist[i].createDate+'</td>'
                                 +'<td colspan="2" rowspan="1" width="500">'+rlist[i].replyContent+'</td>'
                                 +'<td rowspan="1"><button onclick="deleteReply(this);"value="'+rlist[i].replyNo+'"class="btn btn-danger">삭제</button></td>'
