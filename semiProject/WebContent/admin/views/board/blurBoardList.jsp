@@ -21,7 +21,6 @@
 		text-align: center;
 	}
 	btn-8{
-		
 	}
 </style>
 </head>
@@ -60,7 +59,7 @@
 				</table>
 	        <% } else { %>
 	        	<h1 style="line-height: 500px; text-align: center;">확인 필요한 게시물이 없습니다</h1>
-	        	<button class='custom-btn btn-8' onclick="location.href='<%=contextPath%>/';">메인으로</button>
+	        	<button class='custom-btn btn-8' onclick="location.href='<%=contextPath%>/main.abo?currentPage=1';">메인으로</button>
 	        <% } %>
 	    </div>
     </div>

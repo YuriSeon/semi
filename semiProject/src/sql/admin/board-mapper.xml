@@ -133,8 +133,9 @@
 		WHERE BOARD_NO = ?
 	</entry>
 	<entry key="selectReply">
-		SELECT *
-		FROM REPLY
+		SELECT REPLY_NO, BOARD_NO, REPLY_CONTENT, USER_NICK, R.CREATE_DATE, R.STATUS
+		FROM REPLY R
+		JOIN BMEMBER USING(USERNO)		
 		WHERE BOARD_NO = ?
 	</entry>
 	<entry key="deleteReply">

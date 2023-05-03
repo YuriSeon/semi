@@ -28,7 +28,7 @@
     <%@include file="../common/menubar.jsp"%>
    <div id="wrapper">
 		<div id="bb"><br>
-			<form action="<%=contextPath %>/select.ck" method="post">
+			<form action="<%=contextPath %>/select.ck" method="get">
 				<div id="search_div">
 					<input type="hidden" name="currentPage" value="1">
 					<select id="select" name="select" onchange="selectboxP();">

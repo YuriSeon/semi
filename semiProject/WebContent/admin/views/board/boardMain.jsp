@@ -3,6 +3,7 @@
 <%
 	ArrayList<Board> blist = (ArrayList<Board>)request.getAttribute("blist");	
 	PageInfo pi = (PageInfo)request.getAttribute("pi");
+	int count = (int)request.getAttribute("count");
 %>
 <!DOCTYPE html>
 <html>
@@ -16,11 +17,15 @@
 		margin: 0;
 		padding: 0;
 	}
-	.btn-11{
+	.btn-11 .btn-16{
 		vertical-align: middle;
 		font-size: medium;
 		margin-top: 13px;
 	}
+	.btn-16{
+		margin-top: 12px;
+	}
+	
 	tbody>tr:hover{
 		background-color: rgb(241, 241, 241);
 		cursor: pointer;
@@ -47,7 +52,11 @@
 						<button type="button" class="custom-btn btn-10" onclick="location.href='<%=contextPath%>/insert.abo'">작성하기</button>	
 					</div>
 				</form>
-				<button type="button" class="custom-btn btn-11" id="checkL" onclick="location.href='<%=contextPath%>/blurboard.abo?currentPage=1'">Check★</button>	
+				<% if(count!=0) { %>
+					<button type="button" class="custom-btn btn-11" id="checkL" onclick="location.href='<%=contextPath%>/blurboard.abo?currentPage=1'">Check★</button>	
+				<% } else { %>
+					<button type="button" class="custom-btn btn-16" id="checkL" disabled>Check★</button>
+				<% } %>
 			</div>
 		</div>
 		<br>

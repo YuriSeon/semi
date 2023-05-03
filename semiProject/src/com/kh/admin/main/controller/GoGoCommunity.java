@@ -1,7 +1,6 @@
 package com.kh.admin.main.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,22 +8,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.kh.admin.board.model.service.BoardService;
-import com.kh.admin.userManage.model.service.UserManageService;
+import com.kh.bMember.model.service.BMemberService;
 import com.kh.bMember.model.vo.BMember;
-import com.kh.board.model.vo.Board;
 
 /**
- * Servlet implementation class MainSearchbarController
+ * Servlet implementation class GoGoCommunity
  */
-@WebServlet("/mainSearch.menu")
-public class MainSearchbarController extends HttpServlet {
+@WebServlet("/com.go")
+public class GoGoCommunity extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MainSearchbarController() {
+    public GoGoCommunity() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,28 +31,15 @@ public class MainSearchbarController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		int mPage = Integer.parseInt(request.getParameter("mPage"));
+		String userId = "admin"; 
 		
-		int bPage = Integer.parseInt(request.getParameter("bPage"));
+		String userPwd = "1234";
 		
-		String search = request.getParameter("search");
+		BMember loginUser = new BMemberService().loginMember(userId,userPwd);
+		System.out.println(loginUser);
+		request.getSession().setAttribute("loginUser", loginUser);
 		
-		ArrayList<BMember> mList = new UserManageService().mainSearchUser(search);
-		
-		ArrayList<Board> bList = new BoardService().mainSearchBoard(search);
-
-		request.setAttribute("mList", mList);
-		
-		request.setAttribute("bList", bList);
-		
-		request.setAttribute("search", search);
-		
-		request.setAttribute("mPage", mPage);
-		
-		request.setAttribute("bPage", bPage);
-		
-		request.getRequestDispatcher("admin/views/common/mainSearchResult.jsp").forward(request, response);
-		
+		response.sendRedirect(request.getContextPath()+"/Main.co");
 	}
 
 	/**

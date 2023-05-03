@@ -47,6 +47,7 @@
 				</div>
 			</div>
 		<br>
+		<div id="print">
 		<%if(list!=null && !list.isEmpty()) { %>
 			<table id="tab">
 				<thead>
@@ -97,134 +98,138 @@
 								<td><%=((BMember)list.get(i)).getSchoolNo() %></td>
 								<% } %>
 								<% i--; %>
-								
 								<%if(list.get(i) instanceof UserManage) {%>
 									<td><%=((UserManage)list.get(i)).getBoardCount() %></td>
 									<td><%=((UserManage)list.get(i)).getReplyCount() %></td>
 									<td><%=((UserManage)list.get(i)).getFoodBStatus() %></td>
-									<% } %>
-								</tr>
-							<% } %>
+								<% } %>
+							</tr>
 						<% } %>
-						</tbody>
-					</table>
-				<% } else { %>
-						<p>조회내역이 없습니다.</p>
-				<% } %>
-			</div>
-		<div>
-			<!-- 페이징처리 -->
-			<% if(pi.getMaxPage() > 1) { %>
-				<% if(pi.getCurrentPage()==1) {%>
-					<button type="button" disabled>&lt;</button>
-				<% } else { %>
-					<button type="button" onclick="beforePage();">&lt;</button>
-				<% } %>
-				<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
-					<%if(i==pi.getCurrentPage()) {%>
-						<button type="button" disabled><%=pi.getCurrentPage()%></button>
-					<% } else {%>
-						<button type="button" class="btnNum" name="<%=i %>" onclick="pageNum();"><%=i %></button>
 					<% } %>
-				<% } %>
-				<% if(pi.getMaxPage()!=pi.getCurrentPage()) { %>
-						<button type="button" onclick="nextPage();return false;">&gt;</button>
-				<% } else { %>
-					<button type="button" disabled>&gt;</button>
-				<% } %> 
+					</tbody>
+				</table>
+			<% } else { %>
+				<p>조회내역이 없습니다.</p>
 			<% } %>
 		</div>
+	</div>
+	<div>
+		<!-- 페이징처리 -->
+		<% if(pi.getMaxPage() > 1) { %>
+			<% if(pi.getCurrentPage()==1) {%>
+				<button type="button" disabled>&lt;</button>
+			<% } else { %>
+				<button type="button" onclick="beforePage();">&lt;</button>
+			<% } %>
+			<% for(int i=pi.getStartPage(); i<=pi.getEndPage(); i++) { %>
+				<%if(i==pi.getCurrentPage()) {%>
+					<button type="button" disabled><%=pi.getCurrentPage()%></button>
+				<% } else {%>
+					<button type="button" class="btnNum" name="<%=i %>" onclick="pageNum();"><%=i %></button>
+				<% } %>
+			<% } %>
+			<% if(pi.getMaxPage()!=pi.getCurrentPage()) { %>
+					<button type="button" onclick="nextPage();return false;">&gt;</button>
+			<% } else { %>
+				<button type="button" disabled>&gt;</button>
+			<% } %> 
+		<% } %>
+	</div>
 
 		<script>
-		// 공통으로 사용되기에 변수에 먼저 담아줌
-		var sort = $("#orderByS option:selected").val();
-		var select = $("#orderByC option:selected").val();
-
-		$(function(){
-			$("#orderByS").children().each(function(){
-				if($(this).val()=="<%=sort%>"){
-					$(this).attr("selected", true);
-				} 
+	
+			$(function(){
+				$("#orderByS").children().each(function(){
+					if($(this).val()=="<%=sort%>"){
+						$(this).attr("selected", true);
+					} 
+				});
+				$("#orderByC").children().each(function(){
+					if($(this).val()=="<%=select%>"){
+						$(this).attr("selected", true);
+					} 
+				});
 			});
-			$("#orderByC").children().each(function(){
-				if($(this).val()=="<%=select%>"){
-					$(this).attr("selected", true);
-				} 
+				
+			
+			function beforePage(){
+				location.href="<%=contextPath%>/main.um?currentPage=<%=pi.getCurrentPage()-1%>&sort="+$('#orderByS option:selected').val()+"&select="+$('#orderByC option:selected').val();
+			}
+			function nextPage(){
+				location.href="<%=contextPath%>/main.um?currentPage=<%=pi.getCurrentPage()+1%>&sort=" +$('#orderByS option:selected').val()+ "&select="+$('#orderByC option:selected').val();
+			}
+			function pageNum(){
+				location.href="<%=contextPath%>/main.um?currentPage=" + $('.btnNum').attr('name') + "&sort=" +$('#orderByS option:selected').val()+ "&select=" +$('#orderByC option:selected').val();
+			}
+			
+			
+			
+			$(".orderBy").on("change", function() {
+				
+				var sort = $("#orderByS option:selected").val();
+				var select = $("#orderByC option:selected").val();
+				
+				$.ajax({
+					url : "main.um",
+					data : {
+						status : "Y",
+						sort :  sort,
+						select : select,
+						currentPage : <%=request.getParameter("currentPage")%>
+					},
+					type : "post",
+					success : function(list) {
+						
+						var table = "<table id='tab'><thead><tr><th>NO</th><th>ID</th><th>Name</th>"
+							+"<th>Phone</th><th>Email</th><th>University</th><th>Upload Board</th>"
+							+"<th>Upload Reply</th><th>Food Rank</th></tr></thead><tbody>";
+							
+						var ascStr = "";
+									for(var i=0;i<list.length; i++){
+										ascStr +="<tr>"
+												+"<td>"+list[i].userNo+"</td>"
+												+"<td>"+list[i].userId+"</td>"
+												+"<td>"+list[i].userName+"</td>"
+												+"<td>"+list[i].phone+"</td>"
+												+"<td>"+list[i].email+"</td>"
+												+"<td>"+list[i].schoolNo+"</td>"
+											i++;
+										ascStr+="<td>"+list[i].boardCount+"</td>"
+												+"<td>"+list[i].replyCount+"</td>"
+												+"<td>"+list[i].foodBStatus+"</td>"
+												+"</tr>";
+									}
+				
+						var descStr = "";
+									for (var i = 1; i < list.length; i += 3) {
+										descStr +="<tr>"
+												+"<td>"+list[i].userNo+"</td>"
+												+"<td>"+list[i].userId+"</td>"
+												+"<td>"+list[i].userName+"</td>"
+												+"<td>"+list[i].phone+"</td>"
+												+"<td>"+list[i].email+"</td>"
+												+"<td>"+list[i].schoolNo+"</td>"
+										i--;
+										descStr+="<td>"+list[i].boardCount+"</td>"
+												+"<td>"+list[i].replyCount+"</td>"
+												+"<td>"+list[i].foodBStatus+"</td>"
+												+"</tr>";
+									}
+						var end = "</tbody></table>"
+									
+						if (list != null && sort == "asc") {
+							$("#print").html(table+ascStr+end);
+						} else {
+							$("#print").html(table+descStr+end);
+						}
+	
+					},
+					error : function() {
+						console.log("통신실패");
+					},
+				});
 			});
-		});
-			
-		
-		function beforePage(){
-			location.href="<%=contextPath%>/main.um?currentPage=<%=pi.getCurrentPage()-1%>&sort="+sort+"&select="+select;
-		}
-		function nextPage(){
-			location.href="<%=contextPath%>/main.um?currentPage=<%=pi.getCurrentPage()+1%>&sort=" + sort + "&select="+ select;
-		}
-		function pageNum(){
-			location.href="<%=contextPath%>/main.um?currentPage=" + $('.btnNum').attr('name') + "&sort=" + sort + "&select=" +select;
-		}
-		
-		
-		
-		$(".orderBy").on("change", function() {
-			$.ajax({
-				url : "main.um",
-				data : {
-					status : "Y",
-					sort : sort,
-					select : select,
-					currentPage : <%=request.getParameter("currentPage")%>
-				},
-				type : "post",
-				success : function(list) {
-					var ascStr = "";
-								for(var i=0;i<list.length; i++){
-								ascStr +="<tr>"
-										+"<td>"+list[i].userNo+"</td>"
-										+"<td>"+list[i].userId+"</td>"
-										+"<td>"+list[i].userName+"</td>"
-										+"<td>"+list[i].phone+"</td>"
-										+"<td>"+list[i].email+"</td>"
-										+"<td>"+list[i].schoolNo+"</td>"
-									i++;
-								ascStr+="<td>"+list[i].boardCount+"</td>"
-										+"<td>"+list[i].replyCount+"</td>"
-										+"<td>"+list[i].foodBStatus+"</td>"
-										+"</tr>";
-								}
-			
-					var descStr = "";
-								for (var i = 1; i < list.length; i += 3) {
-									descStr +="<tr>"
-										+"<td>"+list[i].userNo+"</td>"
-										+"<td>"+list[i].userId+"</td>"
-										+"<td>"+list[i].userName+"</td>"
-										+"<td>"+list[i].phone+"</td>"
-										+"<td>"+list[i].email+"</td>"
-										+"<td>"+list[i].schoolNo+"</td>"
-									i--;
-								descStr+="<td>"+list[i].boardCount+"</td>"
-										+"<td>"+list[i].replyCount+"</td>"
-										+"<td>"+list[i].foodBStatus+"</td>"
-										+"</tr>";
-								}
-								
-								if (list != null && sort == "asc") {
-									$("#tab tbody").html(ascStr);
-								} else {
-									$("#tab tbody").html(descStr);
-								}
-
-							},
-							error : function() {
-								console.log("통신실패");
-							},
-							complete : function() {
-								console.log("통신만 됨");
-							}
-						});
-					});
-
+	
 			$("#tab tbody>tr").click(function() {
 				// console.log($(this).children().eq(0).text());
 				var userNo = $(this).children().eq(0).text();

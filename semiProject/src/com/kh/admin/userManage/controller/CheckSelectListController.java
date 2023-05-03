@@ -33,20 +33,10 @@ public class CheckSelectListController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		request.setCharacterEncoding("UTF-8");
-		
 		int select = Integer.parseInt(request.getParameter("select"));
 		
 		String search = request.getParameter("search");
-
+		
 		int listCount = new UserManageService().ckCount(select, search);
 		
 		int currentPage = Integer.parseInt(request.getParameter("currentPage"));
@@ -71,11 +61,11 @@ public class CheckSelectListController extends HttpServlet {
 		ArrayList<BMember> list = new UserManageService().checkSelectList(pi, select, search);
 		
 		if(listCount!=0 && list.isEmpty()) { // 리스트의 수가 0이 아닌데 list가 비어있을 땐 조회실패
-
+			
 			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
-		
+			
 		} else { // 조회 성공
-
+			
 			request.setAttribute("list", list);
 			
 			request.setAttribute("pi", pi);
@@ -88,6 +78,13 @@ public class CheckSelectListController extends HttpServlet {
 			
 		}
 		
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 		
 	}
 
