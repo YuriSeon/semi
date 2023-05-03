@@ -91,7 +91,7 @@
 			  minHeight:null,
 			  maxheight:null,
 			  lang: "ko-KR",
-			  placeholder:"내용 입력",
+			  placeholder:"사진은 밑에 첨부파일로 넣어주세요.",
 			  toolbar: [
 					    // 글꼴 설정
 					    ['fontname', ['fontname']],

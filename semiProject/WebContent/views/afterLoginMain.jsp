@@ -152,7 +152,8 @@ body{
         <p class="card__category">익명게시판</p>
         <h3 class="card__heading">대나무숲</h3>
       </div>
-    </li>
+    
+    </a>
     <!-- 시간에 따라 메인 페이지 중 음식 사진 변경 -->
     <%
     	Date d = new Date();
