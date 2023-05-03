@@ -34,11 +34,6 @@ public class BMemberSearchController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<String> list = new BMemberService().friendArr();
-<<<<<<< HEAD
-
-=======
-		
->>>>>>> b6a934874e8e8cd81f364c89657c98c72e759221
 		response.setContentType("json/aplication; charset=UTF-8");
 		new Gson().toJson(list,response.getWriter());
 	}
