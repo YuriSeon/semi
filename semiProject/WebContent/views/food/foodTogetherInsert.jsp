@@ -139,7 +139,7 @@
             		<div id="map" style="width: 100%; height: 100%;" align="center" ></div>
             	</div>
         </div>
-        <div id="fitbtn" style="text-align: center;">
+        <div id="fitbtn" style="text-align: center; line-height: 3">
             <button type="submit" class="btn btn-success">등록하기</button>
             <button type="button" class="btn btn-warning" onclick="location.href='<%=request.getContextPath()%>/foodTogether.bo'">뒤로가기</button>
         </div>

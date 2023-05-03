@@ -80,7 +80,7 @@
 	<body>
 
 		<body>
-		<br><br><br><br><br>
+		<%@ include file="../common/menubar.jsp" %>
 		
 <form action="<%=request.getContextPath()%>/rankInsert.bo" method="post" enctype="multipart/form-data" >
 	<div id="fio" style="margin:auto">

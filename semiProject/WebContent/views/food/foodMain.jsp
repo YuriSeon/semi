@@ -255,7 +255,7 @@ body {
 		
 				
 	<div id="UserShowPage">
-		<div id ="topmargin"></div>
+<!-- 		<div id ="topmargin"></div> -->
 		<div id="left">
 			<div id="foodrankbtn" style="background-image: url(https://ceoimg.cdn.baemin.com/ceoimg-ym4g/i/2023/4/12/01gxscxbnb37gspcrt41cva8cr.jpg); background-size:100% 100%;" onclick="location.href='<%=request.getContextPath()%>/foodRanking.bo'">
 			</div>

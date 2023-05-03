@@ -25,6 +25,7 @@
 	int maxpage = 0;
 %>
 <body>
+<%@ include file="../common/menubar.jsp" %>
 	<div style="text-align:center;">	
 		<a href="<%=request.getContextPath()%>/rankInsert.bo" class="btn btn-primary">글작성</a>
 		<a href="<%=request.getContextPath()%>/foodmain.bo" class="btn btn-warning">홈으로 이동</a>

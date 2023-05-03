@@ -9,7 +9,84 @@
 	integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
 	crossorigin="anonymous"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f91f4c1499628ccd44bb5d41070cb9a1&libraries=services"></script>
-
+    <style>
+       #fio{
+            width: 800px;
+            height: 700px;
+            box-sizing: border-box;
+        }
+        #writeri{
+            width: 100%;
+            height: 5%;
+        }
+        #fit1,#fit2,#fit5{
+            width: 100%;
+            height: 10%;
+            box-sizing: border-box;
+        }
+        #fit4{
+            width: 100%;
+            height: 15%;
+            box-sizing: border-box;
+        }
+        #fit3{
+            width: 100%;
+            height: 20%;
+            box-sizing: border-box;
+        }
+        #fit6{
+            width: 100%;
+            height: 30%;
+            box-sizing: border-box;
+        }
+        #fit1l, #fit2l, #fit3l, #fit4l, #fit5l{
+            width: 30%;
+            height: 100%;
+            box-sizing: border-box;
+            float: left;
+        }
+        #fit1r, #fit2r, #fit3r, #fit4r, #fit5r,#fit22{
+            width: 70%;
+            height: 100%;
+            box-sizing: border-box;
+            float: left;
+        }
+        #fit41, #fit42{
+            width: 100%;
+            height: 50%;
+            box-sizing: border-box;
+        }
+        #fit6l, #fit6r{
+            width: 50%;
+            height: 100%;
+            border: 1px solid rgb(192, 192, 192);
+            box-sizing: border-box;
+            float: left;
+        }
+        #fit21{
+            width: 30%;
+            height: 100%;
+            float: left;
+            box-sizing: border-box;
+        }
+        #w1{
+            width: 30%;
+            height: 100%;
+            float: left;
+            box-sizing: border-box;
+        }
+        #w2{
+            width: 70%;
+            height: 100%;
+            float: left;
+            box-sizing: border-box;
+        }
+        #button3, #userbtn{
+        	width:100%;
+        	height:5%;
+        	box-sizing:border-box;
+        }
+    </style>
 </head>
 <body>
  <%
@@ -20,59 +97,133 @@
  %>
  	<%@include file="../common/menubar.jsp" %>
  	
+ 	
  	<form action="<%=request.getContextPath() %>/foodRankUpdate.bo?bno=<%=request.getParameter("bno")%>" method="get">
- 	<input type="hidden" name="helloworld"value="<%=request.getParameter("bno") %>">
- 	<input type="hidden" name="imgname"value="<%=att.getChangeName() %>">
-	<table id = "table-area">
-		<%if(m.getUserId().equals(b.getBoardWriter())){ %>
-		<tr>
-			<th>작성자 : </th>
-			<td>본인</td>
-		</tr>
-		<%} else { %>
-		<tr>
-			<th>작성자 : </th>
-			<td><%=b.getBoardWriter() %> </td>
-		</tr>
-		<%} %>
-		<tr>
-			<th>제목</th>
-			<td><input type="text" name="Btitle" value="<%=b.getBoardTitle() %>" readOnly></td>
-		</tr>
-		<tr>
-			<th>메뉴</th>
-			<td><input type="text" name="foodCate" value="<%=b.getFoodName()%>" readOnly></td>
-		</tr>
-		<tr>
-			<th>내용</th>
-			<td><textarea rows="10" cols="30" name="content"
-					style="resize: none" readOnly><%=b.getBoardContent() %></textarea></td>
-		</tr>
-		<tr>
-			<th>음식 사진 </th>
-			<td>
-				<img alt="대표이미지" src="<%=contextPath+att.getFilePath()+"/"+att.getChangeName()%>" id="mainImg" name="mainImg" style="width:150px; height:150px;">
-			</td>
-		</tr>
-		<tr>
-			<th>주소</th>
-			<td><input type="text" id="address" name="address1" value="<%=b.getAbbress() %>" readOnly></td>
-		</tr>
+ 	<div id="fio" style="margin:auto; ">
+ 		<input type="hidden" name="helloworld"value="<%=request.getParameter("bno") %>">
+ 		<input type="hidden" name="imgname"value="<%=att.getChangeName() %>">
+        <div id="writeri">
+            <div id="w1" style="font-size: 18px; font-weight: 1000; text-align: center; line-height: 2;">작성자</div>
+            <%if(m.getUserId().equals(b.getBoardWriter())){ %>
+            	<div id="w2" style="font-size: 18px; font-weight: 1000; text-align: center; line-height: 2;">나</div>
+            <%} else { %>
+            	<div id="w2" style="font-size: 18px; font-weight: 1000; text-align: center; line-height: 2;"><%=b.getBoardWriter() %></div>            	
+            <%} %>
+        </div>
+        <div id="fit1">
+            <div id="fit1l" style="font-size: 18px; font-weight: 1000; text-align: center; line-height: 3.5;">제목</div>
+            <div id="fit1r"><input style="width:100%; height:80%" type="text" name="Btitle" value="<%=b.getBoardTitle() %>" readOnly></div>
+        </div>
+        <div id="fit2">
+            <div id="fit21" style="font-size: 18px; font-weight: 1000; text-align: center; line-height: 3.5;">메뉴</div>
+            <div id="fit22"><input type="text" style="width:100%; height:80%" name="foodCate" value="<%=b.getFoodName()%>" readOnly></div>
+        </div>
+        <div id="fit3">
+            <div id="fit3l" style="font-size: 18px; font-weight: 1000; text-align: center; line-height: 7.5;">내용</div>
+            <div id="fit3r"><textarea rows="10" cols="30" name="content" style="resize: none; width:100%; height:80%;" readOnly><%=b.getBoardContent() %></textarea></div>
+        </div>
+        <div id="fit4">
+            <div id="fit4l" style="font-size: 18px; font-weight: 1000; text-align: center; line-height: 6;">주소</div>
+            <div id="fit4r">
+                <div id="fit41"><input type="text" style="width:100%; height:80%" id="address" name="address1" value="<%=b.getAbbress() %>" readOnly></div>
+                <div id="fit42"></div>
+            </div>
+        </div>
+<!--         <div id="fit5"> -->
+<!--             <div id="fit5l" style="font-size: 18px; font-weight: 1000; text-align: center; line-height: 3.5;">첨부파일</div> -->
+<!--             <div id="fit5r"></div> -->
+<!--         </div> -->
+        <div id="fit6">
+            <div id="fit6l">
+				<img alt="대표이미지" src="<%=contextPath+att.getFilePath()+"/"+att.getChangeName()%>" id="mainImg" name="mainImg" style="width:100%; height:100%;">
+			</div>
+			<div id="fit6r">
+	            <div id="map" style="align:center;width:100%;height:100%;"></div>
+			</div>
+        </div>
+        
+        <div id="button3" style="text-align: center; margin-top:3px;">
+			<button type="button" id="goodbtn" class="btn btn-success">추천 <%=b.getGood() %></button>
+			<button type="button" id="badbtn" class="btn btn-warning">비추천 <%=b.getBad() %></button>
+			<button type="button" id="reportbtn" class="btn btn-danger">신고 <%=b.getReport() %></button>
+		</div>
+		<div id="userbtn" style="text-align: center; margin-top:5px;">
+			<%if(m != null && m.getUserNo() == b.getUn()){ %>
+			<button type="submit" class="btn btn-info">수정하기</button>
+			<button type="button" class="btn btn-dark" onclick="location.href='<%=request.getContextPath()%>/foodRankDelete.bo?bno=<%=request.getParameter("bno")%>'">삭제하기</button>
+			<%} %>
+			<button type="button" class="btn btn-secondary" onclick="history.back();">목록보기</button>
+		</div>
+    </div>
+    </form>
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+<%--  	<form action="<%=request.getContextPath() %>/foodRankUpdate.bo?bno=<%=request.getParameter("bno")%>" method="get"> --%>
+<%--  	<input type="hidden" name="helloworld"value="<%=request.getParameter("bno") %>"> --%>
+<%--  	<input type="hidden" name="imgname"value="<%=att.getChangeName() %>"> --%>
+<!-- 	<table id = "table-area"> -->
+<%-- 		<%if(m.getUserId().equals(b.getBoardWriter())){ %> --%>
+<!-- 		<tr> -->
+<!-- 			<th>작성자 : </th> -->
+<!-- 			<td>본인</td> -->
+<!-- 		</tr> -->
+<%-- 		<%} else { %> --%>
+<!-- 		<tr> -->
+<!-- 			<th>작성자 : </th> -->
+<%-- 			<td><%=b.getBoardWriter() %> </td> --%>
+<!-- 		</tr> -->
+<%-- 		<%} %> --%>
+<!-- 		<tr> -->
+<!-- 			<th>제목</th> -->
+<%-- 			<td><input type="text" name="Btitle" value="<%=b.getBoardTitle() %>" readOnly></td> --%>
+<!-- 		</tr> -->
+<!-- 		<tr> -->
+<!-- 			<th>메뉴</th> -->
+<%-- 			<td><input type="text" name="foodCate" value="<%=b.getFoodName()%>" readOnly></td> --%>
+<!-- 		</tr> -->
+<!-- 		<tr> -->
+<!-- 			<th>내용</th> -->
+<!-- 			<td><textarea rows="10" cols="30" name="content" -->
+<%-- 					style="resize: none" readOnly><%=b.getBoardContent() %></textarea></td> --%>
+<!-- 		</tr> -->
+<!-- 		<tr> -->
+<!-- 			<th>음식 사진 </th> -->
+<!-- 			<td> -->
+<%-- 				<img alt="대표이미지" src="<%=contextPath+att.getFilePath()+"/"+att.getChangeName()%>" id="mainImg" name="mainImg" style="width:150px; height:150px;"> --%>
+<!-- 			</td> -->
+<!-- 		</tr> -->
+<!-- 		<tr> -->
+<!-- 			<th>주소</th> -->
+<%-- 			<td><input type="text" id="address" name="address1" value="<%=b.getAbbress() %>" readOnly></td> --%>
+<!-- 		</tr> -->
 	
-	</table>
+<!-- 	</table> -->
 	
-	<%if(!b.getAbbress().equals("")){ %>
-	<div id="map" style="align:center;width:500px;height:350px;"></div>
-	<%} %>
-	<br><br>
+<%-- 	<%if(!b.getAbbress().equals("")){ %> --%>
+<!-- 	<div id="map" style="align:center;width:500px;height:350px;"></div> -->
+<%-- 	<%} %> --%>
+<!-- 	<br><br> -->
 	
 	
-	<div id="button3">
-	<button type="button" id="goodbtn">추천 <%=b.getGood() %></button>
+<!-- 	<div id="button3"> -->
+<%-- 	<button type="button" id="goodbtn">추천 <%=b.getGood() %></button> --%>
 	
-	<button type="button" id="badbtn">비추천 <%=b.getBad() %></button>
-	<button type="button" id="reportbtn">신고 <%=b.getReport() %></button>
-	</div>
+<%-- 	<button type="button" id="badbtn">비추천 <%=b.getBad() %></button> --%>
+<%-- 	<button type="button" id="reportbtn">신고 <%=b.getReport() %></button> --%>
+<!-- 	</div> -->
 	
 	<script>
 	
@@ -146,14 +297,14 @@
 	
 	
 	
-	<%if(m != null && m.getUserNo() == b.getUn()){ %>
-	<button type="submit">수정하기</button>
-	<button type="button" onclick="location.href='<%=request.getContextPath()%>/foodRankDelete.bo?bno=<%=request.getParameter("bno")%>'">삭제하기</button>
-	<%} %>
+<%-- 	<%if(m != null && m.getUserNo() == b.getUn()){ %> --%>
+<!-- 	<button type="submit">수정하기</button> -->
+<%-- 	<button type="button" onclick="location.href='<%=request.getContextPath()%>/foodRankDelete.bo?bno=<%=request.getParameter("bno")%>'">삭제하기</button> --%>
+<%-- 	<%} %> --%>
 	
-	<!-- <button type="button" onclick="location.href='<%=request.getHeader("Referer")%>'">목록보기</button> -->
-	<button type="button" onclick="history.back();">목록보기</button>
-	</form>
+<%-- 	<!-- <button type="button" onclick="location.href='<%=request.getHeader("Referer")%>'">목록보기</button> --> --%>
+<!-- 	<button type="button" onclick="history.back();">목록보기</button> -->
+<!-- 	</form> -->
 <script>
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = {
