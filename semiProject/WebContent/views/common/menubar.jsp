@@ -146,7 +146,10 @@
         #myModal{
         width: 200px;
     	}
-    
+    	.exit{
+    		margin-left:1150px;
+    		margin-top:-45px;
+    	}
         .exit a{
             text-decoration: none;
             color: darkgrey;
@@ -223,7 +226,7 @@
     	<p><%=loginUser.getUserNick() %> 님</p>
     </div>
     
-        <div class="exit">
+    <div class="exit">
         <a href="<%=contextPath%>/logout.me">로그아웃</a>
         <img src="resources/로그아웃_투명.png" style="width: 30px;" alt="">
     </div>
@@ -271,56 +274,25 @@
         </nav>
     </div>
     </header>
-
-
-    <!--  <table id="table">
-        <tbody>
-          <tr>
-            	<!-- 자기 자신은 클릭 못하게 
-            			닉네임 적힌곳들에 유저 닉네임 넣으시면 됩니다. -->
-			    <!-- <%if(loginUser.getUserNick().equals("닉네임")){ %>
-        			<td>닉네임</td>    	
-			    <%}else{ %>
-                	<td><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#myModal" id="userNick">닉네임</a></td>
-			    <%} %>
-			    
-            </tr>
-        </tbody>
-    </table> -->
-    
-    <div class="friendList">
-    	<table id="frdTb">
-    		<thead>
-    		<tr>
-    			<td>
-    			<p class="frdHd">친구 목록</p>
-    			</td>
-    		</tr>  		
-    		<tr>
-    			<td>
-    			<input type="text" name="searchNick" id="searchf">
-    			</td>
-    		</tr>
-    		<tr>
-    			<td>
-    			<button class="frdBtn" onclick="friendSearch();">검색</button>
-    			</td>
-    		</tr>	
-
-
     
     <div class="friendList">
     	<table id="frdTb">
     		<thead style="font-size:19px;">
-    			<tr><td>친구 목록</td></tr>
-    			<tr><td><input type="text" name="searchNick" id="searchf"><td></tr>
-
-    		</thead>
-    		<tbody>
-    		</tbody>
-    		
-
-
+	    		<tr>
+	    			<td>
+	    			<p class="frdHd">친구 목록</p>
+	    			</td>
+	    		</tr>  		
+	    		<tr>
+	    			<td>
+	    			<input type="text" name="searchNick" id="searchf">
+	    			</td>
+	    		</tr>
+	    		<tr>
+	    			<td>
+	    			<button class="frdBtn" onclick="friendSearch();">검색</button>
+	    			</td>
+	    		</tr>	
     		</thead>
     		<tbody>
     		</tbody>
@@ -403,17 +375,10 @@
     
      <script >
 	     $("#frdTb tbody").on("click", "tr" , function(){
-// 	    	userNick = $(this).html(); //전역 변수 선언(닉네임 클릭했을때 닉네임 가져옴)
-
 	    	$("#recipient-name").val($(this).text()); //메시지 입력창 닉네임 넣기
 	    	$("#block-name").val($(this).text());	//차단 등록창 닉네임 넣기
 	     });
 	     
-	     
-
-	     $(function(){
-// 	    	 console.log("ajax");
-
 	     $(document).ready(function(){
 	    	 friendList(); // 초기화면에 친구목록 보여주기
 	    	    $("#searchf").focus(function(){ //커서올리면 보여주기
@@ -421,14 +386,13 @@
 	    	    });
 	    	});
 	     
+	     
 	     function friendList(){//친구 목록 불러오기
 
 	    	 $.ajax({
 	    		 url: "friendList.me",
 	    		 success:function(list){
 	    			 var result = "";
-
-// 	    			 console.log(list);
 
 
 	    			 for(var i=0; i<list.length; i++){
@@ -443,17 +407,11 @@
 	    		 }
 	    	 });
 
-	     })
-	     function friendSearch(){
-	    	 $.ajax({
-
 	     }
-	     
-	     
-	     
+	 	     	     
 	     function friendSearch(){
 	    	    var searchValue = $("#searchf").val();
-	    	    if(searchValue === ''){
+	    	    if(searchValue == ''){//원래 ===
 	    	        friendList();
 	    	        return;
 	    	    }
@@ -466,17 +424,6 @@
 	    		 data:{
 	    			 userNick:$("#searchf").val()
 	    		 },
-
-	    		 success: function(arr){
-	    			 var result = "";
-	    			 for(var i=0; i<list.length; i++){
-	    				 result = "<tr>"
-	    					 +"<td><a href='javascript:void(0)' data-bs-toggle=modal data-bs-target=#myModal id="+list[i]+">"+list[i]+"</a></td>"
-	    				 		+"</tr>"
-	    			 }
-	    			 $("frdTb").html(result);
-	    			 $("#searchf").val("");
-
 	    		 success : function(response){
 	    			 if(response == ""){
 	    				 alert("조회하신 회원이 없습니다.");
@@ -495,12 +442,9 @@
 	    			 alert("목록 불러오기 실패");
 	    		 }
 
-	    	 })
-	     }
-	     
-
 	    	 });
 	     }
+    
 
 
 	     
@@ -534,14 +478,15 @@
      					$("#message-text").val("");
      					
      				}else{//인서트 실패or차단 당함
-     					alert("차단 당하셨습니다.")
+     					alert("차단 당하셨습니다.");
      				}
      			},
      			error:function(){
-     				console.log("통신실패")
+     				console.log("통신실패");
      			}
      		});
      	}
+	    
      </script>
 
 </body>
