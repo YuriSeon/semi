@@ -77,7 +77,7 @@
 			  minHeight:null,
 			  maxheight:null,
 			  lang: "ko-KR",//한글 안되면 UTF-8로 해봄
-			  placeholder:"사진의 크기는 ?mb까지 최대 3개까지 넣으실 수 있습니다.",
+			  placeholder:"사진은 밑에 첨부파일로 넣어주세요.",
 			  toolbar: [
 					    // 글꼴 설정
 					    ['fontname', ['fontname']],
