@@ -1,6 +1,12 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="java.util.*"%>
+    pageEncoding="UTF-8" import="java.util.*,com.kh.bMember.model.vo.BMember"%>
+<%
+	//로그인 유저 정보
+	BMember loginUser = (BMember)session.getAttribute("loginUser");
+	//알람 메세지
+	String alertMsg = (String)session.getAttribute("alertMsg");
+%>    
 <!DOCTYPE html>
 <html>
 <head>
@@ -128,12 +134,21 @@ body{
 </style>
 </head>
 <body>
+<script>
+		//script태그 내에서도 스크립틀릿과 같은 jsp요소를 사용할 수 있다.
+		var msg = "<%=alertMsg%>"; //성공적으로 로그인 되었습니다 / null
+		if(msg !="null"){
+			alert(msg);
+			//알람메세지 한번 띄웠으면 지워주기 지우지 않으면 매번 menubar.jsp가 열릴때마다 알림뜸
+			<%session.removeAttribute("alertMsg");%>
+		}
+	</script>
 <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
 
 <section class="hero-section">
   <div class="card-grid">
     <a class="card" href="<%=request.getContextPath()%>/list.me?currentPage=1">
-      <div class="card__background" style="background-image: url(https://images.unsplash.com/photo-1557177324-56c542165309?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80)"></div>
+      <div class="card__background" style="background-image: url(https://ichef.bbci.co.uk/images/ic/1008xn/p0dpqs67.jpg)"></div>
       <div class="card__content">
         <p class="card__category">MyPage</p>
         <h3 class="card__heading">마이페이지</h3>
@@ -146,8 +161,12 @@ body{
         <h3 class="card__heading">릴스 영상</h3>
       </div>
     </a>
+    <%if(loginUser.getSchool_st().equals("N")){ %>
+	<a class="card" href="#">
+    <%}else{ %>
     <a class="card" href="<%=request.getContextPath()%>/bamlist.bo?currentPage=1">
-      <div class="card__background" style="background-image: url(https://images.unsplash.com/photo-1556680262-9990363a3e6d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60)"></div>
+    <%} %>
+      <div class="card__background" style="background-image: url(https://png.pngtree.com/background/20211215/original/pngtree-outdoor-daytime-bamboo-forest-and-green-bamboo-leaves-photography-map-with-picture-image_1501224.jpg)"></div>
       <div class="card__content">
         <p class="card__category">익명게시판</p>
         <h3 class="card__heading">대나무숲</h3>
