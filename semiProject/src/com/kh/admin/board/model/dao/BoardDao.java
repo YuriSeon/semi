@@ -367,7 +367,6 @@ public class BoardDao {
 						, rset.getInt("BAD")
 						, rset.getInt("REPORT")
 						, rset.getInt("COUNT"));
-				System.out.println(b);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -563,7 +562,7 @@ public class BoardDao {
 			while(rset.next()) {
 				list.add(new Reply(rset.getInt("REPLY_NO")
 									, rset.getInt("BOARD_NO")
-									, rset.getString("USERNO")
+									, rset.getString("USER_NICK")
 									, rset.getString("REPLY_CONTENT")
 									, rset.getDate("CREATE_DATE")
 									, rset.getString("STATUS")));

@@ -861,25 +861,24 @@ background: linear-gradient(0deg, rgba(0,172,238,1) 0%, rgba(2,126,251,1) 100%);
 	</a> <a href="<%=contextPath %>/main.um?currentPage=1"> <i class="fas fa-user"></i><span>User_Manage</span>
 	</a> <a href="<%=contextPath %>/main.ck?option=1&currentPage=1"> <i class="fas fa-star"></i> <span>CheckList</span>
 	</a> <a href="<%=contextPath %>/main.bl?currentPage=1"> <i class="fas fa-poo"></i> <span>BlackList</span>
-	</a> <a href="<%=contextPath %>/Main.co"> <i class="fas fa-heart"></i> <span>Go community</span>
+	</a> <a href="<%=contextPath %>/com.go"> <i class="fas fa-heart"></i> <span>Go community</span>
 	</a> <a href="<%=contextPath %>/logout.me"> <i class="fas fa-home" style="color: rgb(255, 164, 178);"></i> <span id="ho">♥퇴근합시다♥</span>
 		</a>
 	</div>
 	<div id="head">
 		<form action="<%=contextPath %>/mainSearch.menu" method="get">
 			<div id="cover">
-				<form method="get" action="<%=contextPath %>/mainSearch.menu">
-					<div class="tb">
-						<div class="td"><input type="text" name="search" placeholder="검색어를 입력하세요." required></div>
-						<div class="td" id="s-cover">
-							<button type="submit">
-								<div id="s-circle"></div>
-				<!-- <div id="logo">
-			<a hr -->				<span></span>
-							</button>
-						</div>
+				<div class="tb">
+					<input type="hidden" name="bPage" value="1">
+					<input type="hidden" name="mPage" value="1">
+					<div class="td"><input type="text" name="search" placeholder="검색어를 입력하세요." required></div>
+					<div class="td" id="s-cover">
+						<button type="submit">
+						<div id="s-circle"></div>
+						<span></span>
+						</button>
 					</div>
-				</form>
+				</div>
 			</div>
 		</form>
 	</div>
