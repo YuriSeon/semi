@@ -416,7 +416,7 @@ body {
 	    	$("#imgarea").css("display", "none");
 	    	$("#iframarea").css("display", "block");  
 	    	let str = "<iframe id='inlineFrameExample' style='width:640px; height:520px;' src='<%=request.getContextPath() %>/views/food/iframFood.jsp'></ifram>";
-	  		$("#iframarea").html(str);    	
+	  		$("#iframarea").html(str); // div영역에 ifram을 띄워준다.
     	}else{
 	    	$("#imgarea").css("display", "block");
 	    	let str = "<iframe id='inlineFrameExample' style='width:640px; height:520px;' src='<%=request.getContextPath() %>/views/food/iframFood.jsp'></ifram>";

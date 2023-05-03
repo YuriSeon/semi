@@ -171,30 +171,25 @@
 			
 			window.onload = function () {
 				document.getElementById("mainAddress").addEventListener("click",function () { 
-							// 지도 오픈
 							new daum.Postcode(
-								{	oncomplete: function (data) { // 주소 선택시 자동으로 입력
-									var dongaddress = ""; // 모두 지번으로 받을꺼다.
+								{	oncomplete: function (data) { 
+									var dongaddress = ""; // 도로명과 지번 중 어느것이 나올지 모르기 때문에 모든 지번으로 통일하기 위해 수정
 									if(data.autoJibunAddress == ""){
 										dongaddress = data.jibunAddress;
 									}else{
 										dongaddress = data.autoJibunAddress;
 									}
-									console.log(dongaddress);
-									console.log(data);
 													document.getElementById("mainAddress").value = data.address; // 주소 넣기
 													document.getElementById("saveAddress").value = dongaddress;
-													
-													document.querySelector("input[name=addressDetail]").focus(); //상세입력 포커싱
+													document.querySelector("input[name=addressDetail]").focus(); 
 			 									}
 								}).open();
-						})
-				// 이벤트 2개 걸기 (tab키로 작성시)
+						});
+				// 같은 곳에 이벤트를 2개 걸어서 각각 상황에 맞는 이벤트가 실행되게 수정
 				document.getElementById("mainAddress").addEventListener("keyup", function () { 
-							// 지도 오픈
 							new daum.Postcode(
-								{	oncomplete: function (data) { //선택시 입력값 세팅
-									var dongaddress = ""; // 모두 지번으로 받을꺼다.
+								{	oncomplete: function (data) { 
+									var dongaddress = ""; // 도로명과 지번 중 어느것이 나올지 모르기 때문에 모든 지번으로 통일하기 위해 수정
 									if(data.autoJibunAddress == ""){
 										dongaddress = data.jibunAddress;
 									}else{
@@ -203,7 +198,7 @@
 													document.getElementById("saveAddress").value = dongaddress;
 													document.querySelector("input[name=addressDetail]").focus(); 
 												
-								}}).open() // 한번만 실행할꺼다.
+								}}.open()) // tab키로 이동시에도 똑같이 실행되게 만들었다.
 			});
 
 			$("#iiii").on("focusin", function () {
