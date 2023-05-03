@@ -158,7 +158,7 @@
 					</div>
 					<div class="sub">
 						<%if(b.getTypeNo()==1&&b.getBoardWriter().equals("1")){ %> <!-- 작성자 -->
-							<p class="name"><i class="fa-solid fa-user-secret"></i>관리자</p>										
+							<p class="name"><i class="fa-solid fa-user-secret fa-2x"></i>관리자</p>										
 						<%}else{ %>
 							
 							<p class="name"><img src="resources/bam_files/팬더.png" style="width:40px;">팬더</p>

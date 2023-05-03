@@ -56,7 +56,6 @@ public class MessageBlockController extends HttpServlet {
 			//여기 지금은 대나무숲 리스트로 보내지만 차단관리 페이지만들면 거기로 보내거나 원래 있던 페이지로 가야할듯
 			response.sendRedirect(request.getContextPath()+"/bamlist.bo?currentPage=1");
 		}else {//메시지 차단 등록 실패
-			System.out.println("차단 실패");
 			request.getSession().setAttribute("alertMsg", "이미 차단 되어있습니다.");
 			response.sendRedirect(request.getContextPath()+"/bamlist.bo?currentPage=1");
 		}

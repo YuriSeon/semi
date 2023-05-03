@@ -95,8 +95,9 @@
         .content{
             width: 800px;
             font-size: 14px;
+            word-break:break-all;
         }
-
+        
         .goodbtn{
             width:70px;
             height: 50px;          
@@ -182,7 +183,7 @@
                  </div>
 				<%}else{//공지사항이라면 %> 
 				<div class="info">
-                      <img src="resources/css/img/baby-girl.png" class="img" alt="">
+                      <i class="fa-solid fa-user-secret fa-3x"></i>
                       <p class="p1">관리자</p>
                       <p class="p2"><%=b.getCreateDate() %></p>                    
                 </div>                    
@@ -204,9 +205,9 @@
             <hr>
 
             <div class="content">
-                <p class="con">
+                
 					<%=b.getBoardContent() %>
-                </p>
+                
                 <%if(at==null){//첨부파일이 없다면 %>
                 	<br>
                 <%}else if(Arrays.asList(arr).contains(at.getOriginName().substring(at.getOriginName().lastIndexOf(".")+1).toUpperCase())){ %>
@@ -215,12 +216,12 @@
                 <%}else{ %>
                 <!-- 이미지가 아니라면 다운로드 할 수 있게 -->
 	                <br>
-	                <p>다운로드</p>
+	                <br>
 	                <a href="<%=contextPath + at.getFilePath()+"/"+at.getChangeName()%>" download="<%=at.getChangeName()%>"><%=at.getOriginName() %></a>
                 <%} %>
                 
                 
-            </div>
+                	</div>
             <br>
             <div class="good">
                 <button class="goodbtn" onclick="boardGood();">추천</button>
