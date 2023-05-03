@@ -65,7 +65,7 @@ public class FoodTogetherInsert extends HttpServlet {
 		String title = multiRequest.getParameter("title");
 		String content = multiRequest.getParameter("content");
 		String mainAddress = multiRequest.getParameter("mainAddress");
-		String subAddress = multiRequest.getParameter("subAddress").trim();
+		String subAddress = multiRequest.getParameter("subAddress");
 		if(subAddress == null) {
 			subAddress = "";
 		}

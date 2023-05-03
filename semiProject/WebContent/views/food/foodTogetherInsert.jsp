@@ -115,13 +115,15 @@
         </div>
         <div id="fit5">
             <div id="fit5l" style="font-size: 18px; font-weight: 1000;text-align: center; line-height: 3;">음식사진</div>
-         <%if(request.getAttribute("img") == null){ %>
-            <div id="fit5r">
-        		<input type="file" id="togetherImg" name="togetherImg" style="width:100%; height:100%" required>
+         		<%if(request.getAttribute("img") == null){ %>
+           			 <div id="fit5r">
+        		<input type="file" id="togetherImg" name="togetherImg" style="width:100%; height:100%" value="<%=((String)request.getAttribute("origin")) %>" required> 
+<%--         		<input type="hidden" name="togetherImg"  style="width:100%; height:100% value="<%=((String)request.getAttribute("origin")) %>">       		 --%>
             </div>
         <%} else { %>
         	<div id="fit5r">
-        		<input type="file" id="togetherImg" name="togetherImg" style="width:100%; height:100%" value="C:\\fakepath\\<%=((String)request.getAttribute("origin")) %>" required>
+        		<input type="file" id="togetherImg" name="togetherImg" style="width:100%; height:100%" readOnly>
+        		<input type="hidden" name="originName"  style="width:100%; height:100% value="<%=((String)request.getAttribute("origin")) %>">
             </div>
         <%} %>
         </div>
