@@ -119,6 +119,15 @@
 		<% } %>	
 	</div>
     <script>
+    
+	 // 뒤로가기 버튼 제어하기 -------------------------------------------------------------
+		window.onpopstate = function(event) {
+		    history.pushState(null, null, '<%=request.getHeader("Referer")%>');
+		    location.reload();
+		}
+		history.pushState(null, null, null);
+		// ----------------------------------------------------------------------------
+	
     	$(".btn-14").on("click", function(){
     		var userNo = $(this).attr("name");
     		$.ajax({

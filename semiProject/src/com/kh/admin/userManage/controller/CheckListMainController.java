@@ -61,9 +61,13 @@ public class CheckListMainController extends HttpServlet {
 		PageInfo pi = new PageInfo(listCount, currentPage, startPage, endPage, boardLimit, pageLimit, maxPage);
 		
 		ArrayList<BMember> list = new UserManageService().checkListRecent(pi, option);
+		
+		int count = new UserManageService().importantCount(); // 체크 필요한 회원 버튼 활성화 여부 위해서 조회
 
 		if(list.isEmpty()) {
+			
 			request.setAttribute("errorMsg", "회원 조회 실패");
+			
 			request.getRequestDispatcher("views/common/error.jsp").forward(request, response);
 			
 		} else {
@@ -71,16 +75,20 @@ public class CheckListMainController extends HttpServlet {
 			if(request.getParameter("check")==null) {
 				
 				request.setAttribute("list", list);
+				
 				request.setAttribute("pi", pi);
+				
+				request.setAttribute("count", count);
+				
 				request.getRequestDispatcher("admin/views/userManage/checkListMain.jsp").forward(request, response);
 				
 			} else {
+				
 				response.setContentType("json/application; charset=UTF8");
+				
 				new Gson().toJson(list, response.getWriter());
 			}
-			
 		}
-	
 	}
 
 	/**

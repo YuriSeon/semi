@@ -53,14 +53,14 @@ public class LoginController extends HttpServlet {
 				response.sendRedirect(request.getContextPath()+"/main.admin");
 			} else if(loginUser.getStatus().contains("K")) {
 				request.getSession().setAttribute("alertMsg", "강제탈퇴된 회원이라 커뮤니티 이용 및 재가입이 불가능합니다.");
+				response.sendRedirect(request.getContextPath());
 			} else if(loginUser.getStatus().equals("N")) {
 				request.getSession().setAttribute("alertMsg", "탈퇴하신 회원입니다. 커뮤니티 이용을 원하시면 재가입을 해주세요.");
+				response.sendRedirect(request.getContextPath());
 			}else {//메인페이지 이동
 				request.getSession().setAttribute("loginUser", loginUser);
 				request.getSession().setAttribute("alertMsg", "로그인 성공");
 				response.sendRedirect(request.getContextPath()+"/Main.co");
-
-				
 			}
 		}else {
 			request.setAttribute("errorMsg", "로그인 실패하였습니다.");

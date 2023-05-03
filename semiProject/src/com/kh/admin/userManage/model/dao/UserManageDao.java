@@ -722,6 +722,7 @@ public class UserManageDao {
 			rset = pstmt.executeQuery();
 			
 			while(rset.next()) {
+				
 				BMember b = new BMember();
 				
 				b.setUserNo(rset.getInt("USERNO"));
@@ -733,7 +734,6 @@ public class UserManageDao {
 				
 				list.add(b);
 			}
-			System.out.println(list);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

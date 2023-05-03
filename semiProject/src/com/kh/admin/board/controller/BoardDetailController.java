@@ -54,7 +54,6 @@ public class BoardDetailController extends HttpServlet {
 			if(!rList.isEmpty()) {
 				request.setAttribute("rList", rList);
 			}
-			System.out.println(b);
 			request.getRequestDispatcher("admin/views/board/boardDetail.jsp").forward(request, response);
 			
 		} else {

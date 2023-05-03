@@ -133,6 +133,7 @@ word-spacing: 100vw;
 }
 td{
 padding:2px;
+color : white;
 
 }
 
@@ -222,7 +223,7 @@ padding:2px;
     </div>
   </li>
   <a class="card" href="<%=contextPath %>/main.ck?option=1&currentPage=1">
-    <div class="card__background"  style="background-image: url(https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMDA5MDlfMTQ2%2FMDAxNTk5NjYwNTA4NjM1.4GMprjPN0zYr-ToL_iv9vrNah0EBCFYY1xnKitTBgD0g.KGC6VtZNixzr4WFjfl2usp4BtWmCsujiBDD77ANU7eMg.JPEG.syl9725%2F%25C3%25BC%25C5%25A9.jpg&type=a340)"></div>
+    <div class="card__background"  style="background-image: url(https://cdn.pixabay.com/photo/2017/11/13/11/45/checklist-2945401__480.jpg)"></div>
     <div class="card__content">
       <br><br>
       <h3 class="card__heading">체크 리스트</h3>

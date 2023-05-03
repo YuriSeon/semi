@@ -26,7 +26,7 @@
         text-align: center;
     }
     td{
-        width: 60%;
+     
         background-color : white;
     }
     input[type=radio]{
@@ -34,7 +34,7 @@
     	
     }
     #btnbtn{
-    	margin-top:20px;
+    	margin-top:30px;
         text-align: center;
         
     }
@@ -43,8 +43,8 @@
   		height: 25px;
     }
 	#tab{
-		border:1px solid black;
-	}
+        vertical-align : middle;   
+    }
     table *{
         box-sizing: border-box;
     }
@@ -54,18 +54,25 @@
     img{
     	width:50px;
     }
+    .replyContent{
+    	width : 400px;
+    }
+    #tr5{
+    	font-size : 13px;
+    }
     
 </style>
 </head>
 <body>
 <%@include file="../common/menubar.jsp" %>
+
     <div id="wrapper">
         <div id="bb">
-            <br><br>
+            <br><br><br><br><br>
             <table>
                 <tr id="tr1">
-                    <th>게시판 종류</th>
-                    <td> 
+                    <th >게시판 종류</th>
+                    <td colspan="3"> 
                         <div>
  	                  		<input type="hidden" name="bno" value="<%=b.getBoardNo()%>">
                            	<input type="radio" name="board_type" id="bam" value="대나무숲" disabled>대나무숲
@@ -76,14 +83,14 @@
                </tr>
                <tr id="tr2">
                    <th>제목</th>
-                   <td>
-                       <input type="text" name="title" id="title" value="<%=b.getBoardTitle()%>">
+                   <td colspan="3">
+                       <input type="text" name="title" id="title" value="<%=b.getBoardTitle()%>" readonly>
                    </td>
                </tr>
                <tr id="tr3">
                    <th>내용</th>
-                    <td>
-                        <div><textarea name="content" id="content" cols="30" rows="8" style="resize: none;"><%=b.getBoardContent() %></textarea></div>
+                    <td colspan="3">
+                        <div><textarea name="content" id="content" cols="30" rows="8" style="resize: none;" readonly><%=b.getBoardContent() %></textarea></div>
                     </td>
                 </tr>
                 <tr id="tr4">
@@ -91,27 +98,29 @@
                     <% if(a!=null) { %>
                         <td>
                         파일명 : <%=a.getFilePath()+a.getChangeName() %> 
-                        <img src="<%=contextPath+a.getFilePath()+a.getChangeName()%>" >
+                        <img src="<%=contextPath+a.getFilePath()%>/<%=a.getChangeName()%>" >
                         </td>
                     <% } else { %> 
-                        <td style="background-color:white;"> 첨부된 파일이 없습니다.</td>
+                        <td style="background-color:white;" colspan="3"> 첨부된 파일이 없습니다.</td>
                     <% } %>   
                 </tr>
                	<tr>
-               		<th colspan="2">댓글</th>
+               		<th colspan="4">댓글</th>
                	</tr>
-                <tr id="tr5">
                 <% if(rList!=null && !(rList.isEmpty())) {%>
                     <% for(int i=0; i<rList.size(); i++) {%>
-                        <td colspan="2">
-                                <td><%=rList.get(i).getReplyWriter() %></td>
-                                <td><input type="text" name="replyCount" id="replyCount" value="<%=rList.get(i).getReplyContent() %>"></td>
-                        </td>
+		                <tr id="tr5">
+		                	<td><%=rList.get(i).getReplyNo() %></td>
+	                        <td><%=rList.get(i).getReplyWriter() %></td>
+	                        <td class="replyContent"><input type="text" name="replyCount" id="replyCount" value="<%=rList.get(i).getReplyContent() %>" readonly></td>
+		                	<td ><%=rList.get(i).getCreateDate() %></td>
+		                </tr>
 	                <% } %>
                 <% } else { %>
-                	<td colspan="2" style="height:150px;">작성된 댓글이 없습니다.</td>
+                	<tr>
+                		<td colspan="2" style="height:150px;">작성된 댓글이 없습니다.</td>
+                	</tr>
                 <% } %>
-                </tr>
             </table>
 	       <div id="btnbtn">
 	            <button type="button" class="custom-btn btn-9" onclick="history.back();">뒤로가기</button>
@@ -121,12 +130,22 @@
         </div>
     </div>
 	<script>
+	
+		// 뒤로가기 버튼 제어하기 -------------------------------------------------------------
+		window.onpopstate = function(event) {
+		    history.pushState(null, null, '<%=request.getHeader("Referer")%>');
+		    location.reload();
+		}
+		history.pushState(null, null, null);
+		// ----------------------------------------------------------------------------
+	
 		var bno = "<%=b.getBoardNo()%>";
 
 		$(function(){
 			$("input[type=radio]").each(function(){
 				if($(this).val()=='<%=b.getBoardType()%>') {
 					$(this).attr("checked", true);
+					console.log(this);
 				}
 			});
 		});

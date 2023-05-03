@@ -1,6 +1,7 @@
-package com.kh.bMember.controller;
+package com.kh.admin.main.controller;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,16 +12,16 @@ import com.kh.bMember.model.service.BMemberService;
 import com.kh.bMember.model.vo.BMember;
 
 /**
- * Servlet implementation class DeleteMemberController
+ * Servlet implementation class GoGoCommunity
  */
-@WebServlet("/deleteMem.me")
-public class DeleteMemberController extends HttpServlet {
+@WebServlet("/com.go")
+public class GoGoCommunity extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public DeleteMemberController() {
+    public GoGoCommunity() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -30,18 +31,15 @@ public class DeleteMemberController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String userId = ((BMember)request.getSession().getAttribute("loginUser")).getUserId();
-		String userPwd = ((BMember)request.getSession().getAttribute("loginUser")).getUserPwd();
+		String userId = "admin"; 
 		
-		int result = new BMemberService().deleteMember(userId,userPwd);
-		System.out.println(result);
-		if(result>0) {
-			request.getSession().setAttribute("alertMsg", "다음에 또 만나요!");
-			request.getSession().removeAttribute("loginUser");
-			response.sendRedirect(request.getContextPath()+"/login.me");
-		}else {
-			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
-		}
+		String userPwd = "1234";
+		
+		BMember loginUser = new BMemberService().loginMember(userId,userPwd);
+		System.out.println(loginUser);
+		request.getSession().setAttribute("loginUser", loginUser);
+		
+		response.sendRedirect(request.getContextPath()+"/Main.co");
 	}
 
 	/**

@@ -218,6 +218,15 @@
     </style>
 </head>
 <body>
+	<script>
+		//script태그 내에서도 스크립틀릿과 같은 jsp요소를 사용할 수 있다.
+		var msg = "<%=alertMsg%>"; //성공적으로 로그인 되었습니다 / null
+		if(msg !="null"){
+			alert(msg);
+			//알람메세지 한번 띄웠으면 지워주기 지우지 않으면 매번 menubar.jsp가 열릴때마다 알림뜸
+			<%session.removeAttribute("alertMsg");%>
+		}
+	</script>
     <!-- font-awsome load -->
     <script src="https://kit.fontawesome.com/d093edb2d8.js" crossorigin="anonymous"></script>
 
@@ -232,7 +241,11 @@
     <div class="nameArea">
     	<span><%=loginUser.getUserNick() %> 님</span>
     	&nbsp&nbsp&nbsp
-        <a href="<%=contextPath%>/logout.me" class="exit">로그아웃</a>
+    	<% if(!(loginUser.getPower().equals("A"))) { %>
+        	<a href="<%=contextPath%>/logout.me" class="exit">로그아웃</a>
+        <% } else { %>
+        	<a href="<%=contextPath%>/main.admin" class="exit">관리자 페이지로</a>
+        <% } %>
         <img src="resources/로그아웃_투명.png" style="width: 30px;" class="exit">
     </div>
     

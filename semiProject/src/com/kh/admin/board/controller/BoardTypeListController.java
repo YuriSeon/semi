@@ -58,11 +58,14 @@ public class BoardTypeListController extends HttpServlet {
 		
 		ArrayList<Board> blist = new BoardService().boardTypeList(pi, bType);
 		
+		int count = new BoardService().blurListCount(); // 관리가 필요한 게시글이 있는지 확인해 버튼 활성화 여부 위해서 조회
+		
 		if(blist.isEmpty()) {
 			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
 		} else {
 			request.setAttribute("blist", blist);
 			request.setAttribute("pi", pi);
+			request.setAttribute("count", count);
 			request.getRequestDispatcher("admin/views/board/boardMain.jsp").forward(request, response);
 		}
 	}

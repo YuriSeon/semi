@@ -6,6 +6,7 @@
  	PageInfo pi = (PageInfo)request.getAttribute("pi");
  	ArrayList<BMember> list = (ArrayList<BMember>)request.getAttribute("list");
  	int option = Integer.parseInt(request.getParameter("option"));
+ 	int count = (int)request.getAttribute("count");
  %>
 <!DOCTYPE html>
 <html>
@@ -18,10 +19,14 @@
 		margin: 0;
 		padding: 0;
 	}
-	.btn-11{
+	.btn-11 .btn-16{
 		vertical-align: middle;
 		font-size: medium;
 		margin-top: 13px;
+	}
+	
+	.btn-16 {
+		margin-top: 12px;
 	}
 	tbody>tr:hover{
 		background-color: rgb(241, 241, 241);
@@ -38,7 +43,7 @@
 	<%@include file="../common/menubar.jsp"%>
 	<div id="wrapper">
 		<div id="bb"><br>
-			<form action="<%=contextPath %>/select.ck" method="post">
+			<form action="<%=contextPath %>/select.ck" method="get">
 				<div id="search_div">
 					<input type="hidden" name="currentPage" value="1">
 					<select name="select" id="search_select" onchange="selectboxP();">
@@ -54,7 +59,11 @@
 					<button type="submit" class="custom-btn btn-10">검색</button>
 				</div>
 			</form>
-				<button type="button" id="checkL" class="custom-btn btn-11" onclick="location.href='<%=contextPath%>/important.ck?currentPage=1'">★ Check</button>
+				<% if(count!=0) { %>
+					<button type="button" id="checkL" class="custom-btn btn-11" onclick="location.href='<%=contextPath%>/important.ck?currentPage=1'">★ Check</button>
+				<% } else { %>
+					<button type="button" id="checkL" class="custom-btn btn-16" disabled>Check★</button>
+				<% } %>
 			<div>
 			</div>
 			<br>
