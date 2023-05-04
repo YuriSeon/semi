@@ -39,7 +39,7 @@ public class FoodMain extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 데몬 스레드호 밥 같이 먹기 참여자 및 작성자는 남은 시간과 실시간 참여자들 보여주기 및 실시간으로 참여자 늘어나는거 남은 시간 보여주는 기능 구현에 사용할 예정
-		Timer time = new Timer();
+		Timer time = new Timer(true);
 		TimerTask task = new TimerTask() {
 			
 			@Override
@@ -49,10 +49,21 @@ public class FoodMain extends HttpServlet {
 				String nowStr = sdf.format(d);
 				String[] nArr = nowStr.split(":");
 				int now = Integer.parseInt(nArr[0])*60 + Integer.parseInt(nArr[1]);
-				
-				ArrayList<FoodTogether> toTime = new FoodService().selectEndTime();
+				ArrayList<FoodTogether> toTime = new ArrayList<>();
+				FoodTogether fd = null;
+				int[] noArr = {4,7,8,13,14};
+				String[] endArr = {"14:15", "16:20", "20:30", "19:19", "17:49"};
+				try {
+					/* toTime = new FoodService().selectEndTime(); */					
+					for(int i = 0; i < 5; i++) {
+						fd = new FoodTogether();
+						fd.setBoardNo(noArr[i]);
+						fd.setEndTime(endArr[i]);
+						toTime.add(fd);
+					}
+				}catch(Exception e){
+				}
 				// 이거 그냥 시간이랑 보드 넘버, 인원 가져오기
-				
 				for(int i = 0; i < toTime.size(); i++) {
 					String[] times = toTime.get(i).getEndTime().split(":");
 					int et = Integer.parseInt(times[0])*60 + Integer.parseInt(times[1]);
@@ -76,12 +87,14 @@ public class FoodMain extends HttpServlet {
 							new MessageService().insertMessage(mg);
 						}
 						
+					}else {
+						System.out.println(toTime.get(i).getBoardNo() + "번 게시글의 모집 시간은 " + nowStr + " 끝나지 않았습니다.");
 					}
-					System.out.println("+++++ 스레드가 돌아가는걸 보여주기 위한 코드 +++++");
 				}
+				System.out.println("+++++ 스레드가 돌아가는걸 보여주기 위한 코드 +++++");
 			};
 		};
-		time.schedule(task, 0, 1000); // 1초에 한번씩 실행하겠다.
+		time.schedule(task, 0, 5000); // 5초에 한번씩 실행하겠다.
 //		
 		request.getRequestDispatcher("views/food/foodMain.jsp").forward(request, response);
 	}

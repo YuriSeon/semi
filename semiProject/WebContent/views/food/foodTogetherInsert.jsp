@@ -122,7 +122,7 @@
             </div>
         <%} else { %>
         	<div id="fit5r">
-        		<input type="file" id="togetherImg" name="togetherImg" style="width:100%; height:100%" readOnly>
+        		<input type="hidden" id="togetherImg" name="togetherImg" style="width:100%; height:100%" readOnly>
         		<input type="hidden" name="originName"  style="width:100%; height:100% value="<%=((String)request.getAttribute("origin")) %>">
             </div>
         <%} %>

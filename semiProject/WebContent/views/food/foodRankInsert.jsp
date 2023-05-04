@@ -186,20 +186,36 @@
 								}).open();
 						});
 				// 같은 곳에 이벤트를 2개 걸어서 각각 상황에 맞는 이벤트가 실행되게 수정
-				document.getElementById("mainAddress").addEventListener("keyup", function () { 
-							new daum.Postcode(
-								{	oncomplete: function (data) { 
-									var dongaddress = ""; // 도로명과 지번 중 어느것이 나올지 모르기 때문에 모든 지번으로 통일하기 위해 수정
-									if(data.autoJibunAddress == ""){
-										dongaddress = data.jibunAddress;
-									}else{
-										dongaddress = data.autoJibunAddress;}
-													document.getElementById("mainAddress").value = data.address;
-													document.getElementById("saveAddress").value = dongaddress;
-													document.querySelector("input[name=addressDetail]").focus(); 
+// 				document.getElementById("mainAddress").addEventListener("onfocus", function () { 
+// 							new daum.Postcode(
+// 								{	oncomplete: function (data) { 
+// 									var dongaddress = ""; // 도로명과 지번 중 어느것이 나올지 모르기 때문에 모든 지번으로 통일하기 위해 수정
+// 									if(data.autoJibunAddress == ""){
+// 										dongaddress = data.jibunAddress;
+// 									}else{
+// 										dongaddress = data.autoJibunAddress;}
+// 													document.getElementById("mainAddress").value = data.address;
+// 													document.getElementById("saveAddress").value = dongaddress;
+// 													document.querySelector("input[name=addressDetail]").focus(); 
 												
-								}}.open()) // tab키로 이동시에도 똑같이 실행되게 만들었다.
-			});
+// 								}}.open()) // tab키로 이동시에도 똑같이 실행되게 만들었다.
+// 			});
+				$("#mainAddress").on("keyup",()=>{
+    	new daum.Postcode(
+                {
+                    oncomplete: (data) => { //선택시 입력값 세팅
+                        var dongaddress = ""; // 모두 지번으로 받을꺼다.
+                        if (data.autoJibunAddress == "") {
+                            dongaddress = data.jibunAddress;
+                        } else {
+                            dongaddress = data.autoJibunAddress;
+                        }
+                        $("#mainAddress").val(data.address);
+                        $("#maptr").css("display", "block");
+                        $("input[name=subAddress]").focus();
+                    }
+                }).open()
+    })
 
 			$("#iiii").on("focusin", function () {
 				var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
