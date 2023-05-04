@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.kh.bMember.model.vo.BMember;
 import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.Board;
 import com.kh.common.model.vo.JDBCTemplate;
@@ -307,6 +308,14 @@ public class FoodService {
 	}
 
 	public ArrayList<FoodTogether> selectEndTime() {
+		// TODO Auto-generated method stub
+		Connection conn = JDBCTemplate.getConnection();
+		ArrayList<FoodTogether> list = new FoodDao().selectEndTime(conn);
+		JDBCTemplate.close(conn);
+		return list;
+	}
+
+	public ArrayList<BMember> selectAlluser(int boardNo) {
 		// TODO Auto-generated method stub
 		return null;
 	}

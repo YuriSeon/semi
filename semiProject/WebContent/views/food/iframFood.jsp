@@ -71,11 +71,14 @@
 <div id="test"></div>
 <script>
 
-var foodName = $("#ssx", parent.document).contents().find("div")[0].children[0].id;
-var fulllocation = $(parent.document).contents().find(".search")[0].children[1].value;
+var foodName = $("#ssx", parent.document).contents().find("div")[0].children[0].id; // ifram안에서 부모(실제) html요소에 접근하여 음식이름을 추출한다.
+
+var fulllocation = $(parent.document).contents().find(".search")[0].children[1].value; // ifram안에서 부모(실제) html요소에 접근하여 현재 위치를 추출한다.
+
 var dong = "";
-	let lo = fulllocation.split(' ');	
-for(let i = 0; i < lo.length; i++){
+
+let lo = fulllocation.split(' '); // 현재 위치는 "서울 영등포구 당산동 74-5" 이런식으로 나오기 때문에 split()을 통해 배열로 만들어준다.
+for(let i = 0; i < lo.length; i++){ // 반복문을 통해 원하는 정보인 "xx동"만 추출한다.
 	if(lo[i].includes("동")){
 		dong = lo[i];
 		break;
