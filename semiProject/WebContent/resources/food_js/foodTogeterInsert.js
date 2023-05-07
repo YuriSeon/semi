@@ -17,7 +17,7 @@ $(function () {
     $("#togetherImg").on("change", e => readImg(e.target));
     function readImg(e) {
         const reader = new FileReader();
-        reader.onload = e => { $("#miriImg").attr("src", e.target.result).css("width", "200px").css("height", "200px").css("display", "block"); }
+        reader.onload = e => { $("#miriImg").attr("src", e.target.result).css("width", "100%").css("height", "100%").css("display", "block"); }
         try {
             reader.readAsDataURL(e.files[0])
         } catch (err) {

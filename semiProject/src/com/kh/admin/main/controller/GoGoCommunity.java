@@ -36,7 +36,7 @@ public class GoGoCommunity extends HttpServlet {
 		String userPwd = "1234";
 		
 		BMember loginUser = new BMemberService().loginMember(userId,userPwd);
-		System.out.println(loginUser);
+
 		request.getSession().setAttribute("loginUser", loginUser);
 		
 		response.sendRedirect(request.getContextPath()+"/Main.co");

@@ -56,7 +56,7 @@
 			<div id="con2">
 				<% if(list!=null && list.isEmpty()) {%>
 					<p>검색어와 일치하는 게시물이 없습니다.</p>
-					<button class='custom-btn btn-8' onclick="location.href='<%=contextPath%>/main.';">이전으로</button>
+					<button class='custom-btn btn-8' onclick="location.href='<%=contextPath%>/main.abo?currentPage=1';">이전으로</button>
 				<% } else {%>
 					<table id="tab">
 						<thead>

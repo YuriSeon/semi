@@ -44,7 +44,6 @@ public class FoodTogetherCheck extends HttpServlet {
 		response.setContentType("json/application; charset=UTF-8");
 		// tocheck 테이블에 정보가 있는 지 확인 있다면 체크 못하게 해야됨.
 		int writerUserCheck = new FoodService().toWriterUser(userNo); // 1은 작성한 글이 있다. 0은 없다.
-		System.out.println("writerUserCheck : " + writerUserCheck);
 		if(writerUserCheck == 1) {
 			gson.toJson("iii",response.getWriter());
 		}else {

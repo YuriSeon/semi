@@ -86,7 +86,6 @@ body {
 #foodrankbtn, #foodtogetherbtn{
 	width: 45%;
 	height: 100%;
-	border: 1px solid red;
 	box-sizing: border-box;
 }
 #nonediv{
@@ -256,23 +255,22 @@ body {
 		
 				
 	<div id="UserShowPage">
-		<div id ="topmargin"></div>
+<!-- 		<div id ="topmargin"></div> -->
 		<div id="left">
-			<div id="foodrankbtn">
-				<a href="<%=request.getContextPath()%>/foodRanking.bo">맛집 순위</a>
+			<div id="foodrankbtn" style="background-image: url(https://ceoimg.cdn.baemin.com/ceoimg-ym4g/i/2023/4/12/01gxscxbnb37gspcrt41cva8cr.jpg); background-size:100% 100%;" onclick="location.href='<%=request.getContextPath()%>/foodRanking.bo'">
 			</div>
 			<div id="nonediv"></div>
-			<div id="foodtogetherbtn" style="background-image: url(https://t1.daumcdn.net/cfile/tistory/997400445ED1FE5D18); background-size: 100%, 100%;">
-				<a href="<%=request.getContextPath()%>/foodTogether.bo">같이 먹을 사람</a>
+			<div id="foodtogetherbtn" style="background-image: url(https://ceoimg.cdn.baemin.com/ceoimg-ym4g/i/2023/4/5/01gx7jpdc4zcsrm1gj63f98phv.jpeg); background-size: 100%, 100%;" onclick="location.href='<%=request.getContextPath()%>/foodTogether.bo'">
 			</div>
 		</div>
 		<div id="bottomshow">
 			<div class="noneb1"></div>
-			<div id="ads" style="background-image: url(https://img.woowahan.com/www/common/baemin.jpg); background-size:100% 100%;" onclick="location.href='https://www.baemin.com/'">
+			<div id="ads" style="background-image: url(https://img.woowahan.com/www/common/baemin.jpg); background-size:826px 193.188px;" onclick="location.href='https://www.baemin.com/'">
 			</div>
 			<div class="noneb1"></div>
-			<div id="whatfood" style="background-image: url(https://yt3.googleusercontent.com/ytc/AGIKgqPNJ64rrMhG_Wl00qzE8ugDRZFO3UnX6eTaMZQAGg=s900-c-k-c0x00ffffff-no-rj); background-size:100% 100%;">
-				뭐먹지
+<!-- 			<div id="whatfood" style="background-image: url(https://yt3.googleusercontent.com/ytc/AGIKgqPNJ64rrMhG_Wl00qzE8ugDRZFO3UnX6eTaMZQAGg=s900-c-k-c0x00ffffff-no-rj); background-size:100% 100%;"> -->
+			<div id="whatfood" style="background-image: url(https://ceoimg.cdn.baemin.com/ceoimg-ym4g/i/2023/4/25/01gyv2k0103b0yy80034trm3qd.jpg); background-size:952px 193.188px;">
+
 				<!-- 지금 맛집에 있는 것들 -->
 			</div>
 		</div>
@@ -418,7 +416,7 @@ body {
 	    	$("#imgarea").css("display", "none");
 	    	$("#iframarea").css("display", "block");  
 	    	let str = "<iframe id='inlineFrameExample' style='width:640px; height:520px;' src='<%=request.getContextPath() %>/views/food/iframFood.jsp'></ifram>";
-	  		$("#iframarea").html(str);    	
+	  		$("#iframarea").html(str); // div영역에 ifram을 띄워준다.
     	}else{
 	    	$("#imgarea").css("display", "block");
 	    	let str = "<iframe id='inlineFrameExample' style='width:640px; height:520px;' src='<%=request.getContextPath() %>/views/food/iframFood.jsp'></ifram>";

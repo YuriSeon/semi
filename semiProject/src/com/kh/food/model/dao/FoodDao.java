@@ -998,4 +998,30 @@ public class FoodDao {
 		return list;
 
 	}
+
+	public ArrayList<FoodTogether> selectEndTime(Connection conn) {
+		ResultSet rset = null;
+		Statement stmt = null;
+		String sql = prop.getProperty("selectEndTime");
+		FoodTogether fd = null;
+		ArrayList<FoodTogether> list = new ArrayList<>();
+		try {
+			stmt = conn.createStatement();
+			rset = stmt.executeQuery(sql);
+			while(rset.next()) {
+				fd = new FoodTogether();
+				fd.setBoardNo(rset.getInt("BOARD_NO"));
+				fd.setEndTime(rset.getString("END_TIME"));
+				list.add(fd);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(stmt);
+		}
+		
+		return list;
+	}
 }

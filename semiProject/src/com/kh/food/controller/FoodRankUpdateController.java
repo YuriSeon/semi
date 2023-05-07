@@ -35,7 +35,6 @@ public class FoodRankUpdateController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		
-		System.out.println("");
 		Attachment att = new FoodService().selectFoodImg(Integer.parseInt(request.getParameter("helloworld")));
 		
 		request.setAttribute("boardNo", request.getParameter("helloworld"));
