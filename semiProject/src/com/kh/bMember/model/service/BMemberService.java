@@ -17,8 +17,9 @@ public class BMemberService {
 
 		Connection conn = JDBCTemplate.getConnection();
 		
+		System.out.println(userId);
+		System.out.println(userPwd);
 		BMember m = new BMemberDao().loginMember(conn,userId,userPwd);
-		
 		JDBCTemplate.close(conn);
 		
 		return m;

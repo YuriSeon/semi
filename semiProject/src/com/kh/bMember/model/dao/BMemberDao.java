@@ -52,10 +52,10 @@ public class BMemberDao {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, userId);
 			pstmt.setString(2, userPwd);
-			
+			System.out.println(sql);
 			rset = pstmt.executeQuery();
-			
 			if(rset.next()) {
+				System.out.println("에러 아니야?");
 				m = new BMember(rset.getInt("USERNO")
 								,rset.getString("USERID")
 								,rset.getString("USERPWD")
@@ -75,12 +75,13 @@ public class BMemberDao {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+			System.out.println("에러 나나?");
 			e.printStackTrace();
 		}finally {
 			JDBCTemplate.close(rset);
 			JDBCTemplate.close(pstmt);
 		}
-		
+		System.out.println(m);
 		return m;
 	}
 
